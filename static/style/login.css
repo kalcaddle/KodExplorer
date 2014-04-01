@@ -1,0 +1,41 @@
+body {background:#e6e5ea;font-size: 13px; padding: 0px; margin: 0px; font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;color:#666;}
+input,button { font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;}
+.loginbox{box-shadow: 0px 10px 150px #666;width:350px;border-radius:3px;padding-bottom: 30px;
+    background: #fff;position:absolute;top:50%;left:50%;margin-top:-240px;margin-left:-175px;}
+
+
+.title{width:100%;background:#6699cc;color:#fff;height: 80px;
+	border-top-left-radius: 3px;border-top-right-radius: 3px;padding-top: 30px;}
+.title .logo{text-align: center;font-size: 30px;width: 100%;
+	-webkit-box-reflect: below -10px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.3)));
+}
+.title .logo b{color:#99ccff;font-weight: 400;}
+.title .info{text-align: right;font-size: 12px;color:#99ccff;padding-right: 13px;padding-top: 15px;}	
+
+.w80{width: 80px;}
+.inputs{padding:30px;padding-bottom:0px;}
+.inputs div{margin-bottom: 15px;}
+.inputs div span{display: block;float: left;width:80px;line-height:30px;height:30px;}
+.inputs div input{height: 25px;width: 190px;}
+.inputs .check_code{margin-bottom: 0;}
+.inputs .check_code input{width:110px;display: block;float: left;}
+.inputs .check_code img{display: block;float: left;padding-left: 10px;width: 70px;height: 32px;}	
+
+input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}
+input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0; 
+	-webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
+
+.actions{padding-left:90px;}
+.checkbox{border:none;padding-right: 10px;}
+.actions #submit{border:none;outline: none;background: #6699cc;color:#fff;
+	padding: 5px 30px;margin-left: 20px;padding: 2px 15px\9;}
+.actions #submit:hover{background: #369;}
+.actions #submit:active{background: #444;}
+.msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
+.footer{color: #999;position: absolute;bottom: 15px;text-align: center;width: 100%;}
+
+
+.guest{text-align:center;margin: 0 auto;margin-top:30px;}
+.guest a{color:#69C;text-decoration:none;border-bottom: 2px solid #f6f6f6;border:2px solid #e6e6e6;border-radius:20px;padding:5px 10px;display: inline-block;}
+.guest a i{padding-left: 8px;}
+.guest a:hover{color:#f60;border-color:#f60;}

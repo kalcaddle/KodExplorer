@@ -1,0 +1,14 @@
+{
+  "family": "test",
+  "version": "0.0.1",
+  "name": "kodexplorer",
+  "spm": {
+    "alias": {
+      "jquery": "lib/jquery-1.8.0.min"
+    }
+  },
+  "devDependencies": {
+    "grunt": "^0.4.2"
+  }
+}
+

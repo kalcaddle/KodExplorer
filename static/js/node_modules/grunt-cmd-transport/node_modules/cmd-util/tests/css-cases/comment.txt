@@ -1,0 +1,5 @@
+/*! block a */
+a {color: red}
+
+/* hello world */
+/*! endblock a */

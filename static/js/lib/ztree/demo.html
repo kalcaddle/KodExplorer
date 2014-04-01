@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<TITLE> ZTREE DEMO - Async</TITLE>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="./style/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="../jquery-1.7.js"></script>
+	<script type="text/javascript" src="../common.js"></script>
+
+	<script type="text/javascript" src="./js/jquery.ztree.core-3.2.min.js"></script>
+	<SCRIPT type="text/javascript">
+		var setting = {
+			async: {
+				enable: true,
+				url:"http://localhost/www/explorer/ajax.php?action=folder_list",
+				autoParam:["name=name","father"],
+				//直接上次拿到的json变量。
+			},
+			callback: {//事件处理回调函数
+				onClick: pathClick
+			}
+		};
+
+		function pathClick(event, treeId,treeNode) {
+			alert(treeNode.name+treeNode.father);
+		};
+		//提交之前数据处理
+		function ajaxDataFilter(treeId, parentNode, childNodes) {
+			if (childNodes) {
+			  for(var i =0; i < childNodes.length; i++) {
+				childNodes[i].name = urlEncode(childNodes[i].name);
+			  }
+			}
+			return childNodes;
+		};
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting);
+		});
+	</SCRIPT>
+</HEAD>
+
+<BODY>
+
+<div class="content_wrap">
+	<div class="zTreeDemoBackground left">
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
+</div>
+
+</BODY>
+</HTML>

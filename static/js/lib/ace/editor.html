@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <style type="text/css" media="screen">
+  	body{margin: 0;padding: 0;}
+	pre { 
+		width: 100%;
+		height: 600px;
+		border:1px solid #ddd;
+		float: left;margin:0px;
+	}
+
+  </style>
+</head>
+<body>
+
+<pre id="editor">
+	var editor = ace.edit("editor");
+	ace.require("ace/ext/language_tools");
+	editor.setTheme("ace/theme/twilight");
+	editor.getSession().setMode("ace/mode/javascript");
+	editor.getSession().setTabSize(4);
+	editor.getSession().setUseWrapMode(true);
+	editor.commands.addCommand({
+		name: 'editSave',
+		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+		exec: function(editor) {
+			console.log(editor.getValue());
+		}
+	});
+	editor.setDragDelay(10);
+	editor.setFontSize(13);
+	editor.on("change", function(e){
+	  editor.commands.exec('startAutocomplete',editor);
+	})
+	editor.setShowPrintMargin(false);//显示固定宽度
+	//自动补全
+	editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true
+    });
+</pre>
+	
+<script src="src-min-noconflict/ace.js"></script>
+<script src="src-min-noconflict/ext-language_tools.js"></script>
+<script>
+	var editor = ace.edit("editor");
+	ace.require("ace/ext/language_tools");
+	editor.setTheme("ace/theme/chrome");
+	editor.getSession().setMode("ace/mode/javascript");
+	editor.getSession().setTabSize(4);
+	editor.getSession().setUseWrapMode(true);
+	editor.commands.addCommand({
+		name: 'editSave',
+		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+		exec: function(editor) {
+			console.log(editor.getValue());
+		}
+	});
+	editor.setDragDelay(10);
+	editor.setFontSize(14);
+	editor.on("change", function(){
+		console.log(editor.multiSelect.rangeCount)
+		if (editor.multiSelect.rangeCount<2) {
+			editor.commands.exec('startAutocomplete',editor);
+		}
+	})
+	editor.setShowPrintMargin(false);//显示固定宽度
+	//自动补全
+	editor.setOptions({
+		autoInsert:false,
+        enableBasicAutocompletion: true,
+        enableSnippets: true
+    });
+
+
+	//editor.setValue('asdf');
+	// editor.redo();//反撤销
+	// editor.undo();//撤销
+
+	//editor.toLowerCase();选中内容转换成小写
+	//editor.toUpperCase();
+	//editor.setShowInvisibles(true);//显示不可见字符
+	//editor.navigateTo(7,0);//跳转到指定行，并且显示到可视区域内
+</script>
+
+</body>
+</html>

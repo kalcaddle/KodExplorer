@@ -1,0 +1,43 @@
+[
+  {
+    "type": "block",
+    "code": [
+      {
+        "id": "a",
+        "type": "import"
+      },
+      {
+        "type": "string",
+        "code": "a {color: red}"
+      },
+      {
+        "id": "b",
+        "type": "import"
+      },
+      {
+        "type": "string",
+        "code": "b {color: red}"
+      },
+      {
+        "id": "c",
+        "type": "block",
+        "code": [
+          {
+            "type": "string",
+            "code": "c {color: red}"
+          },
+          {
+            "id": "d",
+            "type": "block",
+            "code": [
+              {
+                "type": "string",
+                "code": "d {color: red}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

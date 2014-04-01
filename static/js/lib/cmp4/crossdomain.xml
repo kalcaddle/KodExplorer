@@ -1,0 +1,11 @@
+﻿<?xml version="1.0"?>
+<!--
+flash crossdomain.xml:
+http://cmp.cenfun.com/cmp4/doc/crossdomain.htm
+http://www.adobe.com/xml/dtds/cross-domain-policy.dtd
+-->
+<cross-domain-policy> 
+    <site-control permitted-cross-domain-policies="all"/> 
+    <allow-access-from domain="*" /> 
+    <allow-http-request-headers-from domain="*" headers="*"/> 
+</cross-domain-policy>

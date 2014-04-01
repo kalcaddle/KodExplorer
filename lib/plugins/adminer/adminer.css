@@ -1,0 +1,147 @@
+/* CSS by Brade - www.bradezone.com */
+*{margin:0;padding:0}
+/* 颜色微调【同样颜色灰度值调节】 */
+::-webkit-scrollbar-track-piece{background-color:#f5f5f5;border-left:1px solid #d2d2d2}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background-color:#c2c2c2;background-clip:padding-box;border:1px solid #979797;min-height:28px}
+::-webkit-scrollbar-thumb:hover{border:1px solid #636363;background-color:#929292}
+
+body,select,input,button{font:13px "微软雅黑",Microsoft Yahei,STXihei,arial,sans-serif;background:#fff;color:#333}
+code,pre,textarea{font: 14px Consolas, "Liberation Mono", Courier, monospace !important;}
+/* generic */
+a{-ms-transition: all 0.3s;
+-webkit-transition: all 0.3s;
+-moz-transition: all 0.3s;
+-o-transition: all 0.3s;
+transition: all 0.3s;
+}
+a,a:visited{color:#06c;text-decoration:none;padding: 1px 4px;}
+a:hover{background:#C7D1DD;border-radius:10px;color:#555;text-decoration: none !important;}
+p{padding-bottom:4px;margin-bottom:4px}
+h1{font-size:18px;font-weight:bold;padding-bottom:0px;height:25px;padding:0 0 8px 0;color:#666;border:0;background:none;}
+
+h2{font-size:24px;margin:0px;background:transparent;border:0;color:#366ec2;
+padding: 10px 0;;border-bottom: 3px solid #eee;margin-bottom: 10px;}
+h3{font-size:18px;font-weight:bold;padding:4px 0;margin:0}
+form#form{overflow:hidden}
+fieldset{float:left;min-height:48px;padding:0 4px 4px 4px;border:1px solid #ccc;margin-bottom:8px;margin-right:4px}
+fieldset div{margin-top:4px}
+input,select,textarea{color:#555;border:1px solid #ccc;padding: 2px 5px;}
+fieldset select{margin-right:4px}
+optgroup{font-size:11px}
+code{background:#ffc;padding:2px 4px;}
+code a:hover{background:transparent}
+table{margin:4px 0 8px;border:1px solid #ccc;font-size:inherit}
+tbody tr:hover td,tbody tr:hover th{background:#ffc}
+th,td{text-align:left;padding:2px 4px;vertical-align:top;font-weight:normal;border:1px dotted #ccc;border-width:0 0 0 1px;
+margin:0;background:inherit}
+
+thead tr{text-align: center;font-weight: 800;color: #444;height:25px;line-height: 25px;}
+thead tr td{background: #F7F6F6;color: #222;font-weight: 800;border-bottom: 1px solid #CCC;white-space:nowrap;}
+th:first-child,td:first-child{border-color:transparent;white-space:nowrap}
+td[align=right]{text-align:right}
+table code{font-size:13px;line-height:18px}
+.hidden{display:none}
+.error,.message{padding:0;background:transparent;font-weight:bold}
+.error{color:#c00}
+.message{color:#090}
+/* specific */
+#content{margin:0 0 0 255px;height:100%;padding: 40px 10px 10px 0;}
+#content:after{content:".";clear:both;height:0;overflow:hidden;display:block}
+#lang{z-index: 10;background:#5579BA;color: #fff;position: fixed;
+top: 0;right: 0px;padding: 0 20px 0 10px;line-height:30px;height: 35px;box-shadow: 0 -5px 50px #666;}
+
+#lang select{border-color: #fff;height: 22px;line-height: 22px;padding:0px;font-size:12px;}
+#content > p > a,.tabs a{border: 1px solid #ccc;display: inline-block;padding: 3px 1em;
+margin-bottom: 4px;background: #eee;color: #555;
+letter-spacing: 1px;border-radius: 15px;}
+#content > p > a:hover,.tabs a:hover{background:#6787c1;color:#eee;border-right:1px solid #5579BA;}
+#content > p > a.active,.tabs a.active{background:#5579BA;color:#fff;border-right:1px solid #5579BA;}
+
+#menu{background:#E3E7EC;position:fixed;top: 30px;bottom:0px;overflow-x:hidden;
+	overflow-y: auto;left:0px;width:201px;padding:10px 15px;color:#333;
+	border-right:1px solid #ddf;margin:0;}
+#menu a{color:#333;display: inline-block;margin:1px;line-height:18px;}
+#menu a:hover{background:#333;color:#000;background: #C7D1DD;border:none;border-radius:10px;}
+#menu a.h1,#menu a.h1:hover{display:block;height:0;width:175px;padding:40px 0 0 0;overflow:hidden;float:left;border:0;margin:0;
+outline:0;background:url(http://www.bradezone.com/random/adminer_logo.gif) no-repeat;line-height:32px}
+#menu p{white-space:nowrap;border:0;padding:0 0 4px 0;margin:0 0 4px 0;overflow: hidden !important;}
+#menu p a.active{background: #8C9EB4;color: #fff;border-radius:10px;}
+#menu h1 a{display: none;}
+#menu h1:before{content: "Adminer ";line-height: 40px;}
+#menu h1{text-align: center;margin-bottom: 10px;}
+.logout a{border-bottom: 1px solid #ccc;}
+.links a {white-space: nowrap;margin-right: 0px;}
+.icon {background: #ccc;}
+
+#content #breadcrumb{background: #5579BA;border-left: 1px solid #6787c1;height: 30px;color:#ddd;font-size: 16px;position:fixed;top:0;
+left: 231px;width:100%;line-height:30px;padding:2px 10px;z-index:11;margin:0;}
+#content #breadcrumb a{color:#fff;display:inline;padding:3px 6px;background:none;letter-spacing:0;text-decoration: underline;border:none;}
+#content #breadcrumb a:hover{background:transparent;color:#f90;}
+#schema .table{padding:4px 8px;background:#f3f3f3}
+/* IE hacks */
+*+html th:first-child,*+html td:first-child{border-color:inherit;white-space:inherit}
+* html #lang,* html #menu,* html #breadcrumb{position:absolute}
+* html #lang{padding-top:10px;height:30px;box-shadow: 0 -20px 50px #000;}
+* html form#form{height:100%}
+#logins a,#tables a{background: none}
+#logout{color:#333;text-decoration:none;padding:4px 1em;}
+#logout:hover{border-color:#333;background:#333;color:#fff}
+.js .column{background:#ddd}
+
+input,object{
+	border:1px solid #ccc;
+	color: #226; font-weight: normal;
+	background-color: #fcfdfe;
+	font-style:14px;	
+	padding-top:4px 8px;
+	border-right-color:#888\9;
+	border-bottom-color:#888\9;	
+}
+textarea{border: 1px solid #ccc;}
+input[type=text] {padding:4px;background: #fffffa;font-size:12px;}
+input[type=text]:focus{background: #ffffe6;border: 1px solid #5FA3EC;}
+input[type=checkbox]{display: inline-block;margin-right: 10px;margin-left: 5px;}
+input[type="button"],input[type="reset"],input[type="submit"]{
+	height:25px;
+    color: #6e6e6e;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 1px 0 #fff;
+    -webkit-transition: border-color .15s;
+    -moz-transition: border .15s;
+    -o-transition: border-color .15s;
+    transition: border-color .15s;
+    background: #f3f3f3;        
+	background-image: -moz-linear-gradient(top, #fafafa, #eeeeee); /* Firefox */
+    background: -webkit-gradient(linear,0% 40%,0% 70%,from(#FaFaFa),to(#eeeeee));
+    border: solid 1px #bbb;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    padding:2px 1.2em;
+    cursor: pointer;
+    margin-bottom:2px;
+}
+input[type=button]:hover,input[type=reset]:hover,input[type=submit]:hover{
+	color: #333;
+    border-color: #aaa;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+}
+input.default {color: #000 !important;font-weight: 800;box-shadow: 0px 0px 5px #ccc;}
+input[type=button]:active,input[type=reset]:active,input[type=submit]:active{
+    color: #448;
+    background: -webkit-gradient(linear,0% 40%,0% 70%,from(#F1F1F1),to(#FaFaFa));
+    background: -moz-linear-gradient(linear,0% 40%,0% 70%,from(#F1F1F1),to(#FaFaFa));
+    border-color: #888;
+}
+input[type="radio"]{border:none;display:inline-block;margin: 5px;}
+input:focus{border:1px solid #75A1F0;outline:none;box-shadow:0 0 8px #75A1F0;
+-webkit-transition:all 0.218s;-moz-transition: all .218s;-o-transition: all 0.218s;transition: all 0.218s;}
+
+.js .checkable .checked td, .js .checkable .checked th {background: #ff9;}
+.nowrap td, .nowrap th, td.nowrap {white-space: pre;line-height: 24px;}
+code{background:none !important;}
+.jush-sql{background:#eee;}
+

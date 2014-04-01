@@ -1,0 +1,7 @@
+
+1.为修复自动补全(只有一条的情况下不自动填充)
+bug描述：只有一条的情况下啊不弹出下拉框而是自动补全，会出现onchange修改不了的情况
+修改：ext-language_tools.js  this.autoInsert   => this.autoInsert=!1,
+
+
+2.

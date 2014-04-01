@@ -1,0 +1,41 @@
+<div class="init_loading"><img src="<?php echo STATIC_PATH;?>images/loading_simple.gif"/></div>
+<div class="topbar">
+	<div class="content">
+		<div class="top_left">
+			<a href="./" class="title"><i class="icon-cloud"></i>KODExplorer</a>
+		<?php 
+			$tpl="<a class='{this}' href='./?{0}' tartet='_self'><i class='icon-{2}'></i>{1}</a>\n";
+			$menu ='desktop:'.$L['ui_desktop'].':desktop,explorer:'.$L['ui_filemanage'].':tasks,editor:'.$L['ui_editor'].':edit';
+			echo getTplList(',',':',$menu,$tpl,ST);
+		?>
+		<a  href='./lib/plugins/adminer/' target="_blank"><i class='icon-inbox'></i><?php echo $L['adminer'];?></a>
+		</div>
+		<div class="top_right">
+		<div>
+			<a id='topbar_language' data-toggle="dropdown" href="#"><i class='icon-flag'></i>Language<b class="caret"></b></a>
+			<ul class="dropdown-menu topbar_language" role="menu" aria-labelledby="topbar_language">
+			  	<?php 
+					$tpl="<li><a href='javascript:core.language(\"{0}\");' class='{this}'>{1}</a></li>";
+					echo getTplList(',',':',$config['setting_all']['language'],$tpl,$GLOBALS['language']);
+				?>
+			</ul>
+		</div>
+		<div>
+			<a href="#" id='topbar_user' data-toggle="dropdown"><i class="icon-user"></i><?php echo $_SESSION['user']['name'];?><b class="caret"></b></a>
+			<ul class="dropdown-menu menu-topbar_user" role="menu" aria-labelledby="topbar_user">
+				<li><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo $L['setting_user'];?></a></li>
+				<?php if($_SESSION['user']['role']=='root'){ ?>
+					<li><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo $L['setting_member'];?></a></li>
+				<?php } ?>
+				<li><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo $L['setting_theme'];?></a></li>
+				<li><a href="javascript:core.setting('help');"><i class="font-icon icon-question"></i><?php echo $L['setting_help'];?></a></li>
+				<li><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo $L['setting_about'];?></a></li>
+				<li><a href="http://www.kalcaddle.com" target="_blank"><i class="font-icon icon-code-fork"></i><?php echo $L['ui_project_home'];?></a></li>
+				<li role="presentation" class="divider"></li>
+				<li><a href="./?user/logout"><i class="font-icon icon-off"></i><?php echo $L['ui_logout'];?></a></li>
+			</ul>			
+		</div>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="cmp.js"></script>
+</head>
+<body>
+<style type="text/css">
+	*{padding:0px;margin:0px;}
+</style>
+
+<div class="cmp">
+  <div class="cmp_inner" id="player">loading ...</div>
+</div>
+
+<script>
+function cmp_loaded(key) {//cmp loaded	
+	var cmpo = CMP.get("cmp");
+	if (cmpo) {//cmp callback		
+		var config = cmpo.config();
+		document.title = config.name;
+	}
+}
+var flashvars = {api : "cmp_loaded"};
+//id, width, height, swf_url, flashvars, params, attrs
+var htm = CMP.create("cmp", "700", "500", "cmp.swf", flashvars);
+document.getElementById("player").innerHTML = htm;
+</script>
+
+</body>
+</html>

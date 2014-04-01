@@ -1,0 +1,6 @@
+/*! define foo.css */
+/*! import ./base.css */
+
+body {content: 'foo';}
+
+/*! import ./bar.css */
