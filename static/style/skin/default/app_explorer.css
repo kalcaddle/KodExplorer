@@ -437,6 +437,14 @@ div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opaci
 .frame-main .frame-resize.active { background: #000; opacity: 0.2; filter: alpha(opacity=20);}
 .frame-main .frame-right { left: 200px; right: 0; position: absolute; top: 0; bottom: 0; overflow: auto; min-width: 450px;}
 .frame-main .frame-right .frame-right-main .font-icon { text-shadow: 0 0 1px; line-height: 16px; padding: 0 2px; font-size: 14px; color: #888;}
+.frame-main .frame-right .frame-right-main .drop-menu-action { min-width: 130px; width: 130px;}
+.frame-main .frame-right .frame-right-main .drop-menu-action a { padding: 2px 30px;}
+.frame-main .frame-right .frame-right-main .drop-menu-action a i.font-icon { width: 18px; display: inline-block;}
+.frame-main .frame-right .frame-right-main .drop-menu-action a:hover i.font-icon { color: #fff;}
+.frame-main .frame-right .frame-right-main .drop-menu-action .disabled a { color: #bbb;}
+.frame-main .frame-right .frame-right-main .drop-menu-action .disabled a i.font-icon { color: #bbb;}
+.frame-main .frame-right .frame-right-main .drop-menu-action .disabled a:hover { background: #fff; color: #bbb;}
+.frame-main .frame-right .frame-right-main .drop-menu-action .disabled a:hover i.font-icon { color: #bbb;}
 .frame-main .frame-right .frame-right-main .tools { z-index: 100; height: 33px; min-width: 600px; border-bottom: 1px solid #ddd; background: #f6f6f6; -webkit-box-shadow: 1px 2px 15px #eee; -moz-box-shadow: 1px 2px 15px #eee; box-shadow: 1px 2px 15px #eee;}
 .frame-main .frame-right .frame-right-main .tools a.left:hover,.frame-main .frame-right .frame-right-main .tools a.middle:hover { margin-right: 2px; padding-right: 8px;}
 .frame-main .frame-right .frame-right-main .tools a.this { background: #eee; cursor: default;}

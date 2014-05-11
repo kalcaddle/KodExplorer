@@ -51,6 +51,7 @@
 		web_root 	: "<?php echo $GLOBALS['web_root'];?>",
 		web_host 	: "<?php echo HOST;?>",
 		static_path : "<?php echo STATIC_PATH;?>",
+		public_path  : "<?php echo PUBLIC_PATH;?>",
 		basic_path  : "<?php echo BASIC_PATH;?>",
 		version 	: "<?php echo KOD_VERSION;?>",
 		app_host 	: "<?php echo APPHOST;?>",

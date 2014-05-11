@@ -181,7 +181,7 @@ define(function(require, exports) {
 				$(this).remove();
 			});
 			if ($('.selectDragTemp').length != 0) {
-				var dragTo = G.this_path+$('.selectDragTemp').attr('title')+'/';
+				var dragTo = G.this_path+fileLight.name($('.selectDragTemp'))+'/';
 				ui.path.cuteDrag(dragTo);
 			}
 		};
@@ -436,6 +436,7 @@ define(function(require, exports) {
 			Global.fileListAll = $listAll;
 			Global.fileListNum = $listAll.length;
 			Global.fileListSelectNum = 0;
+			fileLight.menuAction('clear');
 		},
 
 		//选择处理
@@ -446,10 +447,11 @@ define(function(require, exports) {
 			if ($list.length > 1) {
 				fileLight.setMenu($list);
 			}
+			fileLight.menuAction('menufile');
 		},
 		//获取文件&文件夹名字
 		name:function($obj){
-			return $obj.attr("title");
+			return $obj.attr("data-name");
 		},
 		//获取文件&文件夹类型 folder为文件夹，其他为文件扩展名
 		type:function($obj){			
@@ -459,6 +461,7 @@ define(function(require, exports) {
 		setMenu:function($obj){
 			$obj.removeClass("menufile menufolder menuApp")
 				.addClass("menuMore");
+			fileLight.menuAction();
 		},
 		//反选，或者框选已经选择的则恢复右键菜单标记
 		resumeMenu:function($obj){
@@ -468,6 +471,7 @@ define(function(require, exports) {
 					$obj.removeClass("menuMore").addClass(menu[key]);
 				}
 			}
+			fileLight.menuAction();
 		},
 
 		//获取选中的文件名	
@@ -482,7 +486,7 @@ define(function(require, exports) {
 		},
 
 		//清空选择，还原右键关联menu		
-		clear:function(){
+		clear:function(){			
 			if (Global.fileListSelectNum == 0) return;
 			var $list = Global.fileListSelect;
 			$list.removeClass(Config.SelectClassName);
@@ -491,6 +495,22 @@ define(function(require, exports) {
 			});		
 			Global.fileListSelect = '';
 			Global.fileListSelectNum = 0;
+			fileLight.menuAction();
+		},
+		menuAction:function(){
+			if (Global.fileListSelectNum == 0) {
+				$('.drop-menu-action li').addClass('disabled');
+				$('.drop-menu-action #past').removeClass('disabled');
+				$('.drop-menu-action #info').removeClass('disabled');
+			}else if (Global.fileListSelectNum > 1) {
+				$('.drop-menu-action li').removeClass('disabled');
+				$('.drop-menu-action #open').addClass('disabled');
+				$('.drop-menu-action #rname').addClass('disabled');
+				$('.drop-menu-action #past').addClass('disabled');
+			}else{
+				$('.drop-menu-action li').removeClass('disabled');
+				$('.drop-menu-action #past').addClass('disabled');
+			}
 		}
 	};
 	//对外接口

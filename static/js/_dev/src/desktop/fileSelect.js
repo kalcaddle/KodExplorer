@@ -184,7 +184,7 @@
 				$(this).remove();
 			});
 			if ($('.selectDragTemp').length != 0) {
-				var dragTo = G.this_path+$('.selectDragTemp').attr('title')+'/';
+				var dragTo = G.this_path+fileLight.name($('.selectDragTemp'))+'/';
 				ui.path.cuteDrag(dragTo);
 			}
 		};
@@ -403,7 +403,7 @@
 		},
 		//获取文件&文件夹名字
 		name:function($obj){
-			return $obj.attr("title");
+			return $obj.attr("data-name");
 		},
 		//获取文件&文件夹类型 folder为文件夹，其他为文件扩展名
 		type:function($obj){			

@@ -182,7 +182,13 @@ define(function(require, exports) {
 					if (treeNode.type == 'folder') selector ='menuTreeFolder';
 					if (treeNode.ext == 'oexe') selector ='menuApp'; 
 				}
-				switchObj.parent().addClass(selector);
+
+				var title = LNG.name+':'+treeNode.name+"\n"+LNG.size+':'+treeNode.size_friendly+"\n"
+				+LNG.modify_time+':'+treeNode.mtime;
+				if (treeNode.type == 'folder') {
+					title = LNG.name+':'+treeNode.name+"\n"+LNG.modify_time+':'+treeNode.mtime;
+				}
+				switchObj.parent().addClass(selector).attr('title',title);
 			}
 		},
 		callback: {//事件处理回调函数
@@ -204,7 +210,11 @@ define(function(require, exports) {
 			beforeClick: function(treeId, treeNode) {
 				if (treeNode.level == 0 ) {
 					var zTree = $.fn.zTree.getZTreeObj("folderList");
+					zTree.selectNode(treeNode);
 					zTree.expandNode(treeNode);
+					if (treeNode.ext == '__root__' && Config.pageApp=='explorer') {
+						ui.path.list(treeNode.this_path+'/');//更新文件列表
+					}
 					return false;
 				}
 				return true;
@@ -288,9 +298,16 @@ define(function(require, exports) {
 			treeNode = zTree.getSelectedNodes()[0],
 			path     = '',type='';
 		if (!treeNode) return {path:'',type:''};
-		if (treeNode.father) path = treeNode.father+treeNode.name;
-		if (treeNode.this_path) path = treeNode.this_path;
-		if (treeNode.path) path = treeNode.path+treeNode.name;
+
+		if (treeNode.father){
+			path = treeNode.father+treeNode.name;
+		}else if (treeNode.this_path){
+			path = treeNode.this_path;
+		}else if (treeNode.path != ''){
+			path = treeNode.path+treeNode.name;
+		}else if (treeNode.path == ''){
+			path = '/'+treeNode.name;
+		}
 		
 		//打开文件夹&文件
 		type = treeNode.ext;

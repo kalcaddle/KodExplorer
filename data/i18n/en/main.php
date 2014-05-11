@@ -65,6 +65,7 @@ $L = array(
 	"sort_type"                  =>	"sort of way",
 	"time_type"                  =>	"Y/m/d h:i",
 	"time_type_info"             =>	"F j, Y, g:i a",
+	"public_path"           	 =>	"Public path",
 
 	//right
 	"file"                       =>	"file",
@@ -198,7 +199,7 @@ $L = array(
 	"server_dwonload_desc"       =>	"task is added to the download list",
 	"parent_permission"          =>	"parent permission",
 
-	"root_path"                  =>	"root directory",
+	"root_path"                  =>	"Home",
 	"lib"                        =>	"library",
 	"fav"                        =>	"bookmark",
 	"desktop"                    =>	"desktop",
@@ -287,7 +288,7 @@ $L = array(
 	"group_role_upload"          =>	"upload",
 	"group_role_download"        =>	"server download",
 	"group_role_passowrd"        =>	"change password",
-	"group_role_config"          =>	"save user config to server",
+	"group_role_config"          =>	"user data",
 	"group_role_fav"             =>	"favourite(add/edit/delete)",
 	"group_role_list"            =>	"list",
 	"group_role_member_add"      =>	"member add",

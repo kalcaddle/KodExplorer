@@ -79,6 +79,38 @@
 					        <button id='upload' class="btn btn-default" type="button">
 					        	<i class="font-icon icon-cloud-upload"></i><?php echo $L['upload'];?>
 					        </button>
+
+					        <div class="btn-group btn-group-sm">
+						    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+						      <i class="font-icon icon-tasks"></i>more&nbsp;<span class="caret"></span>	      
+						    </button>
+						    <ul class="dropdown-menu pull-right drop-menu-action">
+						    	<li id="open"><a href='javascript:;'>
+						    	<i class="font-icon icon-folder-open-alt"></i><?php echo $L['open'];?></a></li>
+
+							    <li id="copy"><a href='javascript:;'>
+							    <i class="font-icon icon-copy"></i><?php echo $L['copy'];?></a></li>
+
+							    <li id="rname"><a href='javascript:;'>
+							    <i class="font-icon icon-pencil"></i><?php echo $L['rename'];?></a></li>
+
+							    <li id="cute"><a href='javascript:;'>
+							    <i class="font-icon icon-cut"></i><?php echo $L['cute'];?></a></li>
+							    <li id="past"><a href='javascript:;'>
+							    <i class="font-icon icon-paste"></i><?php echo $L['past'];?></a></li>
+							    <li id="remove"><a href='javascript:;'>
+							    <i class="font-icon icon-trash"></i><?php echo $L['remove'];?></a></li>
+
+							    <li class="divider"></li>
+							    <li id="zip"><a href='javascript:;'>
+							    <i class="font-icon icon-folder-close"></i><?php echo $L['zip'];?></a></li>
+							    <li id="download"><a href='javascript:;'>
+							    <i class="font-icon icon-download"></i><?php echo $L['download'];?></a></li>
+							    <li class="divider"></li>
+							    <li id="info"><a href='javascript:;'>			    
+							    <i class="font-icon icon-info"></i><?php echo $L['info'];?></a></li>
+						    </ul>
+						  </div>
 						</div>
 						<span class='msg'><?php echo $L['path_loading'];?></span>
 					</div>
@@ -92,7 +124,7 @@
 						  </button>
 						  <div class="btn-group btn-group-sm">
 						    <button id="set_theme" title="<?php echo $L['setting_theme'];?>" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-						      <i class="font-icon icon-dashboard"></i>&nbsp;&nbsp;<span class="caret"></span>						      
+						      <i class="font-icon icon-dashboard"></i>&nbsp;&nbsp;<span class="caret"></span>
 						    </button>
 						    <ul class="dropdown-menu pull-right dropdown-menu-theme">
 							    <?php 
@@ -122,6 +154,7 @@
 		web_host 	: "<?php echo HOST;?>",
 		static_path : "<?php echo STATIC_PATH;?>",
 		basic_path  : "<?php echo BASIC_PATH;?>",
+		public_path  : "<?php echo PUBLIC_PATH;?>",
 		upload_max  : "<?php echo $upload_max;?>",
 		version 	: "<?php echo KOD_VERSION;?>",
 		app_host 	: "<?php echo APPHOST;?>",

@@ -11,7 +11,7 @@ date_default_timezone_set('PRC');
 @set_time_limit(600);//30min pathInfoMuti,search,upload,download... 
 
 function P($path){return str_replace('\\','/',$path);}
-define('WEB_ROOT',      str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__))).'/index.php').'/');
+define('WEB_ROOT',str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__))).'/index.php').'/');
 define('HOST',          'http://'.$_SERVER['HTTP_HOST'].'/');
 define('BASIC_PATH',    P(dirname(dirname(__FILE__))).'/');
 define('APPHOST',       HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
@@ -22,10 +22,12 @@ define('LIB_DIR',		BASIC_PATH .'lib/');		//库目录
 define('FUNCTION_DIR',	LIB_DIR .'function/');		//函数库目录
 define('CLASS_DIR',		LIB_DIR .'class/');			//内目录
 define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
-define('LOG_PATH',      BASIC_PATH .'data/log/');   //日志目录
-define('USER_PATH',     BASIC_PATH .'data/User/');  //用户目录
-define('USER_SYSTEM',   BASIC_PATH .'data/system/');//用户数据存储目录
-define('LANGUAGE_PATH', BASIC_PATH .'data/i18n/');//库目录
+define('DATA_PATH',     BASIC_PATH .'data/');       //用户数据目录
+define('LOG_PATH',      DATA_PATH .'log/');         //日志目录
+define('USER_PATH',     DATA_PATH .'User/');        //用户目录
+define('USER_SYSTEM',   DATA_PATH .'system/');      //用户数据存储目录
+define('LANGUAGE_PATH', DATA_PATH .'i18n/');        //多语言目录
+define('PUBLIC_PATH',   DATA_PATH .'public/');      //公共共享目录 读写权限跟随用户目录的读写权限
 
 define('STATIC_JS',"app");//_dev app  js编译||开发状态
 define('STATIC_PATH',"./static/");//静态文件目录
@@ -43,6 +45,12 @@ include(CORER_DIR.'Model.class.php');
 include(FUNCTION_DIR.'common.function.php');
 include(BASIC_PATH.'config/setting.php');
 include(BASIC_PATH.'config/version.php');
+
+
+//集群.远程接口访问方式
+define('REMOTE_OPEN', false);//eg:auth_key=f5e26983908f6ee6d54fbe3ada4b52db
+define('REMOTE_KEY', '7eab16c4662b853f901d6e641a93c31d');
+
 
 //数据地址定义。
 $config['pic_thumb']	= BASIC_PATH.'data/thumb/';		// 缩略图生成存放地址

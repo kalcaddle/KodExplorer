@@ -52,7 +52,7 @@ class debug extends Controller{
 		load_class('pclzip');
 		ini_set('memory_limit', '2028M');//2G;
 		$archive = new PclZip($this->zip_to);
-        $v_list = $archive->create($this->path_to,PCLZIP_OPT_REMOVE_PATH,$this->parent.'/kod_export');
+        $v_list = $archive->create($this->path_to,PCLZIP_OPT_REMOVE_PATH,$this->path_to);
 		echo '打包成功！<br/><h3>初始化配置文件</h3><hr/>';flush();
 
 		$this->_initUser();

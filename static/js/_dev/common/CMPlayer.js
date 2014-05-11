@@ -96,7 +96,6 @@ define(function(require, exports) {
 	var _insert = function(fileList,player){
 		var new_list = _makeList(fileList);
 		var cmpo = _get(player);
-		console.log(fileList,player,5555,cmpo);
 		if (cmpo) {
 			cmpo.config('play_mode','normal');//写入配置,播放模式改为自动跳到next
 			var old_length = cmpo.list().length;

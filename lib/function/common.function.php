@@ -646,6 +646,18 @@ function rand_string($len = 4, $type = ''){
 	return $str;
 } 
 
+/**
+ * 生成自动密码
+ */
+function make_password(){
+	$temp = '0123456789abcdefghijklmnopqrstuvwxyz'.
+			'ABCDEFGHIJKMNPQRSTUVWXYZ~!@#$^*)_+}{}[]|":;,.'.time();
+	for($i=0;$i<10;$i++){
+		$temp = str_shuffle($temp.substr($temp,-5));
+	}
+	return md5($temp);
+}
+
 
 /**
  * php DES解密函数

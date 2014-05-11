@@ -52,6 +52,13 @@ define(function(require, exports) {
 			path = path.replace(/\\/g, "/");
 			path = path.replace(/\/+/g, "/");
 			path = path.replace(/\/\.*\//g, "/");
+
+			//public path
+			if (path.substring(0,G.public_path.length) == G.public_path) {
+				return G.app_host+'data/public/'+path.replace(G.public_path,'');
+			}
+
+			//user group
 			if (G.is_root) {
 				if (path.substring(0,G.web_root.length) == G.web_root){//服务器路径下
 					return G.web_host+path.replace(G.web_root,'');
@@ -72,8 +79,8 @@ define(function(require, exports) {
 					fixed:true,
 					resize:true,
 					title:LNG.setting,
-					width:'960px',
-					height:'580px'
+					width:960,
+					height:580
 				});
 			}else{
 				$.dialog.list['setting_mode'].display(true);
@@ -85,9 +92,9 @@ define(function(require, exports) {
 				id:'app_store',
 				fixed:true,
 				resize:true,
-				title:'应用商店',
-				width:'800px',
-				height:'500px'
+				title:LNG.app_store,
+				width:800,
+				height:500
 			});
 		},
 		openApp:function(app){

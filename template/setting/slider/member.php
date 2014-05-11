@@ -91,7 +91,7 @@
         <div style="clear:both;"></div>   
     </div>
     <div class="together">
-        <div class="title"><i><?php echo $L['setting_group'];?></i></div>
+        <div class="title"><i><?php echo $L['group_role_config'];?></i></div>
         <a class="tag" href="javascript:;" data-role='user:changePassword'>
             <input type="checkbox" class="checkbox"><span><?php echo $L['group_role_passowrd'];?></span>
         </a>

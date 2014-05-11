@@ -82,6 +82,19 @@
         left: 200px;right: 0;position: absolute;top: 0;bottom: 0;overflow: auto;min-width: 450px;
         .frame-right-main{
             .font-icon{text-shadow: 0 0 1px;line-height: 16px;padding: 0 2px;font-size: 14px;color: #888;}
+            .drop-menu-action{
+                min-width:130px;width:130px;
+                a{padding: 2px 30px;
+                    i.font-icon{width:18px;display: inline-block;}
+                    &:hover i.font-icon{color: #fff;}                    
+                }
+                .disabled a{
+                    color:#bbb;
+                    i.font-icon{color:#bbb;}
+                    &:hover{background: #fff;color:#bbb;}
+                    &:hover i.font-icon{color: #bbb;}
+                }
+            }
             .tools{
                 z-index: 100;height:33px;min-width:600px;
                 border-bottom:1px solid #ddd;background:#f6f6f6;              

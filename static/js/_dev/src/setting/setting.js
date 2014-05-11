@@ -100,8 +100,11 @@ define(function(require, exports) {
 					dataType:'json',
 					success:function(data){
 						tips(data);
+						if (data.code) {
+							window.top.location.href='./index.php?user/logout';
+						}				
 					}
-				});			
+				});
 				break;
 			case 'wall':
 				var image = $('#wall_url').val();
@@ -114,7 +117,7 @@ define(function(require, exports) {
 				$.ajax({
 					url:geturl,type:'json',
 					success:function(data){
-						tips(data);
+						tips(data);						
 					}
 				});	
 			default:break;

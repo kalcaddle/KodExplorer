@@ -27,11 +27,11 @@ class explorer extends Controller{
         }else{
             $dir = '/';//首次进入系统,不带参数
             if ($GLOBALS['is_root']) $dir = WEB_ROOT;
-        }        
+        }
         $dir = rtrim($dir,'/').'/';
         $is_frame = false;//是否以iframe方式打开
         if ($this->in['type'] == 'iframe') $is_frame = true;//
-        $upload_max = get_post_max();   
+        $upload_max = get_post_max();
         $this->assign('upload_max',$upload_max);                
         $this->assign('is_frame',$is_frame);
         $this->assign('dir',$dir);
@@ -147,30 +147,30 @@ class explorer extends Controller{
                 'isParent'  => path_haschildren(_DIR($val['path']),$check_file)
             );
         }
-        $tree_path = WEB_ROOT;
-        if (!$GLOBALS['is_root']) {
-            $tree_path = '/';
-        }
+
+        $list_root  = $this->path(_DIR(MYHOME),true,true);
+        $list_share = $this->path(_DIR(PUBLIC_PATH),true,true);
         if ($check_file) {//编辑器
-            $list=$this->path(_DIR($tree_path),true,true);
-            $res = array_merge($list['folderlist'],$list['filelist']);
+            $root = array_merge($list_root['folderlist'],$list_root['filelist']);
+            $share = array_merge($list_share['folderlist'],$list_share['filelist']);
             $tree_data = array(
-                array('name'=>$this->L['fav'],'ext'=>'__fav__','iconSkin'=>"fav",'open'=>true,'children'=>$fav),
-                array('name'=>$this->L['root_path'],'ext'=>'__root__','children'=>$res,'iconSkin'=>"my",'open'=>true,'this_path'=> $tree_path,'isParent'=>true)
+                array('name'=>$this->L['fav'],'ext'=>'__fav__','iconSkin'=>"fav",
+                    'open'=>true,'children'=>$fav),                
+                array('name'=>$this->L['root_path'],'ext'=>'__root__','children'=>$root,
+                    'iconSkin'=>"my",'open'=>true,'this_path'=> MYHOME,'isParent'=>true),
+                array('name'=>$this->L['public_path'],'ext'=>'__root__','children'=>$share,
+                    'iconSkin'=>"lib",'open'=>true,'this_path'=> PUBLIC_PATH,'isParent'=>true)
             );
         }else{//文件管理器
-            $lib_array =  array(
-                array('name'=>$this->L['desktop'],'ext'=>'_null_','iconSkin'=>"my",'this_path'=> MYHOME.'desktop/','isParent'=>true),
-                array('name'=>$this->L['my_document'],'ext'=>'_null_','iconSkin'=>"doc",'this_path'=> MYHOME.'doc/','isParent'=>true),
-                array('name'=>$this->L['my_picture'],'ext'=>'_null_','iconSkin'=>"pic",'this_path'=> MYHOME.'image/','isParent'=>true),           
-                array('name'=>$this->L['my_music'],'ext'=>'_null_','iconSkin'=>"music",'this_path'=> MYHOME.'music/','isParent'=>true),
-                array('name'=>$this->L['my_movie'],'ext'=>'_null_','iconSkin'=>"movie",'this_path'=> MYHOME.'movie/','isParent'=>true), 
-                array('name'=>$this->L['my_download'],'ext'=>'_null_','iconSkin'=>"download",'this_path'=> MYHOME.'download/','isParent'=>true) 
-            );
+            $root  = $list_root['folderlist'];
+            $share = $list_share['folderlist'];
             $tree_data = array(
-                array('name'=>$this->L['fav'],'ext'=>'__fav__','iconSkin'=>"fav",'open'=>true,'children'=>$fav),
-                array('name'=>$this->L['lib'],'ext'=>'__lib__','iconSkin'=>"lib",'open'=>true,'children'=>$lib_array),
-                array('name'=>$this->L['root_path'],'ext'=>'__root__','iconSkin'=>"my",'open'=>true,'this_path'=> $tree_path,'isParent'=>true)
+                array('name'=>$this->L['fav'],'ext'=>'__fav__','iconSkin'=>"fav",
+                    'open'=>true,'children'=>$fav),
+                array('name'=>$this->L['root_path'],'ext'=>'__root__','children'=>$root,
+                    'iconSkin'=>"my",'open'=>true,'this_path'=> MYHOME,'isParent'=>true),
+                array('name'=>$this->L['public_path'],'ext'=>'__root__','children'=>$share,
+                    'iconSkin'=>"lib",'open'=>true,'this_path'=> PUBLIC_PATH,'isParent'=>true)
             );
         }
         show_json($tree_data);
@@ -374,7 +374,6 @@ class explorer extends Controller{
             $path_this_name=get_path_this($zip_list[0]['path']);
             $zipname = $basic_path.$path_this_name.'.zip';
         }else{
-            //$zipname = $basic_path.'temp_'.substr(md5(time()),5,3).'.zip';
             $path_this_name=get_path_this(get_path_father($zip_list[0]['path']));
             $zipname = $basic_path.$path_this_name.'.zip';
         }

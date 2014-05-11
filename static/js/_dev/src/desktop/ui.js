@@ -114,7 +114,8 @@
 	}
 	//图标样式，文件夹模版填充
 	this._getFolderBox = function(list){
-		var html="<div class='file folderBox menufolder' title='"+list['name']+"'>";
+		var html="<div class='file folderBox menufolder' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.modify_time+':'+list.mtime+"'>";
 		html+="<div class='folder ico' filetype='folder'></div>";
 		html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		return html;
@@ -131,17 +132,23 @@
 			}
 			var code = urlEncode(json_encode(list));
 			var display = list.name.replace('.oexe','');
-			html ="<div class='file fileApp menuApp' data-app="+code+" title='"+list.name+"'>";
+			html ="<div class='file fileApp menuApp' data-app="+code+" data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 			html+="<div class='ico' filetype='oexe' style='background-image:url("+icon+")'></div>";
 			html+="<div id='' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+display+"</span></div></div>";
 		}else if (inArray(core.filetype['image'],list['ext'])) {//如果是图片，则显示缩略图
 			var filePath = core.path2url(G.this_path+list['name']);
 			var thumbPath = 'index.php?explorer/image&path='+urlEncode(G.this_path+list['name']);
-			html+="<div class='file fileBox menufile' title='"+list['name']+"' >";
+			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' title='"+list['name']+"' class='picasaImage picture ico' filetype='"+list['ext']+"' style='margin:3px 0 0 8px;background-image:url(\""+thumbPath+"\");'></div>";
 			html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		}else{
-			html+="<div class='file fileBox menufile' title='"+list['name']+"' >";
+			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 			html+="<div class='"+list['ext']+" ico' filetype='"+list['ext']+"'></div>";
 			html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		}

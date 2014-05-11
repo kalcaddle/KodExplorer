@@ -66,6 +66,7 @@ $L= array(
 	"sort_type"                  =>	"排序方式",
 	"time_type"                  =>	"Y/m/d H:i",
 	"time_type_info"             =>	"Y年m月d日 H:i:s",
+	"public_path"           	 =>	"公共目录",
 
 	//右键
 	"file"                       =>	"文件",
@@ -200,7 +201,7 @@ $L= array(
 	"server_dwonload_desc"       =>	"个任务加入到下载列表",
 	"parent_permission"          => "父目录权限",
 
-	"root_path"                  =>	"根目录",
+	"root_path"                  =>	"我的文件",
 	"lib"                        =>	"库",
 	"fav"                        =>	"收藏夹",
 	"desktop"                    =>	"桌面",
@@ -227,7 +228,7 @@ $L= array(
 	//设置
 	"setting"                    =>	"系统设置", 	
 	"setting_title"              =>	"选项",     
-	"setting_user"               =>	"基础设置",
+	"setting_user"               =>	"个人中心",
 	"setting_password"           =>	"修改密码",	
 	"setting_password_old"       =>	"原密码",
 	"setting_password_new"       =>	"修改为", 
@@ -292,7 +293,7 @@ $L= array(
 	"group_role_upload"          =>	"允许上传",
 	"group_role_download"        =>	"远程下载",
 	"group_role_passowrd"        =>	"修改密码",
-	"group_role_config"          =>	"保存用户配置",
+	"group_role_config"          =>	"用户数据",
 	"group_role_fav"             =>	"收藏夹操作(添加/编辑/删除)",
 	"group_role_list"            =>	"列表查看",
 	"group_role_member_add"      =>	"添加用户",

@@ -174,7 +174,7 @@ define(function(require, exports) {
 				'update_ignore':"暂时忽略",
 				'update_readmore':"查看更多",
 				'update_whats_new':"更新说明",
-				'update_info':"1.多用户,权限管理<br/>2.文件夹拖拽上传<br/>3.解压缩优化<br/>4.非服务器路径预览&下载支持<br/>5.编辑器全面优化<br/>"
+				'update_info':"1.文件夹拖拽完美实现<br/>2.文件夹拖拽上传<br/>3.解压缩优化<br/>4.非服务器路径预览&下载支持<br/>5.树目录中文问题修复<br/>"
 			}
 		};
 		for (var key in L[type]) {

@@ -240,10 +240,30 @@ define(function(require, exports) {
 		});		
 	};
 
+	//下拉菜单展开操作
+	var _menuActionBind = function(){
+		$('.drop-menu-action li').bind('click',function(){
+			if ($(this).hasClass('disabled'))return;
+			var action = $(this).attr('id');
+			switch(action){
+				case 'open':ui.path.open();break;
+				case 'copy':ui.path.copy();break;
+				case 'rname':ui.path.rname();break;
+				case 'cute':ui.path.cute();break;
+				case 'past':ui.path.past();break;
+				case 'remove':ui.path.remove();break;
+				case 'zip':ui.path.zip();break;
+				case 'download':ui.path.download();break;
+				case 'info':ui.path.info();break;
+				default:break;
+			}
+		});
+	};
 	//图标样式，文件夹模版填充
 	this._getFolderBox = function(list){
 		var html="";
-		html+="<div class='file folderBox menufolder' title='"+list['name']+"'>";
+		html+="<div class='file folderBox menufolder' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.modify_time+':'+list.mtime+"'>";
 		html+="<div class='folder ico' filetype='folder'></div>";
 		html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		return html;
@@ -259,17 +279,23 @@ define(function(require, exports) {
 			}
 			var code = urlEncode(json_encode(list));
 			var display = list.name.replace('.oexe','');
-			html ="<div class='file fileApp menuApp' data-app="+code+" title='"+list.name+"'>";
+			html ="<div class='file fileApp menuApp' data-app="+code+" data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 			html+="<div class='ico' filetype='oexe' style='background-image:url("+icon+")'></div>";
 			html+="<div id='' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+display+"</span></div></div>";
 		}else if (inArray(core.filetype['image'],list['ext'])) {//如果是图片，则显示缩略图
 			var filePath = core.path2url(G.this_path+list['name']);
 			var thumbPath = 'index.php?explorer/image&path='+urlEncode(G.this_path+list['name']);
-			html+="<div class='file fileBox menufile' title='"+list['name']+"' >";
-			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' title='"+list['name']+"' class='picasaImage picture ico' filetype='"+list['ext']+"'><img data-original='"+thumbPath+"'/></div>";
+			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
+			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' class='picasaImage picture ico' filetype='"+list['ext']+"'><img data-original='"+thumbPath+"'/></div>";
 			html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		}else{
-			html+="<div class='file fileBox menufile' title='"+list['name']+"' >";
+			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 			html+="<div class='"+list['ext']+" ico' filetype='"+list['ext']+"'></div>";
 			html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		}	
@@ -280,7 +306,8 @@ define(function(require, exports) {
 	//列表样式，文件夹模版填充
 	this._getFolderBoxList = function(list){
 		var html="";
-		html+="<div class='file folderBox menufolder' title='"+list['name']+"'>";
+		html+="<div class='file folderBox menufolder' data-name='"+list.name+"' title='"
+		+LNG.name+':'+list.name+"&#10;"+LNG.modify_time+':'+list.mtime+"'>";
 		html+="	<div class='folder ico' filetype='folder'></div>";
 		html+="	<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div>";
 		html+="	<div class='filetype'>"+LNG.folder+"</div>";
@@ -295,13 +322,18 @@ define(function(require, exports) {
 		var html="";
 		if (list['ext'] == 'oexe') {
 			var code = urlEncode(json_encode(list));
-			html ="<div class='file fileApp menuApp' data-app="+code+" title='"+list.title+"'>";
+			html ="<div class='file fileApp menuApp' data-app='"+code+"' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 		}else if (inArray(core.filetype['image'],list['ext'])) {//如果是图片，则显示缩略图，并绑定幻灯片插件
 			var filePath = core.path2url(G.this_path+list['name']);
 			var thumbPath = 'index.php?explorer/image&path='+urlEncode(G.this_path+list['name']);
-			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' title='"+list['name']+"' class='picasaImage file fileBox menufile'>";
+			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' class='picasaImage file fileBox menufile' data-name='"+list.name+"' title='"+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+				+LNG.modify_time+':'+list.mtime+"'>";
 		}else {
-			html+="<div class='file fileBox menufile'  title='"+list['name']+"'>";
+			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
+			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
+			+LNG.modify_time+':'+list.mtime+"'>";
 		}
 		html+="	<div class='"+list['ext']+" ico' filetype='"+list['ext']+"'></div>";	
 		html+="	<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div>";
@@ -454,7 +486,8 @@ define(function(require, exports) {
 			_bindEventTheme();
 			_bindEventTools();
 			_bindHotKey();
-			_bindFrameSizeEvent();	
+			_bindFrameSizeEvent();
+			_menuActionBind();
 			ui.header.bindEvent();
 			$(window).bind("resize",function(){
 				ui.setStyle();//浏览器调整大小，文件列表区域调整高宽。
@@ -515,7 +548,9 @@ define(function(require, exports) {
 				//地址栏点击，更换地址。
 				$("#yarnball li a").die('click').live('click',function(e) {
 					var path = $(this).attr('title');
-					ui.path.list(path);
+					$("input.path").val(path);
+					ui.header.gotoPath();
+					//ui.path.list(path);
 					stopPP(e);
 				});
 
@@ -570,6 +605,10 @@ define(function(require, exports) {
 			//更新地址栏
 			addressSet:function(){
 				var path = G.this_path;
+				if (path.substring(0,G.public_path.length) == G.public_path) {
+					path = path.replace(G.public_path,'*public*/');
+				}
+
 				$("input.path").val(path);
 				$("#yarnball_input").css('display','none');
 				$("#yarnball").css('display','block');
@@ -627,10 +666,14 @@ define(function(require, exports) {
 				if (url.substr(url.length-1,1)!='/'){
 					url+='/';
 				}
+
+				var temp_path = '*public*/';
+				if (url.substring(0,temp_path.length) == temp_path) {
+					url = url.replace(temp_path,G.public_path);
+				}
 				ui.path.list(url);
 				ui.header.addressSet();
 			},
-
 			// 更改前进后退状态
 			updateHistoryStatus:function(){
 				if (Global.historyStatus['back']==0) {
@@ -667,7 +710,7 @@ define(function(require, exports) {
 					gopath=path.substr(0,len+1);		
 				}
 				$("input.path").val(gopath);
-				ui.path.list(gopath);
+				ui.header.gotoPath();
 			}
 		}
 	}

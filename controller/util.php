@@ -21,33 +21,33 @@ function _DIR($path,$pre_path=HOME){
     $path = _DIR_CLEAR(rawurldecode($path));
     $path = iconv_system($path);
     if (is_dir($path)) $path.='/';
+
+    //公共目录处理
+    $share_len = strlen(PUBLIC_PATH);
+    if (substr($path,0,$share_len) == PUBLIC_PATH) {
+        $pre_path = '';//如果为共享目录 则不追加普通用户的目录前缀
+    }
     return $pre_path.$path;
 }
 
 //处理成用户目录，并且不允许相对目录的请求操作
 function _DIR_OUT(&$arr,$pre_path=HOME){
     if ($GLOBALS['is_root']) return;
+    
+    //公共目录处理
+    if (substr($path,0,$share_len) == PUBLIC_PATH) {
+        $pre_path = '';//如果为共享目录 则不追加普通用户的目录前缀
+    }
     if (is_array($arr)) {
         foreach ($arr['filelist'] as $key => $value) {
-            $arr['filelist'][$key]['path'] = '/'.str_replace(HOME, '', $value['path']);
+            //$arr['filelist'][$key]['path'] = '/'.str_replace($pre_path, '', $value['path']);
+            $arr['filelist'][$key]['path'] = str_replace($pre_path, '', $value['path']);
         }
         foreach ($arr['folderlist'] as $key => $value) {
-            $arr['folderlist'][$key]['path'] = '/'.str_replace(HOME, '', $value['path']);
+            $arr['folderlist'][$key]['path'] = str_replace($pre_path, '', $value['path']);
         }        
     }else{
-        $arr = str_replace(HOME, '',$arr);
-    }
-}
-
-//处理成url连接；返回是否是在web路径下
-function _URL($path,$pre_path=HOME){
-    $path = _DIR_CLEAR(rawurldecode($path));
-    $path = $pre_path.$path;
-    $path = iconv_system($path);
-    if (substr($path,0,strlen(WEB_ROOT)) == WEB_ROOT) {
-        return array(true,HOST.str_replace(WEB_ROOT, '', $path));
-    }else{
-        return array(false,$pre_path.$path);
+        $arr = str_replace($pre_path, '',$arr);
     }
 }
 

@@ -105,6 +105,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		web_root 	: "<?php echo $GLOBALS['web_root'];?>",
 		web_host 	: "<?php echo HOST;?>",
 		static_path : "<?php echo STATIC_PATH;?>",
+		public_path  : "<?php echo PUBLIC_PATH;?>",
 		basic_path  : "<?php echo BASIC_PATH;?>",
 
 		myhome   	: "<?php echo MYHOME;?>",//当前绝对路径

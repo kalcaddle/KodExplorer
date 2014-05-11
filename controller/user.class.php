@@ -19,11 +19,30 @@ class user extends Controller
 		$this->tpl	= TEMPLATE  . 'user/';
 		$this->user = &$_SESSION['user'];
     }
+
+    /**
+     * api方式访问,最高权限
+     */
+    public function authApi(){
+        if (!REMOTE_OPEN) return;
+        if (isset($_GET['auth_key'])){
+            if(md5(md5($this->in['auth_key'])) == REMOTE_KEY) {
+                session_start();//记录session 写入文件
+                $_SESSION['isLogin'] = true;
+                $this->user['role'] = 'root';
+
+            }else{
+                show_json('error',false);
+            }
+        }
+    }
+
 	/**
      * 登陆状态检测;并初始化数据状态
      */
 	public function loginCheck()
     {
+        $this->authApi();//api方式验证
         if($_SESSION['isLogin'] === true){
             define('USER',USER_PATH.$this->user['name'].'/');
             if ($this->user['role'] == 'root') {
@@ -47,7 +66,7 @@ class user extends Controller
             $member = new fileCache($this->config['system_file']['member']);
             $user = $member->get($_COOKIE['kod_name']);
             if(md5($user['password'].get_client_ip()) == $_COOKIE['kod_token']){
-                session_start();//记录session 写入文件
+                
                 $_SESSION['isLogin'] = true;
                 $_SESSION['user']= $user;
                 setcookie('kod_name', $_COOKIE['kod_name'], time()+3600*24*365); 
@@ -144,7 +163,7 @@ class user extends Controller
      * 权限验证；统一入口检验
      */
     public function authCheck(){
-        if ($GLOBALS['is_root']) return;
+        if ($GLOBALS['is_root'] == 1) return;
         if(ACT == 'loginSubmit' || ACT=='checkCode') return;
         if (!array_key_exists(ST,$this->config['role_setting']) ){
             return;
