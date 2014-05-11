@@ -156,7 +156,6 @@ class debug extends Controller{
 		);
 		$path_list = array(
 			$this->path_to.'/data/log',
-			$this->path_to.'/data/User',
 			$this->path_to.'/data/thumb',
 			$this->path_to.'/static/js/_dev',
 			$this->path_to.'/static/js/app/update',
