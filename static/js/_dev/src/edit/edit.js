@@ -259,9 +259,7 @@ define(function(require, exports) {
             beforeSend: function(){
                 Tips.loading(LNG.sending);
             },
-            error:function(data) {
-                Tips.close(LNG.system_error,false);
-            },
+            error:core.ajaxError,
             success:function(data){
                 Tips.close(data);
                 if (!data.code) return;

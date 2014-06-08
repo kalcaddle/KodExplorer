@@ -245,7 +245,7 @@ class explorer extends Controller{
         if(mkdir($new,0777)){
             show_json($this->L['create_success']);
         }else{
-            show_json($this->L['create_error']);
+            show_json($this->L['create_error'],false);
         }
     }
     public function pathCopy(){
@@ -448,7 +448,16 @@ class explorer extends Controller{
     public function serverDownload() {
         $url = rawurldecode($this->in['url']);
         $save_path = _DIR($this->in['save_path']);
-        $save_path = $save_path.'download_'.rand(100,999).'.tmp';
+
+        $name = get_path_this($url);
+        if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));        
+        if (!$name) $name = 'index.html';
+        $ext = get_path_ext($name);
+        $ext_arr = explode('|',$GLOBALS['auth']['ext_not_allow']);
+        if (in_array($ext,$ext_arr)){
+            $name .= '.tmp';
+        }
+        $save_path = $save_path.$name;
         $result = file_download_this($url,$save_path);
         if ($result == 1){
             show_json($this->L['download_success'],true,$save_path);

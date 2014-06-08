@@ -47,15 +47,16 @@ class debug extends Controller{
 		$this->_remove();
 		echo '删除成功！<br/><h3>开始替换模板种less相关内容</h3><hr/>';flush();
 		$this->_fileReplace();
-		echo '替换成功！<br/><h3>打包程序</h3><hr/>';flush();
-		
+		echo '替换成功！<br/><h3>初始化默认用户数据...</h3><hr/>';flush();		
+		$this->_initUser();
+		echo '初始化默认用户成功!<br/><h3>打包程序</h3><hr/>';flush();
+
 		load_class('pclzip');
 		ini_set('memory_limit', '2028M');//2G;
 		$archive = new PclZip($this->zip_to);
         $v_list = $archive->create($this->path_to,PCLZIP_OPT_REMOVE_PATH,$this->path_to);
 		echo '打包成功！<br/><h3>初始化配置文件</h3><hr/>';flush();
 
-		$this->_initUser();
 		echo '更新成功！<br/><h1>导出处理完成！^_^</h1>';flush();
 	}
 	
@@ -156,6 +157,8 @@ class debug extends Controller{
 		);
 		$path_list = array(
 			$this->path_to.'/data/log',
+			$this->path_to.'/data/User',
+			$this->path_to.'/data/public/',
 			$this->path_to.'/data/thumb',
 			$this->path_to.'/static/js/_dev',
 			$this->path_to.'/static/js/app/update',
@@ -222,7 +225,8 @@ class debug extends Controller{
         	'guest'=>array('guest','guest')
         );
 
-        foreach ($user as $name => $v) {
+		mk_dir($this->path_to.'/data/public/test/');//创建公共目录
+        foreach ($user as $name => $v) {//创建用户目录及初始化
 	        $user_path = $this->path_to.'/data/User/'.$name.'/';
 	        mk_dir($user_path);
 	        foreach ($root as $dir) {
@@ -231,8 +235,7 @@ class debug extends Controller{
 	        foreach ($home as $dir) {
 	            mk_dir($user_path.'home/'.$dir);
 	        }
-	        fileCache::save($user_path.'data/config.php',$this->config['setting_default']);  
-
+	        fileCache::save($user_path.'data/config.php',$this->config['setting_default']);
         }
         $this->_initUserData();
 	}

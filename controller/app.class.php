@@ -87,7 +87,17 @@ class app extends Controller{
         show_json($this->L['error'],false);
     }
 
-
+    public function get_url_title(){
+        $html = curl_get_contents($this->in['url']);
+        $result = match($html,"<title>(.*)<\/title>");
+        if (strlen($result)>50) {
+            $result = mb_substr($result,0,50,'utf-8');
+        }
+        if (strlen($result) == 0) {
+            $result = urlencode($this->in['url']);
+        }
+        show_json($result);
+    }
 
     private function _init(){
         return  json_decode(rawurldecode($this->in['data']));

@@ -39,9 +39,7 @@ define(function(require, exports) {
 			beforeSend:function(){
 				core.tips.loading();
 			},
-			error:function(){
-			    core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success: function(data) {
 				core.tips.close(data);
 				if (typeof(callback) == 'function')callback(data);
@@ -59,9 +57,7 @@ define(function(require, exports) {
 			beforeSend:function(){
 				core.tips.loading();
 			},
-			error:function(){
-			    core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success: function(data) {
 				core.tips.close(data);
 				if (typeof (callback) == 'function')callback(data);
@@ -81,9 +77,7 @@ define(function(require, exports) {
 			beforeSend:function(){
 				core.tips.loading();
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success: function(data) {
 				core.tips.close(data);
 				if (typeof(callback) == 'function')callback(data);
@@ -97,7 +91,11 @@ define(function(require, exports) {
 	//删除 文件|文件夹 & 包含批量删除
 	var remove = function(param,callback){
 		if (param.length<1) return;
-		var name = param[0]['path'].substr(-40) + '...';
+		var name = param[0]['path'];
+		if (name.length > 20) {
+			name = name.substr(-20) + '...'
+		};
+
 		$.dialog({
 			id:'dialog_path_remove',
 			fixed: true,//不跟随页面滚动
@@ -117,9 +115,7 @@ define(function(require, exports) {
 					beforeSend:function(){
 						core.tips.loading();
 					},
-					error:function(){
-						common.tips.close(LNG.system_error,false);
-					},
+					error:core.ajaxError,
 					success: function(data) {
 						core.tips.close(data);
 						if (typeof(callback) == 'function')callback(data);
@@ -137,9 +133,7 @@ define(function(require, exports) {
 			type:'POST',
 			dataType:'json',
 			data:_json(param),
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success: function(data) {
 				core.tips.tips(data);
 			}
@@ -153,9 +147,7 @@ define(function(require, exports) {
 			type:'POST',
 			dataType:'json',
 			data:_json(param),
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				core.tips.tips(data);
 			}
@@ -171,9 +163,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.moving);
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				if (!data.code){
 					core.tips.close(data);					
@@ -196,9 +186,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.getting);
 			},
-			error:function(){//请求出错处理
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				if (!data.code){
 					core.tips.close(data);return;
@@ -225,9 +213,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.getting);
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				if (!data.code){
 					core.tips.close(data);return;
@@ -258,9 +244,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.ziping);
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
 				data.code = 100;
@@ -277,9 +261,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.unziping);
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
 				data.code = 100;
@@ -298,9 +280,7 @@ define(function(require, exports) {
 			beforeSend: function(){
 				core.tips.loading(LNG.moving);
 			},
-			error:function(){
-				core.tips.close(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
 				if (!data.code) return;
@@ -313,9 +293,7 @@ define(function(require, exports) {
 		$.ajax({
 			url:'index.php?explorer/clipboard',
 			dataType:'json',
-			error:function(){
-				core.tips.tips(LNG.system_error,false);
-			},
+			error:core.ajaxError,
 			success:function(data){
 				if (!data.code) return;
 				$.dialog({
@@ -415,9 +393,7 @@ define(function(require, exports) {
 						beforeSend:function(){
 							core.tips.loading();
 						},
-						error:function(){
-							core.tips.close(LNG.system_error,false);
-						},
+						error:core.ajaxError,
 						success: function(data) {
 							core.tips.close(data);
 							if (!data.code) return;
@@ -476,10 +452,51 @@ define(function(require, exports) {
     var appList = function(){
     	core.appStore();
 	};
+	//ui.path.pathOperate.appAddURL('http://www.baidu.com');
+	var appAddURL = function(url){
+		if (url && url.length<4 && url.substring(0,4)!='http') return;
+		$.ajax({
+			url: './index.php?app/get_url_title&url='+url,
+			dataType:'json',
+			beforeSend:function(){
+				core.tips.loading();
+			},
+			success: function(result) {
+				var name = result.data;
+				core.tips.close(result);
+				var data = {
+					content:url,
+					desc: "",
+					group: "others",
+					type: "url",
+					icon: "internet.png",
+					name: name,
+					resize: 1,
+					simple: 0,
+					height: "70%",
+					width: "80%"
+				};
+				var filename = urlEncode2(G.this_path+name);
+				url = './index.php?app/user_app&action=add&path='+filename;
+			    $.ajax({
+					url: url,
+					type:'POST',
+					dataType:'json',
+					data:'data='+urlEncode2(json_encode(data)),					
+					success: function(data) {
+						core.tips.close(data);
+						if (!data.code) return;
+						ui.f5();
+					}
+				});
+			}
+		});		
+	};
 
 	return{
 		appEdit:appEdit,
 		appList:appList,
+		appAddURL:appAddURL,
 
 		newFile:newFile,
 		newFolder:newFolder,

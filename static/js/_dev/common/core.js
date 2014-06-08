@@ -14,11 +14,11 @@ define(function(require, exports) {
 			'bindary':['pdf','bin','zip','swf','gzip','rar','arj','tar','gz','cab','tbz','tbz2','lzh','uue','bz2'
 						,'ace','exe','so','dll','chm','rtf','odp','odt','pages','class','psd','ttf']
 		},
-		contextmenu:function(){
+		contextmenu:function(event){
 			rightMenu.hidden();
 			var e = event || window.event;
-			if ($.nodeName(e.target,'TEXTAREA') ||
-				$.nodeName(e.target,'INPUT')){
+			if (e && ($.nodeName(e.target,'TEXTAREA') ||
+				$.nodeName(e.target,'INPUT'))){
 				return true;
 			}
 			//return false;
@@ -68,6 +68,24 @@ define(function(require, exports) {
 				return host+'index.php?explorer/fileProxy&path=' +urlEncode(path);
 			}else{
 				return G.web_host+G.web_root+path;
+			}
+		},
+		ajaxError:function(XMLHttpRequest, textStatus, errorThrown){
+			core.tips.close(LNG.system_error,false);
+			var error = '<div style="color:#f60;">'+XMLHttpRequest.responseText+'</div>';
+			var dialog = $.dialog.list['ajaxErrorDialog'];
+			if (dialog) {
+				dialog.content(error);
+			}else{
+				$.dialog({
+					id:'ajaxErrorDialog',
+					fixed:true,
+					resize:true,
+					title:'ajax error',
+					width:450,
+					height:200,
+					content:error
+				});	
 			}
 		},
 		// setting 对话框
@@ -279,6 +297,7 @@ define(function(require, exports) {
 					beforeSend:function(){
 						$message.hide().html(LNG.searching+'<img src="'+G.static_path+'images/loading.gif">').fadeIn(fade);
 					},
+					error:core.ajaxError,
 					success:function(data){
 						if (!data.code) {
 							$message.hide().html(data.data).fadeIn(fade);
@@ -292,9 +311,6 @@ define(function(require, exports) {
 						var render = template.compile(tpl.list);
 						data.data.LNG = LNG;
 						$(render(data.data)).insertAfter('.search_result .message').fadeIn(fade);
-					},
-					error:function(data){
-						$message.hide().html(LNG.system_error).fadeIn(fade);
 					}
 				});
 			}
@@ -370,14 +386,12 @@ define(function(require, exports) {
 				$.ajax({
 					url:'?explorer/serverDownload&save_path='+path+'&url='+urlEncode2(urls[i]),
 					dataType:'json',
+					error:core.ajaxError,
 					success:function(data){
 						if (data.code) {
 							FrameCall.father('ui.f5',"");
 						}
 						core.tips.tips(data);
-					},
-					error:function(data){
-						core.tips.tips(LNG.system_error,false);
 					}
 				});
 			}
@@ -447,10 +461,13 @@ define(function(require, exports) {
 			}).on('uploadError', function(file,reason){
 				$('#'+file.id).find(state).addClass('error').text(LNG.upload_error);
 			}).on('uploadFinished', function(file){
-			   $(list).find('.item').delay(2000).each(function(index){
+				$(list).find('.item').delay(2000).each(function(index){
 					$(this).delay(index*300).slideUp(600);
-			   });
+				});
 				select_name_arr = [];
+				if (Config.pageApp == 'explorer') {
+					ui.tree.checkIfChange(G.this_path);
+				}
 			}).on('error',function(a,b){
 				//console.log(a,b);
 			});
@@ -458,8 +475,8 @@ define(function(require, exports) {
 			var timer;
 			inState = false;
 			dragOver = function(e){
-				stopPP(e);
-				if (inState == false){
+				//stopPP(e);
+				if (inState == false){					
 					inState = true;
 					MaskView.tips(LNG.upload_drag_tips);
 				}
@@ -476,12 +493,19 @@ define(function(require, exports) {
 				},100);
 			}
 			dragDrop = function(e){
+				e = e.originalEvent || e;
+				var txt = e.dataTransfer.getData("text/plain");
+				if (txt && txt.substring(0,4) == 'http') {
+					ui.path.pathOperate.appAddURL(txt);
+					console.log(txt);
+				}else{
+					core.upload();//满足 拖拽到当前，则上传到当前。
+				}
 				stopPP(e);
 				if (inState) {
 					inState = false;
 					MaskView.close();
-				}
-				core.upload();//满足 拖拽到当前，则上传到当前。
+				}				
 			}
 		}
 	};

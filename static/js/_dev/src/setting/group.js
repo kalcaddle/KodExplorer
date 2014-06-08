@@ -113,6 +113,11 @@ define(function(require, exports) {
             tips(LNG.not_null,'error');
             return false;
         }
+        if (escape(role).indexOf("%u")>=0){
+            tips('名称不能为中文！','warning');
+            return false;
+        }
+        
         $('.group_editor .tag.this').each(function(){
             var data = $(this).attr('data-role').split(';');
             for (var i = 0; i < data.length; i++) {

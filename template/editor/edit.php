@@ -107,6 +107,8 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		static_path : "<?php echo STATIC_PATH;?>",
 		public_path  : "<?php echo PUBLIC_PATH;?>",
 		basic_path  : "<?php echo BASIC_PATH;?>",
+		version 	: "<?php echo KOD_VERSION;?>",
+		app_host 	: "<?php echo APPHOST;?>",
 
 		myhome   	: "<?php echo MYHOME;?>",//当前绝对路径
 		frist_file	: "<?php echo $_GET['filename'];?>",

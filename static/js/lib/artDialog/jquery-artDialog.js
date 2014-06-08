@@ -160,6 +160,12 @@ artDialog.fn = artDialog.prototype = {
 		config.init && config.init.call(that, window);
 		_titleBarHeight = DOM.title.css('height');
 		_titleBarHeight = _titleBarHeight.replace('px','');
+		
+		DOM.wrap
+			.css({opacity:0.6,top:'-='+DOM.wrap.height()*0.02})
+			.animate(
+				{opacity:1,top:'+='+DOM.wrap.height()*0.02},
+				{easing: 'swing',duration:200});
 		return that;
 	},
 	
@@ -528,53 +534,53 @@ artDialog.fn = artDialog.prototype = {
 		!arguments[0] && this._lockMaskWrap && this._lockMaskWrap.hide();
 		return this;
 	},
-	
+
 	/** 关闭对话框 */
 	close: function () {
 		if (this.closed) return this;
-
 		var that = this,
 			DOM = that.DOM,
 			wrap = DOM.wrap,
 			list = artDialog.list,
 			fn = that.config.close,
 			follow = that.config.follow;
-		
+
 		that.time();
 		if (typeof fn === 'function' && fn.call(that, window) === false) {
 			return that;
-		};
-		
+		};				
 		that.unlock();
-		
-		// 置空内容
-		that._elemBack && that._elemBack();
-		wrap[0].className = wrap[0].style.cssText = '';
-		DOM.title.html('');
-		DOM.content.html('');
-		DOM.buttons.html('');
 
-		if (artDialog.focus === that) artDialog.focus = null;
-		if (follow) follow.removeAttribute(_expando + 'follow');
-		
-		//if (that.config.resize) 
-		if (that.config.title !== false){
-			dialogList.close(that.config.id);
-		}
+		wrap.animate({opacity:0,top:'-='+wrap.height() * 0.03},
+			{easing:'swing',duration:250,complete:function(){
+			// 置空内容
+			that._elemBack && that._elemBack();
+			wrap[0].className = wrap[0].style.cssText = '';
+			DOM.title.html('');
+			DOM.content.html('');
+			DOM.buttons.html('');
 
-		delete list[that.config.id];
-		that._removeEvent();
-		that.hide(true)._setAbsolute();
-		
-		// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
-		for (var i in that) {
-			if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
-		};
-		
-		// 移除HTMLElement或重用
-		_box ? wrap.remove() : _box = that;
-		this.resetIndex();
-		return that;
+			if (artDialog.focus === that) artDialog.focus = null;
+			if (follow) follow.removeAttribute(_expando + 'follow');
+			
+			//if (that.config.resize) 
+			if (that.config.title !== false){
+				dialogList.close(that.config.id);
+			}
+
+			delete list[that.config.id];
+			that._removeEvent();
+			that.hide(true)._setAbsolute();
+			
+			// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
+			for (var i in that) {
+				if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
+			};				
+			// 移除HTMLElement或重用
+			_box ? wrap.remove() : _box = that;
+			that.resetIndex();
+			return that;
+		}});
 	},
 	
 	/**
@@ -950,7 +956,7 @@ _$document.bind('keydown', function (event) {
 		keyCode = event.keyCode;
 
 	if (!api || !api.config.esc || rinput.test(nodeName) || api.config.resize || api.config.simple) return;
-		
+	
 	keyCode === 27 && api._click(api.config.cancelVal);
 });
 

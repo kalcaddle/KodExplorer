@@ -213,6 +213,7 @@
 				url:'index.php?explorer/pathList&path='+G.this_path,
 				dataType:'json',
 				//async:false,//同步阻塞.阻塞其他线程，等待执行完成。//解决重命名后设置选中
+				error:core.ajaxError,
 				success:function(data){
 					if (!data.code) {	
 						core.tips.tips(data);
@@ -224,9 +225,6 @@
 					if (typeof(callback) == 'function'){
 						callback(data);
 					}
-				},
-				error:function(data){
-					core.tips.tips(LNG.system_error,false);
 				}
 			});		
 		}

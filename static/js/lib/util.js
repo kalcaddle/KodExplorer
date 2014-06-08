@@ -161,8 +161,8 @@ var tips = function(msg,code){
 	Tips.tips(msg,code);
 }
 var Tips =  (function(){
-	var in_time  = 600;
-	var delay = 1200;
+	var in_time  = 500;
+	var delay = 500;
 	var opacity  = 0.7;
 	var _init = function(msg,code){
 		var tipsIDname = "messageTips";

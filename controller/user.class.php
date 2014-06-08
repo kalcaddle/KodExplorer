@@ -45,6 +45,10 @@ class user extends Controller
         $this->authApi();//api方式验证
         if($_SESSION['isLogin'] === true){
             define('USER',USER_PATH.$this->user['name'].'/');
+            if (!file_exists(USER)) {
+                $this->logout();
+                return;
+            }
             if ($this->user['role'] == 'root') {
                 define('MYHOME',USER.'home/');
                 define('HOME','');
@@ -66,7 +70,7 @@ class user extends Controller
             $member = new fileCache($this->config['system_file']['member']);
             $user = $member->get($_COOKIE['kod_name']);
             if(md5($user['password'].get_client_ip()) == $_COOKIE['kod_token']){
-                
+                session_start();//re start
                 $_SESSION['isLogin'] = true;
                 $_SESSION['user']= $user;
                 setcookie('kod_name', $_COOKIE['kod_name'], time()+3600*24*365); 
@@ -180,12 +184,11 @@ class user extends Controller
                 }
                 //扩展名限制：新建文件&上传文件&重命名文件&保存文件&zip解压文件
                 $check_arr = array(
-                    'mkfile'    =>  $this->in['path'],
-                    'pathRname' =>  $this->in['rname_to'],
-                    'fileUpload'=>  $_FILES['file']['name'],
-                    'fileSave'  =>  $this->in['path'],
+                    'mkfile'    =>  trim($this->in['path']),
+                    'pathRname' =>  trim($this->in['rname_to']),
+                    'fileUpload'=>  trim($_FILES['file']['name']),
+                    'fileSave'  =>  trim($this->in['path'])
                 );
-
                 if (array_key_exists(ACT,$check_arr)){
                     $ext = get_path_ext($check_arr[ACT]);
                     $ext_arr = explode('|',$auth['ext_not_allow']);

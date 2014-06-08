@@ -14,7 +14,7 @@ define(function(require, exports) {
 
         //图片缩略图懒加载 桌面不做处理
         $(".fileContiner .picture img").lazyload({
-        	effect : "fadeIn",
+        	//effect : "fadeIn",
         	//placeholder:G.static_path + 'images/loading_tree.gif',
         	container: $(".bodymain")
 		});
@@ -427,10 +427,10 @@ define(function(require, exports) {
 						callback(data);
 					}
 				},
-				error:function(data){
-					core.tips.tips(LNG.system_error,false);
+				error:function(XMLHttpRequest, textStatus, errorThrown){					
 					$('.tools-left .msg').fadeOut(100);
 					$(Config.FileBoxSelector).html('');
+					core.ajaxError(XMLHttpRequest, textStatus, errorThrown);
 				}
 			});		
 		}
@@ -643,16 +643,17 @@ define(function(require, exports) {
 			//自适应宽度
 			set_width:function(){
 				$(".yarnball").stop(true,true);
-				var box_width = $('#yarnball').innerWidth()-3;
+				var box_width = $('#yarnball').innerWidth();
 				var need_width = 0;
 				$('#yarnball li a').each(function(index){
-					need_width += $(this).outerWidth()+ parseInt($(this).css('margin-left'));
+					need_width += $(this).outerWidth()+ parseInt($(this).css('margin-left'))+5;
 				});
-				var m_width = (box_width-30) - need_width;
-				if(m_width<0){
+
+				var m_width = box_width - need_width;
+				if(m_width<=0){
 					$(".yarnball")
-						.css('width',box_width - m_width +'px')
-						.css('left', m_width+'px');
+						.css('width',need_width +'px')
+						.css('left',m_width+'px');
 				}else{
 					$(".yarnball").css({'left':'3px','width':box_width +'px'});
 				}

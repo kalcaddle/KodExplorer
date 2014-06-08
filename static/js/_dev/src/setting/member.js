@@ -103,6 +103,11 @@ define(function(require, exports) {
             tips(LNG.not_null,'warning');
             return false;
         }
+        if (escape(name).indexOf("%u")>=0){
+            tips('名称不能为中文！','warning');
+            return false;
+        }
+
         $.ajax({
             url:api+'add&name='+name+'&password='+password+'&role='+role,
             dataType:'json',
@@ -147,6 +152,10 @@ define(function(require, exports) {
         var password_to=$(obj).find('#password').val();
         if (name_to=='' || role_to ==''){
             tips(LNG.not_null,'error');
+            return false;
+        }
+        if (escape(name_to).indexOf("%u")>=0){
+            tips('名称不能为中文！','warning');
             return false;
         }
 

@@ -264,6 +264,7 @@ define(function(require, exports) {
 					core.tips.tips(LNG.path_exists,'warning');
 				}else{
 					pathOperate.newFile(G.this_path+filename,function(){
+						ui.tree.checkIfChange(G.this_path);
 						ui.f5_callback(function() {
 							_setSelectByFilename(filename);
 						});
@@ -280,6 +281,7 @@ define(function(require, exports) {
 				_newFile(newname_ext);
 			}else{           
 				pathOperate.newFile(G.this_path+filename,function(){
+					ui.tree.checkIfChange(G.this_path);
 					ui.f5_callback(function() {
 						_setSelectByFilename(filename);
 					});
@@ -318,6 +320,7 @@ define(function(require, exports) {
 					core.tips.tips(LNG.path_exists,'warning');
 				}else{
 					pathOperate.newFolder(G.this_path+filename,function(){
+						ui.tree.checkIfChange(G.this_path);
 						ui.f5_callback(function() {
 							_setSelectByFilename(filename);
 						});
@@ -333,6 +336,7 @@ define(function(require, exports) {
 				_newFolder();
 			}else{
 				pathOperate.newFolder(G.this_path+filename,function(){
+					ui.tree.checkIfChange(G.this_path);
 					ui.f5_callback(function() {
 						_setSelectByFilename(filename);
 					});
@@ -381,6 +385,7 @@ define(function(require, exports) {
 					path    =urlEncode(G.this_path+selectid);
 					rname_to=urlEncode(G.this_path+rname_to);
 					pathOperate.rname(path,rname_to,function(){
+						ui.tree.checkIfChange(G.this_path);
 						ui.f5_callback(function() {
 							_setSelectByFilename(select_name);
 						});
@@ -403,6 +408,7 @@ define(function(require, exports) {
 				path    =urlEncode(G.this_path+selectid);
 				rname_to=urlEncode(G.this_path+rname_to);
 				pathOperate.rname(path,rname_to,function(){
+					ui.tree.checkIfChange(G.this_path);
 					ui.f5_callback(function() {
 						_setSelectByFilename(select_name);
 					});
@@ -412,6 +418,10 @@ define(function(require, exports) {
 				$(selectObj).find(".title").html(selectid);
 			}
 		});
+	};
+	var refreshCallback=function(){//当前目录文件变化，刷新目录
+		ui.f5();
+		ui.tree.checkIfChange(G.this_path);
 	};
 	return {
 		//app
@@ -469,16 +479,17 @@ define(function(require, exports) {
 		pathOperate:pathOperate,
 		search 	:function(){core.search('',_param().path);},
 		fav 	:function(){pathOperate.fav(_param().path);},
-		remove 	:function(){pathOperate.remove(_param(true),ui.f5);fileLight.clear();},
+		remove 	:function(){pathOperate.remove(_param(true),refreshCallback);fileLight.clear();},
 		copy 	:function(){pathOperate.copy(_param(true));},
 		cute 	:function(){pathOperate.cute(_param(true),ui.f5);},
-		zip 	:function(){pathOperate.zip(_param(true),ui.f5);},
+		zip 	:function(){pathOperate.zip(_param(true),refreshCallback);},
 		unZip 	:function(){pathOperate.unZip(_param().path,ui.f5);},
-		cuteDrag:function(dragTo){pathOperate.cuteDrag(_param(true),dragTo,ui.f5);},
+		cuteDrag:function(dragTo){pathOperate.cuteDrag(_param(true),dragTo,refreshCallback);},
 		info:function(){pathOperate.info(_param(true));},
 		past:function(){
 			fileLight.clear();
 			pathOperate.past(G.this_path,function(list){
+				ui.tree.checkIfChange(G.this_path);
 				ui.f5_callback(function() {
 					_setSelectByFilename(list.data);
 				});

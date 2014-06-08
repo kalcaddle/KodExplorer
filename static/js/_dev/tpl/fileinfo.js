@@ -83,6 +83,11 @@ var path_info = "<div class='pathinfo'>\
         <div class='content'>{{mtime}}</div>\
         <div style='clear:both'></div>\
     </div>\
+    <div class='p'>\
+        <div class='title'>{{LNG.last_time}}</div>\
+        <div class='content'>{{atime}}</div>\
+        <div style='clear:both'></div>\
+    </div>\
     <div class='line'></div>\
     <div class='p'>\
         <div class='title'>{{LNG.permission}}:</div>\

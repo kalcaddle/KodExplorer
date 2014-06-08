@@ -5,10 +5,12 @@
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
 * @license http://kalcaddle.com/tools/licenses/license.txt
 */
+
+
 date_default_timezone_set('PRC');
-@ini_set('display_errors',0);
 @ini_set('session.cache_expire',600);
 @set_time_limit(600);//30min pathInfoMuti,search,upload,download... 
+@ini_set('display_errors',0);
 
 function P($path){return str_replace('\\','/',$path);}
 define('WEB_ROOT',str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__))).'/index.php').'/');
