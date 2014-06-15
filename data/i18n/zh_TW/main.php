@@ -72,6 +72,7 @@ $L= array(
 	"file"                       =>	"檔",
 	"folder"                     =>	"檔夾",
 	"copy"                       =>	"複製",
+	"clone"                      =>	"创建副本",	
 	"past"                       =>	"粘貼",
 	"cute"                       =>	"剪切",
 	"remove"                     =>	"刪除",

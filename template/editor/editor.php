@@ -35,7 +35,7 @@
 				<div class="menuTreeFolder"></div>
 				<div class="menuTreeFile"></div>				
 				<div class ='frame'>
-					 <iframe name="OpenopenEditor" src="?editor/edit" style="width:100%;height:100%;border:0;" frameborder=0></iframe>
+					 <iframe name="OpenopenEditor" src="./index.php?editor/edit" style="width:100%;height:100%;border:0;" frameborder=0></iframe>
 				</div>	
 			</div>
 		</div><!-- / frame-right end-->

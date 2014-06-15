@@ -98,6 +98,8 @@
 							    <i class="font-icon icon-cut"></i><?php echo $L['cute'];?></a></li>
 							    <li id="past"><a href='javascript:;'>
 							    <i class="font-icon icon-paste"></i><?php echo $L['past'];?></a></li>
+							    <li id="clone"><a href='javascript:;'>
+							    <i class="font-icon icon-external-link"></i><?php echo $L['clone'];?></a></li>
 							    <li id="remove"><a href='javascript:;'>
 							    <i class="font-icon icon-trash"></i><?php echo $L['remove'];?></a></li>
 
@@ -147,7 +149,7 @@
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js"></script>
 <script type="text/javascript">
     var LNG = <?php echo json_encode($L);?>;
-    var AUTH = <?php echo json_encode($GLOBALS['auth']);?>;
+    <?php if(isset($GLOBALS['auth'])) echo "var AUTH = "+json_encode($GLOBALS['auth']);?>;
 	var G = {
 		is_root 	: <?php echo  $GLOBALS['is_root'];?>,
 		web_root 	: "<?php echo $GLOBALS['web_root'];?>",

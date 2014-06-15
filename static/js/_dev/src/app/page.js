@@ -48,6 +48,7 @@ define(function(require, exports) {
 						dataType:'json',
 						type:'POST',
 						data:'data='+urlEncode(json_encode(data)),
+						error:core.ajaxError,
 						success:function(data){
 							tips(data);
 							if (!data.code) return;
@@ -61,10 +62,9 @@ define(function(require, exports) {
 					break;
 				case 'del':
 					$.ajax({
-						url:'?app/del&name='+urlEncode(data.name),
+						url:'./index.php?app/del&name='+urlEncode(data.name),
 						dataType:'json',
-						beforeSend:function (data){
-						},
+						error:core.ajaxError,
 						success:function(data){
 							tips(data);
 							if (!data.code) return;
@@ -110,7 +110,7 @@ define(function(require, exports) {
 
 		var $content = $('.main .app-list');
 		$.ajax({
-			url:'?app/get&group='+group,
+			url:'./index.php?app/get&group='+group,
 			dataType:'json',
 			beforeSend:function (data){
 			},

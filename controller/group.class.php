@@ -6,11 +6,7 @@
 * @license http://kalcaddle.com/tools/licenses/license.txt
 */
 
-class group extends Controller
-{
-    /**
-     * 构造函数
-     */
+class group extends Controller{
     private $sql;
     function __construct()    {
         parent::__construct();
@@ -23,8 +19,7 @@ class group extends Controller
     /**
      * 用户添加
      */
-    public function add()
-    {
+    public function add(){
         $group = $this->_init_data();
         if($this->sql->add($this->in['role'],$group)){
             show_json($this->L['success']);
@@ -35,8 +30,7 @@ class group extends Controller
     /**
      * 编辑
      */
-    public function edit() 
-    {
+    public function edit(){
         $group = $this->_init_data();
         $role_old = $this->in['role_old'];
         if (!$role_old) show_json($this->L["groupname_can_not_null"],false);

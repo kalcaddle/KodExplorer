@@ -115,7 +115,7 @@ define(function(require, exports) {
 					break;
 				default:break;
 			}
-		}		
+		}
 	};
 
 	var setting={
@@ -124,7 +124,9 @@ define(function(require, exports) {
 			url:Config.treeAjaxURL,//直接上次拿到的json变量。
 			autoParam:["ajax_name=name","ajax_path=path","this_path"],//前面是value 后面是key
 			dataFilter: function(treeId, parentNode, responseData){
-				if (!responseData.code) return null;
+				if (!responseData.code){				
+					return null;
+				}
 				return responseData.data;
 			}
 		},

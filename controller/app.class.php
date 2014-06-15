@@ -7,9 +7,6 @@
 */
 
 class app extends Controller{
-    /**
-     * 构造函数
-     */
     function __construct()    {
         parent::__construct();
         $role = $_SESSION['user']['role'];
@@ -28,7 +25,7 @@ class app extends Controller{
      */
     public function user_app() {
         $path = _DIR($this->in['path']);
-        if ($this->in['action'] == 'add'){
+        if (isset($this->in['action']) && $this->in['action'] == 'add'){
             $path .= '.oexe';
             
         }
@@ -44,7 +41,7 @@ class app extends Controller{
      */
     public function get() {
         $list = array();
-        if (!$this->in['group'] || $this->in['group']=='all') {
+        if (!isset($this->in['group']) || $this->in['group']=='all') {
             $list = $this->sql->get();
         }else{
             $list = $this->sql->get('group','',$this->in['group']);

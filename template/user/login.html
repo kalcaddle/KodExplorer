@@ -1,3 +1,4 @@
+<!--user login-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,12 +14,12 @@
 			<div class="logo">KOD<b>Explorer</b></div>
 			<div class='info'>——<?php echo $L['title_name'];?></div>
 		</div>
-		<form method="post" action="./?user/loginSubmit">
+		<form method="post" action="./index.php?user/loginSubmit">
 			<div class="inputs">
 				<div><span><?php echo $L['username'];?>：</span><input id="username" name='name' type="text" placeholder="<?php echo $L['username'];?>" required/> </div> 
 				<div><span><?php echo $L['password'];?>：</span><input id="password" name='password' type="password" placeholder="<?php echo $L['password'];?>" required /></div>
-            	<?php if(intval($_SESSION['code_error_time']) >=3){?>
-					<div class='check_code'><span><?php echo $L['login_code'];?>：</span><input name='check_code' class="check_code" type="text" placeholder="<?php echo $L['login_code'];?>" required /> <img src='./?user/checkCode' onclick="this.src='./?user/checkCode'" />
+            	<?php if(intval(isset($_SESSION['code_error_time']) && $_SESSION['code_error_time']) >=3){?>
+					<div class='check_code'><span><?php echo $L['login_code'];?>：</span><input name='check_code' class="check_code" type="text" placeholder="<?php echo $L['login_code'];?>" required /> <img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
 					<div style="clear:both;"></div></div>				
 				<?php }?>
 			</div>
@@ -30,7 +31,7 @@
 			<div class="msg"><?php echo $msg;?></div>
 			<div style="clear:both;"></div>
 			<div class='guest'>
-			<a href="./?user/loginSubmit&name=guest&password=guest"><?php echo $L['guest_login'];?><i class=' icon-arrow-right'></i></a></div>
+			<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo $L['guest_login'];?><i class=' icon-arrow-right'></i></a></div>
 		</form>
 	</div>
 	<div class="footer">kalcaddle.com 2013 © All Rights Reserved.| <?php echo $L['us'];?></div>

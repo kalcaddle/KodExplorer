@@ -6,11 +6,7 @@
 * @license http://kalcaddle.com/tools/licenses/license.txt
 */
 
-class member extends Controller
-{
-    /**
-     * 构造函数
-     */
+class member extends Controller{
     private $sql;
     function __construct()    {
         parent::__construct();
@@ -27,8 +23,7 @@ class member extends Controller
     /**
      * 用户添加
      */
-    public function add()
-    {
+    public function add(){
         if (!$this->in['name'] || 
             !$this->in['password'] ||
             !$this->in['role'] ) show_json($this->L["data_not_full"],false);
@@ -48,8 +43,7 @@ class member extends Controller
     /**
      * 编辑
      */
-    public function edit() 
-    {
+    public function edit() {
         if (!$this->in['name'] || 
             !$this->in['name_to'] || 
             !$this->in['role_to'] ) show_json($this->L["data_not_full"],false);

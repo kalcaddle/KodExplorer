@@ -36,7 +36,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js"></script>
 <script type="text/javascript">
     var LNG = <?php echo json_encode($L);?>;
-    var AUTH = <?php echo json_encode($GLOBALS['auth']);?>;
+    <?php if(isset($GLOBALS['auth'])) echo "var AUTH = "+json_encode($GLOBALS['auth']);?>;
 	var G = {
 		is_root 	: <?php echo  $GLOBALS['is_root'];?>,
 		web_root 	: "<?php echo $GLOBALS['web_root'];?>",

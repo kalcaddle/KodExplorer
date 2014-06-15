@@ -38,16 +38,6 @@
 					fileLight.clear();
 					$(this).addClass(Config.SelectClassName);
 					fileLight.select();
-				}				
-			}).unbind("mousedown").mousedown(function(e){
-				rightMenu.hidden();
-				//if (ui.isEdit()) return true;		
-				if (e.which != 1) return true;
-
-				if (!e.ctrlKey && !e.shiftKey && !$(this).hasClass(Config.SelectClassName)) {
-					fileLight.clear();
-					$(this).addClass(Config.SelectClassName);
-					fileLight.select();
 				}
 				if(e.ctrlKey) {//ctrl 跳跃选择
 					if ($(this).hasClass(Config.SelectClassName)) {//已经选中则反选
@@ -75,7 +65,17 @@
 							_selectFromTo(first,current);
 						}
 					}
-				}				
+				}			
+			}).unbind("mousedown").mousedown(function(e){
+				rightMenu.hidden();
+				//if (ui.isEdit()) return true;		
+				if (e.which != 1) return true;
+
+				if (!e.ctrlKey && !e.shiftKey && !$(this).hasClass(Config.SelectClassName)) {
+					fileLight.clear();
+					$(this).addClass(Config.SelectClassName);
+					fileLight.select();
+				}								
 			})
 		}).unbind('mouseleave').live('mouseleave',function(){
 			$(this).removeClass(Config.HoverClassName);
@@ -108,8 +108,9 @@
 
 	// 拖拽——移动 select 
 	var _bindDragEvent= function(){
-		var delayTime = 300;
+		var delayTime = 100;
 		var leftOffset= 50;
+		var dragCopyOffset = 30;
 		var topOffset = 80-Global.topbar_height;
 		var $self;
 		var startTime = 0;
@@ -120,7 +121,7 @@
 		var screenWidth;
 
 		$(Config.FileBoxClass).unbind('mousedown').live('mousedown',function(e){
-			if (Global.shiftKey || Global.ctrlKey) return;
+			if (Global.shiftKey) return;
 			if (ui.isEdit()) return true;
 			if (e.which != 1 || isSelect) return true;
 			$self = $(this);
@@ -183,8 +184,19 @@
 			$('.draggable-dragging').fadeOut(200,function(){
 				$(this).remove();
 			});
-			if ($('.selectDragTemp').length != 0) {
-				var dragTo = G.this_path+fileLight.name($('.selectDragTemp'))+'/';
+
+			var dragTo = G.this_path;
+			var isDragCurrent = ($('.selectDragTemp').length == 0);
+			if (Global.ctrlKey) {
+				if (!isDragCurrent) {
+					dragTo = dragTo+fileLight.name($('.selectDragTemp'));
+				}
+				if (Math.abs(e.pageX-boxLeft) > dragCopyOffset || 
+					Math.abs(e.pageY-boxTop)  > dragCopyOffset) {
+					ui.path.copyDrag(dragTo,isDragCurrent);
+				}
+			}else if (!isDragCurrent){
+				dragTo = dragTo+fileLight.name($('.selectDragTemp'));
 				ui.path.cuteDrag(dragTo);
 			}
 		};

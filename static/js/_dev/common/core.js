@@ -72,8 +72,16 @@ define(function(require, exports) {
 		},
 		ajaxError:function(XMLHttpRequest, textStatus, errorThrown){
 			core.tips.close(LNG.system_error,false);
-			var error = '<div style="color:#f60;">'+XMLHttpRequest.responseText+'</div>';
+			var response = XMLHttpRequest.responseText;
+			var error = '<div style="color:#f60;">'+response+'</div>';
 			var dialog = $.dialog.list['ajaxErrorDialog'];
+			
+			//已经退出
+			if (response.substr(0,17) == '<!--user login-->') {
+				FrameCall.goRefresh();
+				return;
+			}
+
 			if (dialog) {
 				dialog.content(error);
 			}else{
@@ -92,7 +100,7 @@ define(function(require, exports) {
 		setting:function(setting){
 			if (setting == undefined) setting = '';
 			if (window.top.frames["Opensetting_mode"] == undefined) {
-				$.dialog.open('?setting#'+setting,{
+				$.dialog.open('./index.php?setting#'+setting,{
 					id:'setting_mode',
 					fixed:true,
 					resize:true,
@@ -289,6 +297,10 @@ define(function(require, exports) {
 					$message.hide().html(LNG.search_info).fadeIn(fade);
 					return;
 				}
+				if (param.search.length<=1) {
+					$message.hide().html('too short!').fadeIn(fade);
+					return;
+				}
 				$.ajax({
 					url:'index.php?explorer/search',
 					dataType:'json',
@@ -384,7 +396,7 @@ define(function(require, exports) {
 			core.tips.tips(urls.length + LNG.server_dwonload_desc);
 			for (var i=0; i<urls.length; i++) {
 				$.ajax({
-					url:'?explorer/serverDownload&save_path='+path+'&url='+urlEncode2(urls[i]),
+					url:'./index.php?explorer/serverDownload&save_path='+path+'&url='+urlEncode2(urls[i]),
 					dataType:'json',
 					error:core.ajaxError,
 					success:function(data){

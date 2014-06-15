@@ -1,1 +1,1 @@
-<?php exit;?>{"0.000":{"name":"0.000","path":"D:\/wwwroot\/0.000\/"},"config":{"name":"config","path":"D:\/wwwroot\/tools\/eXtplorer\/config"},"kod":{"name":"kod","path":"D:\/wwwroot\/www\/kod"},"\u5e7b\u4e61":{"name":"\u5e7b\u4e61","path":"D:\/wwwroot\/www\/kod\/dev\/data\/public\/images\/\u6211\u7684\u6536\u85cf\/\u5e7b\u4e61"}}
+<?php exit;?>{"kod":{"name":"kod","path":"D:\/WWW\/www\/kod"},"config":{"name":"config","path":"D:\/WWW\/tools\/eXtplorer\/config"},"0.000":{"name":"0.000","path":"D:\/WWW\/0.000\/"}}

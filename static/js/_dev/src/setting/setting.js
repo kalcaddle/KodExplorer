@@ -19,7 +19,7 @@ define(function(require, exports) {
 		window.location.href ='#'+page;
 
 		$.ajax({
-			url:'?setting/slider&slider='+page,
+			url:'./index.php?setting/slider&slider='+page,
 			beforeSend:function (data){
 				$('.main').html("<img src='./static/images/loading.gif'/>");
 			},

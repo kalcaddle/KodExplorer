@@ -10,11 +10,7 @@ class user extends Controller
 {
 	private $user;	//用户相关信息
     private $auth;  //用户所属组权限
-    /**
-     * 构造函数
-     */
-    function __construct()
-	{
+    function __construct(){
         parent::__construct();
 		$this->tpl	= TEMPLATE  . 'user/';
 		$this->user = &$_SESSION['user'];
@@ -40,10 +36,9 @@ class user extends Controller
 	/**
      * 登陆状态检测;并初始化数据状态
      */
-	public function loginCheck()
-    {
+	public function loginCheck(){
         $this->authApi();//api方式验证
-        if($_SESSION['isLogin'] === true){
+        if(isset($_SESSION['isLogin']) && $_SESSION['isLogin'] === true){
             define('USER',USER_PATH.$this->user['name'].'/');
             if (!file_exists(USER)) {
                 $this->logout();
@@ -82,26 +77,41 @@ class user extends Controller
         $this->login();
     }
 
+
     /**
      * 登陆view
      */
-    public function login($msg = '')
-    {
+    public function login($msg = ''){
+        if(isset($_SESSION['isLogin']) && $_SESSION['isLogin'] === true){
+            header('location:./index.php');
+            return;
+        }
         $this->assign('msg',$msg);
     	$this->display('login.html');
         exit;
     }
+
+    /**
+     * 退出处理
+     */
+    public function logout(){
+        session_start();
+        setcookie('kod_name', null, time()-3600); 
+        setcookie('kod_token', null, time()-3600); 
+        session_destroy();
+        header('location:./index.php?user/login');
+    }
+    
 	/**
      * 登陆数据提交处理
      */
-	public function loginSubmit()
-    {
-        $name = $this->in['name'];
-		if(empty($name) || empty($this->in['password'])) {
+	public function loginSubmit(){
+		if(!isset($this->in['name']) || !isset($this->in['password'])) {
             $msg = $this->L['login_not_null'];
 		}else{
             //错误三次输入验证码
             session_start();//re start
+            $name = $this->in['name'];
             if(intval($_SESSION['code_error_time']) >=3 && 
                 $_SESSION['check_code'] !== strtolower($this->in['check_code'])){
                 $this->login($this->L['code_error']);
@@ -122,7 +132,7 @@ class user extends Controller
                     setcookie('kod_name', $user['name'], time()+3600*24*365);
                     setcookie('kod_token',md5($user['password'].get_client_ip()), time()+3600*24*365);
                 }
-                header('location:./');
+                header('location:./index.php');
                 return;
             }else{
                 $_SESSION['code_error_time'] = intval($_SESSION['code_error_time']) + 1;
@@ -133,22 +143,9 @@ class user extends Controller
     }
 
 	/**
-     * 退出处理
-     */
-    public function logout()
-    {
-        session_start();
-        setcookie('kod_name', null, time()-3600); 
-        setcookie('kod_token', null, time()-3600); 
-		session_destroy();
-		header('location:./?user/login');
-    }
-
-	/**
      * 修改密码
      */
-    public function changePassword()
-    {
+    public function changePassword(){
         $password_now=$this->in['password_now'];
         $password_new=$this->in['password_new'];
         if (!$password_now && !$password_new)show_json($this->L['password_not_null'],false);

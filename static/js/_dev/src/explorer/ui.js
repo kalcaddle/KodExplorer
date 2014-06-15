@@ -250,6 +250,7 @@ define(function(require, exports) {
 				case 'copy':ui.path.copy();break;
 				case 'rname':ui.path.rname();break;
 				case 'cute':ui.path.cute();break;
+				case 'clone':ui.path.copyDrag(G.this_path,true);break;
 				case 'past':ui.path.past();break;
 				case 'remove':ui.path.remove();break;
 				case 'zip':ui.path.zip();break;

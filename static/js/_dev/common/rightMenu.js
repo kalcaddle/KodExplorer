@@ -272,6 +272,7 @@ define(function(require, exports) {
             callback: function(key, options) {_menuPath(key);},
             items: {
                 "copy":{name:LNG.copy,className:"copy",icon:"copy",accesskey: "c"},
+                "clone":{name:LNG.clone,className:"clone",icon:"external-link",accesskey: "m"},
                 "cute":{name:LNG.cute,className:"cute",icon:"cut",accesskey: "k"},                
                 "remove":{name:LNG.remove,className:"remove",icon:"trash",accesskey: "d"},
                 "sep1":"--------",
@@ -340,6 +341,7 @@ define(function(require, exports) {
             case 'search':ui.path.search();break;
 
             case 'copy':ui.path.copy();break;
+            case 'clone':ui.path.copyDrag(G.this_path,true);break;
             case 'cute':ui.path.cute();break;
             case 'remove':ui.path.remove();break;
             case 'rname':ui.path.rname();break;

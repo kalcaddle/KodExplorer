@@ -7,9 +7,6 @@
 */
 
 class editor extends Controller{
-	/**
-	 * 构造函数
-	 */
 	function __construct()    {
 		parent::__construct();
 		$this->tpl = TEMPLATE . 'editor/';
@@ -36,8 +33,8 @@ class editor extends Controller{
 			$filecontents=mb_convert_encoding($filecontents,'utf-8',$charset);
 		}
 		$data = array(
-			'ext'		=> end(explode('.',$filename)),
-			'name'      => iconv_app(end(explode('/',$filename))),
+			'ext'		=> get_path_ext($filename),
+			'name'      => iconv_app(get_path_this($filename)),
 			'filename'	=> rawurldecode($this->in['filename']),
 			'charset'	=> $charset,
 			'content'	=> $filecontents			

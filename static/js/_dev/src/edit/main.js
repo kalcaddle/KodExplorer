@@ -11,6 +11,11 @@ define(function(require, exports, module) {
     rightMenu = Tap.rightMenu;
     preview = Toolbar.preview;
 
+    Global = {
+        topbar_height:40,           // 头部高度
+        isIE:!-[1,],                // 是否ie
+    };
+
     $(document).ready(function() {
         Tap.init();
         Toolbar.init();

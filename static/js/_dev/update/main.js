@@ -61,7 +61,7 @@ define(function(require, exports) {
 	var time = function(){var date = new Date();return parseInt(date.getTime()/1000);}
 	var _download = function(from,to,callback){
 		$.ajax({
-			url:'?explorer/serverDownload&save_path='+to
+			url:'./index.php?explorer/serverDownload&save_path='+to
 				 +'&url='+urlEncode2(from),
 			dataType:'json',
 			success:function(data){

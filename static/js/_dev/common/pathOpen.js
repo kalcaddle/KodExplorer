@@ -121,7 +121,7 @@ define(function(require, exports) {
 			return;
 		}
 		if (window.top.frames["OpenopenEditor"] == undefined) {
-		   var url ='?editor/edit&filename='+urlEncode(urlEncode2(path));//3次
+		   var url ='./index.php?editor/edit&filename='+urlEncode(urlEncode2(path));//3次
 		   var title = filename+' ——'+LNG.edit;
 			_openWindow(url,title.substring(title.length-50),'openEditor');
 		}else{

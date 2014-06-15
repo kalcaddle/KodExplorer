@@ -35,6 +35,7 @@ var FrameCall = (function(){
 			if (!window.parent.frames[iframe]) return;
 			//var obj = window.top.frames[iframe].document;
 			var obj = window.parent.frames[iframe].document;
+            if(!obj) return;
 			obj=obj.getElementById(idName);		
 			$(obj).attr("action",action);
 			$(obj).attr("value",value);
@@ -42,11 +43,7 @@ var FrameCall = (function(){
 		},
 		//该窗口调用父窗口的api
 		father:function(action,value){
-			if (ie){//获取兄弟frame的dom树
-				var obj=window.parent.document;//IE
-			}else{
-				var obj=window.parent.document;//chrome safari firefox...
-			}
+			var obj=window.parent.document;
 			obj=obj.getElementById(idName);	
 			$(obj).attr("action",action);
 			$(obj).attr("value",value);

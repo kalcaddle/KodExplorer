@@ -167,6 +167,7 @@ define(function(require, exports) {
 			beforeSend:function(){
 				$('.tools-left .msg').stop(true,true).fadeIn(100);
 			},
+			error:core.ajaxError,
 			success:function(data){
 				$('.tools-left .msg').fadeOut(100);
 				if (!data.code) {					
@@ -191,6 +192,7 @@ define(function(require, exports) {
 			beforeSend:function(){
 				$('.tools-left .msg').stop(true,true).fadeIn(100);
 			},
+			error:core.ajaxError,
 			success:function(data){
 				$('.tools-left .msg').fadeOut(100);
 				if (!data.code) {					
@@ -264,7 +266,6 @@ define(function(require, exports) {
 					core.tips.tips(LNG.path_exists,'warning');
 				}else{
 					pathOperate.newFile(G.this_path+filename,function(){
-						ui.tree.checkIfChange(G.this_path);
 						ui.f5_callback(function() {
 							_setSelectByFilename(filename);
 						});
@@ -281,7 +282,6 @@ define(function(require, exports) {
 				_newFile(newname_ext);
 			}else{           
 				pathOperate.newFile(G.this_path+filename,function(){
-					ui.tree.checkIfChange(G.this_path);
 					ui.f5_callback(function() {
 						_setSelectByFilename(filename);
 					});
@@ -320,7 +320,9 @@ define(function(require, exports) {
 					core.tips.tips(LNG.path_exists,'warning');
 				}else{
 					pathOperate.newFolder(G.this_path+filename,function(){
-						ui.tree.checkIfChange(G.this_path);
+						if (Config.pageApp == 'explorer') {
+ 							ui.tree.checkIfChange(G.this_path);
+	  					}
 						ui.f5_callback(function() {
 							_setSelectByFilename(filename);
 						});
@@ -336,7 +338,9 @@ define(function(require, exports) {
 				_newFolder();
 			}else{
 				pathOperate.newFolder(G.this_path+filename,function(){
-					ui.tree.checkIfChange(G.this_path);
+					if (Config.pageApp == 'explorer') {
+						ui.tree.checkIfChange(G.this_path);
+					}					
 					ui.f5_callback(function() {
 						_setSelectByFilename(filename);
 					});
@@ -385,7 +389,9 @@ define(function(require, exports) {
 					path    =urlEncode(G.this_path+selectid);
 					rname_to=urlEncode(G.this_path+rname_to);
 					pathOperate.rname(path,rname_to,function(){
-						ui.tree.checkIfChange(G.this_path);
+						if (Config.pageApp == 'explorer') {
+ 							ui.tree.checkIfChange(G.this_path);
+	  					}
 						ui.f5_callback(function() {
 							_setSelectByFilename(select_name);
 						});
@@ -408,7 +414,9 @@ define(function(require, exports) {
 				path    =urlEncode(G.this_path+selectid);
 				rname_to=urlEncode(G.this_path+rname_to);
 				pathOperate.rname(path,rname_to,function(){
-					ui.tree.checkIfChange(G.this_path);
+					if (Config.pageApp == 'explorer') {
+						ui.tree.checkIfChange(G.this_path);
+					}
 					ui.f5_callback(function() {
 						_setSelectByFilename(select_name);
 					});
@@ -421,7 +429,9 @@ define(function(require, exports) {
 	};
 	var refreshCallback=function(){//当前目录文件变化，刷新目录
 		ui.f5();
-		ui.tree.checkIfChange(G.this_path);
+		if (Config.pageApp == 'explorer') {
+			ui.tree.checkIfChange(G.this_path);
+		}
 	};
 	return {
 		//app
@@ -485,11 +495,26 @@ define(function(require, exports) {
 		zip 	:function(){pathOperate.zip(_param(true),refreshCallback);},
 		unZip 	:function(){pathOperate.unZip(_param().path,ui.f5);},
 		cuteDrag:function(dragTo){pathOperate.cuteDrag(_param(true),dragTo,refreshCallback);},
+		copyDrag:function(dragTo,isDragCurrent){
+			pathOperate.copyDrag(_param(true),dragTo,function(list){
+				fileLight.clear();
+				if (Config.pageApp == 'explorer') {
+					ui.tree.checkIfChange(G.this_path);
+				}
+				ui.f5_callback(function() {
+					if (isDragCurrent){
+						_setSelectByFilename(list.data);
+					}					
+				});
+			});
+		},
 		info:function(){pathOperate.info(_param(true));},
 		past:function(){
 			fileLight.clear();
 			pathOperate.past(G.this_path,function(list){
-				ui.tree.checkIfChange(G.this_path);
+				if (Config.pageApp == 'explorer') {
+					ui.tree.checkIfChange(G.this_path);
+				}
 				ui.f5_callback(function() {
 					_setSelectByFilename(list.data);
 				});

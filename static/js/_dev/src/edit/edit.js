@@ -53,11 +53,11 @@ define(function(require, exports) {
         var load = art.dialog({title:false,content:LNG.getting,icon:'warning'});
         $.ajax({
             dataType:'json',
-            url:'./?editor/fileGet&filename='+filename,
-            error:function(data) {
+            url:'./index.php?editor/fileGet&filename='+filename,
+            error:function(XMLHttpRequest, textStatus, errorThrown) {
                 load.close();
                 _removeData(initData.uuid);
-                Tips.tips(LNG.system_error,false);
+                core.ajaxError(XMLHttpRequest, textStatus, errorThrown);
             },
             success: function(result) {
                 load.close();
@@ -218,7 +218,7 @@ define(function(require, exports) {
         }
         if (key == 'theme') {
             $.ajax({
-                url:'?setting/set&k=codetheme&v='+value,
+                url:'./index.php?setting/set&k=codetheme&v='+value,
                 dataType:'json',
                 success:function(data){
                     tips(data);
@@ -254,7 +254,7 @@ define(function(require, exports) {
             type:'POST',
             async:false,
             dataType:'json',
-            url:'?editor/fileSave',
+            url:'./index.php?editor/fileSave',
             data:'path='+filename+'&charset='+edit_this.kod.charset+'&filestr='+html,
             beforeSend: function(){
                 Tips.loading(LNG.sending);

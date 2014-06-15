@@ -161,11 +161,11 @@ artDialog.fn = artDialog.prototype = {
 		_titleBarHeight = DOM.title.css('height');
 		_titleBarHeight = _titleBarHeight.replace('px','');
 		
-		DOM.wrap
-			.css({opacity:0.6,top:'-='+DOM.wrap.height()*0.02})
-			.animate(
-				{opacity:1,top:'+='+DOM.wrap.height()*0.02},
-				{easing: 'swing',duration:200});
+		// DOM.wrap
+		// 	.css({opacity:0.6,top:'-='+DOM.wrap.height()*0.02})
+		// 	.animate(
+		// 		{opacity:1,top:'+='+DOM.wrap.height()*0.02},
+		// 		{easing: 'swing',duration:200});
 		return that;
 	},
 	
@@ -987,7 +987,7 @@ _path = window['_artDialog_path'] || (function (script, i, me) {
 // 使用uglifyjs压缩能够预先处理"+"号合并字符串
 // uglifyjs: http://marijnhaverbeke.nl/uglifyjs
 artDialog._templates =
-'<div class="aui_outer"><div class="aui_mask"></div>'
+'<div class="aui_outer pop_fadein"><div class="aui_mask"></div>'
 +	'<table class="aui_border">'
 +		'<tbody>'
 +			'<tr>'

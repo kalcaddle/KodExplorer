@@ -69,14 +69,14 @@
 			<li><a href="#" onclick="core.setting('wall');"><span><?php echo $L['setting_wall'];?></span></a></li>
 			<li><a href="#" onclick="core.setting('fav');"><span><?php echo $L['setting_fav'];?></span></a></li>
 			<li><a href="#" onclick="core.setting('theme');"><span><?php echo $L['setting_theme'];?></span></a></li>
-			<li><a href="?user/logout" style="margin-top:70px;"><span><?php echo $L['ui_logout'];?>></span></a></li>            
+			<li><a href="./index.php?user/logout" style="margin-top:70px;"><span><?php echo $L['ui_logout'];?>></span></a></li>            
 		</ul>
 	</div>
 
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js"></script>
 <script type="text/javascript">
 	var LNG = <?php echo json_encode($L);?>;
-	var AUTH = <?php echo json_encode($GLOBALS['auth']);?>;
+	<?php if(isset($GLOBALS['auth'])) echo "var AUTH = "+json_encode($GLOBALS['auth']);?>;
 	var G = {
 		is_root 	: <?php echo $GLOBALS['is_root'];?>,
 		web_root 	: "<?php echo $GLOBALS['web_root'];?>",

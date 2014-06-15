@@ -9,9 +9,6 @@
 //集群 远程接口方式访问。多台服务器管理
 
 class api extends Controller{
-    /**
-     * 构造函数
-     */
     function __construct()    {
         parent::__construct();
     }

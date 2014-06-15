@@ -7,9 +7,6 @@
 */
 
 class explorer extends Controller{
-    /**
-     * 构造函数
-     */
     public $path;
     public function __construct(){
         parent::__construct();
@@ -20,7 +17,7 @@ class explorer extends Controller{
     }
 
     public function index(){
-        if($this->in['path'] !=''){
+        if(isset($this->in['path']) && $this->in['path'] !=''){
             $dir = $_GET['path'];
         }else if(isset($_SESSION['this_path'])){
             $dir = $_SESSION['this_path'];
@@ -30,7 +27,7 @@ class explorer extends Controller{
         }
         $dir = rtrim($dir,'/').'/';
         $is_frame = false;//是否以iframe方式打开
-        if ($this->in['type'] == 'iframe') $is_frame = true;//
+        if (isset($this->in['type']) && $this->in['type'] == 'iframe') $is_frame = true;//
         $upload_max = get_post_max();
         $this->assign('upload_max',$upload_max);                
         $this->assign('is_frame',$is_frame);
@@ -40,7 +37,7 @@ class explorer extends Controller{
 
     public function pathInfo(){
         $path = $this->path;
-        $type=$this->in['type'];
+        $type= $this->in['type'];
         if ($type=="folder"){
             $data = path_info($path,$this->L['time_type_info']);
         }else{
@@ -109,8 +106,11 @@ class explorer extends Controller{
     }
     public function treeList(){//树结构
         $app = $this->in['app'];//是否获取文件 传folder|file
-        if ($this->in['type']=='init') $this->_tree_init($app);
-        if ($this->in['this_path']){
+        if (isset($this->in['type']) && $this->in['type']=='init'){
+            $this->_tree_init($app);
+        }
+        
+        if (isset($this->in['this_path'])){
             $path=_DIR($this->in['this_path']);
         }else{
             $path=_DIR($this->in['path'].$this->in['name']);
@@ -277,14 +277,31 @@ class explorer extends Controller{
         foreach ($clipboard as $val) {
             $path_copy = _DIR($val['path']);
             $filename  = get_path_this($path_copy);
-            if ($clipboard[$i]['type'] == 'folder') {
-                @rename($path_copy,$path_past.$filename.'/');
-            }else{
-                @rename($path_copy,$path_past.$filename);
-            }
+            @rename($path_copy,$path_past.$filename);
         }
         show_json($this->L['success']);
-    }      
+    }
+
+    public function pathCopyDrag(){
+        $clipboard = json_decode($this->in['list'],true);
+        $path_past=$this->path;
+        $data = array();
+        if (!is_writable($path_past)) show_json($this->L['no_permission'],false);
+        foreach ($clipboard as $val) {
+            $path_copy = _DIR($val['path']);
+            $path = '';
+            if ($val['type'] == 'folder') {
+                $path = get_path_same_next($path_past,get_path_this($path_copy),'folder');
+                copy_dir($path_copy,$path);
+            }else{
+                $path = get_path_same_next($path_past,get_path_this($path_copy),'file');
+                copy($path_copy,$path);
+            }
+            $data[] = iconv_app(get_path_this($path));
+        }
+        show_json($data,true);
+    }
+
     public function clipboard(){
         $clipboard = json_decode($_SESSION['path_copy'],true);
         $msg = '';
@@ -338,8 +355,7 @@ class explorer extends Controller{
                     copy_dir($path_copy,$path_past.$filename);
                 }else{
                     copy($path_copy,$path_past.$filename);
-                }
-                
+                }                
             }else{
                 if ($cute_list[$i]['type'] == 'folder') {
                     rename($path_copy,$path_past.$filename.'/');

@@ -4,7 +4,7 @@
 		<div class="top_left">
 			<a href="./" class="title"><i class="icon-cloud"></i>KODExplorer</a>
 		<?php 
-			$tpl="<a class='{this}' href='./?{0}' tartet='_self'><i class='icon-{2}'></i>{1}</a>\n";
+			$tpl="<a class='{this}' href='./index.php?{0}' tartet='_self'><i class='icon-{2}'></i>{1}</a>\n";
 			$menu ='desktop:'.$L['ui_desktop'].':desktop,explorer:'.$L['ui_filemanage'].':tasks,editor:'.$L['ui_editor'].':edit';
 			echo getTplList(',',':',$menu,$tpl,ST);
 		?>
@@ -32,7 +32,7 @@
 				<li><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo $L['setting_about'];?></a></li>
 				<li><a href="http://www.kalcaddle.com" target="_blank"><i class="font-icon icon-code-fork"></i><?php echo $L['ui_project_home'];?></a></li>
 				<li role="presentation" class="divider"></li>
-				<li><a href="./?user/logout"><i class="font-icon icon-off"></i><?php echo $L['ui_logout'];?></a></li>
+				<li><a href="./index.php?user/logout"><i class="font-icon icon-off"></i><?php echo $L['ui_logout'];?></a></li>
 			</ul>			
 		</div>
 		</div>

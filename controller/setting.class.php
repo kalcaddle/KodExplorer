@@ -7,9 +7,6 @@
 */
 
 class setting extends Controller{
-    /**
-     * 构造函数
-     */
     private $sql;
     function __construct() {
         parent::__construct();

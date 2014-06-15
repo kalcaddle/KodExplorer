@@ -118,7 +118,33 @@ function get_filename_auto($path){
  * 获取扩展名
  */
 function get_path_ext($path){
-	return strtolower(end(explode('.',$path)));
+	$arr = explode('.',$path);
+	$ext = end($arr);
+	return strtolower($ext);
+}
+
+/**
+ * 获取扩展名
+ */
+function get_path_same_next($path,$name,$type){
+	if (!file_exists($path)) return '';
+	$temp = $name;
+	$i = 1;
+	if ($type=='folder') {
+		while(file_exists($path.$name)) {
+			$name = $temp.'('.$i.')';
+			$i++;
+		}
+	}else{
+		$temp_ext = get_path_ext($temp);
+		$temp_extp = strlen($temp_ext)>0?$temp_ext='.'.$temp_ext:'';
+		$temp_pre = substr($temp,0,-strlen($temp_extp));
+		while(file_exists($path.$name)){
+			$name = $temp_pre.'('.$i.')'.$temp_extp;
+			$i++;
+		}
+	}
+	return $path.$name;
 }
 
 /**
@@ -306,6 +332,8 @@ function del_dir($dir){
  */
 
 function copy_dir($source, $dest){
+	if (!$dest) return false;
+	if ($source == substr($dest,0,strlen($source))) return;//防止无限递归
 	$result = false;
 	if (is_file($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
@@ -315,7 +343,7 @@ function copy_dir($source, $dest){
 		} 
 		$result = copy($source, $__dest); 
 		chmod($__dest, 0755);
-	} elseif (is_dir($source)) {
+	}elseif (is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
 			$dest = $dest . basename($source);
 			mkdir($dest, 0755);
@@ -334,9 +362,7 @@ function copy_dir($source, $dest){
 			} 
 		} 
 		closedir($dirHandle);
-	} else {
-		$result = false;
-	} 
+	}
 	return $result;
 } 
 

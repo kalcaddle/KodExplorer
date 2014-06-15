@@ -166,7 +166,7 @@ define(function(require, exports) {
 			error:core.ajaxError,
 			success:function(data){
 				if (!data.code){
-					core.tips.close(data);					
+					core.tips.close(data);
 				}else{
 					core.tips.close(data.info);
 				}
@@ -288,6 +288,26 @@ define(function(require, exports) {
 			}
 		});
 	};
+	// 创建副本
+	var copyDrag = function(param,dragTo,callback){
+		if (!dragTo) return;
+		$.ajax({
+			url:'index.php?explorer/pathCopyDrag',
+			type:'POST',
+			dataType:'json',
+			data:_json(param)+'&path='+urlEncode2(dragTo),
+			beforeSend: function(){
+				core.tips.loading(LNG.moving);
+			},
+			error:core.ajaxError,
+			success:function(data){
+				core.tips.close(data);
+				if (!data.code) return;
+				if (typeof (callback) == 'function') callback(data);
+			}
+		});
+	};
+
 	//==查看剪贴板
 	var clipboard = function(){
 		$.ajax({
@@ -510,6 +530,7 @@ define(function(require, exports) {
 		info:info,
 		remove:remove,
 		cuteDrag:cuteDrag,
+		copyDrag:copyDrag,
 
 		past:past,
 		clipboard:clipboard,

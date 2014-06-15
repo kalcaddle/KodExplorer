@@ -1,2 +1,2 @@
 <?php 
-define('KOD_VERSION','2.4');//2014.6.8
+define('KOD_VERSION','2.5');//2014.6.15

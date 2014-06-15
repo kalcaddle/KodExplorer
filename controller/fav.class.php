@@ -7,11 +7,8 @@
 */
 
 class fav extends Controller{
-    /**
-     * 构造函数
-     */
     private $sql;
-    function __construct()    {
+    function __construct(){
         parent::__construct();
         $this->sql=new fileCache($this->config['user_fav_file']);
     }
