@@ -36,12 +36,45 @@ function get_client_ip($b_ip = true){
 } 
 
 
+// url头部数据
+function url_header($url){
+	$name = '';$length=0;
+	$header = @get_headers($url,true);
+	if (!$header) return false;
 
+	if(isset($header['Content-Length'])){
+		if(is_array($header['Content-Length'])){
+			$length = array_pop($header['Content-Length']);
+		}else{
+			$length = $header['Content-Length'];
+		}
+	}
+	if(isset($header['Content-Disposition'])){
+		if(is_array($header['Content-Disposition'])){
+			$dis = array_pop($header['Content-Disposition']);
+		}else{
+			$dis = $header['Content-Disposition'];
+		}
+		$i = strpos($dis,"filename=");
+		if($i!= false){
+			$name = substr($dis,$i+9);
+			$name = trim($name,'"');
+		}
+	}
+	if(!$name){
+	    $name = get_path_this($url);
+	    if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
+	    if (!$name) $name = 'index.html';
+	}
+	// $header['name'] = $name;
+	// return $header;
+	return array('length'=>$length,'name'=>$name);
+} 
 
 
 // url检查
 function check_url($url){
-	$array = get_headers($url, 1);
+	$array = get_headers($url,true);
 	if (preg_match('/404/', $array[0])) {
 		return false;
 	} elseif (preg_match('/403/', $array[0])) {
@@ -56,7 +89,7 @@ function check_url($url){
  */
 function curl_get_contents($url){
 	$ch = curl_init();
-	$timeout = 5;
+	$timeout = 4;
 	$user_agent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; SLCC1)";
 	curl_setopt ($ch, CURLOPT_URL, $url);
 	curl_setopt ($ch, CURLOPT_HEADER, 0);

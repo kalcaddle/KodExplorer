@@ -12,7 +12,12 @@
 @-webkit-keyframes hidefwin{from{opacity:1;-webkit-transform:scale(1,1);} to{opacity:0;-webkit-transform:scale(1.1,1.1);}}
 @-moz-keyframes hidefwin{from{opacity:1;-moz-transform:scale(1,1);} to{opacity:0;-moz-transform:scale(1.1,1.1);}}
 .pop_fadein{animation:showfwin .2s;-webkit-animation:showfwin .2s;-moz-animation:showfwin .2s;}
-.pop_fadeout{animation:hidefwin .4s;-webkit-animation:hidefwin .4s;-moz-animation:hidefwin .4s;}
+.pop_fadeout{animation:hidefwin .5s;-webkit-animation:hidefwin .5s;-moz-animation:hidefwin .5s;}
+
+@keyframes showfadein{from{opacity:0;} to{opacity:1;}}
+@-webkit-keyframes showfadein{from{opacity:0;} to{opacity:1;}}
+@-moz-keyframes showfadein{from{opacity:0;} to{opacity:1;}}
+.fadein{animation:showfadein .3s;-webkit-animation:showfadein .3s;-moz-animation:showfadein .3s;}
 
 
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */

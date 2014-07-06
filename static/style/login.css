@@ -2,7 +2,8 @@ body {background:#e6e5ea;font-size: 13px; padding: 0px; margin: 0px; font-family
 input,button { font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;}
 .loginbox{box-shadow: 0px 10px 150px #666;width:350px;border-radius:3px;padding-bottom: 30px;
     background: #fff;position:absolute;top:50%;left:50%;margin-top:-240px;margin-left:-175px;}
-
+a{text-decoration:none;color:#69c;}
+a:hover{color:#f90;}
 
 .title{width:100%;background:#6699cc;color:#fff;height: 80px;
 	border-top-left-radius: 3px;border-top-right-radius: 3px;padding-top: 30px;}

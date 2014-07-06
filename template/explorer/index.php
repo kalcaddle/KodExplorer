@@ -84,7 +84,7 @@
 						    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 						      <i class="font-icon icon-tasks"></i>more&nbsp;<span class="caret"></span>	      
 						    </button>
-						    <ul class="dropdown-menu pull-right drop-menu-action">
+						    <ul class="dropdown-menu pull-right drop-menu-action fadein">
 						    	<li id="open"><a href='javascript:;'>
 						    	<i class="font-icon icon-folder-open-alt"></i><?php echo $L['open'];?></a></li>
 
@@ -128,7 +128,7 @@
 						    <button id="set_theme" title="<?php echo $L['setting_theme'];?>" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
 						      <i class="font-icon icon-dashboard"></i>&nbsp;&nbsp;<span class="caret"></span>
 						    </button>
-						    <ul class="dropdown-menu pull-right dropdown-menu-theme">
+						    <ul class="dropdown-menu pull-right dropdown-menu-theme fadein">
 							    <?php 
 									$tpl="<li class='list {this}' theme='{0}'><a href='javascript:void(0);'>{1}</a></li>\n";
 									echo getTplList(',',':',$config['setting_all']['themeall'],$tpl,$config['user']['theme'],'this');

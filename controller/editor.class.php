@@ -45,7 +45,7 @@ class editor extends Controller{
 		$filestr = rawurldecode($this->in['filestr']);
 		$charset = $this->in['charset'];
 		$path =_DIR($this->in['path']);
-		if (!is_writable($path)) show_json($this->L['no_permission'],false);
+		if (!is_writable($path)) show_json($this->L['no_permission_write'],false);
 		
 		if ($charset !='' || $charset != 'utf-8') {
 			$filestr=mb_convert_encoding($filestr,$this->in['charset'],'utf-8');

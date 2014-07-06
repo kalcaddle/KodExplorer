@@ -1104,16 +1104,7 @@ var // currently active contextMenu trigger
         //warlee
         layer: function(opt, zIndex) {
             $visibleMenu = $('.context-menu-list').filter(':visible');
-            if (typeof(Global) != "undefined") {
-                $(Config.MainContent).data('contextMenuRoot', opt)
-                .unbind("contextmenu")
-                .contextmenu(function(e){
-                    $visibleMenu.trigger('contextmenu:hide');
-                    return true;
-                });                
-            }else{
-                return true;
-            }
+            return true;
         }
     };
 

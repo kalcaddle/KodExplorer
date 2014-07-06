@@ -47,6 +47,7 @@ define(function(require, exports) {
 			}
 		});
 		fileLight.select();
+		fileLight.setInView();
 	};
 
 	//设置某个文件[夹]选中。传入字符串或数组
@@ -60,15 +61,15 @@ define(function(require, exports) {
 			var arr = [];
 			$('.fileContiner .file').each(function(){
 				var current_name = fileLight.name($(this));
+				if (!current_name) return;
 				if (ch == current_name.substring(0,ch.length).toLowerCase()){
 					arr.push(current_name);
 				}
 			});
 			selectByChar = {key:ch,path:G.this_path,index:0,list:arr};
 		}
-
+		
 		if (selectByChar.list.length == 0) return;//没有匹配项
-
 		//自动从匹配结果中查找
 		_setSelectByFilename(selectByChar.list[selectByChar.index++]);
 		if (selectByChar.index == selectByChar.list.length) {
@@ -498,11 +499,11 @@ define(function(require, exports) {
 		copyDrag:function(dragTo,isDragCurrent){
 			pathOperate.copyDrag(_param(true),dragTo,function(list){
 				fileLight.clear();
-				if (Config.pageApp == 'explorer') {
+				if (Config.pageApp == 'explorer'){
 					ui.tree.checkIfChange(G.this_path);
 				}
 				ui.f5_callback(function() {
-					if (isDragCurrent){
+					if (isDragCurrent && list['data']){
 						_setSelectByFilename(list.data);
 					}					
 				});

@@ -31,6 +31,7 @@ define(function(require, exports) {
         $('.set_set'+G.list_type).addClass('selected');
         $('.set_sort_'+G.sort_field).addClass('selected');
         $('.set_sort_'+G.sort_order).addClass('selected');
+        $('.context-menu-root').addClass('fadein');
     };
     var _init_desktop = function(){
         $('<div id="rightMenu" class="hidden"></div>').appendTo('body');
@@ -47,7 +48,8 @@ define(function(require, exports) {
         _bindSelectMore();
         _bindTaskBar();
         $('.set_sort_'+G.sort_field).addClass('selected');
-        $('.set_sort_'+G.sort_order).addClass('selected');    
+        $('.set_sort_'+G.sort_order).addClass('selected');
+        $('.context-menu-root').addClass('fadein');
     };
 
     //初始化编辑器 树目录右键菜单
@@ -65,6 +67,7 @@ define(function(require, exports) {
         _bindTreeFolderEditor();
         _bindEditorFile();
         _bindTaskBar();
+        $('.context-menu-root').addClass('fadein');
     };
 
 

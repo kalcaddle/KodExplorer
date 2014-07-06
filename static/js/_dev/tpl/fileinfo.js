@@ -1,7 +1,7 @@
 var file_info = "<div class='pathinfo'>\
     <div class='p'>\
         <div class='icon file_icon'></div>\
-        <input type='text' name='filename' value='{{name}}'/>\
+        <input type='text' class='info_name' name='filename' value='{{name}}'/>\
         <div style='clear:both'></div>\
     </div>\
     <div class='line'></div>\
@@ -42,13 +42,19 @@ var file_info = "<div class='pathinfo'>\
         <div class='title'>{{LNG.permission}}:</div>\
         <div class='content'>{{mode}}</div>\
         <div style='clear:both'></div>\
-    </div>  \
+    </div>\
+    <div class='p'>\
+        <div class='title'>{{LNG.permission_edit}}:</div>\
+        <div class='content'><input type='text' class='info_chmod' value='777'/>\
+        <button class='btn btn-default btn-sm edit_chmod' type='button'>{{LNG.button_save}}</button></div>\
+        <div style='clear:both'></div>\
+    </div>\
 </div>";
 
 var path_info = "<div class='pathinfo'>\
     <div class='p'>\
         <div class='icon folder_icon'></div>\
-        <input type='text' name='filename' value='{{name}}'/>\
+        <input type='text' class='info_name' name='filename' value='{{name}}'/>\
         <div style='clear:both'></div>\
     </div>\
     <div class='line'></div>\
@@ -93,7 +99,13 @@ var path_info = "<div class='pathinfo'>\
         <div class='title'>{{LNG.permission}}:</div>\
         <div class='content'>{{mode}}</div>\
         <div style='clear:both'></div>\
-    </div>  \
+    </div>\
+    <div class='p'>\
+        <div class='title'>{{LNG.permission_edit}}:</div>\
+        <div class='content'><input type='text' class='info_chmod' value='777'/>\
+        <button class='btn btn-default btn-sm edit_chmod' type='button'>{{LNG.button_save}}</button></div>\
+        <div style='clear:both'></div>\
+    </div>\
 </div>";
 
 var path_info_more = "<div class='pathinfo'>\
@@ -111,10 +123,16 @@ var path_info_more = "<div class='pathinfo'>\
     </div>\
     <div class='line'></div>\
     <div class='p'>\
-        <div class='title'>{{LNG.parent_permission}}:</div>\
+        <div class='title'>{{LNG.permission}}:</div>\
         <div class='content'>{{mode}}</div>\
         <div style='clear:both'></div>\
-    </div>  \
+    </div>\
+    <div class='p'>\
+        <div class='title'>{{LNG.permission_edit}}:</div>\
+        <div class='content'><input type='text' class='info_chmod' value='777'/>\
+        <button class='btn btn-default btn-sm edit_chmod' type='button'>{{LNG.button_save}}</button></div>\
+        <div style='clear:both'></div>\
+    </div>\
 </div>";
 
 define(function(require, exports) {

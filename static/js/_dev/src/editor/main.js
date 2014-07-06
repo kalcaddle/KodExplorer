@@ -27,6 +27,6 @@ define(function(require, exports, module) {
 		TaskTap.init();
         core.update();
 		rightMenu.initEditor();
-		$('.init_loading').fadeOut(600);
+		$('.init_loading').fadeOut(450).addClass('pop_fadeout');
 	});
 });

@@ -11,11 +11,14 @@ define(function(require, exports) {
 			var id = $(this).attr('id');
 			var dialog = art.dialog.list[id];
 			var dom = $('.'+id);
-			if (dom.css('visibility') != 'hidden'){
+			if (dom.css('visibility') == 'hidden'){
+				dialog.display(true);
+			}else if(dom.hasClass('aui_state_focus')){
 				dialog.display(false);
 			}else{
-				dialog.display(true);
+				dialog.zIndex();
 			}
+			
 		}).die('mouseleave').live('mouseleave',function(){
 			$(this).removeClass('hover');
 		}).die('dblclick').live('dblclick',function(){

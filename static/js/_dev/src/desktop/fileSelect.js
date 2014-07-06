@@ -1,6 +1,7 @@
 ﻿define(function(require, exports) {
 	var isSelect		= false;	// 	是否多选状态
 	var isDraging		= false;	//	是否拖拽状态
+	var isCtrlSelect 	= false;	//  是否ctrl按住并选择
 
 	//初始化选择
 	var _initSelect = function(){
@@ -28,11 +29,19 @@
 					&& !$(this).hasClass(Config.SelectClassName)) {					
 					$(this).addClass('selectDragTemp');
 				}
-			}			
+			}
 			if(!isSelect && !isDraging){//框选时，由于ctrl重选时会反选有hover
 				$(this).addClass(Config.HoverClassName);	
 			}
-			$(this).unbind("mouseup").mouseup(function(e){
+
+			$(this).unbind("mousedown").mousedown(function(e){
+				rightMenu.hidden();
+				//已选中多个,点击可拖动以选中进行操作；点击未选中则清空
+				if (!e.ctrlKey && !e.shiftKey && !$(this).hasClass(Config.SelectClassName)) {
+					fileLight.clear();
+					$(this).addClass(Config.SelectClassName);
+					fileLight.select();
+				}
 				//鼠标右键,有选中，且当前即为选中
 				if(e.which==3 && !$(this).hasClass(Config.SelectClassName)){
 					fileLight.clear();
@@ -40,15 +49,15 @@
 					fileLight.select();
 				}
 				if(e.ctrlKey) {//ctrl 跳跃选择
-					if ($(this).hasClass(Config.SelectClassName)) {//已经选中则反选
-						fileLight.resumeMenu($(this));//恢复右键菜单id
-						$(this).removeClass(Config.SelectClassName);					
+					if ($(this).hasClass(Config.SelectClassName)) {//已经选定 设置标志位弹起时取消选择
+						isCtrlSelect = true;
 					}else{
-						fileLight.setMenu($(this));//修改右键菜单至多选
-						$(this).addClass(Config.SelectClassName);						
+						fileLight.setMenu($(this));
+						$(this).addClass(Config.SelectClassName);
 					}
 					fileLight.select();
-				}else if(e.shiftKey){//shift 连选
+				}
+				if(e.shiftKey){//shift 连选
 					var current = parseInt($(this).attr(Config.FileOrderAttr));
 					if (Global.fileListSelectNum == 0) {
 						_selectFromTo(0,current);
@@ -65,32 +74,25 @@
 							_selectFromTo(first,current);
 						}
 					}
-				}			
-			}).unbind("mousedown").mousedown(function(e){
-				rightMenu.hidden();
-				//if (ui.isEdit()) return true;		
-				if (e.which != 1) return true;
-
-				if (!e.ctrlKey && !e.shiftKey && !$(this).hasClass(Config.SelectClassName)) {
-					fileLight.clear();
-					$(this).addClass(Config.SelectClassName);
-					fileLight.select();
-				}								
-			})
-		}).unbind('mouseleave').live('mouseleave',function(){
+				}	
+			});
+		}).die('mouseleave').live('mouseleave',function(){
 			$(this).removeClass(Config.HoverClassName);
 			$(this).removeClass('selectDragTemp');
-		}).unbind('click').live('click',function (e) {
+		}).die('click').live('click',function (e) {
 			stopPP(e);//再次绑定，防止冒泡到html的click事件
-			if (!e.ctrlKey && !e.shiftKey && $(this).hasClass(Config.SelectClassName)) {
-			//多选后再次直接点击,已经选中则反选
+			if (!e.ctrlKey && !e.shiftKey) {
 				fileLight.clear();
-				$(this).removeClass(Config.SelectClassName);
 				$(this).addClass(Config.SelectClassName);
-				fileLight.select();				
+				fileLight.select();
+			}
+			if(e.ctrlKey && isCtrlSelect) {//ctrl 跳跃选择
+				isCtrlSelect = false;
+				fileLight.resumeMenu($(this));//恢复右键菜单id
+				$(this).removeClass(Config.SelectClassName);
+				fileLight.select();
 			}
 		});
-
 		//双击事件
 		$(Config.FileBoxClass).unbind('dblclick').live('dblclick',function(e){//双击打开
 			stopPP(e);
@@ -412,6 +414,9 @@
 			if ($list.length > 1) {				
 				fileLight.setMenu($list);
 			}
+		},
+		setInView:function(){
+			return;//desktop不处理
 		},
 		//获取文件&文件夹名字
 		name:function($obj){

@@ -42,19 +42,21 @@
     .tabs{height:100%;margin-right: 10px;margin-right: 60px;
         .tab{float: left;height: 100%;margin-right: 2px;
             width:110px;border: 1px solid rgba(255,255,255,0.4);line-height: 30px;
-            text-shadow:0 0 3px #000;box-shadow: 0 0 6px #000;padding-left: 10px;
-            border-radius: 3px ;cursor:default;color:#fff;overflow: hidden;font-size: 13px;
-            .gradient(top,rgba(255,255,255,0.2),rgba(255,255,255,0));               
-            &.hover{.gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0));}
-            &.this{.gradient(top,rgba(255,255,255,0.6),rgba(255,255,255,0));}
+            text-shadow:0 0 3px #000;color:#fff;
+            border-radius: 3px ;cursor:default;overflow: hidden;font-size: 13px;
+            .gradient(top,rgba(255,255,255,0.3),rgba(255,255,255,0));
+            img{width:18px;height:18px;padding-right:4px;vertical-align:middle;display: inline-block;margin-top:-3px;border-radius:4px;};padding-left:4px;word-break: break-all;
+            &.hover{.gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0));}
+            &.this{.gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0));box-shadow: 0 0 6px #000;}
         }
     }
 }
-.tasktab-dragging{position: absolute;z-index: 999;height:30px;
+.tasktab-dragging{position:fixed;z-index: 99999;height:30px;
     width:110px;border: 1px solid rgba(255,255,255,0.4);line-height: 30px;
-    text-shadow:0 0 3px #000;box-shadow: 0 0 6px #000;padding-left: 10px;
+    text-shadow:0 0 3px #000;box-shadow: 0 0 6px #000;padding-left:4px;
     border-radius: 3px ;cursor:default;color:#fff;overflow: hidden;font-size: 13px;
-    .gradient(top,rgba(255,255,255,0.6),rgba(255,255,255,0));
+    img{width:18px;height:18px;padding-right:4px;vertical-align:middle;display: inline-block;margin-top:-3px;border-radius:4px;};padding-left:4px;word-break: break-all;
+    .gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2));
 }
 
 #menuwin{

@@ -90,8 +90,9 @@ class app extends Controller{
         if (strlen($result)>50) {
             $result = mb_substr($result,0,50,'utf-8');
         }
-        if (strlen($result) == 0) {
-            $result = urlencode($this->in['url']);
+        if (!$result || strlen($result) == 0) {
+            $result = $this->in['url'];
+            $result = str_replace(array('http://','&','/'),array('','@','-'), $result);
         }
         show_json($result);
     }

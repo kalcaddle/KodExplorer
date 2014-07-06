@@ -261,13 +261,42 @@
 	        });
 	        
 			//绑定键盘定位文件名 选中文件,只只是首字母选择。
+			var lastClickTime = 0;
+			var lastkeyCode = '';
+			var keyTimeout;
+			var timeOffset = 200;//按键之间延迟，小于则认为是整体
 			Mousetrap.bind(
-				['1','2','3','4','5','6','7','8','9','0',
-				'`','~','!','@','#','$','%','^','&','*','(',')','-','_','=','+','[','{',']','}','|','/','?','.','>',',','<',
-				'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],function(e) {
-					var code = String.fromCharCode(e.charCode);
-		            ui.path.setSelectByChar(code);
+				['1','2','3','4','5','6','7','8','9','0','`','~','!','@','#','$','%','^','&','*','(',')',
+				'-','_','=','+','[','{',']','}','|','/','?','.','>',',','<','a','b','c','d','e',
+				'f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],function(e){
+				var code = String.fromCharCode(e.charCode);
+				if (lastClickTime == 0) {//新的一次键盘记录
+					lastClickTime = time();
+					lastkeyCode = code;
+					keyTimeout = setTimeout(function(){
+						ui.path.setSelectByChar(lastkeyCode);
+						lastClickTime = 0;
+					},timeOffset);//延迟执行
+					return;
+				}
+				if (code == lastkeyCode.substr(-1)) {//当前和之前一致
+					ui.path.setSelectByChar(lastkeyCode);
+					lastClickTime = 0;
+					return;
+				}
+
+				if (time() - lastClickTime < timeOffset) {
+					//定时之内没有输入则执行，有则追加，继续延时
+					lastClickTime = time();
+					lastkeyCode += code;
+					clearTimeout(keyTimeout);
+					keyTimeout = setTimeout(function(){
+						ui.path.setSelectByChar(lastkeyCode);
+						lastClickTime = 0;
+					},timeOffset);//延迟执行。
+				}
 	        });
+
 	        Mousetrap.bind(['alt+n', 'alt+n'],function(e){
 				stopPP(e);ui.path.newFile();
 	        });

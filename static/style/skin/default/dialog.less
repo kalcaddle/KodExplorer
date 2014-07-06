@@ -17,6 +17,7 @@ table.aui_border, table.aui_dialog { border:0; margin:0; border-collapse:collaps
 .aui_nw, .aui_n, .aui_ne, .aui_w, .aui_c, .aui_e, .aui_sw, .aui_s, .aui_se, .aui_header, .aui_tdIcon, .aui_main, .aui_footer { padding:0; }
 .aui_header, .aui_buttons button { font: 12px; }
 .aui_title { overflow:hidden; text-overflow: ellipsis; }
+.aui_title img{width:18px;height:18px;padding-right:4px;display:inline-block;margin-top: -3px;}
 .aui_state_noTitle .aui_title { display:none; }
 .aui_close { display:block; position:absolute; text-decoration:none; outline:none; _cursor:pointer; }
 .aui_close:hover { text-decoration:none; }
@@ -51,7 +52,7 @@ button.aui_state_highlight:active { border-color:#1c6a9e; filter: ~"progid:DXIma
 
 .aui_state_focus .aui_mask {display:none;}
 .aui_titleBar { width:100%; height:0; position:relative; bottom:33px; _bottom:0; _margin-top:-33px; }
-.aui_title { height:27px; line-height:27px; padding:0 16px 0 5px; color:#222; font-weight:700; text-shadow: 0 0px 10px #fff;}
+.aui_title {height:27px; line-height:27px; padding:0 16px 0 0px; color:#222; font-weight:700; text-shadow: 0 0px 10px #fff;}
 
 .aui_min{right: 81px;width: 27px;background:url("images/dialog/btn-min.png") no-repeat;}
 .aui_max{right: 54px;width: 27px;background:url("images/dialog/btn-max.png") no-repeat;}
@@ -64,8 +65,6 @@ button.aui_state_highlight:active { border-color:#1c6a9e; filter: ~"progid:DXIma
     &:active{background-position:0 0px;}
 }
 .aui_max,.aui_min{display: none;}
-
-
 .aui_state_noTitle{
     .aui_nw,.aui_ne,.aui_sw,.aui_se { width:5px; height:5px; }
     .aui_titleBar { bottom:0; _bottom:0; _margin-top:0; }
@@ -106,40 +105,6 @@ button.aui_state_highlight:active { border-color:#1c6a9e; filter: ~"progid:DXIma
     .resize-top-right{cursor: ne-resize; width: 15px; height: 15px; right: -5px; top: -5px;} 
     .aui_min,.aui_max{display: block;}   
 }
-
-
-/*----------------------- dialog ------------------------------*/
-/* 文件属性样式*/
-.pathinfo{font-size:13px;width:330px;height: 280px;padding:15px 0 15px 0;color:#446;}
-.pathinfo .line{width:95%;margin:8px auto 8px auto;height:0px;border-bottom:1px solid #ccc;}
-.pathinfo .p{margin-left:6px;margin-bottom:5px;}
-.pathinfo .p .icon{width:40px;height:40px;float:left;border:1px solid #f6f6f6;margin-left:10px;}
-.pathinfo .p .file_icon{background:url("@{img_common}file.png") 5px 4px no-repeat}
-.pathinfo .p .folder_icon{background:url("@{img_common}folder.png") 5px 4px  no-repeat}
-
-.pathinfo .p input{padding:2px;padding-left: 10px;border:1px solid #ccc;
-height:25px;line-height:25px;width:210px;float:left;display:block;margin:10px 0 0 30px;}
-.pathinfo .p .title{width:80px;float:left;color:#333;margin-left:15px;font-weight:800;color:#444;}
-.pathinfo .p .content{float:left;width:210px;word-break:break-all;color:#666; -moz-user-select:text;-webkit-user-select: text;}
-
-/* 弹出对话框css3 效果 */
-table.aui_border, table.aui_dialog {
-    -webkit-animation-name: fadein;
-    -webkit-animation-duration: 0.2s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-iteration-count: 1;
-}
-@-webkit-keyframes fadein {
-    0% {opacity:0;}
-    50% {opacity: 0.8;}
-}
-.file_drag_upload .aui_content{overflow-y: scroll;}
-.fileuploadinfo,.fileupload{color: #555;font-size: 13px;}
-.fileuploadinfo{font-size: 18px;color:#5499D9;margin-bottom: 8px;border-bottom: 1px solid #dde;padding-bottom: 6px;}
-.fileuploadinfo em{font-size:12px;}
-.fileupload {padding-left: 25px;}
-.fileupload span.status{padding-left: 10px;font-size: 10px;color: #f96;}
-.file_list{display: none;}
 
 div.dialog-simple{
     .aui_outer {border:none;border-radius:none;box-shadow:none;background:none;}

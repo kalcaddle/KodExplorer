@@ -1,0 +1,56 @@
+#!/bin/bash
+
+function failCommit() {
+    tput setaf 1
+    echo "----------------------------------------"
+    echo "FATAL ERROR: $1"
+    echo "----------------------------------------"
+    tput sgr0
+    exit 1
+}
+
+function testFail() {
+    tput setaf 3
+    echo "----------------------------------------"
+    echo "$1"
+    echo "----------------------------------------"
+    tput sgr0
+}
+
+if git-rev-parse --verify HEAD >/dev/null 2>&1 ; then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=57a26a48a48608f76f7e292fec691d9324c4969a
+fi
+
+# Remove all of the trailing whitespace in this commit
+for FILE in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | sed -E 's/:[0-9]+:.*//' | uniq` ; do
+    sed -i '' -E 's/[[:space:]]*$//' "$FILE"
+    git add $FILE
+done
+
+echo 'Running Jshint...'
+result=$(make lint)
+if [ $? != 0 ]; then
+    echo "$result"
+    echo ''
+    echo 'Jslint fail'
+    lintFailed=1
+    failCommit "Lint Errors"
+fi
+
+echo 'Running Tests...'
+result=$(make test)
+if grep -q FAILURES <<< $result; then
+    num=$(grep "FAILURES" <<< "$result")
+    testFail "Test $num"
+    echo "$result"
+    echo ''
+    echo 'Tests fail'
+    testsFailed=1
+fi
+
+if [[ $testsFailed || $lintFailed ]]; then
+    failCommit "Unable To Commit"
+fi

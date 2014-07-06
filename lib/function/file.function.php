@@ -101,50 +101,45 @@ function get_path_father($path){
     $path = str_replace('\\','/', rtrim(trim($path),'/'));
     return substr($path, 0, strrpos($path,'/')+1);
 }
+/**
+ * 获取扩展名
+ */
+function get_path_ext($path){
+	$name = get_path_this($path);
+	if(strstr($name,'.')){
+		$ext = substr($name,strrpos($name,'.')+1);
+		return strtolower($ext);
+	}else{
+		return '';
+	}
+}
 
 //自动获取不重复文件(夹)名
 function get_filename_auto($path){
-	$i=1;$dot_index = strrpos($path,'.');
-	$file_pre = substr($path,0,$dot_index);
-	$file_ext = substr($path,$dot_index);
+	$i=1;
+	$father = get_path_father($path);
+	$name =  get_path_this($path);
+	$ext = get_path_ext($name);
+	if (strlen($ext)>0) {
+		$ext='.'.$ext;
+		$name = substr($name,0,strlen($name)-strlen($ext));
+	}
 	while(file_exists($path)){
-		$path = $file_pre.'('.$i.')'.$file_ext;
+		$path = $father.$name.'('.$i.')'.$ext;
 		$i++;
 	}
 	return $path;
 }
 
 /**
- * 获取扩展名
+ * 判断文件夹是否可写
  */
-function get_path_ext($path){
-	$arr = explode('.',$path);
-	$ext = end($arr);
-	return strtolower($ext);
-}
-
-/**
- * 获取扩展名
- */
-function get_path_same_next($path,$name,$type){
-	if (!file_exists($path)) return '';
-	$temp = $name;
-	$i = 1;
-	if ($type=='folder') {
-		while(file_exists($path.$name)) {
-			$name = $temp.'('.$i.')';
-			$i++;
-		}
-	}else{
-		$temp_ext = get_path_ext($temp);
-		$temp_extp = strlen($temp_ext)>0?$temp_ext='.'.$temp_ext:'';
-		$temp_pre = substr($temp,0,-strlen($temp_extp));
-		while(file_exists($path.$name)){
-			$name = $temp_pre.'('.$i.')'.$temp_extp;
-			$i++;
-		}
-	}
-	return $path.$name;
+function path_writable($path) {	
+	$file = $path.'/test'.time().'.txt';
+	$dir  = $path.'/test'.time();
+	if(@is_writable($path) && @touch($file) && @unlink($file)) return true;
+	if(@mkdir($dir,0777) && @rmdir($dir)) return true;
+	return false;
 }
 
 /**
@@ -177,7 +172,7 @@ function path_check($path){
  */
 function _path_info_more($dir, &$file_num = 0, &$path_num = 0, &$size = 0){
 	if (!$dh = opendir($dir)) return false;
-	while (false !== ($file = readdir($dh))) {
+	while (($file = readdir($dh)) !== false) {
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir . "/" . $file;
 			if (!is_dir($fullpath)) {
@@ -201,7 +196,14 @@ function _path_info_more($dir, &$file_num = 0, &$path_num = 0, &$size = 0){
 /**
  * 获取多选文件信息,包含子文件夹数量，文件数量，总大小，父目录权限
  */
-function path_info_muti($list){
+function path_info_muti($list,$time_type){
+	if (count($list) == 1) {
+		if ($list[0]['type']=="folder"){
+	        return path_info($list[0]['path'],$time_type);
+	    }else{
+	        return file_info($list[0]['path'],$time_type);
+	    }
+	}
 	$pathinfo = array(
 		'file_num'		=> 0,
 		'folder_num'	=> 0,
@@ -210,7 +212,7 @@ function path_info_muti($list){
 		'father_name'	=> '',
 		'mod'			=> ''
 	);
-	foreach ($list as $val) {
+	foreach ($list as $val){
 		if ($val['type'] == 'folder') {
 			$pathinfo['folder_num'] ++;
 			$temp = path_info($val['path']);
@@ -235,10 +237,11 @@ function path_info_muti($list){
  */
 function path_list($dir,$list_file=true,$check_children=false){
 	$dir = rtrim($dir,'/').'/';
-	if (!is_dir($dir)) return array('folderlist'=>array(),'filelist'=>array());
-	$dh = opendir($dir);
+	if (!is_dir($dir) || !($dh = opendir($dir))){
+		return array('folderlist'=>array(),'filelist'=>array());
+	}
 	$folderlist = array();$filelist = array();//文件夹与文件
-	while (false !== ($file = readdir($dh))) {
+	while (($file = readdir($dh)) !== false) {
 		if ($file != "." && $file != ".." && $file != ".svn" ) {
 			$fullpath = $dir . $file;
 			if (is_dir($fullpath)) {
@@ -262,7 +265,7 @@ function path_list($dir,$list_file=true,$check_children=false){
 function path_haschildren($dir,$check_file=false){
 	$dir = rtrim($dir,'/').'/';
 	if (!$dh = @opendir($dir)) return false;
-	while (false !== ($file = readdir($dh))){
+	while (($file = readdir($dh)) !== false){
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir.$file;
 			if ($check_file) {//有子目录或者文件都说明有子内容
@@ -295,7 +298,7 @@ function del_file($fullpath){
  */
 function del_dir($dir){
 	if (!$dh = opendir($dir)) return false;
-	while (false !== ($file = readdir($dh))) {
+	while (($file = readdir($dh)) !== false) {
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir . '/' . $file;
 			if (!is_dir($fullpath)) {
@@ -312,7 +315,7 @@ function del_dir($dir){
 				} 
 			} 
 		} 
-	} 
+	}
 	closedir($dh);
 	if (rmdir($dir)) {
 		return true;
@@ -342,16 +345,16 @@ function copy_dir($source, $dest){
 			$__dest = $dest;
 		} 
 		$result = copy($source, $__dest); 
-		chmod($__dest, 0755);
+		chmod($__dest, 0777);
 	}elseif (is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
 			$dest = $dest . basename($source);
-			mkdir($dest, 0755);
+			mkdir($dest, 0777);
 		} else {
-			mkdir($dest, 0755);
-		} 
-		$dirHandle = opendir($source);
-		while (false !== ($file = readdir($dirHandle))) {
+			mkdir($dest, 0777);
+		}
+		if (!$dh = opendir($source)) return false;
+		while (($file = readdir($dh)) !== false) {
 			if ($file != "." && $file != "..") {
 				if (!is_dir($source . "/" . $file)) {
 					$__dest = $dest . "/" . $file;
@@ -361,7 +364,7 @@ function copy_dir($source, $dest){
 				$result = copy_dir($source . "/" . $file, $__dest);
 			} 
 		} 
-		closedir($dirHandle);
+		closedir($dh);
 	}
 	return $result;
 } 
@@ -377,7 +380,7 @@ function mk_dir($dir, $mode = 0777){
 	if (is_dir($dir) || mkdir($dir, $mode))
 		return true;
 	if (!mk_dir(dirname($dir), $mode))
-		return false;
+		return false;		
 	return mkdir($dir, $mode);
 }
 
@@ -390,8 +393,8 @@ function recursion_dir($path,&$dir,&$file,$deepest=-1,$deep=0){
 	$path = rtrim($path,'/').'/';
 	if (!is_array($file)) $file=array();
 	if (!is_array($dir)) $dir=array();
-	$handle=opendir($path);
-	while(($val=readdir($handle)) !== false){
+	if (!$dh = opendir($path)) return false;
+	while(($val=readdir($dh)) !== false){
 		if ($val=='.' || $val=='..') continue;
 		$value = strval($path.$val);
 		if (is_file($value)){
@@ -403,7 +406,7 @@ function recursion_dir($path,&$dir,&$file,$deepest=-1,$deep=0){
 			}
 		}
 	}
-	closedir($handle);
+	closedir($dh);
 	return true;
 }
 /*
@@ -449,6 +452,26 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
 	}
 	return array('folderlist' => $folderlist,'filelist' => $filelist);
 }
+
+/**
+ * 修改文件、文件夹权限
+ * @param  $path 文件(夹)目录
+ * @return :string
+ */
+function chmod_path($path,$mod){
+	$mod = 0777;//
+	if (!isset($mod)) $mod = 0777;
+	if (!is_dir($path)) return chmod($path,$mod);
+	if (!$dh = opendir($path)) return false;
+	while (($file = readdir($dh)) !== false){
+		if ($file != "." && $file != "..") {
+			$fullpath = $path . '/' . $file;
+			return chmod_path($fullpath,$mod);
+		} 
+	}
+	closedir($dh);
+	return chmod($path,$mod);
+} 
 
 /**
  * 文件大小格式化
@@ -517,62 +540,62 @@ function ext_type($ext){
  * 文件下载
  */
 function file_download($file){
-	if (file_exists($file)) {
-		header("Cache-Control: public");  
-		header("Content-Type: application/octet-stream");  
-		header("Content-Disposition: attachment;filename=".get_path_this($file));  
-		header("Accept-Ranges: bytes");  
-		$size = filesize($file);  
-		//如果有$_SERVER['HTTP_RANGE']参数 断点续传 
-		if (isset ($_SERVER['HTTP_RANGE'])) {  
-		    list ($a, $range) = explode("=", $_SERVER['HTTP_RANGE']);  
-		    str_replace($range, "-", $range);  
-		    $size2 = $size -1; //文件总字节数  
-		    $new_length = $size2 - $range; //获取下次下载的长度  
-		    header("HTTP/1.1 206 Partial Content");  
-		    header("Content-Length: $new_length"); //输入总长  
-		    header("Content-Range: bytes $range$size2/$size");
-		}else{//第一次连接
-		    $size2 = $size -1;  
-		    header("Content-Range: bytes 0-$size2/$size"); //Content-Range: bytes 0-4988927/4988928  
-		    header("Content-Length: " . $size); //输出总长  
-		}  
-		$fp = fopen($file, "rb");  
-		fseek($fp, $range);  
-		while (!feof($fp)) {  
-		    set_time_limit(0);  
-		    print (fread($fp, 1024 * 8)); //输出文件  
-		    flush(); 
-		    ob_flush();  
-		}  
-		fclose($fp);  
-		exit ();
-	} 
+	if (!file_exists($file)) show_json('file not exists');
+	if (isset($_SERVER['HTTP_RANGE']) && ($_SERVER['HTTP_RANGE'] != "") && 
+		preg_match("/^bytes=([0-9]+)-$/i", $_SERVER['HTTP_RANGE'], $match) && ($match[1] < $fsize)) { 
+		$start = $match[1];
+	}else{
+		$start = 0;
+	}
+
+	$size = filesize($file);
+	header("Cache-Control: public");  
+	header("Content-Type: application/octet-stream");  
+	$filename = get_path_this($file);//解决在IE中下载时中文乱码问题
+	if(preg_match('/MSIE/',$_SERVER['HTTP_USER_AGENT'])){
+		$filename = str_replace('+','%20',urlencode($filename));
+	}
+	header("Content-Disposition: attachment;filename=".get_path_this($file));
+
+	if ($start > 0) {
+		header("HTTP/1.1 206 Partial Content");
+		header("Content-Length: " . ($size - $start));
+		header("Content-Ranges: bytes".$start ."-".($size - 1)."/" .$size);
+	}else{
+		header("Content-Length: $size");
+		header("Accept-Ranges: bytes");
+	}
+
+	$fp = fopen($file, "rb");
+	fseek($fp, $start);
+	while (!feof($fp)) {  
+		set_time_limit(0);  
+		print (fread($fp, 1024 * 8)); //输出文件  
+		flush(); 
+		ob_flush();  
+	}  
+	fclose($fp);
+	exit;
 }
 
 /**
  * 文件代理输出
  */
 function file_proxy_out($file){
-	if (file_exists($file)) {
-		$mime = get_file_mime(get_path_ext($file));
-		header("Cache-Control:public");		
-		header("Content-Type:".$mime);
-		$size = filesize($file);
-		header("Content-Length: " . $size); //输出总长
-		$fp = fopen($file, "rb");
-		fseek($fp, $range);
-		while (!feof($fp)) {  
-		    set_time_limit(0);  
-		    print (fread($fp, 1024 * 8)); //输出文件  
-		    flush(); 
-		    ob_flush();  
-		}  
-		fclose($fp);  
-		exit;
-	}else{
-		show_json('file not exists',false);
+	if (!file_exists($file)) show_json('file not exists',false);
+	$mime = get_file_mime(get_path_ext($file));
+	header("Cache-Control:public");		
+	header("Content-Type:".$mime);
+	header("Content-Length: ".filesize($file)); //输出总长
+	$fp = fopen($file, "rb");
+	set_time_limit(0);
+	while (!feof($fp)) {	    
+	    print (fread($fp, 1024 * 8)); //输出文件  
+	    flush();
+	    ob_flush();  
 	}
+	fclose($fp);  
+	exit;
 }
 
 
@@ -583,17 +606,13 @@ function file_download_this($from, $file_name){
 	$fp = @fopen ($from, "rb");
 	if ($fp){
 		$new_fp = @fopen ($file_name, "wb");
-		if ($new_fp){
-			while(!feof($fp)){
-				fwrite($new_fp, fread($fp, 1024 * 8 ), 1024 * 8 );
-			}
-		}else{
-			return -1;
+		while(!feof($fp)){
+			fwrite($new_fp, fread($fp, 1024 * 8 ), 1024 * 8);
 		}
+		return true;
 	}else{
-		return -2;
-	}
-	return 1;
+		return false;
+	}	
 }
 
 /**
@@ -650,18 +669,16 @@ function get_post_max(){
  */
 function upload($fileInput, $path = './'){
 	global $config,$L;
-	if (!isset($_FILES[$fileInput])) show_json($L['upload_error_null'],false);
-
 	$file = $_FILES[$fileInput];
+	if (!isset($file)) show_json($L['upload_error_null'],false);
+	
 	$file_name = iconv_system($file['name']);
 	$info = _upload($file['tmp_name'],$file['size'],$path.$file_name);
-	show_json($info['data'],$info['code']);
+	show_json($info['data'],$info['code'],$info['path']);
 }
 function _upload($tmp_name,$size,$save_path){
 	global $L;
-	if(file_exists($save_path)){
-		return array('code'=>false,'data'=>$L['upload_error_exists']);
-	}
+	$save_path = get_filename_auto($save_path);
 	if(move_uploaded_file($tmp_name,$save_path)){
 		return array('code'=>true,'data'=>$L['upload_success'],'path'=>$save_path);
 	}else {
@@ -681,7 +698,7 @@ function write_log($log, $type = 'default', $level = 'log'){
 	$now_day  = date('Y_m_d');
 	// 根据类型设置日志目标位置
 	$target   = LOG_PATH . strtolower($type) . '/';
-	mk_dir($target, 0755);
+	mk_dir($target, 0777);
 	if (! is_writable($target)) exit('path can not write!');
 	switch($level){// 分级写日志
 		case 'error':	$target .= 'Error_' . $now_day . '.log';break;

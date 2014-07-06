@@ -36,7 +36,7 @@ define(function(require, exports, module) {
     
     require('lib/jquery-lib');
     require('lib/util');
-    require('lib/webuploader/webuploader-min');//-min
+    require('lib/webuploader/webuploader-min');//
     require('lib/ztree/js/ztree');
     require('lib/contextMenu/jquery-contextMenu');
     require('lib/artDialog/jquery-artDialog');
@@ -57,13 +57,14 @@ define(function(require, exports, module) {
         }else{
             Global.topbar_height = $('.topbar').height();
         }
-        $('.init_loading').fadeOut(600);
+        
         ui.init();
         ui.tree.init();
 		TaskTap.init();
         core.update();
         core.upload_init();
 		fileSelect.init();
-		rightMenu.initExplorer();        
+		rightMenu.initExplorer();
+        $('.init_loading').fadeOut(450).addClass('pop_fadeout');
 	});
 });

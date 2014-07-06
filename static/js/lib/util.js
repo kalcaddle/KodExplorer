@@ -63,14 +63,22 @@ $(document).ready(function() {
 	FrameCall.apiOpen();
 });
 
-
+var time = function(){
+    var time = (new Date()).valueOf();
+    return time;
+}
 var urlEncode = encodeURIComponent;
 var urlDecode = decodeURIComponent;
 var urlEncode2 = function (str){
 	return urlEncode(urlEncode(str));
 };
 var UUID = function(){
-	return 'uuid_'+Date.parse(new Date())+'_'+Math.ceil(Math.random()*10000)
+	return 'uuid_'+time()+'_'+Math.ceil(Math.random()*10000)
+}
+var round = function(val,point){
+    if (!point) point = 2;
+    point = Math.pow(10,parseInt(point));
+    return  Math.round(parseFloat(val)*point)/point;
 }
 
 //跨框架数据共享
@@ -158,15 +166,17 @@ var tips = function(msg,code){
 	Tips.tips(msg,code);
 }
 var Tips =  (function(){
-	var in_time  = 500;
+	var in_time  = 400;
 	var delay = 500;
 	var opacity  = 0.7;
 	var _init = function(msg,code){
 		var tipsIDname = "messageTips";
 		var tipsID = "#"+tipsIDname;
 		if ($(tipsID).length ==0) {
-			var html = '<div id="'+tipsIDname+'" style="z-index:50;min-width:60px;position:fixed;padding:2px 2em;text-align:center;line-height:30px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;"><i style="padding: 0 6px;font-size: 15px;"></i><span></span></div>'
-			$('body').append(html);	
+			var html = '<div id="'+tipsIDname+'" style="z-index:50;min-width:60px;max-width:80%;position:fixed;padding:2px 2em;text-align:center;line-height:30px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;"><i style="padding: 0 6px;font-size: 15px;"></i><span></span></div>'
+			$('body').append(html);
+
+            $(tipsID).show().css({'left':($(window).width() - $(tipsID).innerWidth())/2});
 			$(window).bind('resize',function(){
 				if ($(tipsID).css('display') =="none") return;
 				self.stop(true,true)
@@ -175,14 +185,14 @@ var Tips =  (function(){
 		}
 		var self = $(tipsID),icon,color;
 		switch(code){
-			case 100://加长时间 5s
+			case 100:delay = 3000;//加长时间 5s
 			case true:
 			case undefined:
 			case 'succcess':color = '#5cb85c';icon = 'icon-ok';break;
 			case 'info':color = '#519AF6';icon = 'icon-info';break;
 			case 'warning':color = '#ed9c28';icon = 'icon-exclamation';break;
 			case false:
-			case 'error':color = '#d9534f';icon = 'icon-remove';break;
+			case 'error':delay = 1000;color = '#d9534f';icon = 'icon-remove';break;
 			default:color = '';icon = '';break;
 		}
 
@@ -191,6 +201,7 @@ var Tips =  (function(){
 			self.find('i').removeClass().addClass(icon);		
 		}
 		if (msg != undefined) self.find('span').html(msg);
+        $(tipsID).show().css({'left':($(window).width() - $(tipsID).innerWidth())/2});
 		return self;
 	};
 	var tips = function(msg,code,offset_top){
@@ -199,14 +210,13 @@ var Tips =  (function(){
 		}
 		if (offset_top == undefined) offset_top = 0;
 		var self = _init(msg,code);
-		if(code == 100){delay = 3500;}
 		self.stop(true,true)
-			.css({'display':'block','opacity':'0','top':offset_top-self.height(),
-				'left':($(window).width() - self.width()) / 2})
+			.css({'opacity':'0','top':offset_top-self.height()})
+            .show()
 			.animate({opacity:opacity,top:offset_top},in_time,0)
 			.delay(delay)
 			.animate({opacity:0,top:'-='+(offset_top+self.height())},in_time,0,function(){
-				$(this).css('display','none');
+				$(this).hide();
 			});
 	};
 	var loading = function(msg,code,offset_top){
@@ -219,23 +229,27 @@ var Tips =  (function(){
 
 		var self = _init(msg,code);
 		self.stop(true,true)
-			.css({'display':'block','opacity':'0','top':offset_top-self.height(),
-				'left':($(window).width() - self.width()) / 2})
+			.css({'opacity':'0','top':offset_top-self.height()})
 			.animate({opacity:opacity,top:offset_top},in_time,0);
 	};
 	var close = function(msg,code,offset_top){
 		if (typeof(msg) == 'object'){
-			code=msg.code;msg = msg.data;
+            try{
+                code=msg.code;msg = msg.data;
+            }catch(e){
+                code=0;msg ='';
+            };			
 		}
 		if (offset_top == undefined) offset_top = 0;
 		var self = _init(msg,code);
 
 		self.delay(delay)
+            .show()
 			.animate({
 				opacity:0,
 				top:'-='+(offset_top+self.height())},
 				in_time,0,function(){
-					$(this).css('display','none');
+                    $(this).hide();
 			});
 	};
 	return{

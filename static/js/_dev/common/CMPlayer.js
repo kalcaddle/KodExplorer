@@ -29,12 +29,14 @@ define(function(require, exports) {
 
 	// 创建播放器；动态获取皮肤以及对应大小尺寸
 	var _create = function(player){
-		var playerSkin,playerTitle,resize;	
+		var playerSkin,playerTitle,resize,ico;	
 		if (player == 'music_player') {
+			ico=core.ico('mp3');
 			playerSkin = _skin[G.musictheme];
 			playerTitle= 'music player';
 			resize = false;
 		}else {
+			ico=core.ico('flv');
 			playerSkin = _skin[G.movietheme];
 			playerTitle= 'movie player';
 			resize = true;
@@ -44,6 +46,7 @@ define(function(require, exports) {
 		var playerDialog = {
 			id:player+'_dialog',
 			simple:true,
+			ico:ico,
 			title:playerTitle,
 			width:playerSkin.width,
 			height:playerSkin.height,

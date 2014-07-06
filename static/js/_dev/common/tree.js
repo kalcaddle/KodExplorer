@@ -4,6 +4,7 @@ define(function(require, exports) {
 	var successCallback;
 	var isUpdateRefresh = false;//上传连续更新树目录队列方式。没有处理完不做反应，处理完后sleep 2s;
 	ui.pathOpen = pathOpen;
+	var zTree;
 
 	// 目录树操作
 	var init=function(){
@@ -20,6 +21,7 @@ define(function(require, exports) {
 				} 
 				var tree_json = data.data;
 				$.fn.zTree.init($("#folderList"), setting,tree_json);
+				zTree = $.fn.zTree.getZTreeObj("folderList");
 			}
 		});
 		$('.ztree .switch').die('mouseenter').live('mouseenter',function(){
@@ -27,7 +29,6 @@ define(function(require, exports) {
 		}).die('mouseleave').live('mouseleave',function(){
 			$(this).removeClass('switch_hover');
 		});
-
 		if (Config.pageApp == 'editor') {
 			Mousetrap.bind('up',function(e) {
 				keyAction(e,'up');		    
@@ -60,73 +61,70 @@ define(function(require, exports) {
 			}).bind('alt+n',function(e) {
 				tree.create('file');
 			});
-		};
+		}
 	};
 	var keyAction = function(e,action){
 		stopPP(e);
-		var zTree = $.fn.zTree.getZTreeObj("folderList"),
-			treeNode = zTree.getSelectedNodes()[0];
-		if (treeNode != undefined) {			
-			switch(action){
-				case 'up':
-					var node = treeNode.getPreNode();
-					if (!node) {
-						node = treeNode.getParentNode();
-					}else if(node.open && node.children.length>0) {
-						while(node.open && node.children && node.children.length>=1){
-							node = node.children[node.children.length-1];
-						}
-						//if (node.getParentNode().tId == treeNode.tId) node=treeNode;
+		var treeNode = zTree.getSelectedNodes()[0];
+		if (!treeNode) return;			
+		switch(action){
+			case 'up':
+				var node = treeNode.getPreNode();
+				if (!node) {
+					node = treeNode.getParentNode();
+				}else if(node.open && node.children.length>0) {
+					while(node.open && node.children && node.children.length>=1){
+						node = node.children[node.children.length-1];
 					}
-					zTree.selectNode(node);
-					break;
-				case 'down':
-					if (treeNode.open && treeNode.children.length>=1){
-						node = treeNode.children[0];
-					}else{
-						var tempNode = treeNode,
+					//if (node.getParentNode().tId == treeNode.tId) node=treeNode;
+				}
+				zTree.selectNode(node);
+				break;
+			case 'down':
+				if (treeNode.open && treeNode.children.length>=1){
+					node = treeNode.children[0];
+				}else{
+					var tempNode = treeNode,
+						node = tempNode.getNextNode()||tempNode.getParentNode().getNextNode();
+					try{
+						while(!node){
+							tempNode = tempNode.getParentNode();
 							node = tempNode.getNextNode()||tempNode.getParentNode().getNextNode();
-						try{
-							while(!node){
-								tempNode = tempNode.getParentNode();
-								node = tempNode.getNextNode()||tempNode.getParentNode().getNextNode();
-							}							
-						}catch(e){}
-					}
-					zTree.selectNode(node);
-					break;
-				case 'left':
-					if (!treeNode.isParent) {
+						}							
+					}catch(e){}
+				}
+				zTree.selectNode(node);
+				break;
+			case 'left':
+				if (!treeNode.isParent) {
+					zTree.selectNode(treeNode.getParentNode());
+				}else{
+					if (treeNode.open) {
+						zTree.expandNode(treeNode,false);
+					}else{
 						zTree.selectNode(treeNode.getParentNode());
-					}else{
-						if (treeNode.open) {
-							zTree.expandNode(treeNode,false);
-						}else{
-							zTree.selectNode(treeNode.getParentNode());
-						}						
-					}
-					break;
-				case 'right':
-					if (treeNode.open){
-						zTree.selectNode(treeNode.children[0]);	
-					}else{
-						zTree.expandNode(treeNode,true);
-					}					
-					break;
-				default:break;
-			}
+					}						
+				}
+				break;
+			case 'right':
+				if (treeNode.open){
+					zTree.selectNode(treeNode.children[0]);	
+				}else{
+					zTree.expandNode(treeNode,true);
+				}					
+				break;
+			default:break;
 		}
 	};
 
 	var setting={
 		async: {
 			enable: true,
+			dataType: "json",
 			url:Config.treeAjaxURL,//直接上次拿到的json变量。
 			autoParam:["ajax_name=name","ajax_path=path","this_path"],//前面是value 后面是key
-			dataFilter: function(treeId, parentNode, responseData){
-				if (!responseData.code){				
-					return null;
-				}
+			dataFilter: function(treeId,parentNode,responseData){
+				if (!responseData.code) return null;
 				return responseData.data;
 			}
 		},
@@ -196,7 +194,6 @@ define(function(require, exports) {
 		},
 		callback: {//事件处理回调函数
 			onClick: function(event,treeId,treeNode){
-				var zTree = $.fn.zTree.getZTreeObj("folderList");
 				zTree.selectNode(treeNode);
 				zTree.expandNode(treeNode);
 				if(treeNode.type=='folder' && Config.pageApp=='editor') return;
@@ -214,14 +211,17 @@ define(function(require, exports) {
 				}
 			},
 			beforeRightClick:function(treeId, treeNode){			
-				var zTree = $.fn.zTree.getZTreeObj("folderList");
 				zTree.selectNode(treeNode);
 			},
 			beforeAsync:function(treeId, treeNode){
 				treeNode.ajax_name= urlEncode(treeNode.name);
 				treeNode.ajax_path= urlEncode(treeNode.path);
 			},
-			onAsyncSuccess:function(treeId, treeNode){//更新成功后调用
+			onAsyncSuccess:function(event, treeId, treeNode, msg){//更新成功后调用
+				if (msg.data.length == 0){
+					zTree.removeChildNodes(treeNode);
+					return;
+				}
 				if (typeof(successCallback) == 'function'){
 					successCallback();
 					successCallback = undefined;
@@ -229,8 +229,7 @@ define(function(require, exports) {
 			},
 			//新建文件夹、文件、重命名后回调（input blur时调用）
 			onRename:function(event, treeId,treeNode){
-				var zTree = $.fn.zTree.getZTreeObj("folderList"),
-					parent = treeNode.getParentNode();;
+				var parent = treeNode.getParentNode();
 				//已存在检测
 				if(zTree.getNodesByParam('name',treeNode.name,parent).length>1){
 					core.tips.tips(LNG.name_isexists,false);
@@ -300,9 +299,7 @@ define(function(require, exports) {
 
 	//配置请求数据  通用
 	var _param = function(makeArray){
-		var zTree = $.fn.zTree.getZTreeObj("folderList");
-		if (!zTree) return;
-		
+		if (!zTree) return;		
 		var treeNode = zTree.getSelectedNodes()[0],
 			path = '',
 			type ='';
@@ -330,10 +327,14 @@ define(function(require, exports) {
 	};
 	//通用刷新 不传参数则刷新选中节点
 	var refresh = function(treeNode){
-		var zTree = $.fn.zTree.getZTreeObj("folderList");
 		if (treeNode == undefined) treeNode=zTree.getSelectedNodes()[0];
 		if (!treeNode.isParent){
 			treeNode = treeNode.getParentNode();
+			if (!treeNode){
+				ui.tree.init();
+				return;
+			}
+			if (treeNode && treeNode['ext'] =='__fav__') return;//不刷新收藏夹
 		}
 		zTree.reAsyncChildNodes(treeNode, "refresh");
 	};
@@ -384,22 +385,15 @@ define(function(require, exports) {
 		remove:function(){
 			var param  = _param(true);
 			var parent = param[0].node.getParentNode();
-			if(!parent) {
-				$.dialog({fixed: true,resize: false,icon:'warning',drag: true,
-					title:LNG.tips,content: LNG.remove_not,ok:true});
-			}else{
-				pathOperate.remove(param,function(){
-					f5_refresh();
-					refresh(parent);
-				});
-			}
+			pathOperate.remove(param,function(){
+				f5_refresh();
+				refresh(parent);
+			});
 		},
-		checkIfChange:function(explorer_path){
+		checkIfChange:function(explorer_path){			
 			if (isUpdateRefresh) return;
 			isUpdateRefresh = true;
-			var zTree = $.fn.zTree.getZTreeObj("folderList");
 			if (!zTree) return;
-
 			zTree.getNodesByFilter(function(treeNode){
 				var path;
 				if (treeNode.this_path){
@@ -408,7 +402,8 @@ define(function(require, exports) {
 					path = treeNode.path+treeNode.name;
 				}
 				if (path == explorer_path ||
-					path+'/'==explorer_path) {
+					path+'/'==explorer_path||
+					'/'+treeNode.name+'/'==explorer_path) {
 					refresh(treeNode);
 					return true;
 				}
@@ -440,7 +435,6 @@ define(function(require, exports) {
 		},
 		// 创建节点 让元素进入编辑状态(编辑、新建)。保存动作在ztree的onRename回调函数中
 		create:function(type){//type ='file' 'folder'
-			var zTree = $.fn.zTree.getZTreeObj("folderList");
 			var sel = zTree.getSelectedNodes();
 			if (sel.length<=0){//工具栏新建文件（夹）
 				var node = zTree.getNodeByParam("ext",'__root__', null);
@@ -464,21 +458,18 @@ define(function(require, exports) {
 				newNode = {name:file+'('+i+').txt','ext':'txt',type:'file',create:true,path:param.path};
 			}
 
+
 			if(treeNode.children != undefined){
-				treeNodeNew = zTree.addNodes(treeNode,newNode);
-				zTree.editName(treeNodeNew[0]);
-			}else{
+				var treeNodeNew = zTree.addNodes(treeNode,newNode)[0];
+				zTree.editName(treeNodeNew);
+			}else{				
 				if (treeNode.type != 'folder') treeNode = treeNode.getParentNode();
-				successCallback = function(){
-					treeNodeNew = zTree.addNodes(treeNode,newNode);
-					zTree.editName(treeNodeNew[0]);
-				}
-				refresh(treeNode);
-			}
+				var treeNodeNew = zTree.addNodes(treeNode,newNode)[0];
+				zTree.editName(treeNodeNew);
+			}			
 		},
 		rname:function(){
-			var zTree = $.fn.zTree.getZTreeObj("folderList"),
-			treeNode = zTree.getSelectedNodes()[0],newNode;
+			var treeNode = zTree.getSelectedNodes()[0],newNode;
 			zTree.editName(treeNode);
 			treeNode.beforeName = treeNode.name;
 		}

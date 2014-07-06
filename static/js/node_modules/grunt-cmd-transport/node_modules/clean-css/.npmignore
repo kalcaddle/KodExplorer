@@ -1,0 +1,6 @@
+bench
+test
+.jshintignore
+.jshintrc
+.travis.yml
+History.md

@@ -15,7 +15,7 @@ define(function(require, exports) {
 		}
 		if (ext == 'swf') {
 			var url = core.path2url(path);
-			_openWindow(url,core.pathThis(path));
+			_openWindow(url,core.ico('swf'),core.pathThis(path));
 			return;
 		}
 		if (ext == 'oexe') {
@@ -30,6 +30,7 @@ define(function(require, exports) {
 			$.dialog({
 				resize:true,
 				fixed:true,
+				ico:core.ico('pdf'),
 				title:core.pathThis(path),
 				width:800,
 				height:400,
@@ -41,7 +42,7 @@ define(function(require, exports) {
 		}
 		if (ext=='html' || ext =='htm'){
 			var url = core.path2url(path);
-			_openWindow(url,core.pathThis(path));
+			_openWindow(url,core.ico('html'),core.pathThis(path));
 			return;
 		}
 		if (inArray(core.filetype['image'],ext)){//单张图片打开
@@ -88,7 +89,7 @@ define(function(require, exports) {
 		var url=core.path2url(path);
 		window.open(url);
 	};
-	var _openWindow = function(url,title,name) {
+	var _openWindow = function(url,ico,title,name) {
 		if (!url) return;
 		if (name == undefined) name = 'openWindow'+UUID();
 
@@ -100,6 +101,7 @@ define(function(require, exports) {
 		art.dialog.through({
 			id:name,
 			title:title,
+			ico:ico,
 			width:'70%',
 			height:'65%',
 			padding:0,
@@ -123,30 +125,33 @@ define(function(require, exports) {
 		if (window.top.frames["OpenopenEditor"] == undefined) {
 		   var url ='./index.php?editor/edit&filename='+urlEncode(urlEncode2(path));//3次
 		   var title = filename+' ——'+LNG.edit;
-			_openWindow(url,title.substring(title.length-50),'openEditor');
+			_openWindow(url,core.ico('edit'),title.substring(title.length-50),'openEditor');
 		}else{
 			if ($.dialog.list['openEditor']) $.dialog.list['openEditor'].display(true);;
 			FrameCall.top('OpenopenEditor','Editor.add','"'+urlEncode2(path)+'"');//2次
 		}
 	};
 	var _openOffice = function(url,ext){
-		var app_url,temp_url,frame;
+		var app_url,temp_url,frame,ico;
 		switch (ext) {
 			case 'doc':
 			case 'docx':
 			case 'docm':
 			case 'dot':
+				ico=core.ico('doc');
 				app_url ='http://sg1b-word-view.officeapps.live.com/wv/wordviewerframe.aspx?ui=zh-CN&rs=zh-CN&WOPISrc=';
 				break;
 			case 'ppt':
 			case 'pptm':
 			case 'pptx':
+				ico=core.ico('ppt');
 				app_url ='http://sg1b-powerpoint.officeapps.live.com/p/PowerPointFrame.aspx?PowerPointView=ReadingView&ui=zh-CN&rs=zh-CN&WOPISrc=';
 				break;          
 			case 'xls':
 			case 'xlsb':
 			case 'xlsm':
 			case 'xlsx':
+				ico=core.ico('xls');
 				app_url = 'http://sg1b-excel.officeapps.live.com/x/_layouts/xlviewerinternal.aspx?ui=zh-CN&rs=zh-CN&WOPISrc=';
 				break;
 			default:break;
@@ -156,7 +161,12 @@ define(function(require, exports) {
 		frame = app_url+urlEncode(temp_url)+'&access_token=1&access_token_ttl=0';
 
 		var title = core.pathThis(urlDecode(url));
-		art.dialog.open(frame,{title:title,width:'70%',height:'65%',resize:true});
+		art.dialog.open(frame,{
+			ico:ico,
+			title:title,width:'70%',
+			height:'65%',
+			resize:true
+		});
 	}
 	//传入音乐播放地址，多个的话传入数组。可以扩展播放网络音乐
 	var _player = function(list,ext){

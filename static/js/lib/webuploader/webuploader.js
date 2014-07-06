@@ -4457,8 +4457,7 @@ var dragEnter=dragOver=dragLeave=dragDrop=function(){};
             _addFile: function( file ) {
                 var me = this;
                 // mark --warlee  file-size 6?
-                if ( !file || file.size < 6 || me.accept &&
-    
+                if ( !file || me.accept &&    
                         // 如果名字中有后缀，才做后缀白名单处理。
                         rExt.exec( file.name ) && !me.accept.test( file.name ) ) {
                     return;

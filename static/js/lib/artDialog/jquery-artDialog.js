@@ -100,6 +100,7 @@ var artDialog = function (config, ok, cancel) {
 	
 	//添加到任务栏
 	if (config.title !== false){
+		config.title = '<img src="'+config.ico+'" />'+config.title;
 		if (_count>=1) dialogList.add(config.id,config.title);
 	}
 
@@ -1086,6 +1087,7 @@ artDialog.defaults = {
 	top: '38.2%',				// Y轴坐标
 	zIndex: 300,				// 对话框叠加高度值(重要：此值不能超过浏览器最大限制)
 	
+	ico:'./static/images/file_16/file.png',//默认标题小图标
 	resize: false,				// 是否允许用户调节尺寸
 	dialogMaxFlag:'dialogMax',	// 最大化状态标记class
 	dialogMinFlag:'dialogMin',	// 最小化状态标记class	

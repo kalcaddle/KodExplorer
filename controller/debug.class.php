@@ -144,7 +144,7 @@ class debug extends Controller{
 	// 删除
 	function _remove(){		
 		$file_list = array(
-			$this->path_to.'/controller/debug.class.php',
+			$this->path_to.'/data/system/install.lock',
 			$this->path_to.'/lib/class/lessc.inc.class.php',
 			$this->path_to.'/static/style/base.less',
 			$this->path_to.'/static/js/lib/less-1.4.2.min.js',
@@ -154,6 +154,7 @@ class debug extends Controller{
 			$this->path_to.'/static/js/package.json',
 			$this->path_to.'/static/js/readme.txt',
 			$this->path_to.'/todo.txt',
+			$this->path_to.'/controller/debug.class.php',
 		);
 		$path_list = array(
 			$this->path_to.'/data/log',
@@ -172,6 +173,8 @@ class debug extends Controller{
 		foreach($path_list as $val){
 			del_dir($val);
 		}
+
+		mk_dir($this->path_to.'/data/thumb');
 		echo '<br/>2.文件夹删除完成：';flush();
 		$path		= $this->path_to.'/static/style/skin/';
 		$app_theme	= array('default','metro','simple');
@@ -206,11 +209,11 @@ class debug extends Controller{
 			file_put_contents($val,$content);
 			echo '<br/>处理template文件：'.$val,'成功';flush();
 		}
-
+		
 		$config = $this->path_to.'/config/config.php';
 		$content = file_get_contents($config);
-		$content = str_replace('define(\'STATIC_JS\'.*','',$content);
-		$content = str_replace('define(\'STATIC_LESS\'.*','',$content);
+		$content = str_replace("('STATIC_JS','_dev')","('STATIC_JS','app')",$content);
+		$content = str_replace("('STATIC_LESS','less')","('STATIC_LESS','css')",$content);
 		file_put_contents($config,$content);
 	}
 

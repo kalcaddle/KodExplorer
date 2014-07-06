@@ -1,4 +1,4 @@
-<div class="init_loading"><img src="<?php echo STATIC_PATH;?>images/loading_simple.gif"/></div>
+<div class="init_loading"><div><img src="<?php echo STATIC_PATH;?>images/loading_simple.gif"/></div></div>
 <div class="topbar">
 	<div class="content">
 		<div class="top_left">
@@ -13,7 +13,7 @@
 		<div class="top_right">
 		<div>
 			<a id='topbar_language' data-toggle="dropdown" href="#"><i class='icon-flag'></i>Language<b class="caret"></b></a>
-			<ul class="dropdown-menu topbar_language" role="menu" aria-labelledby="topbar_language">
+			<ul class="dropdown-menu topbar_language fadein" role="menu" aria-labelledby="topbar_language">
 			  	<?php 
 					$tpl="<li><a href='javascript:core.language(\"{0}\");' class='{this}'>{1}</a></li>";
 					echo getTplList(',',':',$config['setting_all']['language'],$tpl,$GLOBALS['language']);
@@ -22,7 +22,7 @@
 		</div>
 		<div>
 			<a href="#" id='topbar_user' data-toggle="dropdown"><i class="icon-user"></i><?php echo $_SESSION['user']['name'];?><b class="caret"></b></a>
-			<ul class="dropdown-menu menu-topbar_user" role="menu" aria-labelledby="topbar_user">
+			<ul class="dropdown-menu menu-topbar_user fadein" role="menu" aria-labelledby="topbar_user">
 				<li><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo $L['setting_user'];?></a></li>
 				<?php if($_SESSION['user']['role']=='root'){ ?>
 					<li><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo $L['setting_member'];?></a></li>

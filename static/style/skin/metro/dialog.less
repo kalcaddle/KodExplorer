@@ -18,6 +18,7 @@ table.aui_border, table.aui_dialog { width: 100%;border:0; margin:0; border-coll
 .aui_nw, .aui_n, .aui_ne, .aui_w, .aui_c, .aui_e, .aui_sw, .aui_s, .aui_se, .aui_header, .aui_tdIcon, .aui_main, .aui_footer { padding:0; }
 .aui_header, .aui_buttons button { font: 12px/1.11;}
 .aui_title { overflow:hidden; text-overflow: ellipsis; }
+.aui_title img{width:18px;padding-right:4px;height:18px;}
 .aui_state_noTitle .aui_title { display:none; }
 .aui_main { text-align:center; min-width:9em; min-width:0~'\9'/*IE8 BUG*/;visibility: auto;}
 .aui_content {text-align:left;font-size: 14px;color:#666; border:none 0;color:#666;width:100%;height:100%;}
@@ -56,7 +57,7 @@ table.aui_border, table.aui_dialog { width: 100%;border:0; margin:0; border-coll
 .aui_inner {background:#FFF;}
 .aui_state_lock .aui_nw, .aui_state_lock .aui_n, .aui_state_lock .aui_ne, .aui_state_lock .aui_w, .aui_state_lock .aui_e, .aui_state_lock .aui_sw, .aui_state_lock .aui_s, .aui_state_lock .aui_se { background:rgba(0, 0, 0, .5); background:#000~'\9'!important;.opacity(50); }
 .aui_titleBar { position:relative; height:100%; }
-.aui_title { height:31px; line-height:30px; padding:0 28px 0 15px;color:#fff;font-size: 14px;
+.aui_title { height:31px; line-height:30px; padding:0 28px 0 10px;color:#fff;font-size: 14px;
     background-color: @dialog_color;border-bottom: 1px solid darken(@dialog_color,10%);}
 
 .aui_state_focus{
@@ -119,41 +120,6 @@ table.aui_border, table.aui_dialog { width: 100%;border:0; margin:0; border-coll
     .aui_min,.aui_max{display:block;}   
 }
 
-/*----------------------- dialog ------------------------------*/
-/* 文件属性样式*/
-.pathinfo{
-    font-size:13px;width:330px;height: 300px;padding:15px 0 15px 0;color:#446;
-    .line{width:95%;margin:8px auto 8px auto;height:0px;border-bottom:1px solid #ccc;}
-    .p{
-        margin-left:6px;margin-bottom:5px;
-        .icon{width:40px;height:40px;float:left;border:1px solid #f6f6f6;margin-left:10px;}
-        .file_icon{background:url("@{img_common}file.png") 5px 4px no-repeat}
-        .folder_icon{background:url("@{img_common}folder.png") 5px 4px  no-repeat}
-        input{padding:2px;padding-left: 10px;border:1px solid #ccc;
-            height:25px;line-height:25px;width:210px;float:left;display:block;margin:10px 0 0 30px;}
-        .title{width:80px;float:left;color:#333;margin-left:15px;font-weight:800;color:#444;}
-        .content{float:left;width:210px;word-break:break-all;color:#666; -moz-user-select:text;-webkit-user-select: text;}
-    }
-}
-
-/* 弹出对话框css3 效果 */
-table.aui_border, table.aui_dialog {
-    -webkit-animation-name: fadein;
-    -webkit-animation-duration: 0.2s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-iteration-count: 1;
-}
-@-webkit-keyframes fadein {
-    0% {opacity:0;}
-    50% {opacity: 0.8;}
-}
-.file_drag_upload .aui_content{overflow-y: scroll;}
-.fileuploadinfo,.fileupload{color: #555;font-size: 13px;}
-.fileuploadinfo{font-size: 18px;color:#5499D9;margin-bottom: 8px;border-bottom: 1px solid #dde;padding-bottom: 6px;}
-.fileuploadinfo em{font-size:12px;}
-.fileupload {padding-left: 25px;}
-.fileupload span.status{padding-left: 10px;font-size: 10px;color: #f96;}
-.file_list{display: none;}
 
 div.dialog-simple{
     .aui_outer {border:none;border-radius:none;box-shadow:none;background:none;}

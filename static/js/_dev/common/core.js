@@ -14,6 +14,17 @@ define(function(require, exports) {
 			'bindary':['pdf','bin','zip','swf','gzip','rar','arj','tar','gz','cab','tbz','tbz2','lzh','uue','bz2'
 						,'ace','exe','so','dll','chm','rtf','odp','odt','pages','class','psd','ttf']
 		},
+		ico:function(type){
+			var path = G.static_path + 'images/file_16/';
+			var arr=['folder','file','edit','search','up','setting','appStore','error','info',
+					 'mp3','flv','pdf','doc','xls','ppt','html','swf'];
+			var index = $.inArray(type,arr);
+			if (index == -1) {
+				return path+'file.png';
+			}else{
+				return path+type+'.png';
+			}
+		},
 		contextmenu:function(event){
 			rightMenu.hidden();
 			var e = event || window.event;
@@ -73,7 +84,7 @@ define(function(require, exports) {
 		ajaxError:function(XMLHttpRequest, textStatus, errorThrown){
 			core.tips.close(LNG.system_error,false);
 			var response = XMLHttpRequest.responseText;
-			var error = '<div style="color:#f60;">'+response+'</div>';
+			var error = '<div class="ajaxError">'+response+'</div>';
 			var dialog = $.dialog.list['ajaxErrorDialog'];
 			
 			//已经退出
@@ -87,11 +98,11 @@ define(function(require, exports) {
 			}else{
 				$.dialog({
 					id:'ajaxErrorDialog',
+					padding:0,
 					fixed:true,
 					resize:true,
+					ico:core.ico('error'),
 					title:'ajax error',
-					width:450,
-					height:200,
 					content:error
 				});	
 			}
@@ -103,6 +114,7 @@ define(function(require, exports) {
 				$.dialog.open('./index.php?setting#'+setting,{
 					id:'setting_mode',
 					fixed:true,
+					ico:core.ico('setting'),
 					resize:true,
 					title:LNG.setting,
 					width:960,
@@ -117,6 +129,7 @@ define(function(require, exports) {
 			$.dialog.open('./index.php?app',{
 				id:'app_store',
 				fixed:true,
+				ico:core.ico('appStore'),
 				resize:true,
 				title:LNG.app_store,
 				width:800,
@@ -125,6 +138,10 @@ define(function(require, exports) {
 		},
 		openApp:function(app){
 			if (app.type == 'url') {
+				var icon = app.icon;
+				if (app.icon.search(G.static_path)==-1 && app.icon.substring(0,4) !='http') {
+					icon = G.static_path + 'images/app/' + app.icon;
+				}
 				//高宽css px或者*%
 				if (typeof(app.width)!='number' 
 					&& app.width.search('%') == -1){app.width = parseInt(app.width);} 
@@ -133,6 +150,7 @@ define(function(require, exports) {
 				$.dialog.open(app.content,{
 					title:app.name,
 					fixed:true,
+					ico:icon,
 					resize:app.resize,
 					simple:app.simple,
 					title:app.name.replace('.oexe',''),
@@ -156,6 +174,7 @@ define(function(require, exports) {
 			if (path == undefined) path = '';
 			$.dialog.open('?/explorer&type=iframe&path='+path,{
 				resize:true,fixed:true,
+				ico:core.ico('folder'),
 				title:LNG.ui_filemanage,
 				width:880,height:550
 			});
@@ -233,6 +252,7 @@ define(function(require, exports) {
 						id:'dialog_do_search',
 						padding:0,
 						fixed:true,
+						ico:core.ico('search'),
 						resize:true,
 						title:LNG.search,
 						width:450,
@@ -346,6 +366,7 @@ define(function(require, exports) {
 				padding:5,
 				height:430,
 				resize:true,
+				ico:core.ico('up'),
 				id:'dialog_file_upload',
 				fixed: true,
 				title:LNG.upload_muti,
@@ -381,33 +402,127 @@ define(function(require, exports) {
 				}
 			});
 			// 远程下载
-			$('.file_upload .download_box .submit input').unbind('click').bind('click',function(){
+			$('.file_upload .download_box button').unbind('click').bind('click',function(){
 				core.server_dwonload(G.upload_path);
 			});
 			uploader.addButton({id: '#picker'});
 		},
 		server_dwonload:function(path){
-			var urls = [];		
-			$('.list input').each(function(i){
-				if ($(this).val() != '') {
-					urls.push($(this).val());
+			var $box = $('.download_box'),$list=$box.find('#download_list');
+			var url = $box.find('input').val();
+			$box.find('input').val('');
+
+			//url为空或不对
+			if (!url || url.substr(0,4)!='http') {
+				core.tips.tips('url false!',false);
+				return;
+			};
+
+			var uuid = UUID();
+			var html ='<div id="' + uuid + '" class="item">' +
+					'<div class="info"><span class="title" title="'+url+'">' + url 
+					+ '</span><span class="state">'+LNG.upload_ready
+					+ '</span><div style="clear:both"></div></div></div>';
+			if ($list.find('.item').length>0) {
+				$(html).insertBefore($list.find('.item:eq(0)'))
+			}else{
+				$list.append(html)
+			}
+			
+			var repeatTime,delayTime,preInfo,preSpeed=0;
+			var $state=$('#'+uuid+' .state').text(LNG.download_ready);
+			var $percent = $('<div class="progress progress-striped active">' +
+				'<div class="progress-bar" role="progressbar" style="width: 0%;text-align:right;">'+
+				'</div></div>').appendTo('#'+uuid).find('.progress-bar');			
+			$.ajax({//开始下载文件
+				url:'./index.php?explorer/serverDownload&type=download&save_path='+path+
+					'&url='+urlEncode2(url)+'&uuid='+uuid,
+				dataType:'json',
+				error:function(a, b, c){
+					core.ajaxError(a, b, c);
+					clearInterval(repeatTime);repeatTime=false;
+					clearTimeout(delayTime);repeatTime=false;
+					$percent.parent().remove();
+					$state.addClass('error').text(LNG.download_error);	
+				},
+				success:function(data){
+					clearInterval(repeatTime);repeatTime=false;
+					clearTimeout(delayTime);repeatTime=false;
+					if (!data.code) {
+						$state.addClass('error').text(LNG.error);
+					}else{
+						FrameCall.father('ui.f5_callback',"function(){ui.path.setSelectByFilename('"
+							+data.info+"');}");
+						$state.text(LNG.download_success);
+						$('#'+uuid+' .info .title').html(data.info);
+					}
+					$percent.parent().remove();
 				}
 			});
-			core.tips.tips(urls.length + LNG.server_dwonload_desc);
-			for (var i=0; i<urls.length; i++) {
+			
+			var ajax_process = function(){//定时获取下载文件的大小，计算出下载速度和百分比。
 				$.ajax({
-					url:'./index.php?explorer/serverDownload&save_path='+path+'&url='+urlEncode2(urls[i]),
+					url:'./index.php?explorer/serverDownload&type=percent&uuid='+uuid,
 					dataType:'json',
-					error:core.ajaxError,
 					success:function(data){
-						if (data.code) {
-							FrameCall.father('ui.f5',"");
+						if (!repeatTime) return;
+						if (!data.code) {//header获取
+							$state.text(LNG.loading);
+							return;							
 						}
-						core.tips.tips(data);
+						var speedStr = '',info = data.data;
+						if (!info) return;
+						info.size = parseFloat(info.size);
+						info.time = parseFloat(info.time);
+						if (preInfo){
+							var speed = (info.size-preInfo.size)/(info.time-preInfo.time);
+							//速度防跳跃缓冲 忽略掉当前降低到20%的当前次
+							if (speed*0.2 < preSpeed) {
+								var temp = preSpeed;
+								preSpeed = speed;
+								speed = temp;
+							}else{
+								preSpeed = speed;
+							}
+							speedStr = core.file_size(speed)+"/s";
+						}
+						if (info['length']==0){
+							$percent.css('width','100%' ).text(LNG.loading);
+						}else{
+							var percent = round(info.size/info.length*100,1);
+							$percent.css('width', percent+'%').text(percent+'%');
+						}
+						$state.text(speedStr+'('+core.file_size(info.length)+')');
+						preInfo = info;
 					}
 				});
 			}
+
+			delayTime = setTimeout(function(){
+				ajax_process();
+				repeatTime = setInterval(function(){
+					ajax_process();
+				},1000);
+			},100);
 		},
+
+		file_size:function(size){
+			if (size == 0) return "0B";
+			size = parseFloat(size);
+			var unit = {
+				'GB' : 1073741824,	// pow( 1024, 3)
+				'MB' : 1048576,		// pow( 1024, 2)
+				'KB' : 1024,		// pow( 1024, 1)
+				'B ' : 0			// pow( 1024, 0)
+			};
+			for (var key in unit) {
+				if (size >= unit[key]){
+					return (size/unit[key]).toFixed(1)+key;
+				}
+			}
+			return '0B';
+		},
+
 		upload_init:function() {//upload init
 			var list = '#thelist',state = 'span.state';
 			uploader = WebUploader.create({
@@ -440,8 +555,7 @@ define(function(require, exports) {
 					$(html).insertBefore($(list).find('.item:eq(0)'))
 				}else{
 					$(list).append(html)
-				}
-				select_name_arr.push(file.name);
+				}				
 				uploader.upload();
 			}).on('uploadProgress', function( file, percentage){
 				var $li = $( '#'+file.id ),
@@ -453,16 +567,19 @@ define(function(require, exports) {
 					  '</div>' +
 					'</div>').appendTo( $li ).find('.progress-bar');
 				}
-				$li.find(state).text((percentage*100).toFixed(2)+'%');
-				$percent.css( 'width', percentage*100+'%' );
+				$li.find('.state').text((percentage*100).toFixed(2)+'%');
+				$percent.css( 'width', percentage*100+'%');
 			}).on('uploadAccept', function(obj,server) {
 				obj.file.serverData = server;//添加服务器返回变量
+				try{
+					select_name_arr.push(core.pathThis(server['info']));
+				}catch(e){};				
 			}).on('uploadSuccess', function(file){
-				var data = file.serverData
-				if (data.code) {
-					$( '#'+file.id ).find(state).text(data.data);
+				var data = file.serverData;				
+				if (data.code){
+					$('#'+file.id ).find(state).text(data.data);
 				}else{
-					$( '#'+file.id ).find(state).addClass('error').text(data.data);
+					$('#'+file.id ).find(state).addClass('error').text(data.data);
 				}
 				uploader.removeFile(file);
 				$('#'+file.id).find('.progress').fadeOut();
@@ -480,8 +597,8 @@ define(function(require, exports) {
 				if (Config.pageApp == 'explorer') {
 					ui.tree.checkIfChange(G.this_path);
 				}
-			}).on('error',function(a,b){
-				//console.log(a,b);
+			}).on('error',function(info,code){
+				core.tips.tips(info,false);
 			});
 
 			var timer;
@@ -509,7 +626,6 @@ define(function(require, exports) {
 				var txt = e.dataTransfer.getData("text/plain");
 				if (txt && txt.substring(0,4) == 'http') {
 					ui.path.pathOperate.appAddURL(txt);
-					console.log(txt);
 				}else{
 					core.upload();//满足 拖拽到当前，则上传到当前。
 				}

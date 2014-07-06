@@ -29,6 +29,11 @@
   border-color:rgba(red(@color),green(@color),blue(@color),@alpha);  
 }
 
+.input(@focus_color:#75A1F0){
+    border: 1px solid #ddd;background:#fff;outline: none;outline: none;
+    &:focus{border-color:@focus_color;outline:none;box-shadow: 0 0 12px @focus_color;.transition(all 0.218s);}
+}
+
 /* 渐变色 */
 .gradient (@origin: left, @start: #ffffff, @stop: #000000) {
     background:@stop;

@@ -19,12 +19,12 @@ $config['setting_all']['language'] = "en:English,zh_CN:简体中文,zh_TW:簡體
 // 默认配置
 $config['setting_default'] = array(
 	'list_type'			=> "icon",		// list||icon
-	'list_sort_field'	=> "mtime",		// name||size||ext||mtime
+	'list_sort_field'	=> "name",		// name||size||ext||mtime
 	'list_sort_order'	=> "up",		// asc||desc
 	'theme'				=> "metro/",	// app theme
 	'codetheme'			=> "github",	// code editor theme
 	'wall'				=> "1",			// wall picture
-	'musictheme'		=> "mp3player",		// music player theme
+	'musictheme'		=> "mp3player",	// music player theme
 	'movietheme'		=> "webplayer"	// movie player theme
 );
 
@@ -38,9 +38,9 @@ $config['system_file'] = array(
 //权限路由配置；精确到需要做权限控制的控制器和方法
 $config['role_setting'] = array(
 	'explorer'	=> array(
-		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','pathCopy',
-		'pathCute','pathCuteDrag','clipboard','pathPast','pathInfo',
-		'pathInfoMuti','serverDownload','fileUpload','search'),
+		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','pathCopy','pathChmod',
+		'pathCute','pathCuteDrag','pathCopyDrag','clipboard','pathPast','pathInfo',
+		'serverDownload','fileUpload','search'),
 	'app'		=> array('user_app','add','edit','del'),//
 	'user'		=> array('changePassword'),//可以设立公用账户
 	'editor'	=> array('fileSave'),

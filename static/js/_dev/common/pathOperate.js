@@ -32,7 +32,10 @@ define(function(require, exports) {
 	var newFile = function(path,callback){
 		if (!path) return;
 		var filename = core.pathThis(path);
-		if (!_pathAllow(filename)) return;
+		if (!_pathAllow(filename)){
+			if (typeof(callback) == 'function')callback();
+			return;
+		}
 		$.ajax({
 			dataType:'json',
 			url: 'index.php?explorer/mkfile&path='+urlEncode2(path),
@@ -50,7 +53,10 @@ define(function(require, exports) {
 	var newFolder = function(path,callback){
 		if (!path) return;
 		var filename = core.pathThis(path);
-		if (!_pathAllow(filename)) return;
+		if (!_pathAllow(filename)){
+			if (typeof(callback) == 'function')callback();
+			return;
+		}
 		$.ajax({
 			dataType:'json',
 			url: 'index.php?explorer/mkdir&path='+urlEncode2(path),
@@ -68,7 +74,10 @@ define(function(require, exports) {
 	var rname = function(from,to,callback){
 		if (!from || !to) return;
 		if (from == to) return;
-		if (!_pathAllow(core.pathThis(to))) return;
+		if (!_pathAllow(core.pathThis(to))){
+			if (typeof(callback) == 'function')callback();
+			return;
+		}
 		$.ajax({
 			type: "POST", 
 			dataType:'json',
@@ -93,7 +102,7 @@ define(function(require, exports) {
 		if (param.length<1) return;
 		var name = param[0]['path'];
 		if (name.length > 20) {
-			name = name.substr(-20) + '...'
+			name = '...'+name.substr(-20);
 		};
 
 		$.dialog({
@@ -165,10 +174,10 @@ define(function(require, exports) {
 			},
 			error:core.ajaxError,
 			success:function(data){
-				if (!data.code){
+				if (data.code){
 					core.tips.close(data);
 				}else{
-					core.tips.close(data.info);
+					core.tips.close(data.info,false);
 				}
 				if (typeof(callback) == 'function')callback(data);
 			}
@@ -178,38 +187,11 @@ define(function(require, exports) {
 	//获取文件夹属性
 	var info = function(param){
 		if (param.length<1) param = [{path:G.this_path,type:"folder"}];//当前目录属性
-		if (param.length >1) {_infoMuti(param);return;};
-		param = param[0];
-		var info = param.type =='folder'?'path_info':'file_info';
 		$.ajax({
-			url:'index.php?explorer/pathInfo&type='+param.type+'&path='+urlEncode2(param.path),		
-			beforeSend: function(){
-				core.tips.loading(LNG.getting);
-			},
-			error:core.ajaxError,
-			success:function(data){
-				if (!data.code){
-					core.tips.close(data);return;
-				}
-				core.tips.close(LNG.get_success,true);
-				var render = template.compile(tpl[info]);
-				data.data.LNG = LNG;//模板中的多语言注入
-				$.dialog({
-					padding:5,
-					fixed: true,//不跟随页面滚动
-					title:core.pathThis(param.path).substr(0,20)+"...  "+LNG.info,
-					content:render(data.data),
-					width:'350px',
-					cancel: true
-				});
-			}
-		});
-	};
-	var _infoMuti = function(param){
-		$.ajax({//若type为muti则path为多个的json拼装
-			url:'index.php?explorer/pathInfoMuti',
+			url:'index.php?explorer/pathInfo',
 			type:'POST',
-			data:_json(param),
+			dataType:'json',
+			data:_json(param),	
 			beforeSend: function(){
 				core.tips.loading(LNG.getting);
 			},
@@ -219,20 +201,57 @@ define(function(require, exports) {
 					core.tips.close(data);return;
 				}
 				core.tips.close(LNG.get_success,true);
-
-				var render = template.compile(tpl.path_info_more);
-				data.data.LNG = LNG;//模板中的多语言注入
+				var tpl_file = 'path_info_more';
+				var title = LNG.info;
+				if (param.length ==1) {
+					tpl_file = ((param[0].type =='folder')?'path_info':'file_info');
+					title = core.pathThis(param[0].path);
+					if (title.length>15) {
+						title = title.substr(0,15)+"...  "+LNG.info
+					}
+				}
+				var render = template.compile(tpl[tpl_file]);
+				var dialog_id = UUID();
+				data.data.LNG = LNG;//模板中的多语言注入				
 				$.dialog({
+					id:dialog_id,
 					padding:5,
+					ico:core.ico('info'),
 					fixed: true,//不跟随页面滚动
-					width:'350px',
-					title:LNG.info,
+					title:title,
 					content:render(data.data),
+					width:'350px',
 					cancel: true
 				});
+				_chmod(dialog_id,param);			
 			}
 		});
 	};
+	var _chmod = function(dialog_id,param){
+		$('.'+dialog_id).find('.edit_chmod').click(function(){
+			var $input = $(this).parent().find('input');
+			var $button = $(this);
+			$.ajax({
+				url:'index.php?explorer/pathChmod&mod='+$input.val(),
+				type:'POST',
+				data:_json(param),	
+				beforeSend: function(){
+					$button.text(LNG.loading);
+				},
+				error:function(data){
+					$button.text(LNG.button_save);
+				},
+				success:function(data){
+					$button.text(data.data)
+						.animate({opacity:0.6},400,0)
+						.delay(1000)
+						.animate({opacity:1},200,0,function(){
+							$button.text(LNG.button_save);
+						});
+				}
+			});
+		});
+	}
 
 	var zip = function(param,callback){
 		if (param.length<1) return;
@@ -283,7 +302,6 @@ define(function(require, exports) {
 			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
-				if (!data.code) return;
 				if (typeof (callback) == 'function') callback(data);
 			}
 		});
@@ -302,7 +320,6 @@ define(function(require, exports) {
 			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
-				if (!data.code) return;
 				if (typeof (callback) == 'function') callback(data);
 			}
 		});
@@ -485,16 +502,16 @@ define(function(require, exports) {
 				var name = result.data;
 				core.tips.close(result);
 				var data = {
-					content:url,
+					content:"window.open('"+url+"');",
 					desc: "",
 					group: "others",
-					type: "url",
+					type: "app",
 					icon: "internet.png",
 					name: name,
 					resize: 1,
 					simple: 0,
-					height: "70%",
-					width: "80%"
+					height: "",
+					width: ""
 				};
 				var filename = urlEncode2(G.this_path+name);
 				url = './index.php?app/user_app&action=add&path='+filename;

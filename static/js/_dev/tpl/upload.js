@@ -17,14 +17,13 @@ define(function(require, exports) {
                 </div>\
             </div>\
             <div class='download_box hidden'>\
-                <form id='form' method='post'>\
-                    <div class='list'>{{LNG.download_address}}1: <input type='text' name='url1'/></div>\
-                    <div class='list'>{{LNG.download_address}}2: <input type='text' name='url2'/></div>\
-                    <div class='list'>{{LNG.download_address}}3: <input type='text' name='url3'/></div>\
-                    <div class='list'>{{LNG.download_address}}4: <input type='text' name='url4'/></div>\
-                    <div class='list'>{{LNG.download_address}}5: <input type='text' name='url5'/></div>\
-                    <div class='submit'><input type='button' name='' value='{{LNG.button_submit}}' class=''/></div>\
-                </form>\
+                <div class='list'>{{LNG.download_address}}<input type='text' name='url'/>\
+                <button class='btn btn-default btn-sm' type='button'>{{LNG.download}}</button>\
+                </div>\
+                <div style='clear:both'></div>\
+                <div id='downloader'>\
+                    <div id='download_list' class='uploader-list'></div>\
+                </div>\
             </div>\
         </div>"
     }

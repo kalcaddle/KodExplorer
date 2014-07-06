@@ -8,36 +8,20 @@
 
 class user extends Controller
 {
-	private $user;	//用户相关信息
+    private $user;  //用户相关信息
     private $auth;  //用户所属组权限
+    private $notCheck;
     function __construct(){
         parent::__construct();
-		$this->tpl	= TEMPLATE  . 'user/';
-		$this->user = &$_SESSION['user'];
+        $this->tpl  = TEMPLATE  . 'user/';
+        $this->user = &$_SESSION['user'];
+        $this->notCheck = array('loginFirst','loginSubmit','checkCode');//不需要判断的action
     }
-
+    
     /**
-     * api方式访问,最高权限
-     */
-    public function authApi(){
-        if (!REMOTE_OPEN) return;
-        if (isset($_GET['auth_key'])){
-            if(md5(md5($this->in['auth_key'])) == REMOTE_KEY) {
-                session_start();//记录session 写入文件
-                $_SESSION['isLogin'] = true;
-                $this->user['role'] = 'root';
-
-            }else{
-                show_json('error',false);
-            }
-        }
-    }
-
-	/**
      * 登陆状态检测;并初始化数据状态
      */
-	public function loginCheck(){
-        $this->authApi();//api方式验证
+    public function loginCheck(){
         if(isset($_SESSION['isLogin']) && $_SESSION['isLogin'] === true){
             define('USER',USER_PATH.$this->user['name'].'/');
             if (!file_exists(USER)) {
@@ -59,7 +43,7 @@ class user extends Controller
             $this->config['user_seting_file']  = USER.'data/config.php'; //用户配置文件
             $this->config['user']  = fileCache::load($this->config['user_seting_file']);
             return;
-        }else if(ACT == 'loginSubmit' || ACT=='checkCode'){//登陆提交判断;或者获取验证码
+        }else if(in_array(ACT,$this->notCheck)){//不需要判断的action
             return;
         }else if(isset($_COOKIE['kod_name']) && isset($_COOKIE['kod_token'])){
             $member = new fileCache($this->config['system_file']['member']);
@@ -71,7 +55,7 @@ class user extends Controller
                 setcookie('kod_name', $_COOKIE['kod_name'], time()+3600*24*365); 
                 setcookie('kod_token',$_COOKIE['kod_token'],time()+3600*24*365); //密码的MD5值再次md5
                 header('location:'.get_url());
-                return;
+                exit;
             }
         }
         $this->login();
@@ -81,15 +65,23 @@ class user extends Controller
     /**
      * 登陆view
      */
-    public function login($msg = ''){
-        if(isset($_SESSION['isLogin']) && $_SESSION['isLogin'] === true){
-            header('location:./index.php');
-            return;
-        }
+    public function login($msg = ''){   
+        if (!file_exists(USER_SYSTEM.'install.lock')) {
+            $this->display('install.html');exit;
+        }               
         $this->assign('msg',$msg);
-    	$this->display('login.html');
+        $this->display('login.html');
         exit;
     }
+
+    /**
+     * 首次登陆
+     */
+    public function loginFirst(){
+        touch(USER_SYSTEM.'install.lock');
+        header('location:./index.php');
+    }
+
 
     /**
      * 退出处理
@@ -102,13 +94,13 @@ class user extends Controller
         header('location:./index.php?user/login');
     }
     
-	/**
+    /**
      * 登陆数据提交处理
      */
-	public function loginSubmit(){
-		if(!isset($this->in['name']) || !isset($this->in['password'])) {
+    public function loginSubmit(){
+        if(!isset($this->in['name']) || !isset($this->in['password'])) {
             $msg = $this->L['login_not_null'];
-		}else{
+        }else{
             //错误三次输入验证码
             session_start();//re start
             $name = $this->in['name'];
@@ -138,11 +130,11 @@ class user extends Controller
                 $_SESSION['code_error_time'] = intval($_SESSION['code_error_time']) + 1;
                 $msg = $this->L['password_error'];
             }
-		}
+        }
         $this->login($msg);
     }
 
-	/**
+    /**
      * 修改密码
      */
     public function changePassword(){
@@ -165,37 +157,30 @@ class user extends Controller
      */
     public function authCheck(){
         if ($GLOBALS['is_root'] == 1) return;
-        if(ACT == 'loginSubmit' || ACT=='checkCode') return;
-        if (!array_key_exists(ST,$this->config['role_setting']) ){
-            return;
-        }else{
-            if (!in_array(ACT,$this->config['role_setting'][ST])){
-                return;
-            }else{
-                //有权限限制的函数
-                $key = ST.':'.ACT;
-                $group  = new fileCache($this->config['system_file']['group']);
-                $GLOBALS['auth'] = $auth   = $group->get($this->user['role']);
-                if ($auth[$key] !== 1) {
-                    show_json($this->L['no_permission'],false);
-                }
-                //扩展名限制：新建文件&上传文件&重命名文件&保存文件&zip解压文件
-                $check_arr = array(
-                    'mkfile'    =>  trim($this->in['path']),
-                    'pathRname' =>  trim($this->in['rname_to']),
-                    'fileUpload'=>  trim($_FILES['file']['name']),
-                    'fileSave'  =>  trim($this->in['path'])
-                );
-                if (array_key_exists(ACT,$check_arr)){
-                    $ext = get_path_ext($check_arr[ACT]);
-                    $ext_arr = explode('|',$auth['ext_not_allow']);
-                    if (in_array($ext,$ext_arr)){
-                        show_json($this->L['no_permission_ext'],false);
-                    } 
-                }                
-            }
-        }
-        return;
+        if (in_array(ACT,$this->notCheck)) return;
+        if (!array_key_exists(ST,$this->config['role_setting']) ) return;
+        if (!in_array(ACT,$this->config['role_setting'][ST])) return;
+
+        //有权限限制的函数
+        $key = ST.':'.ACT;
+        $group  = new fileCache($this->config['system_file']['group']);
+        $GLOBALS['auth'] = $auth   = $group->get($this->user['role']);
+
+        //默认扩张功能等价权限
+        $auth['explorer:pathChmod'] = $auth['explorer:pathRname'];
+        $auth['explorer:pathCopyDrag']  = $auth['explorer:pathCuteDrag'];
+        if ($auth[$key] !== 1) show_json($this->L['no_permission'],false);
+
+        //扩展名限制：新建文件&上传文件&重命名文件&保存文件&zip解压文件
+        $check_arr = array(
+            'mkfile'    =>  isset($this->in['path'])?$this->in['path']:'',
+            'pathRname' =>  isset($this->in['rname_to'])?$this->in['rname_to']:'',
+            'fileUpload'=>  isset($_FILES['file']['name'])?$_FILES['file']['name']:'',
+            'fileSave'  =>  isset($this->in['path'])?$this->in['path']:''
+        );
+        if (array_key_exists(ACT,$check_arr) && !checkExt($check_arr[ACT])){
+            show_json($this->L['no_permission_ext'],false);
+        }                
     }
 
 

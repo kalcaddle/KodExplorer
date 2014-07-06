@@ -1,0 +1,45 @@
+[
+  {
+    "type": "block",
+    "code": [
+      {
+        "type": "string",
+        "code": "body {color: red}"
+      },
+      {
+        "id": "a",
+        "type": "block",
+        "code": [
+          {
+            "type": "string",
+            "code": "a {color: black}"
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "type": "block",
+        "code": [
+          {
+            "type": "string",
+            "code": "b {color: black}"
+          },
+          {
+            "id": "c",
+            "type": "block",
+            "code": [
+              {
+                "type": "string",
+                "code": "c {color: black}"
+              }
+            ]
+          },
+          {
+            "type": "string",
+            "code": "b {color: black}"
+          }
+        ]
+      }
+    ]
+  }
+]

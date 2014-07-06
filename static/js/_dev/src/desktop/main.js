@@ -54,7 +54,8 @@
         core.upload_init();
         fileSelect.init();
         rightMenu.initDesktop();
-        $('.init_loading').fadeOut(600);
+        $('.init_loading').fadeOut(450).addClass('pop_fadeout');
+        
         $(".bodymain").click(function () {
             if ($("#menuwin").css("display")=='block') {
                 $("#menuwin").css("display", "none");

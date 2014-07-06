@@ -66,7 +66,8 @@ define(function(require, exports) {
 					default:break;
 				}
 			}
-		});        
+		});
+		$('.context-menu-root').addClass('fadein');
 	};
 		
 	// 拖拽——移动
