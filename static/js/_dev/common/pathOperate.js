@@ -266,7 +266,6 @@ define(function(require, exports) {
 			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
-				data.code = 100;
 				core.tips.tips(data);
 				if (typeof (callback) == 'function') callback(data);
 			}
@@ -283,7 +282,6 @@ define(function(require, exports) {
 			error:core.ajaxError,
 			success:function(data){
 				core.tips.close(data);
-				data.code = 100;
 				if (typeof (callback) == 'function') callback(data);
 			}
 		});

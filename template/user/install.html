@@ -21,11 +21,14 @@ a:hover{color:#f90;}
 .title .info{text-align: right;font-size: 12px;color:#99ccff;padding-right: 13px;padding-top: 15px;}	
 .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
 .error{padding:10px;color:#a94442;background-color: #f2dede;border:#ebccd1 1px solid;font-size:14px;}
+
+.error a{background-color: #f2dede;border:#ebccd1 1px solid;}
+
 h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 .footer{color: #999;position: absolute;bottom: 15px;text-align: center;width: 100%;}
-.guest{text-align:center;margin: 0 auto;margin-top:30px;}
-.guest a{color:#69C;text-decoration:none;border: 2px solid #69c;border-radius:20px;padding:5px 30px;display:inline-block;letter-spacing:2px;}
-.guest a:hover{color:#f60;border-color:#f60;}
+.install{text-align:center;margin: 0 auto;margin-top:30px;}
+.install a{color:#69C;text-decoration:none;border: 2px solid #69c;border-radius:20px;padding:5px 30px;display:inline-block;letter-spacing:2px;}
+.install a:hover{color:#f60;border-color:#f60;}
 </style>
 
 
@@ -53,15 +56,11 @@ h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 	            }
 	            if ($error=='') {
 	            	echo '<div class="success"><h4>Successful!</h4>您可以用如下账号登陆',
-	            	'<br/>管理员：admin/admin(请务必修改密码)<br/>普通用户：demo/demo<br/>游客用户：guest/guest</div>';
+	            	'<br/>管理员：admin/admin(请务必修改密码)<br/>普通用户：demo/demo<br/>游客用户：guest/guest</div></div><div class="install"><a href="./index.php?user/loginFirst">进入系统</a></div>';
 	            }else{
-	            	echo '<div class="error"><h4>error:</h4>'.$error.'</div>';
+	            	echo '<div class="error"><h4>error:</h4>'.$error.'</div></div><div class="install"><a href="./index.php?user/loginFirst">忽略错误</a></div>';
 	            }
 	        ?>
-		</div>
-		<?php if($error==''){?>
-		<div class='guest'><a href="./index.php?user/loginFirst">进入系统</a></div>
-		<?php }?>
 	</div>
 	<div class="footer">kalcaddle.com 2013 © All Rights Reserved.| 
 	<a href="http://kalcaddle.com" target="_blank"><?php echo $L['us'];?></a>

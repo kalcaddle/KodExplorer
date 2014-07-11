@@ -442,7 +442,7 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
 	if ($file_ext == '') {//没限定扩展名则才搜索文件夹
 		foreach($dirs as $f){
 			$path_this = get_path_this($f);
-			if ($strpos($path_this,$search)){
+			if ($strpos($path_this,$search) !== false){
 				$folderlist[]= array(
 					'name'  => iconv_app(get_path_this($f)),
 					'path'  => iconv_app(get_path_father($f))			

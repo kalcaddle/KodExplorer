@@ -282,6 +282,7 @@ define(function(require, exports) {
 			}
 			//搜索相关事件绑定
 			var __bindEvent = function(){
+				__bindKeyDown();
 				$('#search_value,#search_ext,#search_path').keyEnter(__reSearch);
 				$('.search_header a.button').die('click').live('click',__reSearch);
 				$('.search_result .list .name').die('click').live('click',function(e){
@@ -304,6 +305,11 @@ define(function(require, exports) {
 					}else{
 						core.explorer(path);
 					}
+				});
+			};
+			var __bindKeyDown = function(){
+				$('#search_value').die('keyup').live('keyup',function(){
+					ui.path.setSearchByStr($(this).val());
 				});
 			}
 

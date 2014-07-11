@@ -39,23 +39,26 @@
 			</div><!-- /header left -->
 			
 			<div class='header-middle'>
-				<a href="javascript:void(0);" id='home' class="home button left"  title='<?php echo $L['root_path'];?>'>
+				<button class="btn btn-default" id='home' title='<?php echo $L['root_path'];?>'>
 					<i class="font-icon icon-home"></i>
-				</a>
+				</button>
+
 				<div id='yarnball' title="<?php echo $L['address_in_edit'];?>"></div>
 				<div id='yarnball_input'><input type="text" name="path" value="" class="path" id="path"/></div>
-				<a href="javascript:void(0);" id='fav' class="middle button" title='<?php echo $L['add_to_fav'];?>'>
+
+				<button class="btn btn-default" id='fav' title='<?php echo $L['add_to_fav'];?>' type="button">
 					<i class="font-icon icon-star"></i>
-				</a>				
-				<a href="javascript:void(0);" id='up' class="right button" title='<?php echo $L['go_up'];?>'>
+				</button>
+
+				<button class="btn btn-default" id='up' title='<?php echo $L['go_up'];?>' type="button">
 					<i class="font-icon icon-circle-arrow-up"></i>
-				</a>
+				</button>
 			</div><!-- /header-middle end-->		
 			<div class='header-right'>
 				<input type="text" name="seach"/>
-				<a href="javascript:void(0);" id='search' class="right button" title='<?php echo $L['search'];?>'>
+				<button class="btn btn-default" id='search' title='<?php echo $L['search'];?>' type="button">
 					<i class="font-icon icon-search"></i>
-				</a>
+				</button>
 			</div>
 		</div>
 	</div><!-- / header end -->

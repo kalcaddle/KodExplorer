@@ -198,7 +198,7 @@ define(function(require, exports) {
 				isStopPP = true;
 				Global.ctrlKey = true;
 				switch(e.keyCode){
-					case 8:ui.path.remove();isStopPP=true;break;//backspace
+					case 8:ui.path.remove();isStopPP=true;break;//ctrl+backspace remove
 					case 65:fileSelect.selectPos('all');break;//CTRL+A	全选
 					case 8:ui.path.next();isStopPP=true;break;//前进
 					case 67:ui.path.copy();break;//CTRL+C 复制
@@ -215,7 +215,7 @@ define(function(require, exports) {
 				//console.log("shiftKey+"+e.keyCode);
 			}else{
 				switch (e.keyCode) {
-					case 8:ui.path.back();break;
+					case 8:ui.path.back();isStopPP=true;break;
 					case 35:fileSelect.selectPos('end');break;
 					case 36:fileSelect.selectPos('home');break;
 					case 37:fileSelect.selectPos('left');isStopPP=true;break;
@@ -223,8 +223,8 @@ define(function(require, exports) {
 					case 39:fileSelect.selectPos('right');isStopPP=true;break;
 					case 40:fileSelect.selectPos('down');isStopPP=true;break;
 					case 13:ui.path.open();isStopPP=false;break;//enter 打开文件==双击
-					case 46:ui.path.remove();break;
-					case 113:ui.path.rname();break;//f2重命名
+					case 46:ui.path.remove();isStopPP=true;break;
+					case 113:ui.path.rname();isStopPP=true;break;//f2重命名
 					default:isStopPP=false;break;
 				}
 			}
@@ -603,6 +603,10 @@ define(function(require, exports) {
 				$('.header-right input').keyEnter(function(e){
 					core.search($('.header-right input').val(),G.this_path);
 				});
+				$('.header-right input').die('keyup').live('keyup',function(){
+					ui.path.setSearchByStr($(this).val());
+				});
+
 				$('.header-content a,.header-content button').click(function(e){
 					var action = $(this).attr('id');
 					switch (action){

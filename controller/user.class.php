@@ -14,7 +14,7 @@ class user extends Controller
     function __construct(){
         parent::__construct();
         $this->tpl  = TEMPLATE  . 'user/';
-        $this->user = &$_SESSION['user'];
+        $this->user = &$_SESSION['kod_user'];
         $this->notCheck = array('loginFirst','loginSubmit','checkCode');//不需要判断的action
     }
     
@@ -22,7 +22,7 @@ class user extends Controller
      * 登陆状态检测;并初始化数据状态
      */
     public function loginCheck(){
-        if(isset($_SESSION['isLogin']) && $_SESSION['isLogin'] === true){
+        if(isset($_SESSION['kod_login']) && $_SESSION['kod_login'] === true){
             define('USER',USER_PATH.$this->user['name'].'/');
             if (!file_exists(USER)) {
                 $this->logout();
@@ -50,8 +50,8 @@ class user extends Controller
             $user = $member->get($_COOKIE['kod_name']);
             if(md5($user['password'].get_client_ip()) == $_COOKIE['kod_token']){
                 session_start();//re start
-                $_SESSION['isLogin'] = true;
-                $_SESSION['user']= $user;
+                $_SESSION['kod_login'] = true;
+                $_SESSION['kod_user']= $user;
                 setcookie('kod_name', $_COOKIE['kod_name'], time()+3600*24*365); 
                 setcookie('kod_token',$_COOKIE['kod_token'],time()+3600*24*365); //密码的MD5值再次md5
                 header('location:'.get_url());
@@ -118,8 +118,8 @@ class user extends Controller
                     $this->init_app($user);
                 }
                 $group  = new fileCache($this->config['system_file']['group']);
-                $_SESSION['isLogin'] = true;
-                $_SESSION['user']= $user;
+                $_SESSION['kod_login'] = true;
+                $_SESSION['kod_user']= $user;
                 if ($this->in['rember_password'] == 'on') {
                     setcookie('kod_name', $user['name'], time()+3600*24*365);
                     setcookie('kod_token',md5($user['password'].get_client_ip()), time()+3600*24*365);
@@ -180,7 +180,7 @@ class user extends Controller
         );
         if (array_key_exists(ACT,$check_arr) && !checkExt($check_arr[ACT])){
             show_json($this->L['no_permission_ext'],false);
-        }                
+        }
     }
 
 

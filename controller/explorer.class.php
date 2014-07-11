@@ -89,7 +89,6 @@ class explorer extends Controller{
         session_start();//re start
         $session=isset($_SESSION['history'])?$_SESSION['history']:false;
         $user_path = $this->in['path'];
-        
         if (is_array($session)){
             $hi=new history($session);
             if ($user_path==""){

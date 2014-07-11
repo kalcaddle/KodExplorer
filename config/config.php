@@ -31,8 +31,8 @@ define('LANGUAGE_PATH', DATA_PATH .'i18n/');        //多语言目录
 define('PUBLIC_PATH',   DATA_PATH .'public/');      //公共共享目录 读写权限跟随用户目录的读写权限
 
 define('STATIC_JS','_dev');//_dev app  js编译||开发状态
+define('STATIC_LESS','less');
 define('STATIC_PATH',"./static/");//静态文件目录
-define('STATIC_LESS','css');
 //define('STATIC_PATH','http://static.kalcaddle.com/static/');
 
 include(FUNCTION_DIR.'web.function.php');

@@ -20,12 +20,12 @@ function _DIR_CLEAR($path){
 function _DIR($path){
     $path = _DIR_CLEAR(rawurldecode($path));
     $path = iconv_system($path);
-    if (is_dir($path)) $path.='/';
-
     if (substr($path,0,strlen(PUBLIC_PATH)) == PUBLIC_PATH) {
         return $path;
     }
-    return HOME.$path;
+    $path = HOME.$path;
+    if (is_dir($path)) $path.='/';
+    return $path;
 }
 //处理成用户目录输出
 function _DIR_OUT(&$arr){
@@ -53,9 +53,9 @@ function pre_clear($path){
 function checkExtUnzip($s,$info){
     return checkExt($info['stored_filename']);
 }
-//扩展名权限判断 有权限则返回true
+//扩展名权限判断 有权限则返回1 不是true
 function checkExt($file,$changExt=false){
-    if ($GLOBALS['is_root'] == 1) return true;
+    if ($GLOBALS['is_root'] == 1) return 1;
     if ($file=='') return false;
     $not_allow = $GLOBALS['auth']['ext_not_allow'];
     $file = rawurldecode($file);
@@ -69,7 +69,7 @@ function checkExt($file,$changExt=false){
             }
         }
     }
-    return true;
+    return 1;
 }
 
 

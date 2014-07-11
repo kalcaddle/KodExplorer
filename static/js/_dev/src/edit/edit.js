@@ -70,7 +70,6 @@ define(function(require, exports) {
                 editors[uuid] = undefined;
                 $('pre#'+uuid).text(data.content);
                 initAce(initData);
-
                 $('.edit_body .this').removeClass('this');
                 $('.edit_body pre#'+uuid).addClass('this');
                 var current = editors[uuid];
@@ -115,15 +114,11 @@ define(function(require, exports) {
         this_editor.setShowInvisibles(editConfig.display);
         this_editor.setFontSize(editConfig.fontsize);
         this_editor.setOptions({
-            enableBasicAutocompletion:editConfig.auto_complete,
-            enableSnippets: true
+            enableBasicAutocompletion:true,
+            enableSnippets: true,
+            enableLiveAutocompletion:editConfig.auto_complete
         });
-        this_editor.on("change", function(e){
-            if (editConfig.auto_complete
-                &&this_editor.multiSelect.rangeCount<2 
-                && e.data.action == 'insertText') {//插入动作才执行自动提示
-                this_editor.commands.exec('startAutocomplete',this_editor);
-            }
+        this_editor.on("change", function(e){//ace_selected
             setChanged(this_editor,true);
         });
         this_editor.commands.addCommand({
@@ -211,6 +206,7 @@ define(function(require, exports) {
                 //case 'show_line':edit.setShowPrintMargin(value);break;//显示固定宽度线设置
                 case 'auto_complete':
                     editConfig[key] = !edit.$enableBasicAutocompletion;
+                    edit.setOptions({enableLiveAutocompletion:editConfig[key]});
                     edit.$enableBasicAutocompletion = editConfig[key];
                     break;
                 default:break;

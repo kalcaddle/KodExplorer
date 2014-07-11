@@ -77,6 +77,23 @@ define(function(require, exports) {
 		}
 	};
 
+	//搜索当前文件夹 含有字母
+	var _setSearchByStr = function(ch) {
+		if (ch == ''){
+			fileLight.clear();
+			return;
+		}
+		fileLight.clear();
+		$('.fileContiner .file').each(function(key,value){
+			var current_name = fileLight.name($(this));
+			if (current_name.toLowerCase().indexOf(ch) != -1){
+				$(Global.fileListAll).eq(key).addClass(Config.SelectClassName);
+			}
+		});
+		fileLight.select();
+		fileLight.setInView();
+	};
+
 	//查找json中，文件名所在的数组位置。
 	var _arrayFind = function(data,key,str){
 		var m=data.length;
@@ -529,6 +546,7 @@ define(function(require, exports) {
 		newFile:newFile,
 		newFolder:newFolder,
 		rname:rname,
+		setSearchByStr:_setSearchByStr,
 		setSelectByChar:_setSelectByChar,
 		setSelectByFilename:_setSelectByFilename,
 		clipboard:pathOperate.clipboard

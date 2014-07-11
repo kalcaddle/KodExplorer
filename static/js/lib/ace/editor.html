@@ -33,9 +33,6 @@
 	});
 	editor.setDragDelay(10);
 	editor.setFontSize(13);
-	editor.on("change", function(e){
-	  editor.commands.exec('startAutocomplete',editor);
-	})
 	editor.setShowPrintMargin(false);//显示固定宽度
 	//自动补全
 	editor.setOptions({
@@ -53,6 +50,7 @@
 	editor.getSession().setMode("ace/mode/javascript");
 	editor.getSession().setTabSize(4);
 	editor.getSession().setUseWrapMode(true);
+	
 	editor.commands.addCommand({
 		name: 'editSave',
 		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
@@ -62,19 +60,19 @@
 	});
 	editor.setDragDelay(10);
 	editor.setFontSize(14);
-	editor.on("change", function(){
-		console.log(editor.multiSelect.rangeCount)
-		if (editor.multiSelect.rangeCount<2) {
-			editor.commands.exec('startAutocomplete',editor);
-		}
-	})
 	editor.setShowPrintMargin(false);//显示固定宽度
 	//自动补全
 	editor.setOptions({
-		autoInsert:false,
-        enableBasicAutocompletion: true,
-        enableSnippets: true
+        enableBasicAutocompletion:{"text":"true","keyword":"true","snippet":"true"},
+        enableSnippets: true,
+        enableLiveAutocompletion: true
     });
+    editor.on("change", function(e){//ace_selected
+    	var auto = $('.ace_text-layer .ace_line');
+    	if (auto && auto.length>=1) {
+    		auto.removeClass('ace_selected').first().addClass('ace_selected')
+    	}
+	})
 
 
 	//editor.setValue('asdf');

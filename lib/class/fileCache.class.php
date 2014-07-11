@@ -43,9 +43,6 @@ class fileCache
     function __construct($file) {
         $this->file = $file;
         $this->data= self::load($file);
-        if (!is_array($this->data)) {
-            $this->reset();
-        }
     }
     
     /**

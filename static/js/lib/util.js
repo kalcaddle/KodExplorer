@@ -173,7 +173,8 @@ var Tips =  (function(){
 		var tipsIDname = "messageTips";
 		var tipsID = "#"+tipsIDname;
 		if ($(tipsID).length ==0) {
-			var html = '<div id="'+tipsIDname+'" style="z-index:50;min-width:60px;max-width:80%;position:fixed;padding:2px 2em;text-align:center;line-height:30px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;"><i style="padding: 0 6px;font-size: 15px;"></i><span></span></div>'
+			var html='<div id="'+tipsIDname+'" class="tips_box"><i></i><span></span>'+
+                '<a class="tips_close">×</a></div>'
 			$('body').append(html);
 
             $(tipsID).show().css({'left':($(window).width() - $(tipsID).innerWidth())/2});
@@ -182,6 +183,12 @@ var Tips =  (function(){
 				self.stop(true,true)
 				$(tipsID).css({'left':($(window).width() - $(tipsID).width()) / 2});
 			});
+            $(tipsID).find('.tips_close').click(function(){
+                $(tipsID).animate({opacity:0},
+                    in_time,0,function(){
+                        $(this).hide();
+                    });
+            });
 		}
 		var self = $(tipsID),icon,color;
 		switch(code){
@@ -195,7 +202,6 @@ var Tips =  (function(){
 			case 'error':delay = 1000;color = '#d9534f';icon = 'icon-remove';break;
 			default:color = '';icon = '';break;
 		}
-
 		if (color != '') {
 			self.css({'background':color,'color':'#fff'});
 			self.find('i').removeClass().addClass(icon);		
@@ -242,7 +248,6 @@ var Tips =  (function(){
 		}
 		if (offset_top == undefined) offset_top = 0;
 		var self = _init(msg,code);
-
 		self.delay(delay)
             .show()
 			.animate({

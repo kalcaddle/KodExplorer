@@ -42,12 +42,12 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .topbar .content .top_left a b { color: #9CF; font-weight: 400;}
 .topbar .content .top_left a.title:hover { background: none;}
 .topbar .content .top_right { float: right; margin-right: 10px;}
-.topbar .content .top_right div { display: inline-block;}
-.topbar .content .top_right a { display: inline-block; padding: 0px 1em;}
-.topbar .content .top_right a { border: none; color: #fff;}
-.topbar .content .top_right .open a:focus { background: #e169b9;}
+.topbar .content .top_right div { display: inline-block; margin-right: -3px;}
+.topbar .content .top_right a { display: inline-block; padding: 0px 0.7em; border: none; color: #fff;}
+.topbar .content .top_right a i { padding-right: 2px; text-shadow: 0 0 1px;}
+.topbar .content .top_right .open a:focus,.topbar .content .top_right a:hover { background: #e169b9;}
 .topbar .content .top_right .menu-topbar_user { position: absolute; right: 10px; left: auto; margin-top: 0px; width: auto;}
-.topbar .content .top_right .topbar_language { position: absolute; right: 105px; left: auto; margin-top: 0px; width: auto;}
+.topbar .content .top_right .topbar_language { position: absolute; right: 84px; left: auto; margin-top: 0px; width: auto;}
 .topbar .content .top_right ul a { color: #666; line-height: 30px; height: 30px; display: block;}
 .topbar .content .top_right ul a:hover,.topbar .content .top_right ul a.this { background: #e6e6e6; color: #000;}
 .topbar .content .top_right ul .font-icon { width: 18px; display: inline-block;}
@@ -417,6 +417,9 @@ span.tmpzTreeMove_arrow { display: inline-block; margin: 4px 0 0 2px; position: 
 .frame-header .header-content { padding-top: 10px;}
 .frame-header .header-content img { border: none; width: 18px; height: 18px;}
 .frame-header .header-content a { display: block; float: left; height: 19px; height: 28px\0; height: 20px\9;}
+.frame-header .header-content .header-middle .btn-default,.frame-header .header-content .header-right .btn-default { box-shadow: 0 2px 8px rgba(0,0,0,0.05); float: left; -webkit-border-radius: 0; height: 19px; font-size: 12px; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s; padding: 4px 10px; border: solid 1px #ddd; margin: 0 0 0 -6px; outline: none;}
+.frame-header .header-content .header-middle .btn-default:hover,.frame-header .header-content .header-middle .btn-default:focus,.frame-header .header-content .header-right .btn-default:hover,.frame-header .header-content .header-right .btn-default:focus { color: #000; border-color: #aaa; -webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.2); -moz-box-shadow: 0 1px 10px rgba(0,0,0,0.2); box-shadow: 0 1px 10px rgba(0,0,0,0.2);}
+.frame-header .header-content .header-middle .btn-default:active,.frame-header .header-content .header-right .btn-default:active { color: #000; border-color: #888;}
 .frame-header .header-content .font-icon { font-size: 18px; line-height: 20px; padding-right: 4px;}
 .frame-header .header-content .header-left { float: left; width: 170px; padding-left: 35px;}
 .frame-header .header-content .header-middle { position: absolute; left: 205px; top: 10px; right: 0px;}

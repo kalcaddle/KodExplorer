@@ -12,7 +12,7 @@
 		</div>
 		<div class="top_right">
 		<div>
-			<a id='topbar_language' data-toggle="dropdown" href="#"><i class='icon-flag'></i>Language<b class="caret"></b></a>
+			<a id='topbar_language' data-toggle="dropdown" href="#"><i class='icon-flag'></i>&nbsp;<b class="caret"></b></a>
 			<ul class="dropdown-menu topbar_language fadein" role="menu" aria-labelledby="topbar_language">
 			  	<?php 
 					$tpl="<li><a href='javascript:core.language(\"{0}\");' class='{this}'>{1}</a></li>";
@@ -21,10 +21,10 @@
 			</ul>
 		</div>
 		<div>
-			<a href="#" id='topbar_user' data-toggle="dropdown"><i class="icon-user"></i><?php echo $_SESSION['user']['name'];?><b class="caret"></b></a>
+			<a href="#" id='topbar_user' data-toggle="dropdown"><i class="icon-user"></i><?php echo $_SESSION['kod_user']['name'];?><b class="caret"></b></a>
 			<ul class="dropdown-menu menu-topbar_user fadein" role="menu" aria-labelledby="topbar_user">
 				<li><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo $L['setting_user'];?></a></li>
-				<?php if($_SESSION['user']['role']=='root'){ ?>
+				<?php if($_SESSION['kod_user']['role']=='root'){ ?>
 					<li><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo $L['setting_member'];?></a></li>
 				<?php } ?>
 				<li><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo $L['setting_theme'];?></a></li>

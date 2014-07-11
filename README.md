@@ -1,5 +1,5 @@
 ﻿##KodExplorer (http://kalcaddle.com/)
-###ver2.6(2014.7.6)
+###ver2.61(2014.7.12)
 `商业版授权请联系：kalcaddle#qq.com`
 
 ####  1.是什么：
@@ -35,6 +35,32 @@
         则修改第一行："name":"admin","password":"21232f297a57a5a743894a0e4a801fc3"
 
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
+ 
+
+
+###ver2.61 `2014/7/12`
+----
+####update:
+ - 实时搜索，根据搜索框内容变化，实时选中匹配到的结果;
+ - 弹出搜索框遍历子文件夹递归搜索
+ - session key 加入kod_前缀  避免和其他系统key冲突
+ - 编辑器选中优化 选择鼠标到窗口外事件处理
+
+####fix bug:（bug解决和程序优化）
+ - backspace后退截获浏览器事件,作为后退前一次访问的文件夹;
+ - 搜索首字母不匹配问题
+ - 弹出层中的弹出层关闭，父窗口失去焦点问题。
+ - 代码中grunt部分代码拆分开，放到程序外面；提交到git、osc
+ - 桌面：删除alert enter快捷键删除
+ - install 检测 加入跳过，(只判断用到的函数) 加入多语言
+ - zip压缩没有权限  提示红色,false 统一查找
+ - 登录成功后 验证码输错清除 
+ - 非root用户拖拽到文件夹问题
+ - 非root解压问题 不能解压
+ - list oexe 图标问题
+ - 用户目录不存在判断
+ - fileCahe 互斥锁  reset 不用
+ - ie 8~10样式问题调整
 
 
 ###ver2.6 `2014/7/6`

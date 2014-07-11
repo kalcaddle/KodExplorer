@@ -9,7 +9,6 @@
 class app extends Controller{
     function __construct()    {
         parent::__construct();
-        $role = $_SESSION['user']['role'];
         $this->sql=new fileCache($this->config['system_file']['apps']);
     }
 

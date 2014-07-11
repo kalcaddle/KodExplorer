@@ -42,12 +42,12 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .topbar .content .top_left a b { color: #9CF; font-weight: 400;}
 .topbar .content .top_left a.title:hover { background: none;}
 .topbar .content .top_right { float: right; margin-right: 10px;}
-.topbar .content .top_right div { display: inline-block;}
-.topbar .content .top_right a { display: inline-block; padding: 0px 1em;}
-.topbar .content .top_right a { border: none; color: #fff;}
-.topbar .content .top_right .open a:focus { background: #9b53cb;}
+.topbar .content .top_right div { display: inline-block; margin-right: -3px;}
+.topbar .content .top_right a { display: inline-block; padding: 0px 0.7em; border: none; color: #fff;}
+.topbar .content .top_right a i { padding-right: 2px; text-shadow: 0 0 1px;}
+.topbar .content .top_right .open a:focus,.topbar .content .top_right a:hover { background: #9b53cb;}
 .topbar .content .top_right .menu-topbar_user { position: absolute; right: 10px; left: auto; margin-top: 0px; width: auto;}
-.topbar .content .top_right .topbar_language { position: absolute; right: 105px; left: auto; margin-top: 0px; width: auto;}
+.topbar .content .top_right .topbar_language { position: absolute; right: 84px; left: auto; margin-top: 0px; width: auto;}
 .topbar .content .top_right ul a { color: #666; line-height: 30px; height: 30px; display: block;}
 .topbar .content .top_right ul a:hover,.topbar .content .top_right ul a.this { background: #e6e6e6; color: #000;}
 .topbar .content .top_right ul .font-icon { width: 18px; display: inline-block;}

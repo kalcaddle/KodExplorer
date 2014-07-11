@@ -52,7 +52,7 @@
 				isStopPP = true;
 				Global.ctrlKey = true;
 				switch(e.keyCode){
-					case 8:ui.path.remove();isStopPP=true;break;//backspace
+					case 8:ui.path.remove();isStopPP=true;break;//ctrl+backspace remove
 					case 65:fileSelect.selectPos('all');break;//CTRL+A	全选
 					case 67:ui.path.copy();break;//CTRL+C 复制
 					case 88:ui.path.cute();break;//CTRL+X 剪切
@@ -76,8 +76,8 @@
 					case 39:fileSelect.selectPos('right');isStopPP=true;break;
 					case 40:fileSelect.selectPos('down');break;
 					case 13:ui.path.open();isStopPP=false;break;//enter 打开文件==双击
-					case 46:ui.path.remove();break;
-					case 113:ui.path.rname();break;//f2重命名
+					case 46:ui.path.remove();isStopPP=true;break;
+					case 113:ui.path.rname();isStopPP=true;break;//f2重命名
 					default:isStopPP=false;break;
 				}
 			}

@@ -10,10 +10,15 @@ class debug extends Controller{
 	public $path_app;
 	public $path_to;
     function __construct() {
+    	load_class('pclzip');
 		$this->path_app	= BASIC_PATH;
 		$this->parent = dirname(BASIC_PATH);
 		$this->path_to	= $this->parent.'/release';
 		$this->zip_to	= $this->parent.'/tag/kodexplorer'.KOD_VERSION.'.zip';
+
+		//自动更新覆盖包
+		$this->update_to= $this->parent.'/release_update';
+		$this->update_zip_to= $this->parent.'/update/2.0-'.KOD_VERSION.'.zip';		
         parent::__construct();
     }
     /**
@@ -51,15 +56,51 @@ class debug extends Controller{
 		$this->_initUser();
 		echo '初始化默认用户成功!<br/><h3>打包程序</h3><hr/>';flush();
 
-		load_class('pclzip');
+		
 		ini_set('memory_limit', '2028M');//2G;
 		$archive = new PclZip($this->zip_to);
         $v_list = $archive->create($this->path_to,PCLZIP_OPT_REMOVE_PATH,$this->path_to);
 		echo '打包成功！<br/><h3>初始化配置文件</h3><hr/>';flush();
 
+		$this->make_update();
 		echo '更新成功！<br/><h1>导出处理完成！^_^</h1>';flush();
 	}
-	
+
+	function make_update(){
+		del_dir($this->update_to);
+		mk_dir($this->update_to);
+		copy_dir($this->path_to.'/', $this->update_to);
+		$file_list = array(
+			$this->update_to.'/static/js/lib/jquery-1.8.0.min.js'
+		);
+		$path_list = array(
+			$this->update_to.'/data/User',
+			$this->update_to.'/data/thumb',
+			$this->update_to.'/data/system',
+			$this->update_to.'/data/public',
+
+			$this->update_to.'/static/style/font-awesome',
+			$this->update_to.'/static/images/wall_page',
+			$this->update_to.'/static/images/thumb',
+			$this->update_to.'/static/images/wall_page',
+
+			$this->update_to.'/static/js/lib/cmp4',
+			$this->update_to.'/static/js/lib/ztree',
+			$this->update_to.'/static/js/lib/seajs'
+		);
+		foreach($file_list as $val){
+			del_file($val);
+		}
+		echo '<br/>1.更新包；文件删除完成：';flush();
+		foreach($path_list as $val){
+			del_dir($val);
+		}
+		echo '<br/>2.更新包；文件夹删除完成：';flush();
+		$archive = new PclZip($this->update_zip_to);
+        $v_list = $archive->create($this->update_to,PCLZIP_OPT_REMOVE_PATH,$this->update_to);
+		echo '更新包打包成功！<br/><hr/>';flush();
+	}
+
 	//----------------------------	
 	function _less(){
 		load_class('lessc.inc');
@@ -150,9 +191,6 @@ class debug extends Controller{
 			$this->path_to.'/static/js/lib/less-1.4.2.min.js',
 			$this->path_to.'/static/js/lib/webuploader/webuploader.js',
 			$this->path_to.'/static/style/skin/common.less',
-			$this->path_to.'/static/js/Gruntfile.js',
-			$this->path_to.'/static/js/package.json',
-			$this->path_to.'/static/js/readme.txt',
 			$this->path_to.'/todo.txt',
 			$this->path_to.'/controller/debug.class.php',
 		);
@@ -162,8 +200,7 @@ class debug extends Controller{
 			$this->path_to.'/data/public/',
 			$this->path_to.'/data/thumb',
 			$this->path_to.'/static/js/_dev',
-			$this->path_to.'/static/js/app/update',
-			$this->path_to.'/static/js/node_modules'
+			$this->path_to.'/static/js/app/update'
 		);
 		foreach($file_list as $val){
 			del_file($val);
