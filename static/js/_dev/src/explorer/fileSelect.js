@@ -96,6 +96,7 @@ define(function(require, exports) {
 		//双击事件
 		$(Config.FileBoxClass).die('dblclick').live('dblclick',function(e){//双击打开
 			stopPP(e);
+
 			if (e.altKey){
 				ui.path.info();
 			}else {

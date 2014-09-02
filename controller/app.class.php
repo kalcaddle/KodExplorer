@@ -99,21 +99,4 @@ class app extends Controller{
     private function _init(){
         return  json_decode(rawurldecode($this->in['data']));
     }
-
-    /**
-     * 用户app初始化
-     */
-    public function init_app($user) {
-        $sql=new fileCache($this->config['system_file']['apps']);
-        $list = $sql->get();
-        $desktop = USER_PATH.$user.'/home/desktop/';
-        foreach ($list as $key => $data) {
-            //touch($path);
-            $path = iconv_system($desktop.$key.'.oexe');
-            unset($data['name']);
-            unset($data['desc']);
-            unset($data['group']);
-            file_put_contents($path, json_encode($data));
-        }
-    }
 }

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>KodExplorer 运行环境监测</title>
+	<title>运行环境监测-Powered by Kodexplorer</title>
 </head>
 <style>
 body {background:#e6e5ea;font-size: 13px; padding: 0px; margin: 0px; font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;color:#666;}
@@ -43,6 +43,8 @@ h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 			<?php
 				$error = '';
 				if(!function_exists('json_encode')) $error.= '<li>不支持 json_encode函数</li>';
+				if(!function_exists('iconv')) $error.= '<li>不支持iconv</li>';
+				if(!function_exists('mb_convert_encoding')) $error.= '<li>不支持mb_string系列函数</li>';
 	            if(!version_compare(PHP_VERSION,'5.2','>=')) $error.= '<li>PHP版本不能低于5.2</li>';
 	            if(!function_exists('file_get_contents')) $error.='<li>必须开启file_get_contents支持才可继续.</li>';
 	            if(!path_writable(BASIC_PATH.'data')) $error.= '<li>./data目录不可写</li>';
@@ -62,9 +64,8 @@ h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 	            }
 	        ?>
 	</div>
-	<div class="footer">kalcaddle.com 2013 © All Rights Reserved.| 
-	<a href="http://kalcaddle.com" target="_blank"><?php echo $L['us'];?></a>
-	<i>  (v<?php echo KOD_VERSION;?>)</i>
+	<div class="footer">
+	Powered by <a href="http://kalcaddle.com" target="_blank">Kodexplorer</a> v<?php echo KOD_VERSION;?> | ©<?php echo $L['us'];?> All Rights Reserved.
 	</div>
 </body>
 </html>

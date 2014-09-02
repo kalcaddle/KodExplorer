@@ -12,7 +12,7 @@ width:140px;text-decoration:none;background:#000;border-radius:70px;opacity:0.4;
 font-size:35px;font-family: Arial, sans-serif;}
 #PV_Close:hover{opacity:0.6;filter:alpha(opacity=80);}
 #PV_Close:hover span{color:#f30;}
-
+#PV_Picture_Temp {display: none;}
 #PicasaView {position: fixed; _position: absolute; z-index: 9999; left: 0; top: 0; overflow: hidden}
 	#PV_Picture {position: absolute; z-index: 0; cursor: move;
 	-webkit-box-reflect: below 1px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(80%,transparent),color-stop(70%,rgba(255,255,255,0)),to(rgba(255,255,255,0.3)));

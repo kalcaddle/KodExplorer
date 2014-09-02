@@ -4,12 +4,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title><?php echo $L['title'];?></title>
 	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>/images/favicon.ico">
-	<link href="<?php echo STATIC_PATH;?>js/lib/picasa/style/style.css" rel="stylesheet"/>
-	<link href="<?php echo STATIC_PATH;?>js/lib/webuploader/webuploader.css" rel="stylesheet"/>
-	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css" rel="stylesheet"/>	    
-	<link href="<?php echo STATIC_PATH;?>style/font-awesome/style.css" rel="stylesheet"/>
+	<link href="<?php echo STATIC_PATH;?>js/lib/picasa/style/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link href="<?php echo STATIC_PATH;?>js/lib/webuploader/webuploader.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>	    
+	<link href="<?php echo STATIC_PATH;?>style/font-awesome/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 	<?php if(STATIC_LESS == 'css'){ ?>
-	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_explorer.css" rel="stylesheet" id='link_css_list'/>
+	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_explorer.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	<?php }else{//less_compare_online ?>
 	<link rel="stylesheet/less" type="text/css" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_explorer.less"/>
 	<script src="<?php echo STATIC_PATH;?>js/lib/less-1.4.2.min.js"></script>	
@@ -163,6 +163,7 @@
 		upload_max  : "<?php echo $upload_max;?>",
 		version 	: "<?php echo KOD_VERSION;?>",
 		app_host 	: "<?php echo APPHOST;?>",
+		office_server: "<?php echo OFFICE_SERVER;?>",
 
 		this_path	: "<?php echo $dir;?>",//当前绝对路径
 		myhome   	: "<?php echo MYHOME;?>",//当前绝对路径	
@@ -176,7 +177,10 @@
 	};
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
-		preload: ["lib/jquery-1.8.0.min"]
+		preload: ["lib/jquery-1.8.0.min"],
+		map:[
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+		]
 	});
 	seajs.use("<?php echo STATIC_JS;?>/src/explorer/main");
 </script>

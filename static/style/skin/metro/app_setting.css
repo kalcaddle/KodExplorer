@@ -41,15 +41,15 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .topbar .content .top_left a.title { font-size: 20px; width: 200px; padding: 0; text-align: center;}
 .topbar .content .top_left a b { color: #9CF; font-weight: 400;}
 .topbar .content .top_left a.title:hover { background: none;}
-.topbar .content .top_right { float: right; margin-right: 10px;}
+.topbar .content .top_right { float: right;}
 .topbar .content .top_right div { display: inline-block; margin-right: -3px;}
-.topbar .content .top_right a { display: inline-block; padding: 0px 0.7em; border: none; color: #fff;}
+.topbar .content .top_right a { display: inline-block; padding: 0px 0.7em; color: #fff; margin-right: -2px;}
 .topbar .content .top_right a i { padding-right: 2px; text-shadow: 0 0 1px;}
-.topbar .content .top_right .open a:focus,.topbar .content .top_right a:hover { background: #6b8ac3;}
-.topbar .content .top_right .menu-topbar_user { position: absolute; right: 10px; left: auto; margin-top: 0px; width: auto;}
-.topbar .content .top_right .topbar_language { position: absolute; right: 84px; left: auto; margin-top: 0px; width: auto;}
-.topbar .content .top_right ul a { color: #666; line-height: 30px; height: 30px; display: block;}
-.topbar .content .top_right ul a:hover,.topbar .content .top_right ul a.this { background: #e6e6e6; color: #000;}
+.topbar .content .top_right a:focus,.topbar .content .top_right a:hover { background: #6b8ac3;}
+.topbar .content .top_right .menu-topbar_user { position: absolute; right: 0px; left: auto; margin-top: 0px; width: auto;}
+.topbar .content .top_right .topbar_language { position: absolute; right: 75px; left: auto; margin-top: 0px; width: auto;}
+.topbar .content .top_right ul a { color: #666; line-height: 30px; height: 30px; display: block; padding: 0px 1.7em; border: none; overflow: hidden;}
+.topbar .content .top_right ul a:hover,.topbar .content .top_right ul a.this { background: #e6e6e6; color: #000; margin-right: 0px;}
 .topbar .content .top_right ul .font-icon { width: 18px; display: inline-block;}
 .do_search { color: #888; min-width: 452px;}
 .do_search .search_header { padding: 10px; padding-bottom: 0px;}
@@ -74,16 +74,16 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .do_search .search_result table .type { width: 37px;}
 .do_search .search_result table .size { width: 50px;}
 .do_search .search_result table .path,.do_search .search_result table .search_title .path { border-right: none;}
-.task_tab { position: fixed; bottom: 1px; left: 0; width: 100%; height: 30px; z-index: 9999; padding-left: 50px; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(0,0,0,0.15); color: #444;}
+.task_tab { position: fixed; bottom: 1px; left: 0; width: 100%; height: 30px; z-index: 9900; padding-left: 50px; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(0,0,0,0.15); color: #444;}
 .task_tab .tabs { height: 100%; margin-right: 10px; margin-right: 60px;}
-.task_tab .tabs .tab { float: left; height: 100%; margin-right: 2px; box-shadow: 0 0 6px #666; width: 110px; border: 1px solid rgba(255,255,255,0.4); line-height: 30px; border-radius: 3px; cursor: default; overflow: hidden; font-size: 13px; padding-left: 4px; word-break: break-all; background: rgba(255,255,255,0); background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -moz-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -o-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -ms-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0));}
+.task_tab .tabs .tab { float: left; height: 100%; margin-right: 2px; box-shadow: 0 0 6px #666; white-space: nowrap; text-overflow: ellipsis; width: 110px; border: 1px solid rgba(255,255,255,0.4); line-height: 30px; border-radius: 3px; cursor: default; overflow: hidden; font-size: 13px; padding-left: 4px; word-break: break-all; background: rgba(255,255,255,0); background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -moz-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -o-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: -ms-linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0)); background-image: linear-gradient(top,rgba(255,255,255,0.4),rgba(255,255,255,0));}
 .task_tab .tabs .tab img { width: 18px; height: 18px; padding-right: 4px; vertical-align: middle; display: inline-block; margin-top: -3px; border-radius: 4px;}
 .task_tab .tabs .tab.hover { background: rgba(255,255,255,0); background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0)); background-image: -moz-linear-gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0)); background-image: -o-linear-gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0)); background-image: -ms-linear-gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0)); background-image: linear-gradient(top,rgba(255,255,255,0.5),rgba(255,255,255,0));}
 .task_tab .tabs .tab.this { box-shadow: 0 0 6px #000; background: rgba(255,255,255,0.2); background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0.2)); background-image: -moz-linear-gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0.2)); background-image: -o-linear-gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0.2)); background-image: -ms-linear-gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0.2)); background-image: linear-gradient(top,rgba(255,255,255,0.7),rgba(255,255,255,0.2));}
 .tasktab-dragging { position: absolute; z-index: 99999; height: 30px; width: 110px; border: 1px solid rgba(255,255,255,0.4); line-height: 30px; box-shadow: 0 0 6px #000; padding-left: 4px; border-radius: 3px; cursor: default; overflow: hidden; font-size: 13px; word-break: break-all; background: rgba(255,255,255,0.2); background-image: -webkit-linear-gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2)); background-image: -moz-linear-gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2)); background-image: -o-linear-gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2)); background-image: -ms-linear-gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2)); background-image: linear-gradient(top,rgba(255,255,255,0.8),rgba(255,255,255,0.2));}
 .tasktab-dragging img { width: 18px; height: 18px; padding-right: 4px; vertical-align: middle; display: inline-block; margin-top: -3px; border-radius: 4px;}
 body div#ace_settingsmenu,body div#kbshortcutmenu { background-color: #000; opacity: 0.75; filter: alpha(opacity=75); color: #FFF; box-shadow: -5px 4px 5px rgba(0,0,0,0.2);}
-.frame_right { position: absolute; top: 34px; right: 0px; width: 40%; bottom: 0; background: #fff; z-index: 99; border-left: 1px solid #ccc; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: none;}
+.frame_right { position: absolute; top: 34px; right: 0px; width: 40%; bottom: 0; background: #fff; z-index: 99; overflow: hidden; border-left: 1px solid #ccc; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: none;}
 .frame_right .mask_view { z-index: 9999; opacity: 0.1;}
 .frame_right .resize { position: absolute; width: 10px; bottom: 0px; height: 100%; z-index: 100; cursor: col-resize; margin-left: -5px;}
 .frame_right .preview_frame { position: absolute; top: 30px; right: 0; bottom: 0; width: 100%; background: #fff;}
@@ -132,7 +132,7 @@ body div#ace_settingsmenu,body div#kbshortcutmenu { background-color: #000; opac
 .file_list { display: none;}
 .file_upload { width: 365px; height: 385px; padding: 5px;}
 .file_upload .top_nav { border-bottom: 1px solid #ddd; padding-left: 10px; margin-top: 6px;}
-.file_upload .menu { display: block; text-decoration: none; float: left; padding: 2px 15px; height: 28px; background: #eee; font-size: 13px; border: 1px solid #ccc; text-align: center; line-height: 25px; cursor: default; margin-right: 5px; margin-bottom: -1px; color: #444;}
+.file_upload .menu { display: block; text-decoration: none; float: left; padding: 2px 15px; height: 28px; background: #eee; font-size: 13px; border: 1px solid #ccc; text-align: center; line-height: 25px; margin-right: 5px; margin-bottom: -1px; color: #444;}
 .file_upload .menu.this { background: #fff; border-bottom: 1px solid #fff;}
 .file_upload .upload_path { padding: 5px 15px; background: #e6f0ff; margin: 10px 0; overflow: hidden; word-break: keep-all; white-space: nowrap; text-overflow: ellipsis; color: #5275b4;}
 .file_upload div a.left { margin-left: 10px;}
@@ -156,7 +156,8 @@ a.button:active { color: #000; border-color: #444;}
 a.button:focus { outline: none;}
 .messageBox { position: absolute; top: 15%; left: 0px; z-index: 88; background: #5579BA; color: #fff; opacity: 0.7; filter: alpha(opacity=70); -webkit-border-radius: 1px; -moz-border-radius: 1px; border-radius: 1px; -webkit-box-shadow: 0 10px 60px rgba(0,0,0,0.6); -moz-box-shadow: 0 10px 60px rgba(0,0,0,0.6); box-shadow: 0 10px 60px rgba(0,0,0,0.6); display: none;}
 .messageBox .content { padding: 10px 30px; line-height: 20px; width: auto;}
-.aui_outer { text-align: left;}
+.dialogMax { z-index: 99999 !important;}
+.aui_outer { text-align: left; position: relative;}
 .aui_mask { position: absolute; width: 100%; height: 100%; background: #fff; opacity: 0.01;}
 .aui_loading { height: 100%; width: 100%; overflow: hidden; position: absolute; left: 0; top: 40px; z-index: 9999; text-align: center; text-indent: -999em; background: url("../../../images/dialog_loading.gif") no-repeat center center;}
 table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-collapse: collapse;}
@@ -204,7 +205,7 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .dialogMax .aui_nw,.dialogMax .aui_ne,.dialogMax .aui_sw,.dialogMax .aui_se,.dialogMax .aui_w,.dialogMax .aui_e { width: 0px;}
 .dialogMax .aui_sw,.dialogMax .aui_n,.dialogMax .aui_se { height: 0px;}
 .dialogMax .aui_outer { border: none;}
-.dialog-can-resize .resize-handle { position: absolute; font-size: 0.1px; z-index: 9999; display: block;}
+.dialog-can-resize .resize-handle { position: absolute; z-index: 9999; display: block;}
 .dialog-can-resize .resize-top { z-index: 0; cursor: n-resize; top: -3px; left: 0px; height: 7px; width: 100%;}
 .dialog-can-resize .resize-bottom { z-index: 0; cursor: s-resize; bottom: -3px; left: 0px; height: 7px; width: 100%;}
 .dialog-can-resize .resize-right { z-index: 0; cursor: e-resize; right: -3px; top: 0px; width: 7px; height: 100%;}

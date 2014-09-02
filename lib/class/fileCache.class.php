@@ -212,6 +212,7 @@ class fileCache
         $str = file_get_contents($file);
         $str = substr($str, strlen(CONFIG_EXIT));
         $data= json_decode($str,true);
+        if (is_null($data)) $data = array();
         return $data;
     }
     /**

@@ -3,6 +3,7 @@ define(function(require, exports) {
 	//或者打开指定文件
 	var _open = function(path,ext){
 		if (path == undefined) return;
+
 		if (ext == undefined) ext = core.pathExt(path);//没有扩展名则自动解析
 		ext = ext.toLowerCase();
 		if (ext == 'folder'){
@@ -132,6 +133,18 @@ define(function(require, exports) {
 		}
 	};
 	var _openOffice = function(url,ext){
+		if (G.office_server !='') {
+			var office_url = G.office_server + urlEncode(url);
+			var title = core.pathThis(urlDecode(url));
+			art.dialog.open(office_url,{
+				ico:ico,
+				title:title,width:'70%',
+				height:'65%',
+				resize:true
+			});
+			return;
+		}
+
 		var app_url,temp_url,frame,ico;
 		switch (ext) {
 			case 'doc':

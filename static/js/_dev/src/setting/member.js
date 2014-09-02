@@ -160,7 +160,7 @@ define(function(require, exports) {
         }
 
         var password = '';
-        if (password_to !='') password = '&password_to'+password_to;
+        if (password_to !='') password = '&password_to='+password_to;
         $.ajax({
             url:api+'edit&name='+name+'&name_to='+name_to+'&role_to='+role_to+password,
             dataType:'json',

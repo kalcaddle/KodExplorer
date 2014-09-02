@@ -291,7 +291,8 @@ define(function(require, exports) {
 			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"
 			+LNG.name+':'+list.name+"&#10;"+LNG.size+':'+list.size_friendly+"&#10;"
 			+LNG.modify_time+':'+list.mtime+"'>";
-			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' class='picasaImage picture ico' filetype='"+list['ext']+"'><img data-original='"+thumbPath+"'/></div>";
+			html+="<div picasa='"+filePath+"' thumb='"+thumbPath+"' title='"+list['name']+"' class='picasaImage picture ico' filetype='"+list['ext']+"' style='margin:3px 0 0 8px;background:url(\""+thumbPath+"\") no-repeat center center;'></div>";
+
 			html+="<div id='"+list['name']+"' class='titleBox'><span class='title' title='"+LNG.double_click_rename+"'>"+list['name']+"</span></div></div>";
 		}else{
 			html+="<div class='file fileBox menufile' data-name='"+list.name+"' title='"

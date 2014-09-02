@@ -61,12 +61,8 @@ function checkExt($file,$changExt=false){
     $file = rawurldecode($file);
     $ext_arr = explode('|',$not_allow);
     foreach ($ext_arr as $current) {
-        if (stripos($file,'.'.$current) !== false){//含有扩展名
-            if ($changExt === false) {
-                return false;
-            }else{
-                return str_replace($ext, 'tmp', $file);
-            }
+        if (stristr($file,'.'.$current)){//含有扩展名
+            return false;
         }
     }
     return 1;
@@ -76,8 +72,9 @@ function checkExt($file,$changExt=false){
 //语言包加载：优先级：cookie获取>自动识别
 //首次没有cookie则自动识别——存入cookie,过期时间无限
 function init_lang(){
-    $lang = $_COOKIE['kod_user_language'];
-    if (strlen($lang)<=0) {//没有cookie
+    if (isset($_COOKIE['kod_user_language'])) {
+        $lang = $_COOKIE['kod_user_language'];
+    }else{//没有cookie
         preg_match('/^([a-z\-]+)/i', $_SERVER['HTTP_ACCEPT_LANGUAGE'], $matches);
         $lang = $matches[1];
         switch (substr($lang,0,2)) {

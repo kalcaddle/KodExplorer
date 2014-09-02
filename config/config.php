@@ -9,7 +9,7 @@
 date_default_timezone_set('PRC');
 @ini_set('session.cache_expire',600);
 @set_time_limit(600);//30min pathInfoMuti,search,upload,download... 
-@ini_set('display_errors',0);
+@error_reporting(E_ERROR|E_WARING|E_PARSE);
 
 function P($path){return str_replace('\\','/',$path);}
 define('WEB_ROOT',str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__))).'/index.php').'/');
@@ -30,8 +30,12 @@ define('USER_SYSTEM',   DATA_PATH .'system/');      //用户数据存储目录
 define('LANGUAGE_PATH', DATA_PATH .'i18n/');        //多语言目录
 define('PUBLIC_PATH',   DATA_PATH .'public/');      //公共共享目录 读写权限跟随用户目录的读写权限
 
-define('STATIC_JS','_dev');//_dev app  js编译||开发状态
-define('STATIC_LESS','less');
+define('OFFICE_SERVER', "");
+//默认为空则调用微软解析api,需要外网才可以；
+//如果内网或局域网使用，引号内填写配置好的地址前缀 形如:"http://***/view.aspx?src="
+
+define('STATIC_JS','app');//_dev app  js编译||开发状态
+define('STATIC_LESS','css');
 define('STATIC_PATH',"./static/");//静态文件目录
 //define('STATIC_PATH','http://static.kalcaddle.com/static/');
 

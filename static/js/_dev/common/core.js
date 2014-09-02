@@ -181,8 +181,8 @@ define(function(require, exports) {
 			//dlg.DOM.wrap.find('.aui_loading').remove();
 		},
 		setSkin:function(theme,css){
-			var url = './../../../style/skin/'+theme+css;
-			var local = G.static_path+'style/skin/'+theme+css;
+			var url = './../../../style/skin/'+theme+css+'?ver='+G.version;
+			var local = G.static_path+'style/skin/'+theme+css+'?ver='+G.version;
 			require.async(url,function(){
 				$("#link_css_list").attr("href",local);
 				//加载完成后,删除多余link
@@ -596,9 +596,9 @@ define(function(require, exports) {
 			}).on('uploadError', function(file,reason){
 				$('#'+file.id).find(state).addClass('error').text(LNG.upload_error);
 			}).on('uploadFinished', function(file){
-				$(list).find('.item').delay(2000).each(function(index){
-					$(this).delay(index*300).slideUp(600);
-				});
+				// $(list).find('.item').delay(2000).each(function(index){
+				// 	$(this).delay(index*300).slideUp(600);
+				// });
 				select_name_arr = [];
 				if (Config.pageApp == 'explorer') {
 					ui.tree.checkIfChange(G.this_path);

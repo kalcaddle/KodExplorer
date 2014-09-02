@@ -56,7 +56,7 @@
                         padding-left:10px;padding-right: 10px;         
                         text-shadow:1px 1px 3px #cce;color:#888;
                         background:#f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;
-                        box-shadow:#e6e6e6 0px 0px 20px inset;
+                        background: none;width: 94%;
                     }
                     &:focus{outline: none;}
                 }
@@ -64,9 +64,10 @@
         }
         .header-right{
             position: absolute;right:20px;top:10px;
+            .btn{border-radius: 0;}
             a.logout,a.setting{}
             a.logout:hover,a.setting:hover{}
-            input{display: block;float: left;border: 1px solid #ddd;height:25px;height:~"28px\0";;padding-left: 10px;
+            input{display: block;float: left;border: 1px solid #ddd;height:25px;padding-left: 10px;
                 padding-right: 10px;text-shadow: 1px 1px 3px #cce;color: #888;
                 background: #f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;
                 box-shadow: #e6e6e6 0px 0px 20px inset;outline: none;width: 120px;.transition(all 0.218s);
@@ -105,7 +106,7 @@
                 }
             }
             .tools{
-                z-index: 100;height:33px;min-width:600px;
+                z-index: 100;height:33px;min-width:505px;
                 border-bottom:1px solid #ddd;background:#f6f6f6;              
                 .box-shadow(1px 2px 15px  #eee);
                 a.left:hover,a.middle:hover{margin-right:2px;padding-right:8px;}

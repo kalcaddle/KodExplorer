@@ -468,6 +468,7 @@ var // currently active contextMenu trigger
                     return;
                     
                 default: // 0-9, a-z
+                    e.preventDefault();//add by warlee //rename in input [repeat ]
                     var k = (String.fromCharCode(e.keyCode)).toUpperCase();
                     if (opt.accesskeys[k]) {
                         // according to the specs accesskeys must be invoked immediately

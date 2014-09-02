@@ -174,7 +174,8 @@ define(function(require, exports) {
 	}
 	var _add = function(id,title){
 		$('.task_tab').removeClass('hidden');
-		var html_tab = '<div class="tab taskBarMenu" id="'+id+'">'+title+'</div>';
+		var title_hover = title.replace(/<[^>]+>/g,"");
+		var html_tab = '<div class="tab taskBarMenu" id="'+id+'" title="'+title_hover+'">'+title+'</div>';
 		$(html_tab).insertBefore('.task_tab .last');
 		_resetWidth('add');
 		dialogs[id] = {id:id,name:name};

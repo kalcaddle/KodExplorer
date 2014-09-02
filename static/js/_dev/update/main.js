@@ -51,17 +51,17 @@ var dialog_tpl_html = "<div class='update_box'>\
     </div>\
 </div>";
 define(function(require, exports) {
-	var server_version = '2.1';
+	var server_version = '2.7';
 	var local_version  = G.version;
 	var readmore_href  = 'http://kalcaddle.com/download.html';
-	var current_version_file = 'http://static.kalcaddle.com/download/update/2.0-2.1.zip';
+	var current_version_file = 'http://static.kalcaddle.com/download/update/2.0-2.7.zip';
 	var status_href = 'http://kalcaddle.com/tools/state/index.php';
 	
-	var kod_user_online = 'kod_user_online';//在线统计cookie标示
+	var kod_user_online = 'kod_user_online_version';//在线统计cookie标示
 	var time = function(){var date = new Date();return parseInt(date.getTime()/1000);}
 	var _download = function(from,to,callback){
 		$.ajax({
-			url:'./index.php?explorer/serverDownload&save_path='+to
+			url:'?explorer/serverDownload&save_path='+to
 				 +'&url='+urlEncode2(from),
 			dataType:'json',
 			success:function(data){
@@ -106,7 +106,10 @@ define(function(require, exports) {
 		_download(new_file,save_to,function(data){
 			if (data.code) {
 				var zipfile = data.info;
-				var remove = 'list=[{"type":"file","path":"'+urlEncode(zipfile)+'"}]';
+				if (zipfile.length<20) {//新的远程下载返回文件名 之前为全名。
+					zipfile = save_to+zipfile;
+				}
+ 				var remove = 'list=[{"type":"file","path":"'+urlEncode(zipfile)+'"}]';
 				_unzip(zipfile,G.basic_path,function(data){
 					if (data.code) {//更新成功
 						_remove(remove,function(){//删除下载的安装包
@@ -157,7 +160,7 @@ define(function(require, exports) {
 				'update_ignore':"Ignore",		
 				'update_readmore':"Read more",
 				'update_whats_new':"What's New",
-				'update_info':"1.muti user<br/>2.drag upload<br/>3.zip/unzip<br/>4.all path support<br/>5.New editor<br/>"
+				'update_info':"1.zip bug<br/>2.drag ——cute<br/>3.search <br/>4.editor...<br/>"
 			},
 			'zh_CN':{
 				'update_downloading':'下载中...',
@@ -174,7 +177,7 @@ define(function(require, exports) {
 				'update_ignore':"暂时忽略",
 				'update_readmore':"查看更多",
 				'update_whats_new':"更新说明",
-				'update_info':"1.文件夹拖拽完美实现<br/>2.文件夹拖拽上传<br/>3.解压缩优化<br/>4.非服务器路径预览&下载支持<br/>5.树目录中文问题修复<br/>"
+				'update_info':"1.安全及性能优化<br/>2.文件上传控件升级<br/>3.自建office解析服务器配置<br/>4.编辑器优化..."
 			}
 		};
 		for (var key in L[type]) {
@@ -189,6 +192,9 @@ define(function(require, exports) {
 			key_timeout = 'kod_update_ignore_timeout',
 			has_new = false;
 		if (ver_new > ver_local) has_new=true;
+        if (local_version.indexOf('commercial') >1) return;
+		//if (ver_new != ver_local) has_new=true;
+
 		//对话框显示
 		var show_dialog = function(){
 			var id = 'check_version_dialog';
@@ -196,7 +202,7 @@ define(function(require, exports) {
 				init_language();
 				var render = template.compile(dialog_tpl_html);
 				var html = dialog_tpl_css+render({
-						loading_img:G.static_path+'/images/loading_simple.gif',
+						loading_img:G.static_path+'images/loading_simple.gif',
 						LNG:LNG,has_new:has_new,
 						readmore_href:readmore_href,
 						ver_new:server_version,ver_local:local_version});				
@@ -219,8 +225,8 @@ define(function(require, exports) {
 						Cookie.del(key_timeout);
 				});
 				$('.'+id).find('.ignore').die('click').live('click',function(){
-					//设置cookie一年有效,5天后检查;
-					Cookie.set(key_timeout,time()+3600*24*5,24*365);
+					//设置cookie一年有效,2天后检查;
+					Cookie.set(key_timeout,time()+3600*24*2,24*365);
 					art.dialog.list[id].close();
 				});
 			}			
@@ -234,12 +240,12 @@ define(function(require, exports) {
 		}
 	};
 	var user_state = function(){
-		//登陆状态,每个月统计一次
+		//当前版本,每天统计一次
 		if (Cookie.get(kod_user_online) != undefined) return;
 		var url = status_href+'?is_root='+G.is_root
 				  +'&host='+urlEncode(G.app_host)+'&version='+local_version;
 		require.async(url,function(){
-			Cookie.set(kod_user_online,'check-at-'+time(),24*5);
+			Cookie.set(kod_user_online,'check-at-'+time(),24);
 		});
 	};
 	//入口函数,没有参数则默认检查版本

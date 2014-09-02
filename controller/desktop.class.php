@@ -18,9 +18,9 @@ class desktop extends Controller{
             $this->assign('wall',$wall);
         }else{
             $this->assign('wall',STATIC_PATH.'images/wall_page/'.$wall.'.jpg');
-        }
+        } 
 
-        if (!is_dir(MYHOME.'desktop/')) {
+        if (!is_dir(MYHOME.'desktop/') && is_writable(MYHOME)) {
             mkdir(MYHOME.'desktop/');
         }
 

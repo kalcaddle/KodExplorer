@@ -1,10 +1,10 @@
 ﻿##KodExplorer (http://kalcaddle.com/)
-###ver2.61(2014.7.12)
+###ver2.71(2014.8.31)
 `商业版授权请联系：kalcaddle#qq.com`
 
 ####  1.是什么：
  - Kodexplorer为千帆网络工作室开发的一款服务器文件管理程序。
- - 完美取代FTP管理：可用于服务器文件管理,zip解压缩 备份还原、支持图片、音乐、视频预览、office、pdf等格式在线预览。文件夹拖拽上传……。
+ - 完美取代FTP管理：可用于服务器文件管理,zip解压缩、备份还原、支持图片、音乐、视频预览、office、pdf等格式在线预览。文件夹拖拽上传……。
  - 在线编程：支持几乎所有编程语言的在线编辑(高亮,多光标编辑.堪比本地的sublime)
  - 极佳的操作体验：及其便捷的快捷键支持,让你拥有本地化的体验
  - 中文等多语言支持：中文编码全面兼容,文件编辑自动适配。
@@ -17,7 +17,7 @@
  - 你可以把他当做管理linux的一个操作系统界面
  - 可以用来作为私有云存储系统,存储你的文件...
  - 当然你也可以用来分享文件
- - Web IDE / browser code editor awesomeness
+ - Web IDE
  - 更多场景等你来挖掘！……
 
 #### 3.使用说明
@@ -25,17 +25,56 @@
     普通用户：demo/demo
     游客用户：guest/guest
     [如何使用] 下载程序,解压上传到你的服务器路径下,data目录设置777权限。访问体验超便捷的服务吧！
-    (data目录没有写权限会导致配置修改不能保存、不能新建用户等)
+    (为确保数据安全，最好配置服务器不允许列目录)
     [关于上传问题] 程序没有做任何限制,如果需要上传大文件,则修改
-      php.ini：`upload_max_filesize = 1000M post_max_size = 1000M`
+      php.ini：`upload_max_filesize = 1000M post_max_size = 1000M`  [详情：http://955.cc/R2yT]
     [关于解压缩问题] 程序不做任何限制,如若失败请设置php内存限制。memory_limit  1000M
+    [关于"系统错误"] 请配置php错误提示级别error_reporting; 配置php.ini或者允许error_reporting函数
     [关于兼容性] 建议使用chrome firefox ie9+  体验更完整。ie8以下基本上不做兼容处理。chrome支持文件夹拖拽上传。
-    [文件打开] office文件在线预览功能,服务器必须在公网(外部能访问该服务器)
+    [文件打开] office文件在线预览功能,服务器必须在公网(外部能访问该服务器);
+        内部或局域网需要使用请参考qq群共享“web office搭建”,然后配置kod程序config/config.php OFFICE_SERVER
+    [安全提示] 为确保数据安全，请设置http服务器不允许列目录。[详情：http://955.cc/R2vw]
     [忘记密码] 修改data/system/member.php 密码为明文的md5值 例如将admin密码重设为admin
         则修改第一行："name":"admin","password":"21232f297a57a5a743894a0e4a801fc3"
 
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
+
+
+###ver2.71 `2014/8/31`
+----
+####update:
+ - 编辑器配置保存：文字大小、主题风格；主题修改
+ - 精简初始桌面应用
+
+####fix bug:（bug解决和程序优化）
+ - 修改用户密码失败：
+ - 打开设置设置壁纸，关掉，再打开个人中心，桌面乱掉
+ - 桌面开始菜单  最大化问题
+ - 语言选择下拉菜单错位
+ - 修改主题重叠问题
+ - appstore 添加应用tips不见
  
+ie兼容性 font-face 火狐
+ 
+
+###ver2.7 `2014/8/25`
+----
+####update:
+ - 安全及性能优化
+ - 静态文件加入?版本标识，版本更新后不缓存
+ - webuploader 升级到0.14 优化部分上传问题
+ - 错误级别：error_reporting(E_ERROR | E_WARNING);
+ - 地址栏(tab模式、编辑模式)两种模式宽度自适应
+ - 自建office解析服务器配置
+ - 最大化全屏
+
+####fix bug:（bug解决和程序优化）
+ - install 加入iconv、mbstring检测
+ - 右键重命名 快捷键冒泡处理
+ - 文件列表图片缩略图拖拽问题
+ - 标题超出部分截取优化
+ - 编辑器预览滚动条自适应
+
 
 
 ###ver2.61 `2014/7/12`

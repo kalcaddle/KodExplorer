@@ -1,12 +1,11 @@
 define(function(require, exports) {
     var editConfig = {
-        theme:G.codetheme,
-        auto_complete:true,
-        fontsize:14,
-        wrap:true,//自适应宽度换行
-        display:false//是否显示特殊字符
+        theme:G.code_config.theme,
+        fontsize:G.code_config.font_size,
+        auto_complete:parseInt(G.code_config.auto_complete),        
+        wrap:parseInt(G.code_config.auto_wrap),//自适应宽度换行
+        display:parseInt(G.code_config.display_char)//是否显示特殊字符
     };
-
     var editors  = {};
     var focusID  = undefined;
     var Mode = require('./mode');
@@ -21,7 +20,34 @@ define(function(require, exports) {
             }
         }
         return '';
-    };          
+    };    
+
+    var initFirst=function(){
+        //code;
+        $('#fontsize li').removeClass('this');
+        $('#fontsize li').each(function(){
+            if(editConfig.fontsize == $(this).html()){
+                $(this).addClass('this');
+            }   
+        });
+        $('#codetheme li').removeClass('this');
+        $('#codetheme li').each(function(){
+            if(editConfig.theme == $(this).attr('theme')){
+                $(this).addClass('this');
+            }
+        });
+        if (editConfig.wrap==1) {
+            $('a[action=wordbreak]').addClass('select');
+        }
+        if (editConfig.display==1) {
+            $('a[action=display]').addClass('select');
+        }
+        if (editConfig.auto_complete==1) {
+            $('a[action=auto_complete]').addClass('select');
+        }
+    };
+    initFirst();
+
     
     var initAdd = function(filename){
         var initData;
@@ -48,7 +74,6 @@ define(function(require, exports) {
             filename:   filename,
             mode:       Mode.get(core.pathExt(urlDecode(filename))),
         };
-
         initEditor(initData,true);
         var load = art.dialog({title:false,content:LNG.getting,icon:'warning'});
         $.ajax({
@@ -180,6 +205,8 @@ define(function(require, exports) {
         if (uuid != undefined){
             box={};box[uuid]=editors[uuid];
         }
+
+        var save_data=undefined;
         for(var obj in box){
             var edit = box[obj];
             switch(key){
@@ -187,18 +214,28 @@ define(function(require, exports) {
                 case 'theme':
                     editConfig[key] = value;
                     edit.setTheme("ace/theme/"+value);
+                    G.code_config.theme = value;
+                    save_data = {'k':'theme','v':value};
                     break;
                 case 'fontsize':
                     editConfig[key] = value;
                     edit.setFontSize(value);
+                    G.code_config.font_size = value;
+                    save_data = {'k':'font_size','v':value};
                     break;
                 case 'wrap':
                     editConfig[key] = !edit.getSession().getUseWrapMode();
                     edit.getSession().setUseWrapMode(editConfig[key]);
+                    G.code_config.auto_wrap = editConfig[key];
+                    var the_value = editConfig[key]?1:0;
+                    save_data = {'k':'auto_wrap','v':the_value};
                     break;
                 case 'display':
                     editConfig[key] = !edit.getShowInvisibles()
                     edit.setShowInvisibles(editConfig[key]);
+                    G.code_config.display_char = editConfig[key];
+                    var the_value = editConfig[key]?1:0;
+                    save_data = {'k':'display_char','v':the_value};
                     break;//自动换行 true/false
                 case 'setting':edit.commands.exec('showSettingsMenu',edit);break;//自动换行 true/false 
                 //case 'mode':edit.getSession().setMode("ace/mode/"+value);break;
@@ -208,16 +245,19 @@ define(function(require, exports) {
                     editConfig[key] = !edit.$enableBasicAutocompletion;
                     edit.setOptions({enableLiveAutocompletion:editConfig[key]});
                     edit.$enableBasicAutocompletion = editConfig[key];
+                    G.code_config.auto_complete = editConfig[key];
+                    var the_value = editConfig[key]?1:0;
+                    save_data = {'k':'auto_complete','v':the_value};
                     break;
                 default:break;
             }
         }
-        if (key == 'theme') {
+        if (save_data) {//配置保存到服务器
             $.ajax({
-                url:'./index.php?setting/set&k=codetheme&v='+value,
+                url:'./index.php?editor/setConfig&k='+save_data.k+'&v='+save_data.v,
                 dataType:'json',
                 success:function(data){
-                    tips(data);
+                    //tips(data);
                 }
             });
         }

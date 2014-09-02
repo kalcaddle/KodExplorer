@@ -100,7 +100,7 @@ var artDialog = function (config, ok, cancel) {
 	
 	//添加到任务栏
 	if (config.title !== false){
-		config.title = '<img src="'+config.ico+'" />'+config.title;
+		config.title = '<img draggable="false" src="'+config.ico+'" />'+config.title;
 		if (_count>=1) dialogList.add(config.id,config.title);
 	}
 

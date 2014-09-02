@@ -25,7 +25,7 @@ define(function(require, exports) {
 				url:geturl,
 				type:'json',
 				success:function(data){
-					tips(data);
+					tips(data.data,data.code);
 				}
 			});			
 		});
@@ -50,7 +50,7 @@ define(function(require, exports) {
 						data:'data='+urlEncode(json_encode(data)),
 						error:core.ajaxError,
 						success:function(data){
-							tips(data);
+							tips(data.data,data.code);
 							if (!data.code) return;
 							FrameCall.father('ui.f5','');
 						}
@@ -66,7 +66,7 @@ define(function(require, exports) {
 						dataType:'json',
 						error:core.ajaxError,
 						success:function(data){
-							tips(data);
+							tips(data.data,data.code);
 							if (!data.code) return;
 							change();
 						}

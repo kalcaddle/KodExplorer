@@ -475,7 +475,7 @@ define(function(require, exports) {
 			var param = _param();
 			var selectObj= Global.fileListSelect;
 			if (inArray(core.filetype['image'],param.type) ) {
-				if (G.list_type=='icon') {
+				if (G.list_type=='icon' || Config.pageApp == 'desktop') {
 					ui.picasa.play($(selectObj).find('.ico'));
 				}else{
 					ui.picasa.play($(selectObj));

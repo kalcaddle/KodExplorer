@@ -17,7 +17,8 @@ class editor extends Controller{
 		$this->display('editor.php');
 	}
 	// 单文件编辑
-	public function edit(){	
+	public function edit(){
+		$this->assign('editor_config',$this->getConfig());//获取编辑器配置信息
 		$this->display('edit.php');
 	}
 
@@ -55,7 +56,44 @@ class editor extends Controller{
 		fclose($fp);
 		show_json($this->L['save_success']);
 	}
-	//-----------------------------------------------
+
+	/*
+	* 获取编辑器配置信息
+	*/
+	public function getConfig(){
+		$default = array(
+			'font_size'		=> '14px',
+			'theme'			=> 'github',
+			'auto_wrap'		=> 0,
+			'display_char'	=> 0,
+			'auto_complete'	=> 1
+		);
+		$config_file = USER.'data/editor_config.php';		
+		if (!file_exists($config_file)) {//不存在则创建
+			$sql=new fileCache($config_file);
+			$sql->reset($default);
+		}else{
+			$sql=new fileCache($config_file);
+			$default = $sql->get();
+		}
+		return json_encode($default);
+    }
+	/*
+	* 获取编辑器配置信息
+	*/
+	public function setConfig(){
+		$key   = $this->in['k'];$value = $this->in['v'];
+        if ($key !='' && $value != '') {
+        	$config_file = USER.'data/editor_config.php';	
+        	$sql=new fileCache($config_file);
+        	$default = $sql->update($key,$value);
+            show_json($this->L["setting_success"]);
+        }else{
+            show_json($this->L['error'],false);
+        }
+    }
+
+    //-----------------------------------------------
 	/*
 	* 获取字符串编码
 	* @param:$ext 传入字符串

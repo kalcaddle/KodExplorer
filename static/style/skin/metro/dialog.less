@@ -10,7 +10,8 @@
     .content{padding:10px 30px;line-height:20px;width:auto;}  
 }
 /*-------------------------dialog------------------------*/
-.aui_outer { text-align:left;}
+.dialogMax{z-index:99999 !important;}
+.aui_outer { text-align:left;position: relative;}
 .aui_mask{position: absolute;width: 100%;height: 100%;background: #fff;opacity: 0.01;}
 .aui_loading {height: 100%;width: 100%;overflow:hidden;
   position:absolute;left:0;top:40px;z-index:9999;text-align:center;text-indent:-999em;background:url("@{img_common}dialog_loading.gif") no-repeat center center; }
@@ -106,7 +107,7 @@ table.aui_border, table.aui_dialog { width: 100%;border:0; margin:0; border-coll
     .aui_outer { border:none;}
 }
 .dialog-can-resize{
-    .resize-handle{position: absolute;font-size: 0.1px;z-index: 9999; display: block; }
+    .resize-handle{position: absolute;z-index: 9999; display: block; }
     .resize-top{z-index:0; cursor: n-resize; top: -3px; left: 0px; height: 7px; width: 100%;  }
     .resize-bottom{z-index:0; cursor: s-resize; bottom: -3px; left:0px; height: 7px; width: 100%;  }
     .resize-right{z-index:0; cursor: e-resize; right: -3px; top:0px; width: 7px; height: 100%; }

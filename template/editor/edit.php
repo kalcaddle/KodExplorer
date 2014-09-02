@@ -7,10 +7,10 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <meta name="keywords" content="kalcaddle">
 <meta name="author" content="kalcaddle.">
   <head>
-  	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css" rel="stylesheet"/>
-	<link href="<?php echo STATIC_PATH;?>style/font-awesome/style.css" rel="stylesheet"/>
+  	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link href="<?php echo STATIC_PATH;?>style/font-awesome/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 	<?php if(STATIC_LESS == 'css'){ ?>
-	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_code_edit.css" rel="stylesheet" id='link_css_list'/>
+	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_code_edit.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	<?php }else{//less_compare_online ?>
 	<link rel="stylesheet/less" type="text/css" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_code_edit.less"/>
 	<script src="<?php echo STATIC_PATH;?>js/lib/less-1.4.2.min.js"></script>	
@@ -38,7 +38,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 				<span class="line"></span>
 				<a action="wordbreak" href="javascript:;" title="<?php echo $L['wordwrap'];?>"><i class="font-icon icon-level-down"></i></a>
 				<a action="display" href="javascript:;" title="<?php echo $L['char_all_display'];?>"><i class="font-icon icon-eye-open"></i></a>
-				<a action="auto_complete" class="select" href="javascript:;" title="<?php echo $L['auto_complete'];?>"><i class="font-icon icon-code"></i></a>
+				<a action="auto_complete" href="javascript:;" title="<?php echo $L['auto_complete'];?>"><i class="font-icon icon-code"></i></a>
 				<span class="line"></span>
 				<a action="setting" href="javascript:;" title="<?php echo $L['setting'];?>"><i class="font-icon icon-cog"></i></a>
 				<a action="preview" href="javascript:;" title="<?php echo $L['preview'];?>(Ctrl-Shift-S)"><i class="font-icon icon-globe"></i></a>
@@ -57,7 +57,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		<ul id="codetheme"  class="dropdown-menu dropbox" role="menu" aria-labelledby="drop_codetheme">
 		<?php 
 			$tpl="<li class='{this} list' theme='{0}'>{0}</li>\n";
-			echo getTplList(',',':',$config['setting_all']['codethemeall'],$tpl,$config['user']['codetheme']);
+			echo getTplList(',',':',$config['setting_all']['codethemeall'],$tpl,'0');
 		?>
 		</ul>
 
@@ -95,9 +95,9 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	</div>
 
 
-<script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js"></script>
-<script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js"></script>
-<script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js"></script>
+<script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
+<script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js?ver=<?php echo KOD_VERSION;?>"></script>
+<script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
     var LNG = <?php echo json_encode($L);?>;
 	var G = {
@@ -109,14 +109,18 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		basic_path  : "<?php echo BASIC_PATH;?>",
 		version 	: "<?php echo KOD_VERSION;?>",
 		app_host 	: "<?php echo APPHOST;?>",
+		office_server: "<?php echo OFFICE_SERVER;?>",
 
 		myhome   	: "<?php echo MYHOME;?>",//当前绝对路径
 		frist_file	: "<?php echo $_GET['filename'];?>",
-		codetheme 	: "<?php echo $config['user']['codetheme'];?>",
+		code_config : <?php echo $editor_config;?>
 	};
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
-		preload: ["lib/jquery-1.8.0.min"]
+		preload: ["lib/jquery-1.8.0.min"],
+		map:[
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+		]
 	});
 	seajs.use("<?php echo STATIC_JS;?>/src/edit/main");
 </script>

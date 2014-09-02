@@ -104,8 +104,9 @@ class user extends Controller
             //错误三次输入验证码
             session_start();//re start
             $name = $this->in['name'];
-            if(intval($_SESSION['code_error_time']) >=3 && 
-                $_SESSION['check_code'] !== strtolower($this->in['check_code'])){
+            if(isset($_SESSION['code_error_time'])  && 
+               intval($_SESSION['code_error_time']) >=3 && 
+               $_SESSION['check_code'] !== strtolower($this->in['check_code'])){
                 $this->login($this->L['code_error']);
             }
             $member = new fileCache($this->config['system_file']['member']);
@@ -156,7 +157,7 @@ class user extends Controller
      * 权限验证；统一入口检验
      */
     public function authCheck(){
-        if ($GLOBALS['is_root'] == 1) return;
+        if (isset($GLOBALS['is_root']) && $GLOBALS['is_root'] == 1) return;
         if (in_array(ACT,$this->notCheck)) return;
         if (!array_key_exists(ST,$this->config['role_setting']) ) return;
         if (!in_array(ACT,$this->config['role_setting'][ST])) return;
@@ -218,11 +219,19 @@ class user extends Controller
     /**
      * 用户app初始化
      */
-    private function init_app($user) {
+    public function init_app($user) {
         $sql=new fileCache($this->config['system_file']['apps']);
         $list = $sql->get();
+
+        $default = array('365日历','pptv直播','ps','qq音乐','搜狐影视',
+            '时钟','水果忍者','计算器','豆瓣电台','音悦台');
+        $info = array();
+        foreach ($default as $key) {
+            $info[$key] = $list[$key];
+        }
         $desktop = USER_PATH.$user['name'].'/home/desktop/';
-        foreach ($list as $key => $data) {
+        foreach ($info as $key => $data) {
+            //touch($path);
             $path = iconv_system($desktop.$key.'.oexe');
             unset($data['name']);
             unset($data['desc']);

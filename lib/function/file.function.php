@@ -459,7 +459,7 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
  * @return :string
  */
 function chmod_path($path,$mod){
-	$mod = 0777;//
+	//$mod = 0777;//
 	if (!isset($mod)) $mod = 0777;
 	if (!is_dir($path)) return chmod($path,$mod);
 	if (!$dh = opendir($path)) return false;
