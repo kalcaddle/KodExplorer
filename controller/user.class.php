@@ -48,6 +48,9 @@ class user extends Controller
         }else if(isset($_COOKIE['kod_name']) && isset($_COOKIE['kod_token'])){
             $member = new fileCache($this->config['system_file']['member']);
             $user = $member->get($_COOKIE['kod_name']);
+            if (!is_array($user) || !isset($user['password'])) {
+                $this->login();
+            }
             if(md5($user['password'].get_client_ip()) == $_COOKIE['kod_token']){
                 session_start();//re start
                 $_SESSION['kod_login'] = true;

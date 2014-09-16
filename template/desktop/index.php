@@ -8,12 +8,9 @@
 	<link href="<?php echo STATIC_PATH;?>style/font-awesome/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 	<link href="<?php echo STATIC_PATH;?>js/lib/webuploader/webuploader.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>    
 	<link href="<?php echo STATIC_PATH;?>js/lib/picasa/style/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
-	<?php if(STATIC_LESS == 'css'){ ?>
+	
 	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_desktop.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
-	<?php }else{//less_compare_online ?>
-	<link rel="stylesheet/less" type="text/css" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_desktop.less"/>
-	<script src="<?php echo STATIC_PATH;?>js/lib/less-1.4.2.min.js"></script>   
-	<?php } ?>
+	
 	<style type="text/css" media="screen">
 	.desktop{
 		background:#222 url('<?php echo $wall;?>');
@@ -73,7 +70,7 @@
 		</ul>
 	</div>
 
-<script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js"></script>
+<script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
 	var LNG = <?php echo json_encode($L);?>;
 	<?php if(isset($GLOBALS['auth'])) echo "var AUTH = "+json_encode($GLOBALS['auth']);?>;
@@ -105,7 +102,7 @@
 			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
 		]
 	});
-	seajs.use("<?php echo STATIC_JS;?>/src/desktop/main");
+	seajs.use("app/src/desktop/main");
 </script>
 </body>
 </html>

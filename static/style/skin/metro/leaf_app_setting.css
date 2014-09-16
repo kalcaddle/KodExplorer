@@ -228,6 +228,7 @@ div.dialog-simple .aui_dialog { background: none;}
 div.dialog-simple .resize-bottom-right { background: none !important;}
 div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
+body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(opacity=100);}
 body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
 #body { position: absolute; width: 100%; top: 0;}
 #body ul { margin: 0; padding: 0;}

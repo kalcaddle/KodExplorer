@@ -228,6 +228,7 @@ div.dialog-simple .aui_dialog { background: none;}
 div.dialog-simple .resize-bottom-right { background: none !important;}
 div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
+body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(opacity=100);}
 .playmusic-icon { display: none;}
 .context-menu-list { margin: 0; margin-left: 4px; margin-top: 4px; min-width: 120px; max-width: 250px; font-size: 12px; display: inline-block; position: absolute; list-style-type: none; padding: 0px; border-top: 5px solid #fcfcfc; border-bottom: 5px solid #fcfcfc; border: 1px solid #aaa \9; box-shadow: 0 10px 80px #555; background: #fff;}
 .context-menu-list .selected { border-left: 5px solid #666 !important; background: #eee; padding-left: 10px !important;}

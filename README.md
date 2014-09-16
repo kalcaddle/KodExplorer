@@ -1,5 +1,5 @@
 ﻿##KodExplorer (http://kalcaddle.com/)
-###ver2.71(2014.8.31)
+###ver2.72(2014.9.16)
 `商业版授权请联系：kalcaddle#qq.com`
 
 ####  1.是什么：
@@ -40,6 +40,16 @@
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
 
 
+###ver2.72 `2014/9/16`
+####fix bug:（bug解决和程序优化）
+ - 任意执行：远程下载apache 扩漏洞：判断扩展名中是否含有.php.
+ - 不存在的用户
+ - 桌面：开始按钮被tab盖住了
+ - 主题切换,错位问题
+ - 透明对话框拖动时 标题栏不显示问题
+ - 
+
+
 ###ver2.71 `2014/8/31`
 ----
 ####update:
@@ -53,9 +63,7 @@
  - 语言选择下拉菜单错位
  - 修改主题重叠问题
  - appstore 添加应用tips不见
- 
-ie兼容性 font-face 火狐
- 
+
 
 ###ver2.7 `2014/8/25`
 ----

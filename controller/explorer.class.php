@@ -527,8 +527,7 @@ class explorer extends Controller{
         if (!$header) show_json($this->L['download_error_exists'],false);
 
         $save_path = $save_path.urldecode($header['name']);
-        if (!checkExt($save_path)) $save_path = $save_path.'tmp';
-        write_log($save_path);
+        if (!checkExt($save_path)) $save_path = $_DIR($this->in['save_path']).date().'.temp';
 
         $save_path = iconv_system($save_path);
         $save_path = get_filename_auto($save_path);
