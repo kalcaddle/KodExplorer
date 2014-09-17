@@ -1,0 +1,137 @@
+@import "./config.less";
+@import "./tree.less";
+@import "./filelist.less";
+@import "./right_menu.less";
+
+/*------主框架------*/
+.frame-header{
+    height:49px;position: absolute;top:@navbar_height;width:100%;
+    background:#fff url("@{img_common}bg.gif") 0px 5px repeat-x;min-width:600px;
+    border-bottom:1px solid #ddd;
+    .header-content {
+        padding-top: 10px;
+        img{border:none; width:18px;height:18px;}
+        a{display:block;float:left;height:19px;height:~"28px\0";height:~"20px\9";}
+        .header-middle,.header-right{
+             .btn-default{box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                float: left;-webkit-border-radius: 0;height: 19px;font-size: 12px;.transition();
+                padding: 4px 10px;border: solid 1px #ddd;margin: 0 0 0 -6px;outline: none;
+             }   
+             .btn-default:hover,.btn-default:focus{
+                color:#000;border-color: #aaa;.box-shadow(0 1px 10px rgba(0, 0, 0, 0.2))}
+             .btn-default:active{color: #000;border-color: #888;}
+        }
+        .font-icon{font-size: 18px;line-height: 20px;padding-right:4px;}
+        .header-left{float: left;width: 170px;padding-left: 35px;}
+        .header-middle{
+            position:absolute;left:205px;top:10px;right:0px;
+            #yarnball{/* Yarnball 地址栏操作 */
+                width:50%;cursor:text;height:27px;height:~"28px\0";
+                overflow: hidden;margin-left: -1px;
+                float:left;border:1px solid #ddd;
+                box-shadow:#e6e6e6 0px 0px 20px inset;
+                background:#f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;     
+                .yarnball {
+                    list-style: none;margin: 0;margin-top:-1px;padding: 0;position:relative;
+                    .yarnlet {
+                        display: inline-block;
+                        a,a:link,a:visited{color: #666;display: inline-block;font-size: 12px;padding: 5px 15px 10px 20px;margin-left: -15px;position: relative;text-decoration: none;vertical-align:top;line-height: 20px;}
+                        &.first a{margin-left: 0px;padding-left: 8px;}
+                        a {background-image: url("@{img_common}ybutton.png");background-repeat: no-repeat;background-position: 100% 0;cursor: pointer;}
+                        &:hover a{background-position: 100% -48px;color: #333;}
+                        &:active a {background-position: 100% -96px;color: #333;}
+                        .left-yarn {background: url("@{img_common}ybutton.png") no-repeat 0 -2px;margin-left: -17px;padding: 5px 6px 11px 4px;z-index: 11;padding-top:5px~'\9';}
+                        a:hover .left-yarn {background-position: 0 -50px;}
+                        a:active .left-yarn {background-position: 0 -98px;}          
+                    }
+                }
+            }
+            #yarnball_input{
+                height:27px;height:~"28px\0";width:50%;cursor:text;float:left;
+                border:1px solid #ddd;display:none;margin-left: -1px;
+                background:#f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;
+                box-shadow:#e6e6e6 0px 0px 20px inset;
+                input{
+                    &.path{
+                        border:none;height:25px;display: block;width: 100%;
+                        padding-left:10px;padding-right: 10px;         
+                        text-shadow:1px 1px 3px #cce;color:#888;
+                        background:#f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;
+                        background: none;width: 94%;
+                    }
+                    &:focus{outline: none;}
+                }
+            }
+        }
+        .header-right{
+            position: absolute;right:20px;top:10px;
+            .btn{border-radius: 0;}
+            a.logout,a.setting{}
+            a.logout:hover,a.setting:hover{}
+            input{display: block;float: left;border: 1px solid #ddd;height:25px;;padding-left: 10px;
+                padding-right: 10px;text-shadow: 1px 1px 3px #cce;color: #888;
+                background: #f8f8f8 url("@{img_common}bg.gif") 0px -2px repeat-x;
+                box-shadow: #e6e6e6 0px 0px 20px inset;outline: none;width: 120px;.transition(all 0.218s);
+                &:focus{width: 160px;box-shadow: #ccc 0px 0px 20px inset;};
+            }
+        }
+    }
+}
+.frame-main{
+    position: absolute;left: 0;right: 0;top: 90px;bottom: 0;        
+    .frame-left{
+        position: absolute;left: 0;top: 0;bottom: 0;width: 199px;overflow: auto;border-right:1px solid #ddd;
+        background:#fff url("@{img_common}left.jpg") bottom repeat-x;background-attachment: fixed;
+    };
+    .frame-resize{
+        width: 10px;cursor: col-resize;z-index: 100;position: absolute;left: 195px;top: 0;
+        bottom: 0;overflow: hidden;background: url("@{img_common}resize.png") 0px 50% no-repeat;
+        &.active{background: #000;.opacity(20);}
+    }
+    .frame-right{
+        left: 200px;right: 0;position: absolute;top: 0;bottom: 0;overflow: auto;min-width: 450px;
+        .frame-right-main{
+            .font-icon{text-shadow: 0 0 1px;line-height: 16px;padding: 0 2px;font-size: 14px;color: #888;}
+            .drop-menu-action{
+                min-width:130px;width:130px;
+                a{padding: 2px 30px;
+                    i.font-icon{width:18px;display: inline-block;}
+                    &:hover i.font-icon{color: #fff;}                    
+                }
+                .disabled a{
+                    color:#bbb;
+                    i.font-icon{color:#bbb;}
+                    &:hover{background: #fff;color:#bbb;}
+                    &:hover i.font-icon{color: #bbb;}
+                }
+            }
+            .tools{
+                z-index: 100;height:33px;min-width:505px;
+                border-bottom:1px solid #ddd;background:#f6f6f6;              
+                .box-shadow(1px 2px 15px  #eee);
+                a.left:hover,a.middle:hover{margin-right:2px;padding-right:8px;}
+                a.this{background:#eee;cursor: default;
+                    &:hover{
+                        margin-right:0px;padding-right:10px;
+                        border:1px solid #ddd;
+                        background:#eee;
+                        .box-shadow(0 2px 8px rgba(0, 0, 0, 0.05));
+                        .border-radius(2px);
+                    } 
+                }
+                .tools-left{
+                    .font-icon{padding-right: 5px;}
+                    float:left;margin:4px 0 0 10px;
+                    span.msg{display:none;margin-left:20px;
+                    padding-left:30px;font-size:14px;color:#888;
+                    background:url("@{img_common}loading.gif") 0 3px no-repeat;}
+                }
+                .tools-right{ float: right;margin:4px 20px 0 0;}
+            }
+        }
+        .dropdown-menu{.this a,a:hover{background:#ddd;color:#000;filter:none;}}
+        .bodymain{position: absolute;zoom: 1;z-index: 0;top: 35px;bottom: 0;left: 0;
+            overflow: auto;width: 100%;.user-select(none);
+        }
+    }
+}

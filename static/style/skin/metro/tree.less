@@ -1,0 +1,137 @@
+.ztree{
+    @height:22px;
+    font-size:12px;padding:0;margin:0px;margin-top:10px;
+    li {
+        padding:0; margin:0; list-style:none;text-align:left; 
+        white-space:nowrap; outline:0;line-height:@height+2;
+        ul{margin:0; padding:0;}
+        &.level0{margin-bottom:5px;}
+        span{
+            line-height:@height;
+            &.button{
+                line-height:0; margin:0;display: inline-block; vertical-align:middle;
+                cursor: pointer;outline:none;background-color:transparent; background-repeat:no-repeat;
+                height:22px;width:18px;
+                background:url("@{img_common}tree.png") no-repeat;margin-right:5px;
+                &.switch {width: 16px;height:22px;}
+                &.noline_open,&.noline_open_hover{
+                    background-position:-16px -353px;
+                    &.switch_hover{background-position:-48px -353px !important;}
+                }
+                &.noline_close,&.noline_close_hover{
+                    background-position:0px -353px;
+                    &.switch_hover{background-position:-32px -353px !important;}
+                }
+                &.ico_loading{background:url("@{img_common}loading_tree.gif") no-repeat scroll 0 2px transparent;}
+            }
+        }
+        a{ padding-top:1px;cursor:pointer;text-decoration:none;
+            display:block;margin:0;color:#333; vertical-align:top;
+            height:@height;padding-left:10px;border:1px solid @tree_background;
+            &:hover{text-decoration:none;
+                .transition(all 0.3s);background:@file_hover_color;
+                height:@height;border:1px solid @file_hover_color;
+            }
+            &.curSelectedNode {
+                border:1px solid @file_select_color;background:@file_select_color;
+                line-height:@height;height:@height;color:#fff;
+            }
+            &.curSelectedNode_Edit {
+                border:1px solid @file_select_color;background:@file_select_color;
+                color:black; height:@height+1;
+            }
+            input.rename {height:20px;line-height:22px; width:100px; padding:0;margin:0;
+               border:none;outline:none;padding-left:5px;font-size: 12px;
+            }
+            span{
+                &.button{
+                    &.root_docu{ background:none;}
+                    &.noline_docu{ background:none;}
+                    &.root_ico_open,&.root_ico_close,&.root_ico_docu{background-position: 0 -160px;}
+                    &.fav_ico_open,&.fav_ico_close,&.fav_ico_docu{background-position: 0px -275px;};
+                    &.lib_ico_open,&.lib_ico_close,&.lib_ico_docu{background-position: 0px -245px;};
+                    &.my_ico_open,&.my_ico_close,&.my_ico_docu{background-position: 0px -327px;};
+                    &.folder_ico_close,&.folder_ico_open,&.folder_ico_docu,&.ico_close,&.ico_open,&.ico_docu
+                    {background-position: 0 -100px;}
+
+                    &.doc_ico_close,&.doc_ico_docu,&.doc_ico_open{background-position: 0 -188px;}
+                    &.pic_ico_close,&.pic_ico_docu,&.pic_ico_open{background-position: 0 -132px;}
+                    &.music_ico_close,&.music_ico_docu,&.music_ico_open{background-position: 0 -70px;}
+                    &.movie_ico_close,&.movie_ico_docu,&.movie_ico_open{background-position: 0 -220px;}
+                    &.download_ico_close,&.download_ico_docu,&.download_ico_open{background-position: 0 -301px;}
+                }
+            }
+        }
+    }
+}
+ul.tmpTargetzTree {}/*移植根目录选择器*/
+ul.ztree.zTreeDragUL {
+    margin:0; padding:0; position:absolute;width:auto; height:auto;
+    background-color:@file_select_color; border:1px solid @file_select_color;.opacity(50);
+    li a span.space{display: none !important;}
+    li a{padding: 4px 10px 0 10px;color:#fff;}
+    li span.button.switch{display: none;}
+}
+
+.ztree li a.tmpTargetNode_inner {background:darken(@file_select_color,20%);border:1px solid darken(@file_select_color,10%); color:#fff;}
+.ztree li a.tmpTargetNode_prev {border-bottom: 1px solid #f96;}
+.ztree li a.tmpTargetNode_next {border-bottom: 1px solid #f96;}
+span.tmpzTreeMove_arrow {display: inline-block;margin:4px 0 0 2px;position:absolute;
+      border-color: transparent  transparent transparent #fff;
+      border-style: solid;border-width: 7px 0px 7px 7px;width: 0;height: 0;
+      _border-top-color: white;_border-bottom-color: white;_filter: chroma( color =white);
+}
+
+
+.frame-left .ztree{
+    @path:"./@{img_common}file_16/";
+    li{
+        .file{
+            line-height: 0;margin: 0;display: inline-block;
+            vertical-align: middle;cursor: pointer;
+            outline: none;background-color: transparent;
+            background-repeat: no-repeat;
+            height: 22px;width: 18px;
+            margin-right: 5px;
+            background:url("@{path}file.png") no-repeat;
+        }
+        .cpp,.h,.sql,.java,.cs,.py,.html,.htm,.shtml,.hta,.css,.js,.xml,.php,.jsp,.asp,.aspx,.vb,.vbs,.bat,.reg,.cmd,.pl,.pm,.cgi,.as
+        {background-image:url("@{path}code.png");}
+
+        .oexe{background-image:url("@{path}oexe.png");}  
+        .txt,.ini{background-image:url("@{path}txt.png");}
+        .html,.htm,.url{background-image:url("@{path}html.png");}
+        .css{background-image:url("@{path}css.png");}
+        .js{background-image:url("@{path}js.png");}
+        .xml,.config,.manifest,.xaml,.csproj,.vbproj
+        {background-image:url("@{path}xml.png");}
+        .php{background-image:url("@{path}php.png");}
+        .py{background-image:url("@{path}py.png");}
+        .h,.cpp,.c{background-image:url("@{path}cpp.png");}
+
+        .pdf{background-image:url("@{path}pdf.png");}
+        .psd{background-image:url("@{path}psd.png");}
+        .flv,.f4v{background-image:url("@{path}flv.png");}
+        .fla{background-image:url("@{path}fla.png");}
+        .swf{background-image:url("@{path}swf.png");}
+        .air{background-image:url("@{path}air.png");}
+
+        .zip,.tar,.gzip{background-image:url("@{path}zip.png");}
+        .rar{background-image:url("@{path}rar.gif");}
+        .dll{background-image:url("@{path}dll.png");}
+        .exe{background-image:url("@{path}exe.png");}
+        .ttf{background-image:url("@{path}ttf.png");}
+        .bat,.cmd{background-image:url("@{path}cmd.png");}
+        .ini{background-image:url("@{path}ini.png");}
+
+        .jpg,.png,.bmp,.gif,.ttf
+        {background-image:url("@{path}jpg.png");}
+        .mp3,.wma,.mp2,.mid,.aac
+        {background-image:url("@{path}mp3.png");}
+        .avi,.rm,.rmvb,.mpg,.mkv,.wmv,.mov,.mp4
+        {background-image:url("@{path}avi.png");}
+        .doc,.docx,.wps{background-image:url("@{path}doc.png");}
+        .xls,.xlsx{background-image:url("@{path}xls.png");}
+        .ppt,.pptx{background-image:url("@{path}ppt.png");}
+    }
+}

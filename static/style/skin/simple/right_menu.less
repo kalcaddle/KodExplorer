@@ -1,0 +1,80 @@
+@menu_color:#333;
+@menu_disablecolor:#999;
+@menu_hover_color:#2F74EE;
+
+.menu(){
+	padding:6px 0px;
+	border:1px solid #aaa;
+	box-shadow:0 10px 80px #555;
+	border-radius:4px;
+	background:#fff;
+	.box-shadow(0 10px 80px #555);
+
+	-webkit-animation-name: fadein;
+	-webkit-animation-duration: 0.2s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: 0.6;
+}
+.menu_item(){
+	padding:0px 40px 0 20px;
+	border:none;color:@menu_color;
+	.transition(background-color .2s);
+}
+.menu_item_hover(){
+	color:#fff;
+	background:@menu_hover_color;
+	background-color:none~'\9';
+}
+
+
+@-webkit-keyframes fadein {
+    0% {opacity:0;}
+    50% {opacity: 0.4;}
+}
+/* 右键菜单样式 */
+.playmusic-icon{display: none;}
+.context-menu-list {
+    margin:0;margin-left:4px;margin-top:4px;
+    min-width: 120px;
+    max-width: 250px;
+    font-size:12px;
+    display: inline-block;
+    position: absolute;
+    list-style-type: none;
+	.selected{border-left:5px solid #666 !important;background:#eee;padding-left:15px !important;}
+    .menu;
+    .context-menu-submenu:after{
+    	content: "\f0da";font-family:FontAwesome;
+		display: inline-block;float:right;margin-right: -30px;
+	}
+	.context-menu-item {
+		display:block;cursor:pointer;	
+		white-space:nowrap;
+		color:#444;line-height:23px;height:23px;
+		position: relative;border: none;
+		.menu_item;
+
+		.font-icon{display: inline-block;width:25px;font-size: 1.2em;color: #888;}		
+		&.disabled {color:@menu_disablecolor;}
+		&.disabled.hover{cursor: default;background-color: #EEE;}
+		&.hover {
+			cursor: pointer;
+			.menu_item_hover;
+			.font-icon{color: #fff;}
+		}
+        span i{float:right;text-align:right;font-style: normal;color: #888;}  
+		/* 横线 */
+		&.context-menu-separator {
+			height:2px;line-height:0;
+			border-bottom:1px solid #ddd;
+			margin: 2px 0 2px;
+		}
+		& > .context-menu-list {display: none;right: -5px;top: 5px;}
+		&.hover > .context-menu-list {
+			display: block;
+			.font-icon{color: #888;}
+			.hover .font-icon{color: #fff;}
+		}
+		.context-menu-accesskey {text-decoration: underline;}		
+	}
+}

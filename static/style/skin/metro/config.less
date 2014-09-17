@@ -1,0 +1,39 @@
+@import "../../base.less";
+/*  5579BA  metro  */ 
+
+@blue:#5db2ff;
+@leaf:#03B3B2;
+@green:#008a17;
+@grey:#555;
+@purple:#8D3CC4;
+@pink:#DC4FAD;
+@orange:#FF8F32;
+
+/*replace_start_color*/
+@main_color:@blue;
+@nav_color:darken(@main_color,8%);
+@top_back:@main_color;
+@top_back_this:darken(@main_color,12%);
+@file_select_color:@main_color;
+/*replace_end_color*/
+
+/*replace_start*/
+@main_color:#5579BA;
+@nav_color:darken(@main_color,8%);
+@top_back:@main_color;
+@top_back_this:darken(@main_color,12%);
+@file_select_color:@main_color;
+/*replace_end*/
+
+
+@dialog_color:@file_select_color;
+@file_hover_color:darken(#FFE6B0,8%);
+@file_background2:lighten(#FFE6B0,8%);
+@file_select_border:darken(@file_select_color,35%);
+
+@tree_background:#f3f3f3;
+.topback{};
+.topback_this{background:lighten(@top_back_this,18%);};
+@import "../common.less";
+@import "./button.less";
+@import "./dialog.less";

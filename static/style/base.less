@@ -1,0 +1,241 @@
+.box-shadow(@shadow: 5px 5px 10px #cccccc) {
+  -webkit-box-shadow: @shadow;
+     -moz-box-shadow: @shadow;
+          box-shadow: @shadow;
+}
+.border-radius(@radius: 5px) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+.opacity(@opacity: 80) {
+	opacity: @opacity / 100;
+	filter: ~"alpha(opacity=@{opacity})";
+}
+.user-select(@type:auto){
+	-khtml-user-select: @type;
+	-webkit-user-select: @type;  /* Chrome all / Safari all */
+	-moz-user-select: @type;     /* Firefox all */
+	-ms-user-select: @type;      /* IE 10+ */
+	-o-user-select: @type;
+	user-select: @type;
+}
+.background-color(@color,@alpha:0.8){
+  background:@color~'\9';
+  background:rgba(red(@color),green(@color),blue(@color),@alpha); 
+}
+.border-color(@color,@alpha:0.8){
+  border-color:@color~'\9';
+  border-color:rgba(red(@color),green(@color),blue(@color),@alpha);  
+}
+
+.input(@focus_color:#75A1F0){
+    border: 1px solid #ddd;background:#fff;outline: none;outline: none;
+    &:focus{border-color:@focus_color;outline:none;box-shadow: 0 0 12px @focus_color;.transition(all 0.218s);}
+}
+
+/* 渐变色 */
+.gradient (@origin: left, @start: #ffffff, @stop: #000000) {
+    background:@stop;
+    background-image: -webkit-linear-gradient(@origin, @start, @stop);
+    background-image: -moz-linear-gradient(@origin, @start, @stop);
+    background-image: -o-linear-gradient(@origin, @start, @stop);
+    background-image: -ms-linear-gradient(@origin, @start, @stop);
+    background-image: linear-gradient(@origin, @start, @stop);
+}
+/* 动画 */
+.transition(@type:all 0.2s){
+    -webkit-transition: @type;
+    -moz-transition: @type;
+    -o-transition: @type;
+    -ms-transition:@type;
+    transition: @type;
+}
+.background-size(@size:100% 100%){
+  -moz-background-size:@size;
+  -o-background-size:@size;
+  -webkit-background-size:@size;
+  -ms-background-size:@size;
+  background-size:@size;
+}
+
+//**
+// * transform: none
+// * transform: matrix(1.0, 2.0, 3.0, 4.0, 5.0, 6.0)
+// * transform: translate(12px, 50%)
+// * transform: translateX(2em)
+// * transform: translateY(3in)
+// * transform: scale(2, 0.5)
+// * transform: scaleX(2)
+// * transform: scaleY(0.5)
+// * transform: rotate(0.5turn)
+// * transform: skewX(30deg)
+// * transform: skewY(1.07rad)
+// * transform: matrix3d(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0)
+// * transform: translate3d(12px, 50%, 3em)
+// * transform: translateZ(2px)
+// * transform: scale3d(2.5, 1.2, 0.3)
+// * transform: scaleZ(0.3)
+// * transform: rotate3d(1, 2.0, 3.0, 10deg)
+// * transform: rotateX(10deg)
+// * transform: rotateY(10deg)
+// * transform: rotateZ(10deg)
+// * transform: perspective(17px)
+// * transform: translateX(10px) rotate(10deg) translateY(5px)
+// */
+
+// 旋转
+.rotate(@degress) {
+  -webkit-transform: scale(@degress);
+     -moz-transform: scale(@degress);
+      -ms-transform: scale(@degress);
+       -o-transform: scale(@degress);
+          transform: scale(@degress);
+}
+// 三维旋转
+.rotate3d(@x, @y, @z, @degress){
+  -webkit-transform: rotate3d(@x, @y, @z, @degress);
+     -moz-transform: rotate3d(@x, @y, @z, @degress);
+      -ms-transform: rotate3d(@x, @y, @z, @degress);
+       -o-transform: rotate3d(@x, @y, @z, @degress);
+          transform: rotate3d(@x, @y, @z, @degress);
+}
+.rotateX(@degress){
+  -webkit-transform: rotateX(@degrees);
+     -moz-transform: rotateX(@degrees);
+      -ms-transform: rotateX(@degrees);
+       -o-transform: rotateX(@degrees);
+          transform: rotateX(@degrees);
+}
+.rotateY(@degress){
+  -webkit-transform: rotateY(@degrees);
+     -moz-transform: rotateY(@degrees);
+      -ms-transform: rotateY(@degrees);
+       -o-transform: rotateY(@degrees);
+          transform: rotateY(@degrees);
+}
+.rotateZ(@degress){
+  -webkit-transform: rotateZ(@degrees);
+     -moz-transform: rotateZ(@degrees);
+      -ms-transform: rotateZ(@degrees);
+       -o-transform: rotateZ(@degrees);
+          transform: rotateZ(@degrees);
+}
+
+
+//缩放
+.scale(@ratio) {
+  -webkit-transform: scale(@ratio);
+     -moz-transform: scale(@ratio);
+      -ms-transform: scale(@ratio);
+       -o-transform: scale(@ratio);
+          transform: scale(@ratio);
+}
+.scaleX(@ratio) {
+  -webkit-transform: scaleX(@ratio);
+     -moz-transform: scaleX(@ratio);
+      -ms-transform: scaleX(@ratio);
+       -o-transform: scaleX(@ratio);
+          transform: scaleX(@ratio);
+}
+.scaleY(@ratio) {
+  -webkit-transform: scaleY(@ratio);
+     -moz-transform: scaleY(@ratio);
+      -ms-transform: scaleY(@ratio);
+       -o-transform: scaleY(@ratio);
+          transform: scaleY(@ratio);
+}
+
+//
+.translate(@x, @y) {
+  -webkit-transform: translate(@x, @y);
+     -moz-transform: translate(@x, @y);
+      -ms-transform: translate(@x, @y);
+       -o-transform: translate(@x, @y);
+          transform: translate(@x, @y);
+}
+.translate3d(@x, @y, @z) {
+  -webkit-transform: translate3d(@x, @y, @z);
+     -moz-transform: translate3d(@x, @y, @z);
+       -o-transform: translate3d(@x, @y, @z);
+          transform: translate3d(@x, @y, @z);
+}
+.translateX(@x){
+  -webkit-transform: translateX(@x);
+     -moz-transform: translateX(@x);
+      -ms-transform: translateX(@x);
+       -o-transform: translateX(@x);
+          transform: translateX(@x);
+}
+.translateY(@y){
+  -webkit-transform: translateY(@y);
+     -moz-transform: translateY(@y);
+      -ms-transform: translateY(@y);
+       -o-transform: translateY(@y);
+          transform: translateY(@y);
+}
+.translateZ(@z){
+  -webkit-transform: translateZ(@z);
+     -moz-transform: translateZ(@z);
+      -ms-transform: translateZ(@z);
+       -o-transform: translateZ(@z);
+          transform: translateZ(@z);
+}
+
+//变形
+.skew(@x, @y) {
+  -webkit-transform: skew(@x, @y);
+     -moz-transform: skew(@x, @y);
+      -ms-transform: skewX(@x) skewY(@y); 
+       -o-transform: skew(@x, @y);
+          transform: skew(@x, @y);
+  -webkit-backface-visibility: hidden;
+}
+.skewX(@x) {
+  -webkit-transform: skewX(@x);
+     -moz-transform: skewX(@x);
+      -ms-transform: skewX(@x);
+       -o-transform: skewX(@x);
+          transform: skewX(@x);
+  -webkit-backface-visibility: hidden;
+  //Webkit gives a pixelated edge. This can be resolved by adding the following line to the mixin. -webkit-backface-visibility: hidden;
+}
+.skewY(@y) {
+  -webkit-transform: skewY(@y);
+     -moz-transform: skewY(@y);
+      -ms-transform: skewY(@y); 
+       -o-transform: skewY(@y);
+          transform: skewY(@y);
+  -webkit-backface-visibility: hidden;
+}
+
+.transition(@transition) {
+  -webkit-transition: @transition;
+    -moz-transition: @transition;
+       -o-transition: @transition;
+          transition: @transition;
+}
+.transition-delay(@transition-delay: 0s) {
+  -webkit-transition-delay: @transition-delay;
+     -moz-transition-delay: @transition-delay;
+       -o-transition-delay: @transition-delay;
+          transition-delay: @transition-delay;
+}
+.transition-duration(@transition-duration: 0s){
+	-webkit-transition-delay: @transition-duration;
+     -moz-transition-delay: @transition-duration;
+       -o-transition-delay: @transition-duration;
+          transition-delay: @transition-duration;
+}
+.transition-property(@transition-property){
+  -webkit-transition-delay: @transition-property;
+     -moz-transition-delay: @transition-property;
+       -o-transition-delay: @transition-property;
+          transition-delay: @transition-property;
+}
+.transition-timing-function(@transition-timing: ease){
+	-webkit-transition-delay: @transition-timing;
+     -moz-transition-delay: @transition-timing;
+       -o-transition-delay: @transition-timing;
+          transition-delay: @transition-timing;
+}

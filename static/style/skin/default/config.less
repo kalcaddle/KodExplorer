@@ -1,0 +1,15 @@
+@import "../../base.less";
+@file_select_color:#cdf;
+@file_select_border:darken(@file_select_color,30%);
+@file_background2:lighten(@file_select_color,8%);
+@file_hover_color:lighten(@file_select_color,5%);
+@file_hover_border:@file_select_color;
+@top_back:#41bbec;
+@top_back_select:#80dbff;
+
+@tree_background:#f3f3f3;
+.topback{.gradient(top,lighten(@top_back,10%),@top_back);};
+.topback_this{background:@top_back_select;.gradient(top,lighten(@top_back_select,12%),@top_back_select);};
+@import "../common.less";
+@import "./button.less";
+@import "./dialog.less";

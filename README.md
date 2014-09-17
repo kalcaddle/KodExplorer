@@ -1,5 +1,5 @@
 ﻿##KodExplorer (http://kalcaddle.com/)
-###ver2.72(2014.9.16)
+###ver2.73(2014.9.17)
 `商业版授权请联系：kalcaddle#qq.com`
 
 ####  1.是什么：
@@ -39,6 +39,10 @@
 
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
 
+###ver2.73 `2014/9/17`
+####fix bug:
+ - 安全优化补丁
+
 
 ###ver2.72 `2014/9/16`
 ####fix bug:（bug解决和程序优化）
@@ -47,8 +51,6 @@
  - 桌面：开始按钮被tab盖住了
  - 主题切换,错位问题
  - 透明对话框拖动时 标题栏不显示问题
- - 
-
 
 ###ver2.71 `2014/8/31`
 ----

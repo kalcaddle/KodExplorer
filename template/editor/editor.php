@@ -5,10 +5,13 @@
 	<title><?php echo $L['ui_editor'].' '.$L['title'];?></title>
 	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>images/favicon.ico">
 	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>		
-	<link   href="<?php echo STATIC_PATH;?>style/font-awesome/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
-	
+	<link href="./static/style/font-awesome/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<?php if(STATIC_LESS == 'css'){ ?>
 	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_editor.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
-	
+	<?php }else{//less_compare_online ?>
+	<link rel="stylesheet/less" type="text/css" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_editor.less"/>
+	<script src="<?php echo STATIC_PATH;?>js/lib/less-1.4.2.min.js"></script>	
+	<?php } ?>
 </head>
 <body style="overflow:hidden;" oncontextmenu="return core.contextmenu();">
 	<?php include(TEMPLATE.'common/navbar.html');?>
@@ -65,7 +68,7 @@
 			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
 		]
 	});
-	seajs.use("app/src/editor/main");
+	seajs.use("<?php echo STATIC_JS;?>/src/editor/main");
 </script>
 </body>
 </html>

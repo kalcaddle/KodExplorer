@@ -26,7 +26,10 @@ class app extends Controller{
         $path = _DIR($this->in['path']);
         if (isset($this->in['action']) && $this->in['action'] == 'add'){
             $path .= '.oexe';
-            
+        }
+        
+        if (!checkExt($path)) {
+            show_json($this->L['error']);exit;
         }
         $data = json_decode(rawurldecode($this->in['data']),true);
         unset($data['name']);unset($data['desc']);unset($data['group']);
