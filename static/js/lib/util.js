@@ -1,3 +1,10 @@
+/*changed by warlee 
+* @link http://www.kalcaddle.com/
+* @author warlee | e-mail:kalcaddle@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kalcaddle.com/tools/licenses/license.txt
+*/
+
 /*
 * iframe之间函数调用
 *
@@ -37,6 +44,16 @@ var FrameCall = (function(){
 			var obj = window.parent.frames[iframe].document;
             if(!obj) return;
 			obj=obj.getElementById(idName);		
+			$(obj).attr("action",action);
+			$(obj).attr("value",value);
+			obj.click();
+		},
+		//该窗口调用父窗口的api
+		child:function(iframe,action,value){
+			if (!window.frames[iframe]) return;
+			var obj = window.frames[iframe].document;
+            if(!obj) return;
+			obj=obj.getElementById(idName);
 			$(obj).attr("action",action);
 			$(obj).attr("value",value);
 			obj.click();
@@ -149,6 +166,7 @@ var inArray = function(arr,value) {
 }
 var stopPP = function(e){//防止事件冒泡
 	e = e || window.event;
+    if(!e) return;
 	if (e.stopPropagation) {
 		e.stopPropagation();
 	}
@@ -166,8 +184,8 @@ var tips = function(msg,code){
 	Tips.tips(msg,code);
 }
 var Tips =  (function(){
-	var in_time  = 400;
-	var delay = 500;
+	var in_time  = 600;
+	var delay = 800;
 	var opacity  = 0.7;
 	var _init = function(msg,code){
 		var tipsIDname = "messageTips";
@@ -272,7 +290,6 @@ var MaskView =  (function(){
 	var color   ='#000';
 	var maskId  = "#windowMaskView";
 	var maskContent = '#maskViewContent';
-
 	var add = function(content,t_opacity,t_color,time){
 		if (t_opacity != undefined) opacity == t_opacity;
 		if (t_color != undefined) color == t_color;
@@ -280,7 +297,7 @@ var MaskView =  (function(){
 
 		if ($(maskId).length == 0) {
 			var html ='<div id="windowMaskView" style="position:fixed;top:0;left:0;right:0;bottom:0;background:'+
-					color+';opacity:'+opacity+';z-index:9998;"></div><div id="maskViewContent" style="position:absolute;z-index:9999"></div>';
+			color+';opacity:'+opacity+';z-index:9998;"></div><div id="maskViewContent" style="position:absolute;z-index:9999"></div>';
 			$('body').append(html);
 			$(maskId).bind('click',close);
 			$(maskContent).bind('click',function(e){
@@ -335,12 +352,22 @@ var MaskView =  (function(){
                     stopPP(e);
                 }
             }
-		})
-        $dom.mousewheel(function(offset){
-	        var w = parseInt($(this).width())  * (1+offset*0.5);
-	        var h = parseInt($(this).height()) * (1+offset*0.5);
-	        var top  = ($(window).height() - h)/2;
-	        var left = ($(window).width()  - w)/2;
+		});
+
+        $('#windowMaskView,#maskViewContent img').mousewheel(function(event, delta, deltaX, deltaY){
+        	var offset = delta>0?1:-1;
+        	offset = offset * Math.abs(delta/10);
+        	var o_w = parseInt($dom.width()),
+        		o_h=parseInt($dom.height()),
+	        	w =  o_w * (1+offset/6),
+	        	h =  o_h * (1+offset/6);
+	        if(w<=5 || h<=5) return;
+	        if(w>=10000 || h>=10000) return;
+
+	        // var top  = ($(window).height() - h)/2;
+	        // var left = ($(window).width()  - w)/2;
+	        var top  = parseInt($content.css("top"))-(h-o_h)/2;
+	        var left = parseInt($content.css("left"))-(w-o_w)/2;
 	        $(maskContent+','+maskContent+' .image').stop(true)
 	        	.animate({'width':w,'height':h,'top':top,'left':left},400);
 	    });
@@ -360,7 +387,8 @@ var MaskView =  (function(){
 			width = w_width*percent;
 			height= m_height/m_width * width;
 		}else{
-			width = m_width;height= m_height;
+			width = m_width;
+			height= m_height;
 		}
 		$dom.css({'width':width,'height':height});
 		var $content = $(maskContent);
@@ -442,6 +470,321 @@ var MaskView =  (function(){
 	    }
     });
 })(jQuery);
+
+
+
+
+(function($){
+    $.tooltipsy = function (el, options) {
+        this.options = options;
+        this.$el = $(el);
+        this.title = this.$el.attr('title') || '';
+        this.$el.attr('title', '');
+        this.random = parseInt(Math.random()*10000);
+        this.ready = false;
+        this.shown = false;
+        this.width = 0;
+        this.height = 0;
+        this.delaytimer = null;
+
+        this.$el.data("tooltipsy", this);
+        this.init();
+    };
+
+    $.tooltipsy.prototype = {
+        init: function () {
+            var base = this,
+                settings,
+                $el = base.$el,
+                el = $el[0];
+
+            base.settings = settings = $.extend({}, base.defaults, base.options);
+            settings.delay = +settings.delay;
+
+            if (typeof settings.content === 'function') {
+                base.readify(); 
+            }
+
+            if (settings.showEvent === settings.hideEvent && settings.showEvent === 'click') {
+                $el.toggle(function (e) {
+                    if (settings.showEvent === 'click' && el.tagName == 'A') {
+                        e.preventDefault();
+                    }
+                    if (settings.delay > 0) {
+                        base.delaytimer = window.setTimeout(function () {
+                            base.show(e);
+                        }, settings.delay);
+                    }
+                    else {
+                        base.show(e);
+                    }
+                }, function (e) {
+                    if (settings.showEvent === 'click' && el.tagName == 'A') {
+                        e.preventDefault();
+                    }
+                    window.clearTimeout(base.delaytimer);
+                    base.delaytimer = null;
+                    base.hide(e);
+                });
+            }
+            else {
+                $el.bind(settings.showEvent, function (e) {
+                    if (settings.showEvent === 'click' && el.tagName == 'A') {
+                        e.preventDefault();
+                    }
+                    base.delaytimer = window.setTimeout(function () {
+                        base.show(e);
+                    }, settings.delay || 0);
+                }).bind(settings.hideEvent, function (e) {
+                    if (settings.showEvent === 'click' && el.tagName == 'A') {
+                        e.preventDefault();
+                    }
+                    window.clearTimeout(base.delaytimer);
+                    base.delaytimer = null;
+                    base.hide(e);
+                });
+            }
+        },
+
+        show: function (e) {
+            if (this.ready === false) {
+                this.readify();
+            }
+
+            var base = this,
+                settings = base.settings,
+                $tipsy = base.$tipsy,
+                $el = base.$el,
+                el = $el[0],
+                offset = base.offset(el);
+
+            if (base.shown === false) {
+                if ((function (o) {
+                    var s = 0, k;
+                    for (k in o) {
+                        if (o.hasOwnProperty(k)) {
+                            s++;
+                        }
+                    }
+                    return s;
+                })(settings.css) > 0) {
+                    base.$tip.css(settings.css);
+                }
+                base.width = $tipsy.outerWidth();
+                base.height = $tipsy.outerHeight();
+            }
+
+            if (settings.alignTo === 'cursor' && e) {
+                var tip_position = [e.clientX + settings.offset[0], e.clientY + settings.offset[1]];
+                if (tip_position[0] + base.width > $(window).width()) {
+                    var tip_css = {top: tip_position[1] + 'px', right: tip_position[0] + 'px', left: 'auto'};
+                }
+                else {
+                    var tip_css = {top: tip_position[1] + 'px', left: tip_position[0] + 'px', right: 'auto'};
+                }
+            }
+            else {
+                var tip_position = [
+                    (function () {
+                        if (settings.offset[0] < 0) {
+                            return offset.left - Math.abs(settings.offset[0]) - base.width;
+                        }
+                        else if (settings.offset[0] === 0) {
+                            return offset.left - ((base.width - $el.outerWidth()) / 2);
+                        }
+                        else {
+                            return offset.left + $el.outerWidth() + settings.offset[0];
+                        }
+                    })(),
+                    (function () {
+                        if (settings.offset[1] < 0) {
+                            return offset.top - Math.abs(settings.offset[1]) - base.height;
+                        }
+                        else if (settings.offset[1] === 0) {
+                            return offset.top - ((base.height - base.$el.outerHeight()) / 2);
+                        }
+                        else {
+                            return offset.top + base.$el.outerHeight() + settings.offset[1];
+                        }
+                    })()
+                ];
+            }
+            $tipsy.css({top: tip_position[1] + 'px', left: tip_position[0] + 'px'});
+            base.settings.show(e, $tipsy.stop(true, true));
+        },
+
+        hide: function (e) {
+            var base = this;
+
+            if (base.ready === false) {
+                return;
+            }
+
+            if (e && e.relatedTarget === base.$tip[0]) {
+                base.$tip.bind('mouseleave', function (e) {
+                    if (e.relatedTarget === base.$el[0]) {
+                        return;
+                    }
+                    base.settings.hide(e, base.$tipsy.stop(true, true));
+                });
+                return;
+            }
+            base.settings.hide(e, base.$tipsy.stop(true, true));
+        },
+
+        readify: function () {
+            this.ready = true;
+            this.$tipsy = $('<div id="tooltipsy' + this.random + '" style="position:fixed;z-index:2147483647;display:none">').appendTo('body');
+            this.$tip = $('<div class="' + this.settings.className + '">').appendTo(this.$tipsy);
+            this.$tip.data('rootel', this.$el);
+            var e = this.$el;
+            var t = this.$tip;
+            this.$tip.html(this.settings.content != '' ? (typeof this.settings.content == 'string' ? this.settings.content : this.settings.content(e, t)) : this.title);
+        },
+
+        offset: function (el) {
+            return this.$el[0].getBoundingClientRect();
+        },
+
+        destroy: function () {
+            if (this.$tipsy) {
+                this.$tipsy.remove();
+                $.removeData(this.$el, 'tooltipsy');
+            }
+        },
+
+        defaults: {
+            alignTo: 'element',
+            offset: [0, -1],
+            content: '',
+            show: function (e, $el) {
+                $el.fadeIn(100);
+            },
+            hide: function (e, $el) {
+                $el.fadeOut(100);
+            },
+            css: {},
+            className: 'tooltipsy',
+            delay: 200,
+            showEvent: 'mouseenter',
+            hideEvent: 'mouseleave'
+        }
+    };
+
+    $.fn.tooltipsy = function(options) {
+        return this.each(function() {
+            new $.tooltipsy(this, options);
+        });
+    };
+
+})(jQuery);
+
+
+
+var date = function(format, timestamp){ 
+	timestamp = parseInt(timestamp);
+    var a, jsdate=((timestamp) ? new Date(timestamp*1000) : new Date());
+    var pad = function(n, c){
+        if((n = n + "").length < c){
+            return new Array(++c - n.length).join("0") + n;
+        } else {
+            return n;
+        }
+    };
+    var txt_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var txt_ordin = {1:"st", 2:"nd", 3:"rd", 21:"st", 22:"nd", 23:"rd", 31:"st"};
+    var txt_months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; 
+    var f = {
+        // Day
+        d: function(){return pad(f.j(), 2)},
+        D: function(){return f.l().substr(0,3)},
+        j: function(){return jsdate.getDate()},
+        l: function(){return txt_weekdays[f.w()]},
+        N: function(){return f.w() + 1},
+        S: function(){return txt_ordin[f.j()] ? txt_ordin[f.j()] : 'th'},
+        w: function(){return jsdate.getDay()},
+        z: function(){return (jsdate - new Date(jsdate.getFullYear() + "/1/1")) / 864e5 >> 0},
+       
+        // Week
+        W: function(){
+            var a = f.z(), b = 364 + f.L() - a;
+            var nd2, nd = (new Date(jsdate.getFullYear() + "/1/1").getDay() || 7) - 1;
+            if(b <= 2 && ((jsdate.getDay() || 7) - 1) <= 2 - b){
+                return 1;
+            } else{
+                if(a <= 2 && nd >= 4 && a >= (6 - nd)){
+                    nd2 = new Date(jsdate.getFullYear() - 1 + "/12/31");
+                    return date("W", Math.round(nd2.getTime()/1000));
+                } else{
+                    return (1 + (nd <= 3 ? ((a + nd) / 7) : (a - (7 - nd)) / 7) >> 0);
+                }
+            }
+        },
+       
+        // Month
+        F: function(){return txt_months[f.n()]},
+        m: function(){return pad(f.n(), 2)},
+        M: function(){return f.F().substr(0,3)},
+        n: function(){return jsdate.getMonth() + 1},
+        t: function(){
+            var n;
+            if( (n = jsdate.getMonth() + 1) == 2 ){
+                return 28 + f.L();
+            } else{
+                if( n & 1 && n < 8 || !(n & 1) && n > 7 ){
+                    return 31;
+                } else{
+                    return 30;
+                }
+            }
+        },
+       
+        // Year
+        L: function(){var y = f.Y();return (!(y & 3) && (y % 1e2 || !(y % 4e2))) ? 1 : 0},
+        Y: function(){return jsdate.getFullYear()},
+        y: function(){return (jsdate.getFullYear() + "").slice(2)},
+       
+        // Time
+        a: function(){return jsdate.getHours() > 11 ? "pm" : "am"},
+        A: function(){return f.a().toUpperCase()},
+        B: function(){
+            var off = (jsdate.getTimezoneOffset() + 60)*60;
+            var theSeconds = (jsdate.getHours() * 3600) + (jsdate.getMinutes() * 60) + jsdate.getSeconds() + off;
+            var beat = Math.floor(theSeconds/86.4);
+            if (beat > 1000) beat -= 1000;
+            if (beat < 0) beat += 1000;
+            if ((String(beat)).length == 1) beat = "00"+beat;
+            if ((String(beat)).length == 2) beat = "0"+beat;
+            return beat;
+        },
+        g: function(){return jsdate.getHours() % 12 || 12},
+        G: function(){return jsdate.getHours()},
+        h: function(){return pad(f.g(), 2)},
+        H: function(){return pad(jsdate.getHours(), 2)},
+        i: function(){return pad(jsdate.getMinutes(), 2)},
+        s: function(){return pad(jsdate.getSeconds(), 2)},
+
+        O: function(){
+            var t = pad(Math.abs(jsdate.getTimezoneOffset()/60*100), 4);
+            if (jsdate.getTimezoneOffset() > 0) t = "-" + t; else t = "+" + t;
+            return t;
+        },
+        P: function(){var O = f.O();return (O.substr(0, 3) + ":" + O.substr(3, 2))},
+        c: function(){return f.Y() + "-" + f.m() + "-" + f.d() + "T" + f.h() + ":" + f.i() + ":" + f.s() + f.P()},
+        U: function(){return Math.round(jsdate.getTime()/1000)}
+    };
+    return format.replace(/[\\]?([a-zA-Z])/g, function(t, s){
+        if( t!=s ){
+            ret = s;
+        } else if( f[s] ){
+            ret = f[s]();
+        } else{
+            ret = s;
+        }
+        return ret;
+    });
+}
+
 
 var Base64 =  (function(){
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";  

@@ -59,8 +59,9 @@ class Application {
 		if (!method_exists($instance, $function)) {
 			pr($function.' method not exists',1);
 		}
-		$instance -> $function();
+		return $instance -> $function();
 	}
+
 
 	/**
 	 * 运行自动加载的控制器

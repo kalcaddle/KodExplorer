@@ -542,9 +542,32 @@ function get_file_mime($ext){
 		"z" => "application/x-compress",
 		"zip" => "application/zip"
 	);
+	
+	//代码 或文本浏览器输出
+	$text = array('oexe','inc','inf','csv','log','asc','tsv');
+	$code = array("abap","abc","as","ada","adb","htgroups","htpasswd","conf","htaccess","htgroups",
+				"htpasswd","asciidoc","asm","ahk","bat","cmd","c9search_results","cpp","c","cc","cxx","h","hh","hpp",
+				"cirru","cr","clj","cljs","CBL","COB","coffee","cf","cson","Cakefile","cfm","cs","css","curly","d",
+				"di","dart","diff","patch","Dockerfile","dot","dummy","dummy","e","ejs","ex","exs","elm","erl",
+				"hrl","frt","fs","ldr","ftl","gcode","feature",".gitignore","glsl","frag","vert","go","groovy",
+				"haml","hbs","handlebars","tpl","mustache","hs","hx","html","htm","xhtml","erb","rhtml","ini",
+				"cfg","prefs","io","jack","jade","java","js","jsm","json","jq","jsp","jsx","jl","tex","latex",
+				"ltx","bib","lean","hlean","less","liquid","lisp","ls","logic","lql","lsl","lua","lp","lucene",
+				"Makefile","GNUmakefile","makefile","OCamlMakefile","make","md","markdown","mask","matlab",
+				"mel","mc","mush","mysql","nix","m","mm","ml","mli","pas","p","pl","pm","pgsql","php","phtml",
+				"ps1","praat","praatscript","psc","proc","plg","prolog","properties","proto","py","r","Rd",
+				"Rhtml","rb","ru","gemspec","rake","Guardfile","Rakefile","Gemfile","rs","sass","scad","scala",
+				"scm","rkt","scss","sh","bash",".bashrc","sjs","smarty","tpl","snippets","soy","space","sql",
+				"styl","stylus","svg","tcl","tex","txt","textile","toml","twig","ts","typescript","str","vala",
+				"vbs","vb","vm","v","vh","sv","svh","vhd","vhdl","xml","rdf","rss",
+				"wsdl","xslt","atom","mathml","mml","xul","xbl","xaml","xq","yaml","yml","htm",
+				"xib","storyboard","plist","csproj");
 	if (array_key_exists($ext,$mimetypes)){
 		return $mimetypes[$ext];
 	}else{
+		if(in_array($ext,$text) || in_array($ext,$code)){
+			return "text/plain";
+		}
 		return 'application/octet-stream';
 	}
 }

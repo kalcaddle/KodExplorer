@@ -3,24 +3,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title><?php echo $L['title'];?>-Powered by Kodexplorer</title>
-	<link href="./static/style/font-awesome/style.css" rel="stylesheet"/>
+	<title><?php echo $L['kod_name'].$L['kod_power_by'];?></title>
+	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>/images/favicon.ico">
+	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">
+	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="<?php echo STATIC_PATH;?>style/login.css">
 </head>
 
 <body>
-   <div class="loginbox pop_fadein">
+	<?php 
+		$arr = array(4,5,7,7,7,1,10,11,12,13);
+		$get = $arr[mt_rand(0,count($arr)-1)];
+		$image = "./static/images/wall_page/".$get.".jpg";
+		echo '<div class="background" style="background-image:url('.$image.')"></div>';
+	?>
+	<div class="loginbox" >
 		<div class="title">
-			<div class="logo">KOD<b>Explorer</b></div>
-			<div class='info'>——<?php echo $L['title_name'];?></div>
+			<div class="logo"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></div>
+			<div class='info'>——<?php echo $L['kod_name_desc'];?></div>
 		</div>
-		<form method="post" action="./index.php?user/loginSubmit">
+		<div class="form">
 			<div class="inputs">
 				<div><span><?php echo $L['username'];?>：</span><input id="username" name='name' type="text" placeholder="<?php echo $L['username'];?>" required/> </div> 
 				<div><span><?php echo $L['password'];?>：</span><input id="password" name='password' type="password" placeholder="<?php echo $L['password'];?>" required /></div>
+				
             	<?php if(isset($_SESSION['code_error_time']) && intval($_SESSION['code_error_time']) >=3){?>
-					<div class='check_code'><span><?php echo $L['login_code'];?>：</span><input name='check_code' class="check_code" type="text" placeholder="<?php echo $L['login_code'];?>" required /> <img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
-					<div style="clear:both;"></div></div>				
+				<div class='check_code'>
+					<span><?php echo $L['login_code'];?>：</span>
+					<input name='check_code' class="check_code" type="text" placeholder="<?php echo $L['login_code'];?>" required /> <img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
+					<div style="clear:both;"></div>
+				</div>				
 				<?php }?>
 			</div>
 			<div class="actions">
@@ -32,10 +47,20 @@
 			<div style="clear:both;"></div>
 			<div class='guest'>
 			<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo $L['guest_login'];?><i class=' icon-arrow-right'></i></a></div>
-		</form>
-	</div><a href=""></a>
-	<div class="footer">
-	Powered by <a href="http://kalcaddle.com" target="_blank">Kodexplorer</a> v<?php echo KOD_VERSION;?> | ©<?php echo $L['us'];?> All Rights Reserved.
+		</div>
 	</div>
+<?php include(TEMPLATE.'common/footer.html');?>
+<script src="<?php echo APPHOST;?>/index.php?share/common_js#id=<?php echo rand_string(8);?>"></script>
+<script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
+<script type="text/javascript">
+	seajs.config({
+		base: "<?php echo STATIC_PATH;?>js/",
+		preload: ["lib/jquery-1.8.0.min"],
+		map:[
+			[ /^(.*\.(?:css|js|html))(.*)$/i,'$1?ver='+G.version]
+		]
+	});
+	seajs.use("<?php echo STATIC_JS;?>/src/user/main");
+</script>
 </body>
 </html>

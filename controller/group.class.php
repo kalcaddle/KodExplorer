@@ -10,7 +10,7 @@ class group extends Controller{
     private $sql;
     function __construct()    {
         parent::__construct();
-        $this->sql=new fileCache($this->config['system_file']['group']);
+        $this->sql=new fileCache(USER_SYSTEM.'group.php');
     }
     
     public function get() {
@@ -37,7 +37,7 @@ class group extends Controller{
         if ($role_old == 'root') show_json($this->L['default_group_can_not_do'],false);
 
         if ($this->sql->replace_update($role_old,$this->in['role'],$group)){
-            $member = new fileCache($this->config['system_file']['member']);
+            $member = new fileCache(USER_SYSTEM.'member.php');
             if ($member -> update('role',$this->in['role'],$role_old)) {
                 show_json($this->L['success']);
             }
@@ -54,7 +54,7 @@ class group extends Controller{
         if (!$role) show_json($this->L["groupname_can_not_null"],false);
         if ($role == 'root') show_json($this->L['default_group_can_not_do'],false);
         if($this->sql->delete($role)){
-            $member = new fileCache($this->config['system_file']['member']);
+            $member = new fileCache(USER_SYSTEM.'member.php');
             $member -> update('role','',$role);//改组用户设置为空
             show_json($this->L['success']);
         }
@@ -76,10 +76,10 @@ class group extends Controller{
         foreach ($this->config['role_setting'] as $key => $actions) {
             foreach ($actions as $action) {
                 $k = $key.':'.$action;
-                if (isset($this->in[$k])) {
+                if (isset($this->in[$k])){
                     $role_arr[$k] = 1;
                 }else{
-                    //$role_arr[$k] = 0;
+                    $role_arr[$k] = 0;
                 }
             }
         }

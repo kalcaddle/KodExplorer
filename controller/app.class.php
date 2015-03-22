@@ -9,7 +9,7 @@
 class app extends Controller{
     function __construct()    {
         parent::__construct();
-        $this->sql=new fileCache($this->config['system_file']['apps']);
+        $this->sql=new fileCache(USER_SYSTEM.'apps.php');
     }
 
     /**
@@ -18,7 +18,32 @@ class app extends Controller{
     public function index() {
         $this->display(TEMPLATE.'app/index.php');
     }
-    
+
+    public function init_app($user_info){
+        $list = $this->sql->get();
+        $new_user_app = $this->config['setting_system']['new_user_app'];
+        $default = explode(',',$new_user_app);
+        $info = array();
+        foreach ($default as $key) {
+            $info[$key] = $list[$key];
+        }
+        $desktop = USER_PATH.$user_info['name'].'/home/desktop/';
+        mk_dir($desktop);
+        foreach ($info as $key => $data) {
+            if (!is_array($data)) {
+                continue;
+            }
+            $path = iconv_system($desktop.$key.'.oexe');
+            unset($data['name']);
+            unset($data['desc']);
+            unset($data['group']);
+            file_put_contents($path, json_encode($data));
+        }
+        $user_info['status'] = 1;
+        $member = new fileCache(USER_SYSTEM.'member.php');
+        $member->update($user_info['name'],$user_info);
+    }
+
     /**
      * 用户app 添加、编辑
      */
@@ -31,9 +56,9 @@ class app extends Controller{
         if (!checkExt($path)) {
             show_json($this->L['error']);exit;
         }
+
         $data = json_decode(rawurldecode($this->in['data']),true);
         unset($data['name']);unset($data['desc']);unset($data['group']);
-
         $res  = file_put_contents($path, json_encode($data));
         show_json($this->L['success']);
     }
@@ -56,7 +81,6 @@ class app extends Controller{
      * 添加
      */
     public function add() {  
-        if (!$GLOBALS['is_root']) show_json($this->L['no_permission'],false);
         $res=$this->sql->add(rawurldecode($this->in['name']),$this->_init());
         if($res) show_json($this->L['success']);
         show_json($this->L['error_repeat'],false);
@@ -66,7 +90,6 @@ class app extends Controller{
      * 编辑
      */
     public function edit() {
-        if (!$GLOBALS['is_root']) show_json($this->L['no_permission'],false);
         //查找到一条记录，修改为该数组
         if($this->sql->replace_update(
             rawurldecode($this->in['old_name']),
@@ -79,7 +102,6 @@ class app extends Controller{
      * 删除
      */
     public function del() {
-        if (!$GLOBALS['is_root']) show_json($this->L['no_permission'],false);
         if($this->sql->delete(rawurldecode($this->in['name']))){
             show_json($this->L['success']);
         }

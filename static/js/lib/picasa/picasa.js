@@ -205,7 +205,7 @@ Picasa.prototype = {
 			$(this).attr('PicasaNo', index);
 			var thumb = $(this).attr('thumb');
 			img = [thumb,$(this).attr('picasa')];
-			name = img[1].substr(img[1].lastIndexOf('\/')+1);
+			name = core.pathThis(img[1]);
 			self.arrItems.push(new Array(img,name,[0,0],''));
 		});
 		this.arrCount = this.arrItems.length;

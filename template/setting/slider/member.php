@@ -88,8 +88,15 @@
         <a class="tag" href="javascript:;" data-role='explorer:serverDownload'>
             <input type="checkbox" class="checkbox"><span><?php echo $L['group_role_download'];?></span>
         </a>
+        <a class="tag" href="javascript:;" data-role='explorer:fileDownload'>
+            <input type="checkbox" class="checkbox"><span><?php echo $L['group_role_fileDownload'];?></span>
+        </a>
+        <a class="tag" href="javascript:;" data-role='userShare:set;userShare:del'>
+            <input type="checkbox" class="checkbox"><span><?php echo $L['group_role_share'];?></span>
+        </a>
         <div style="clear:both;"></div>   
     </div>
+
     <div class="together">
         <div class="title"><i><?php echo $L['group_role_config'];?></i></div>
         <a class="tag" href="javascript:;" data-role='user:changePassword'>
@@ -119,7 +126,7 @@
             <input type="checkbox" class="checkbox"><span><?php echo $L['group_role_member_del'];?></span>
         </a>
         <div style="clear:both;"></div> 
-    </div>
+    </div>    
     <div class="together combox">
         <div class="title"><i><?php echo $L['group_role_group'];?></i></div>
         <a class="tag" href="javascript:;" data-role='group:get'>

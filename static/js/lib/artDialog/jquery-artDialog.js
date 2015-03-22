@@ -9,6 +9,7 @@
  */
 
 
+//icon-remove
 
 // change by warlee 
 //------------------------------------------------
@@ -99,11 +100,10 @@ var artDialog = function (config, ok, cancel) {
 	_count ++;
 	
 	//添加到任务栏
-	if (config.title !== false){
+	if (config && config.hasOwnProperty('title') && config['title'] !== false){
 		config.title = '<img draggable="false" src="'+config.ico+'" />'+config.title;
 		if (_count>=1) dialogList.add(config.id,config.title);
 	}
-
 	return artDialog.list[config.id] = _box ?
 		_box._init(config) : new artDialog.fn._init(config);
 };
@@ -516,12 +516,24 @@ artDialog.fn = artDialog.prototype = {
 		}
 	},
 
+	has_frame:function(){
+		var f = this.DOM.wrap.find('iframe');
+		if (f.length>=1) {
+			return true;
+		}else{
+			return false;
+		}
+	},
 	refresh:function(){
 		var frame = this.DOM.wrap.find('iframe');
 		frame.attr('src',frame.attr('src'));
 		return this;
 	},
-	
+	open_window:function(){
+		var frame = this.DOM.wrap.find('iframe');
+		window.open(frame.attr('src'));
+		return this;
+	},	
 	/** 显示对话框 */
 	show: function () {
 		this.DOM.wrap.show();
@@ -565,14 +577,13 @@ artDialog.fn = artDialog.prototype = {
 			if (follow) follow.removeAttribute(_expando + 'follow');
 			
 			//if (that.config.resize) 
-			if (that.config.title !== false){
+			if (that.config && that.config['title'] !== false){
 				dialogList.close(that.config.id);
 			}
 
-			delete list[that.config.id];
+			that.config && (delete list[that.config['id']]);
 			that._removeEvent();
 			that.hide(true)._setAbsolute();
-			
 			// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
 			for (var i in that) {
 				if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
@@ -624,7 +635,7 @@ artDialog.fn = artDialog.prototype = {
 			index = artDialog.defaults.zIndex ++;
 		
 		//if (that.config.resize) 
-		if (that.config.title !== false){
+		if (that.config["title"] !== false){
 			dialogList.focus(that.config.id);
 		}
 		
@@ -984,7 +995,6 @@ _path = window['_artDialog_path'] || (function (script, i, me) {
 // 	}, 150);
 // });
 
-
 // 使用uglifyjs压缩能够预先处理"+"号合并字符串
 // uglifyjs: http://marijnhaverbeke.nl/uglifyjs
 artDialog._templates =
@@ -1006,11 +1016,9 @@ artDialog._templates =
 +								'<td colspan="2" class="aui_header">'
 +									'<div class="aui_titleBar dialog_menu">'
 +										'<div class="aui_title"></div>'
-+										'<a class="aui_min">─</a>'
-+										'<a class="aui_max">□</a>'
-+										'<a class="aui_close">'
-+											'\xd7'
-+										'</a>'
++										'<a class="aui_min"></a>'
++										'<a class="aui_max"></a>'
++										'<a class="aui_close"></a>'
 +									'</div>'
 +								'</td>'
 +							'</tr>'
@@ -1159,6 +1167,7 @@ artDialog.dragEvent.prototype = {
 	
 };
 
+preMouseUpTime=0;
 _use = function (event) {
 	var startWidth, startHeight, startLeft, startTop, isResize,
 		api = artDialog.focus,
@@ -1167,7 +1176,7 @@ _use = function (event) {
 		DOM = api.DOM,
 		wrap = DOM.wrap,
 		title = DOM.title,
-		main = DOM.main;
+		main = DOM.main;	
 
 	// 清除文本选择
 	var clsSelect = 'getSelection' in window ? function () {
@@ -1177,9 +1186,9 @@ _use = function (event) {
 			document.selection.empty();
 		} catch (e) {};
 	};
-	
+
 	// 对话框准备拖动
-	_dragEvent.onstart = function (x, y) {
+	_dragEvent.onstart = function (x, y) {		
 		startX = x;startY = y;
 		screenHeight = $(window).height();
 		screenWidth  = $(window).width();
@@ -1278,12 +1287,23 @@ _use = function (event) {
 			var style = wrap[0].style;
 			style.left = x + startLeft  + 'px';
 			style.top = y + startTop + 'px';
-		}			
+
+			var bottom_height = 50;
+			if($(window).height()-(y + startTop)<=bottom_height){
+				style.top = $(window).height()- bottom_height + 'px';
+			}
+		}
 		clsSelect();
 	};
-	
 	// 对话框拖动结束
-	_dragEvent.onend = function (x, y) {		
+	_dragEvent.onend = function (x, y) {
+		var theTime = parseInt((new Date()).valueOf());
+		if (theTime - preMouseUpTime<300 && api.config.resize) {
+			api._clickMax();
+		}else{
+			preMouseUpTime = theTime;
+		}
+
 		_$document.unbind('dblclick', _dragEvent.end);
 		_isLosecapture ? title.unbind('losecapture', _dragEvent.end) :
 			_$window.unbind('blur', _dragEvent.end);
@@ -1300,6 +1320,9 @@ _use = function (event) {
 
 // 代理 mousedown 事件触发对话框拖动
 _$document.bind('mousedown', function (event) {
+	if (event.which!=1) {
+		return true;
+	}
 	var api = artDialog.focus;
 	if (!api) return;
 	var target = event.target,
@@ -1784,9 +1807,9 @@ $(function () {
 
 })(this.art || this.jQuery, this, this.artDialog);
 
-
 if (typeof(LNG) != 'undefined') {
+	artDialog.defaults.title='tips';
 	artDialog.defaults.okVal = LNG.button_ok;
-	artDialog.defaults.cancelVal = LNG.button_cancle;	
+	artDialog.defaults.cancelVal = LNG.button_cancel;	
 };
 

@@ -1,0 +1,47 @@
+<div class="init_loading"><div>
+<img src="<?php echo STATIC_PATH;?>images/loading_simple.gif"/></div>
+</div>
+<div class="topbar">
+	<div class="content">
+		<div class="top_left">
+			<a href="./" class="topbar_menu title"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></a>
+			<div class="share_info">
+				<span class="share_title">
+					<b class="share_title_info"><?php echo $share_info['name'];?></b> 
+				</span>
+				<span class="size"></span>
+				<span class="time"></span>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div class="top_right">
+			<div class="share_info_user hidden menu_group">
+				<span class="info"></span>
+				<!-- 
+				<a type="button" class="btn btn-primary button_my_share" id="button_share" href="javascript:void(0);"><?php echo $L['share'];?></a> 
+				-->
+				<div class="btn-group">
+				  <a type="button" class="btn btn-primary btn_download" target="_blank" href=""><?php echo $L['download'];?></a>
+				  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				    <span class="caret"></span>
+				    <span class="sr-only">Toggle Dropdown</span>
+				  </button>
+				  <ul class="dropdown-menu  download_drop_menu pull-right" role="menu">
+				    <li><a href="javascript:void(0);" class="page_share button_my_share" id="button_share">
+				    	<?php echo $L['share'];?></a>
+				    </li>
+				  </ul>
+				</div>
+			</div>
+			<div class="menu_group">
+				<a href="#" id='topbar_user' class="topbar_menu" data-toggle="dropdown"><i class="font-icon icon-user"></i><?php echo $_SESSION['kod_user']['name'];?>&nbsp;<b class="caret"></b></a>
+				<ul class="dropdown-menu menu-topbar_user fadein  pull-right" role="menu" aria-labelledby="topbar_user">
+					<li><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo $L['full_screen'];?></a></li>
+					<li><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo $L['setting_about'];?></a></li>
+					<li><a href="http://www.kalcaddle.com" target="_blank"><i class="font-icon icon-code-fork"></i><?php echo $L['ui_project_home'];?></a></li>
+				</ul>			
+			</div>		
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>

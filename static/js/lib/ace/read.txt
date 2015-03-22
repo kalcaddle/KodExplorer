@@ -1,5 +1,42 @@
-目前版本：1.1.5
+目前版本：2014.11.08 Version 1.1.8
 下载：https://github.com/ajaxorg/ace-builds/tags
 
-自行修改：自动补全弹出层，自动选中第一个
-t.completer.autoSelect=!0 ==》 t.completer.autoSelect=!0,
+自行修改：修改自动补全,php不生效问题。
+1.ext-language_tools.js
+	搜索："../autocomplete/text_completer" 修改getCompletions前后部分
+	getCompletions: function(editor, session, pos, prefix, callback) {
+        if (session.$mode.$id =='ace/mode/php' && 
+            typeof(session.$mode['isInit']) == 'undefined') {
+            session.$mode['isInit'] = true;
+            var phpAutoComplete = session.$mode.$modes['php-'].$highlightRules.$rules.myKeywords[0].keys
+            session.$mode.$modes['php-'].$keywordList=phpAutoComplete;
+        };
+2.mode-php.js 获取key；并存入rule中
+	搜索："cfunction|old_function"  修改this.$rules 前后部分
+	    var key_list = [];
+	    Array.prototype.push.apply(key_list,Object.keys(keywords));
+	    Array.prototype.push.apply(key_list,Object.keys(languageConstructs));
+	    Array.prototype.push.apply(key_list,Object.keys(builtinConstants));
+	    Array.prototype.push.apply(key_list,Object.keys(builtinFunctions));
+	    Array.prototype.push.apply(key_list,Object.keys(builtinFunctionsDeprecated)); 
+	    this.$rules = {
+	        "myKeywords":[
+	            {keys :key_list}
+	        ],
+	        "start" :
+
+=======================
+min对应修改
+1.mode-php.js 获取key；并存入rule中
+arrayToMap("cfunction|old_function".split("|")),
+	var key_list = [];
+	    Array.prototype.push.apply(key_list,Object.keys(t));
+	    Array.prototype.push.apply(key_list,Object.keys(n));
+	    Array.prototype.push.apply(key_list,Object.keys(r));
+	    Array.prototype.push.apply(key_list,Object.keys(u));
+	    Array.prototype.push.apply(key_list,Object.keys(a));
+	l=i.arrayToMap([]);this.$rules={
+	myKeywords:[{keys :key_list}],
+2.ext-language_tools.js
+
+

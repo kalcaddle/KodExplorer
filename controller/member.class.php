@@ -27,9 +27,12 @@ class member extends Controller{
         if (!$this->in['name'] || 
             !$this->in['password'] ||
             !$this->in['role'] ) show_json($this->L["data_not_full"],false);
+
+        $this->in['name'] = rawurldecode($this->in['name']);
+        $this->in['password'] = rawurldecode($this->in['password']);
         $user = array(
-            'name'      =>  $this->in['name'],
-            'password'  =>  md5($this->in['password']),
+            'name'      =>  rawurldecode($this->in['name']),
+            'password'  =>  md5(rawurldecode($this->in['password'])),
             'role'      =>  $this->in['role'],
             'status'    =>  0,
         );
@@ -43,10 +46,14 @@ class member extends Controller{
     /**
      * 编辑
      */
-    public function edit() {
+    public function edit() {        
         if (!$this->in['name'] || 
             !$this->in['name_to'] || 
             !$this->in['role_to'] ) show_json($this->L["data_not_full"],false);
+
+        $this->in['name'] = rawurldecode($this->in['name']);
+        $this->in['name_to'] = rawurldecode($this->in['name_to']);
+        $this->in['password_to'] = rawurldecode($this->in['password_to']);
         if ($this->in['name'] == 'admin') show_json($this->L['default_user_can_not_do'],false);
 
         //查找到一条记录，修改为该数组
@@ -84,9 +91,10 @@ class member extends Controller{
      */    
     public function _initUser($name){
         $root = array('home','recycle','data');
-        $home = array('desktop','doc','download','image','movie','music');
-        $user_path = USER_PATH.$name.'/';
+        $new_user_folder = $this->config['setting_system']['new_user_folder'];
+        $home = explode(',',$new_user_folder);
 
+        $user_path = USER_PATH.$name.'/';
         mk_dir($user_path);
         foreach ($root as $dir) {
             mk_dir($user_path.$dir);

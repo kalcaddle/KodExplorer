@@ -1,72 +1,42 @@
-<!--user login-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>运行环境监测-Powered by Kodexplorer</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title><?php echo $L['php_env_check'].' - '.$L['kod_name'].$L['kod_power_by'];?></title>
+	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>/images/favicon.ico">
+	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="<?php echo STATIC_PATH;?>style/login.css">
 </head>
-<style>
-body {background:#e6e5ea;font-size: 13px; padding: 0px; margin: 0px; font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;color:#666;}
-.inbox{box-shadow: 0px 10px 150px #666;width:350px;border-radius:3px;padding-bottom: 30px;
-    background: #fff;position:absolute;top:50%;left:50%;margin-top:-240px;margin-left:-175px;}
-a{text-decoration:none;color:#69c;}
-a:hover{color:#f90;}
-
-.title{width:100%;background:#6699cc;color:#fff;height: 80px;
-	border-top-left-radius: 3px;border-top-right-radius: 3px;padding-top: 30px;}
-.title .logo{text-align: center;font-size: 30px;width: 100%;
-	-webkit-box-reflect: below -10px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.3)));
-}
-.title .logo b{color:#99ccff;font-weight: 400;}
-.title .info{text-align: right;font-size: 12px;color:#99ccff;padding-right: 13px;padding-top: 15px;}	
-.success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
-.error{padding:10px;color:#a94442;background-color: #f2dede;border:#ebccd1 1px solid;font-size:14px;}
-
-.error a{background-color: #f2dede;border:#ebccd1 1px solid;}
-
-h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
-.footer{color: #999;position: absolute;bottom: 15px;text-align: center;width: 100%;}
-.install{text-align:center;margin: 0 auto;margin-top:30px;}
-.install a{color:#69C;text-decoration:none;border: 2px solid #69c;border-radius:20px;padding:5px 30px;display:inline-block;letter-spacing:2px;}
-.install a:hover{color:#f60;border-color:#f60;}
-</style>
-
 
 <body>
-   <div class="inbox">
+	<?php 
+		$arr = array(4,5,7,7,7,1,10,11,12,13);
+		$get = $arr[mt_rand(0,count($arr)-1)];
+		$image = "./static/images/wall_page/".$get.".jpg";
+		echo '<div class="background" style="background-image:url('.$image.')"></div>';
+	?>
+	<div class="loginbox" >
 		<div class="title">
-			<div class="logo">KOD<b>Explorer</b></div>
-			<div class='info'>——<?php echo $L['title_name'];?></div>
+			<div class="logo"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></div>
+			<div class='info'>——<?php echo $L['kod_name_desc'];?></div>
 		</div>
-		<div style="padding:10px 30px;">
-			<h3>运行环境监测</h3>
+		<div class="form" style="padding: 10px 20px;">
+			<h3><?php echo $L['php_env_check'];?></h3>
 			<?php
-				$error = '';
-				if(!function_exists('json_encode')) $error.= '<li>不支持 json_encode函数</li>';
-				if(!function_exists('iconv')) $error.= '<li>不支持iconv</li>';
-				if(!function_exists('mb_convert_encoding')) $error.= '<li>不支持mb_string系列函数</li>';
-	            if(!version_compare(PHP_VERSION,'5.2','>=')) $error.= '<li>PHP版本不能低于5.2</li>';
-	            if(!function_exists('file_get_contents')) $error.='<li>必须开启file_get_contents支持才可继续.</li>';
-	            if(!path_writable(BASIC_PATH.'data')) $error.= '<li>./data目录不可写</li>';
-	            if(!path_writable(BASIC_PATH.'data/system')) $error.= '<li>./data/system目录不可写</li>';
-	            if(!path_writable(BASIC_PATH.'data/User')) $error.= '<li>./data/User目录不可写</li>';
-	            if(!path_writable(BASIC_PATH.'data/thumb')) $error.= '<li>./data/thumb目录不可写</li>';
-	            if( !function_exists('imagecreatefromjpeg')||
-	                !function_exists('imagecreatefrompng')||
-	                !function_exists('imagecreatefromgif')||
-	                !function_exists('imagecolorallocate')){
-	                $error.= '<li>必须开启php GD库(用于缩略图生成)</li>';
-	            }
+	            $error = php_env_check();
 	            if ($error=='') {
-	            	echo '<div class="success"><h4>Successful!</h4>您可以用如下账号登陆',
-	            	'<br/>管理员：admin/admin(请务必修改密码)<br/>普通用户：demo/demo<br/>游客用户：guest/guest</div></div><div class="install"><a href="./index.php?user/loginFirst">进入系统</a></div>';
+	            	echo '<div class="success"><h4>Successful!</h4>',$L['install_login'],
+	            	'<br/>'.$L['install_user_default'].'</div></div><div class="guest"><a href="./index.php?user/loginFirst">'.$L['login'].'</a></div>';
 	            }else{
-	            	echo '<div class="error"><h4>error:</h4>'.$error.'</div></div><div class="install"><a href="./index.php?user/loginFirst">忽略错误</a></div>';
+	            	echo '<div class="error"><h4>error:</h4>'.$error.'</div></div><div class="guest"><a href="./index.php?user/loginFirst">'.$L['php_env_error_ignore'].'</a></div>';
 	            }
 	        ?>
+		</div>
 	</div>
-	<div class="footer">
-	Powered by <a href="http://kalcaddle.com" target="_blank">Kodexplorer</a> v<?php echo KOD_VERSION;?> | ©<?php echo $L['us'];?> All Rights Reserved.
-	</div>
+<?php include(TEMPLATE.'common/footer.html');?>
 </body>
 </html>

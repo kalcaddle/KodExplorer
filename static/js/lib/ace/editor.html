@@ -6,83 +6,535 @@
   <title>Editor</title>
   <style type="text/css" media="screen">
   	body{margin: 0;padding: 0;}
-	pre { 
-		width: 100%;
-		height: 600px;
-		border:1px solid #ddd;
-		float: left;margin:0px;
-	}
+	pre {width: 100%;height:400px;border:1px solid #ddd;float: left;margin:0px;}
 
-  </style>
+	body .ace_editor{font-family:Consolas,"Liberation Mono", Menlo, Courier, monospace !important;}
+	div.ace_tooltip{font-size: 13px;font-family:Consolas,"Liberation Mono", Menlo, Courier, monospace;
+		border: 1px solid #e7de81;
+		background-color: #f9f2ad;
+		color: #333333;
+		transition:width 0.3;
+		background-image:none;
+		-webkit-box-shadow: 0 0 7px rgba(119, 119, 119, 0.2), inset 1px 1px transparent, inset -1px -1px transparent;
+		-moz-box-shadow: 0 0 7px rgba(119, 119, 119, 0.2), inset 1px 1px transparent, inset -1px -1px transparent;
+		box-shadow: 0 0 7px rgba(119, 119, 119, 0.2), inset 1px 1px transparent, inset -1px -1px transparent;
+	}
+	div.ace_tooltip hr{border:none;border-bottom:1px solid #e7de81;}
+	div.ace_editor.ace_autocomplete{background:#fff;box-shadow:0px 2px 10px rgba(0,0,0,.3);padding:2px;}
+	div.ace_editor.ace_autocomplete .ace_scroller{padding:3px;}
+	div.ace_editor.ace_autocomplete .ace_layer{margin-left: -2px;}
+	div.ace_editor.ace_autocomplete .ace_line{border-radius: 3px;}
+	
+	div.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line{background:#63acff !important;border-radius: 3px;}
+	div.ace_editor.ace_autocomplete .ace_line-hover {border:none;margin-top: 0;background:#eee;border-radius: 3px;}
+	div.ace_editor.ace_autocomplete .ace_selected{color:#fff;}
+	div.ace_editor.ace_autocomplete .ace_completion-highlight {color:#2882be;}
+	div.ace_editor.ace_autocomplete .ace_rightAlignedText{color:#aaa;}
+	div.ace_editor.ace_autocomplete .ace_selected .ace_completion-highlight{color: #cfe8ff !important;}
+	div.ace_editor.ace_autocomplete .ace_selected .ace_rightAlignedText{color: #fff;z-index: 10;opacity: .5;}
+</style>
+
 </head>
 <body>
 
 <pre id="editor">
-	var editor = ace.edit("editor");
-	ace.require("ace/ext/language_tools");
-	editor.setTheme("ace/theme/twilight");
-	editor.getSession().setMode("ace/mode/javascript");
-	editor.getSession().setTabSize(4);
-	editor.getSession().setUseWrapMode(true);
-	editor.commands.addCommand({
-		name: 'editSave',
-		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
-		exec: function(editor) {
-			console.log(editor.getValue());
+&lt;?php?&gt;
+define(function(require, exports) {
+	var dialogs			= {};
+	var dialog_focus_id = '';
+	var animate_time	= 160;
+	var _bindTab = function(){
+		$('.task_tab .tab').die('mouseenter').live('mouseenter',function (e) {
+			if (!$(this).hasClass('this')){
+				$(this).addClass('hover');
+			}
+		}).die('click').live('click',function(){
+			var id = $(this).attr('id');
+			var dialog = art.dialog.list[id];
+			var dom = $('.'+id);
+			if (dom.css('visibility') == 'hidden'){
+				dialog.display(true);
+			}else if(dom.hasClass('aui_state_focus')){
+				dialog.display(false);
+			}else{
+				dialog.zIndex();
+			}
+			
+		}).die('mouseleave').live('mouseleave',function(){
+			$(this).removeClass('hover');
+		}).die('dblclick').live('dblclick',function(){
+			//remove($(this).attr('id'));
+		});
+	};
+
+	// 拖拽——移动
+	var _bindDrag = function(){
+		var $self,$tabs,$drag,
+			isDraging = false,
+			isDragInit= false,
+			first_left= 0,
+			box_left  = 0,				
+			tab_width = 0,
+			tab_margin= 0,
+			tab_parent_width= 0,
+			tab_parent_left = 0,
+			current_animate_id;	//标签切换，当前动画所在的标签
+		$('.task_tab .tab').die('mousedown').live('mousedown',function(e){
+			$self = $(this);
+			isDraging = true;
+			//事件 在 window之外操作，继续保持。
+			if(this.setCapture) this.setCapture();
+			$(document).mousemove(function(e) {__dragMove(e);});
+			$(document).one('mouseup',function(e) {				
+				__dragEnd(e);
+				if(this.releaseCapture) {this.releaseCapture();}
+				stopPP(e);return false;
+			});
+		});
+		var __dragStart = function(e){
+			isDragInit = true,
+			first_left = e.pageX;
+			$tab_parent  = $('.task_tab');
+			$tabs = $('.task_tab .tab');
+			$(".tasktab-dragging").remove();
+			$drag = $self.clone().addClass("tasktab-dragging").prependTo('body');
+							
+			tab_margin= parseInt($tabs.css('margin-right'));
+			tab_parent_width = $tab_parent.width();
+			tab_parent_left  = $tab_parent.get(0).getBoundingClientRect().left;
+			tab_parent_left  = tab_parent_left+$(window).scrollLeft();
+			box_left = $self.get(0).getBoundingClientRect().left;
+			tab_width = parseInt($tabs.css('width'));
+
+			var top = $self.get(0).getBoundingClientRect().top-parseInt($self.css('margin-top'));
+			var left = e.clientX - first_left + box_left;
+
+			$('body').prepend("<div class='dragMaskView'></div>");
+			$drag.css({'width':tab_width+'px','top':top,'left':left});
+			$self.css('opacity',0);
+		};
+		var __dragMove = function(e){
+			if (!isDraging) return;
+			if(isDragInit==false){
+				__dragStart(e);
+			}
+
+			var left = e.clientX - first_left + box_left;
+			if (left < tab_parent_left 
+				|| left > tab_parent_left+tab_parent_width-tab_width){
+				return;// 拖出边界则不处理
+			}
+			$drag.css('left',left);
+			$tabs.each(function(i) {
+				var t_left = $(this).get(0).getBoundingClientRect().left;
+				if (left > t_left && left < t_left+tab_width/2+tab_margin){
+					if ($self.attr('id') == $(this).attr('id')) {
+						return;//当前区域移动，没有超过左右过半
+					}
+					__change($(this).attr('id'),'left');
+				}
+				if (left > t_left-tab_width/2+tab_margin && left < t_left){
+					if ($self.attr('id') == $(this).attr('id')) {
+						return;//当前区域移动，没有超过左右过半
+					}
+					__change($(this).attr('id'),'right');
+				}
+			});
+		};
+		// 标签交换位置
+		var __change  = function(id,change){
+			//chrome标签类似动画，动画进行中，，且为当前标签动画则继续	
+			if ($self.is(":animated") 
+				&& current_animate_id == id){
+				return;
+			}
+			//处理上次动画结束事物
+			current_animate_id = id;
+			$self.stop(true,true);
+			$('.insertTemp').remove();
+			$tabs = $('.task_tab .tab');
+			
+			var temp,width = $self.width();
+			var $move = $('.task_tab #'+id);
+			var	$insert = $self.clone(true).insertAfter($self)
+				.css({'margin-right':'0px','border':'none'}).addClass('insertTemp');
+
+			if (change == 'left') {
+				$self.after($move).css('width','0px');				
+			}else{
+				$self.before($move).css('width','0px');
+				$move.before($insert);
+			}					
+			$self.animate({'width':width+'px'},animate_time);
+			$insert.animate({'width':'0px'},animate_time,function(){
+				$(this).remove();
+				$tabs = $('.task_tab .tab');
+			});
+		};
+
+		var __dragEnd = function(e){
+			//if (!isDraging) return false;
+			isDraging = false;
+			isDragInit= false;
+			startTime = 0;
+			$('.dragMaskView').remove();
+			if ($drag == undefined) return;
+			box_left = $self.get(0).getBoundingClientRect().left;
+			$drag.animate({left:box_left+'px'},animate_time,function(){
+				$self.css('opacity',1);
+				$(this).remove();						
+			});
+		};
+	};
+
+	var _resetWidth = function(action){
+		var max_width	= 110;
+		var reset_width = max_width;
+		var max_width_all = max_width+12;		
+		var $tabs		= $('.task_tab .tab');
+		var full_width	= $('.task_tab .tabs').width()-50;
+		var count		= $tabs.length;
+		
+		//不用变化的个数				
+		var max_count = Math.floor(full_width/max_width_all);
+		if (count > max_count) {
+			reset_width = Math.floor(full_width/count)-12;
 		}
-	});
-	editor.setDragDelay(10);
-	editor.setFontSize(13);
-	editor.setShowPrintMargin(false);//显示固定宽度
-	//自动补全
-	editor.setOptions({
-        enableBasicAutocompletion: true,
-        enableSnippets: true
-    });
+		switch (action) {
+			case 'add':
+				$('.task_tab .tabs .this').css('width','0')
+				.animate({'width':reset_width+'px'},animate_time);
+			case 'close':
+				$tabs.animate({width:reset_width+'px'},animate_time);
+				break;
+			case 'resize':
+				$tabs.css('width',reset_width+'px');
+				break;
+			default:break;
+		}
+	}
+	var _add = function(id,title){
+		$('.task_tab').removeClass('hidden');
+		var title_hover = title.replace(/<[^>]+>/g,"");
+		var html_tab = '<div class="tab taskBarMenu" id="'+id+'" title="'+title_hover+'">'+title+'</div>';
+		$(html_tab).insertBefore('.task_tab .last');
+		_resetWidth('add');
+		dialogs[id] = {id:id,name:name};
+	};
+	//选中
+	var _focus = function(selectID) {
+		//添加最初标签，或者标签不存在
+		$('.task_tab .this').removeClass('this');
+		$('.task_tab #'+selectID).addClass('this');
+		dialog_focus_id = selectID;
+	};
+	//删除
+	var _close = function(selectID) {
+		delete dialogs[selectID];
+		$('.task_tab #'+selectID).animate({width:0},animate_time,function(){
+			$('.task_tab #'+selectID).remove();
+			_resetWidth('close');
+			if ($('.tabs .tab').length == 0) {
+				$('.task_tab').addClass('hidden');
+			}
+		});
+	};
+
+	//----------------------------------------
+	//交互只能完成基本功能，如果同时调用对话框，会形成死循环。
+	return {
+		add:_add,
+		focus:_focus,
+		close:_close,
+		init:function(){
+			var html = 
+				'<div class="task_tab hidden"><div class="tabs">'+
+				'<div class="last" style="clear:both;"></div></div></div>';
+			$(html).appendTo('body');
+			$(window).bind("resize",function(){
+				_resetWidth('resize');
+			});
+			_bindTab();
+			_bindDrag();
+		}
+	}
+});
+
+
 </pre>
+
 	
 <script src="src-min-noconflict/ace.js"></script>
 <script src="src-min-noconflict/ext-language_tools.js"></script>
 <script>
+	var mode_type = 'javascript';
 	var editor = ace.edit("editor");
 	ace.require("ace/ext/language_tools");
-	editor.setTheme("ace/theme/chrome");
-	editor.getSession().setMode("ace/mode/javascript");
+	editor.setTheme("ace/theme/github");
+	editor.getSession().setMode("ace/mode/javascript");//javascript php
 	editor.getSession().setTabSize(4);
 	editor.getSession().setUseWrapMode(true);
-	
+	editor.setDragDelay(10);
+	editor.setFontSize(14);
+	editor.setShowPrintMargin(false);//显示固定宽度
 	editor.commands.addCommand({
 		name: 'editSave',
 		bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
 		exec: function(editor) {
 			console.log(editor.getValue());
 		}
-	});
-	editor.setDragDelay(10);
-	editor.setFontSize(14);
-	editor.setShowPrintMargin(false);//显示固定宽度
+	});	
 	//自动补全
-	editor.setOptions({
-        enableBasicAutocompletion:{"text":"true","keyword":"true","snippet":"true"},
+    editor.setOptions({
+        enableBasicAutocompletion:true,
         enableSnippets: true,
         enableLiveAutocompletion: true
     });
     editor.on("change", function(e){//ace_selected
-    	var auto = $('.ace_text-layer .ace_line');
-    	if (auto && auto.length>=1) {
-    		auto.removeClass('ace_selected').first().addClass('ace_selected')
-    	}
-	})
+        //test(mode_type);
+    });
 
 
 	//editor.setValue('asdf');
-	// editor.redo();//反撤销
-	// editor.undo();//撤销
-
+	//editor.redo();//反撤销
+	//editor.undo();//撤销
 	//editor.toLowerCase();选中内容转换成小写
 	//editor.toUpperCase();
 	//editor.setShowInvisibles(true);//显示不可见字符
 	//editor.navigateTo(7,0);//跳转到指定行，并且显示到可视区域内
+
+	//匹配参数 \([\w,\s\*\[\]\<\>&]*\)  
+	//匹配c函数修饰与返回值：([\w*]+\s+)+\*? 
+	var language_match={
+		"php":[//ok
+			{
+				reg:/\s*function\s+(\w*)\s*\(.*\)*/g,
+				reg_name:/.*function\s+(\w*)\s*\(/,
+				reg_index:1,//name对应匹配的位置eg:\1
+				type:'function'
+			},
+			{
+				reg:/\s*class\s+(\w*)\s*.*\{/g,
+				reg_name:/\s*class\s+(\w*)\s*.*\{/,
+				reg_index:1,
+				type:'class'
+			}
+		],
+		"javascript":[//ok
+			{//var test = function()
+				reg:/\s+(\w*)\s*=\s*function\s*\(.*\)/g,
+				reg_name:/\s+(\w*)\s*=\s*function\s*\(.*\)/,
+				reg_index:1,
+				type:'function function_var'
+			},
+			{//function test()
+				reg:/\s*function\s+(\w*).*\{*/g,
+				reg_name:/\s*function\s+(\w*).*\{/,
+				reg_index:1,
+				type:'function function_define'
+			},
+			{//a:function()
+				reg:/\s*(\w*)\s*:+\s*function\s*\(.*\)/g,
+				reg_name:/\s*(\w*)\s*:+\s*function\s*\(.*\)/,
+				reg_index:1,
+				type:'function function_value'
+			}
+		],
+		"python":[//ok
+			{// class MethodCommenter 
+				reg:/\s*class\s+(\w*)\s*\(/g,
+				reg_name:/\s*class\s+(\w*)\s*\(/,
+				reg_index:1,
+				type:'class'
+			},
+			{//def getSort(arr)
+				reg:/\s*def\s+(\w*)\s*\(.*\)/g,
+				reg_name:/\s*def\s+(\w*)\s*\(.*\)/,
+				reg_index:1,
+				type:'function'
+			}
+		],
+		"ruby":[//ok
+			{// class MethodCommenter 
+				reg:/\n\s*class\s+(\w*)\s*/g,
+				reg_name:/\n\s*class\s+(\w*)\s*/,
+				reg_index:1,
+				type:'class'
+			},
+			{//def getSort(arr)
+				reg:/\n\s*def\s+(\w*)\s*/g,
+				reg_name:/\n\s*def\s+(\w*)\s*/,
+				reg_index:1,
+				type:'function'
+			},
+		],
+		"java":[//ok
+			{
+				reg:/\s*(final)?\s*(public|private|protected)\s*.*\s+(\w*)\s*\(.*\).*\{/g,
+				reg_name:/\s*(final)?\s*(public|private|protected)\s*.*\s+(\w*)\s*\(.*\).*\{/,
+				reg_index:3,
+				type:'function'
+			},
+			{
+				reg:/\s*class\s+(\w*)\s*/g,
+				reg_name:/\s*class\s+(\w*)\s*/,
+				reg_index:1,
+				type:'class'
+			}
+		],
+		"objectivec":[//ok
+			{//-(int) test:(){};
+				reg:/[\+-]\s*\(.*\)\s*(\w*)\s*\:\s*\(.*/g,
+				reg_name:/[\+-]\s*\(.*\)\s*(\w*)\s*\:\s*\(.*/,
+				reg_index:1,
+				type:'function'
+			},
+			{//-(int) test{};
+				reg:/[\+-]\s*\([^:\{\}]*\)\s*(\w*)\s*\{/g,
+				reg_name:/[\+-]\s*\([^:\{\}]*\)\s*(\w*)\s*\{/,
+				reg_index:1,
+				type:'function'
+			},
+			{// int *test(int argc, char const *argv[])
+				reg:/([\w*]+\s+)+\*?(\w+)\s*\([\w,\s\*\[\]\<\>&]*\)\s*\{/g,
+				reg_name:/(\w+\s*)+\s(\*?\w+)\s*\(/,
+				reg_index:2,
+				type:'function function_define'
+			},			
+			{//@implementation BLEDeviceViewController
+				reg:/@implementation\s+(\w*)[\s\(\n]+/g,
+				reg_name:/@implementation\s+(\w*)[\s\(\n]+/,
+				reg_index:1,
+				type:'class'
+			},			
+			{//#pragma mark - BleClientDelegate
+				reg:/#pragma\s+(mark\s+)?(.*)/g,
+				reg_name:/#pragma\s+(mark\s+)?(.*)/,
+				reg_index:2,
+				type:'mark'
+			}
+		],
+		"c_cpp":[//
+			{// int *test(int argc, char const *argv[])
+				reg:/([\w*]+\s+)+\*?(\w+)\s*\([\w,\s\*\[\]\<\>&]*\)\s*\{/g,
+				reg_name:/(\w+\s*)+\s(\*?\w+)\s*\(/,
+				reg_index:2,
+				type:'function'
+			},
+			{//void Robot::closedb(){  Robot::~Robot(){
+				reg:/\s*(\w+)::~?(\w+)\s*\([\w,\s\*\[\]\<\>&]*\)\s*\{/g,
+				reg_name:/\s*(\w+)::~?(\w+)\s*\(/,
+				reg_index:3,
+				type:'function function_define'
+			},
+			{// class CkxlolDlgBuild : public CDialogEx
+				reg:/\s*class\s+(\w+)\s*:/g,
+				reg_name:/\s*class\s+(\w+)\s*:/,
+				reg_index:1,
+				type:'class'
+			}
+			// {// template <class T,int MAXSIZE> void Stack<T, MAXSIZE>::push(T const& elem)
+			// 	reg:/\s*template\s*\<[\w,\s\*\[\]\<\>]*\>\s*.*(\w+)\s*\(/g,
+			// 	reg_name:/(\w+\s*)+\s(\*?\w+)\s*\(/,
+			// 	reg_index:2,
+			// 	type:'function function_define'
+			// },
+		]
+	};
+
+	//正则匹配查找；并定位字符所在位置。
+	function reg_exec(str,reg_info){
+		var match_list = str.match(reg_info.reg);
+		if (!match_list) return;
+		var result = [],
+			match_len=match_list.length,
+			str_start=0,
+			current_str=str;	
+		console.log(11111111,match_list,match_list.length);	
+		for(var i=0;i<match_len;i++){
+			var info = {};
+			info.the_match = match_list[i];			
+			var match_name = info.the_match.match(reg_info.reg_name);
+			//var match_name = reg_info.reg_name.exec(info.the_match);
+			if (match_name.length<2 || !match_name[reg_info.reg_index]){//匹配出错则跳过
+				//console.log('跳过',match_name);
+				continue;
+			}
+
+			info.name = match_name[reg_info.reg_index];
+			var match_pos = current_str.indexOf(info.the_match);
+			var name_match_pos = info.the_match.indexOf(info.name);
+			info.pos_start = str_start+match_pos+name_match_pos;
+			info.pos_end = info.pos_start+info.name.length;
+
+			console.log(info.name,'----',match_name,'-----',info.the_match,reg_info.reg_name);
+			//从剩下的str中匹配
+			str_start=str_start + match_pos+info.the_match.length;
+			current_str = str.substr(str_start);
+			info.type = reg_info.type;
+			result.push(info);
+		}
+		return result;
+	}
+
+	//list_make(editor.getValue(),'php');	
+	function list_make(string,type){
+		if (typeof(language_match[type]) == 'undefined') return;
+		var reg_match = language_match[type];
+		var match_result = [];
+		//匹配多个类型
+		for (var i = 0; i < reg_match.length; i++) {
+			var match_type = reg_exec(string,reg_match[i]);			
+			if (match_type) {
+				Array.prototype.push.apply(match_result,match_type);
+			}
+		}
+
+		//排序
+		match_result.sort(function(a, b) {
+			var filed = 'pos_start';
+		    if (a[filed] < b[filed]) { return -1; }
+		    if (a[filed] >= b[filed]) { return 1; }
+		});
+
+		//根据在字符串的位置，定位行列数
+		var str_arr = string.split('\n');
+		var str_arr_len = str_arr.length;
+		var match_index = 0,//函数列表的位置
+			info = match_result[match_index],//函数列表位置pose
+			str_pose=0;//字符串截止到当前行当前位置
+		for (var line = 0;line<str_arr_len;line++){
+			if (!info) break;
+			if (info.pos_start >= str_pose && 
+				info.pos_start<=str_pose+str_arr[line].length) {
+				match_result[match_index].range = {//range 追加到info
+					start:{row:line,column:info.pos_start-str_pose},
+					end:  {row:line,column:info.pos_end-str_pose}
+				};
+				match_index++;
+				info = match_result[match_index];//
+			}
+			str_pose = str_pose+str_arr[line].length+1;
+		}
+		console.log(match_result);
+		return match_result;
+	}
+
+	//edit.js  _resetWidth  167行；没有break；
+	function test_run(i,arr) {		
+		if (i>=arr.length) return;
+		setTimeout(function () {
+			test_run(i+1,arr);
+			editor.selection.setSelectionRange(arr[i].range,true);
+		},1000);
+	}
+	//list_make(editor.getValue(),'php');
+	//test('php');
+	function test(type){
+		var list = list_make(editor.getValue(),type);
+		if (!list) return;
+		test_run(0,list);
+	}
 </script>
 
 </body>

@@ -25,7 +25,7 @@ class editor extends Controller{
 	// 获取文件数据
 	public function fileGet(){
 		$filename=_DIR($this->in['filename']);
-		if (!is_readable($filename)) show_json($this->L['no_permission'],false);
+		if (!is_readable($filename)) show_json($this->L['no_permission_read'],false);
 		if (filesize($filename) >= 1024*1024*20) show_json($this->L['edit_too_big'],false);
 
 		$filecontents=file_get_contents($filename);//文件内容
@@ -63,10 +63,11 @@ class editor extends Controller{
 	public function getConfig(){
 		$default = array(
 			'font_size'		=> '14px',
-			'theme'			=> 'github',
+			'theme'			=> 'clouds',
 			'auto_wrap'		=> 0,
 			'display_char'	=> 0,
-			'auto_complete'	=> 1
+			'auto_complete'	=> 1,
+			'function_list' => 1
 		);
 		$config_file = USER.'data/editor_config.php';		
 		if (!file_exists($config_file)) {//不存在则创建
@@ -76,17 +77,26 @@ class editor extends Controller{
 			$sql=new fileCache($config_file);
 			$default = $sql->get();
 		}
+		if (!isset($default['function_list'])) {
+			$default['function_list'] = 1;
+		}
 		return json_encode($default);
     }
 	/*
 	* 获取编辑器配置信息
 	*/
 	public function setConfig(){
-		$key   = $this->in['k'];$value = $this->in['v'];
+		$file = USER.'data/editor_config.php';	
+        if (!is_writeable($file)) {//配置不可写
+            show_json($this->L['no_permission_write'],false);
+        }
+		$key= $this->in['k'];
+		$value = $this->in['v'];
         if ($key !='' && $value != '') {
-        	$config_file = USER.'data/editor_config.php';	
-        	$sql=new fileCache($config_file);
-        	$default = $sql->update($key,$value);
+        	$sql=new fileCache($file);
+        	if(!$sql->update($key,$value)){
+        		$sql->add($key,$value);//没有则添加一条
+        	}
             show_json($this->L["setting_success"]);
         }else{
             show_json($this->L['error'],false);

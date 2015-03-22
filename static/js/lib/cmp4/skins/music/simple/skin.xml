@@ -1,0 +1,23 @@
+﻿<skin name="Manila" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" preview="" mask_color="" show_tips="0">
+  <list xywh="0C, -20C, 100P, 60B" src="" mask="" lock="1" display="1" group="A" fade="0">
+    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" underline="0, 1" color="#ffffff, #ffffff" shadow="1,90,#000000,0.5,4,4,1,1" />
+	<scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src=""/>
+  </list>
+  <lrc xywh="0C, 60R, 100P, 20" src="" mask="" lock="1" display="1" group="A" glow="">
+    <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" leading="0" color="#666666, #eeeeee" horizontal="1" max_scale="2" max_button="0" />
+  </lrc>
+  <media xywh="0C, -20C, 100P, 60B" src="" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P" />
+  </media>
+  <console xywh="0, 0, 100P, 100P" src="console.swf" mask="" lock="1" display="1" group="A" snap="" shadow="" bg="bg.jpg">
+    <bt_play xywh="0C, 10R, 20, 25" src="bt_play.png" />
+    <bt_stop xywh="-35C, 10R, 20, 25" src="bt_stop.png" />
+    <bt_next xywh="-68C, 10R, 20, 25" src="bt_next.png" />
+    <bt_prev xywh="-98C, 10R, 20, 25" src="bt_prev.png" />
+    <bt_mute xywh="35C, 10R, 20, 25" src="bt_mute.png" />
+    <volume xywh="82C, 17R, 46, 8" thumb_src="" track_src="volume_track.png" />
+    <progress xywh="0C, 43R, 150, 7" thumb_src="progress_thumb.png" track_src="progress_track.png" />
+    <title xywh="0C, 0, 240, 18" align="center" font="Verdana" size="12" color="#cccccc" bold="1" borderColor="" />
+    <status xywh="0C, 20, 240, 18" align="center" font="Verdana" size="12" color="#999999" borderColor="" />
+  </console>
+</skin>
