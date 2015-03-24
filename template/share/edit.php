@@ -84,9 +84,8 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		</div>
 	</div>
 
-
+<script src="./index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
-<script src="<?php echo APPHOST;?>/index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
@@ -96,18 +95,12 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.code_config = <?php echo json_encode($editor_config);?>;
 	G.code_theme_all = "<?php echo $config['setting_all']['codethemeall']?>";
-
 	G.theme = "<?php echo $config_theme;?>";
-	G.list_type = "<?php echo $config_list_type;?>";
-	G.sort_field = "<?php echo $config_sort_field;?>";
-	G.sort_order = "<?php echo $config_sort_order;?>";
-	G.musictheme = "<?php echo $config_musictheme;?>";
-	G.movietheme = "<?php echo $config_movietheme;?>";
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
 		map:[
-			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
 	seajs.use("app/src/edit/main");	

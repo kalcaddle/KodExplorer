@@ -100,8 +100,9 @@ class user extends Controller
             $basic_path = '/';//对非root用户隐藏所有地址
         }
         $the_config = array(
-            'lang'          => $GLOBALS['language'],
+            'lang'          => LANGUAGE_TYPE,
             'is_root'       => $GLOBALS['is_root'],
+            'user_name'     => $this->user['name'],
             'web_root'      => $GLOBALS['web_root'],
             'web_host'      => HOST,
             'static_path'   => STATIC_PATH,
@@ -247,16 +248,18 @@ class user extends Controller
             $auth['userShare:set'] = 1;
         }
         if(!isset($auth['explorer:fileDownload'])){
-            $auth['explorer:fileDownload'] = 0;
+            $auth['explorer:fileDownload'] = 1;
         }
         //默认扩展功能 等价权限
         $auth['user:common_js'] = 1;//权限数据配置后输出到前端
         $auth['explorer:pathChmod']         = $auth['explorer:pathRname'];
         $auth['explorer:pathDeleteRecycle'] = $auth['explorer:pathDelete'];
         $auth['explorer:pathCopyDrag']      = $auth['explorer:pathCuteDrag'];
+        
         $auth['explorer:fileDownloadRemove']= $auth['explorer:fileDownload'];
         $auth['explorer:zipDownload']       = $auth['explorer:fileDownload'];
         $auth['explorer:fileProxy']         = $auth['explorer:fileDownload'];
+        $auth['editor:fileGet']             = $auth['explorer:fileDownload'];
         $auth['explorer:makeFileProxy']     = $auth['explorer:fileDownload'];
         $auth['userShare:del']              = $auth['userShare:set'];
         if ($auth[$key] != 1) show_json($this->L['no_permission'],false);

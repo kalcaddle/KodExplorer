@@ -130,12 +130,13 @@ var Cookie = (function(){
 		return cookie[key];		
 	};
 	var set = function(key,value,timeout){
-		var str = key+"="+escape(value);//不设置时间代表跟随页面生命周期
-		if (timeout != undefined){//时间以小时计
-			var date = new Date();
-        	date.setTime(date.getTime() + 1000*3600 * timeout);
-        	str += "; expires=" + date.toGMTString();
+		var str = escape(key)+"="+escape(value);//不设置时间代表跟随页面生命周期
+		if (timeout == undefined){//时间以小时计
+			timeout = 365;
 		}
+		var expDate=new Date(); 
+		expDate.setTime(expDate.getTime() + timeout*3600*24*1000);
+        str += "; path=/; expires="+expDate.toGMTString();
         document.cookie = str;
 	};
 	var del = function(key){
@@ -281,6 +282,25 @@ var Tips =  (function(){
 		close:close
 	}
 })();
+
+//获取keys
+var objectKeys = function(obj){
+	var keys = [];
+    for(var p in obj){
+        if(obj.hasOwnProperty(p)){
+            keys.push(p);
+        }
+    }
+    return keys;
+}
+//获取values
+var objectValues = function(obj){
+	var values = [];
+    for(var p in obj){
+        keys.push(obj[p]);
+    }
+    return values;
+}
 
 
 //通用遮罩层
@@ -443,22 +463,17 @@ var MaskView =  (function(){
     };
 })(jQuery);
 
-//dom绑定enter事件  用于input
 (function($){
-	$.fn.extend({        
+	$.fn.extend({
+		//dom绑定enter事件  用于input
 		keyEnter:function(callback){
 			$(this).die('keydown').live('keydown',function(e){      
 				if (e.keyCode == 13 && callback){
 					callback();
 				}
 			});
-		}
-	});
-})(jQuery);
-
-//dom绑定鼠标滚轮事件
-(function($){
-	$.fn.extend({
+		},
+		//dom绑定鼠标滚轮事件
 		mousewheel: function(fn){
 	        var mousewheel = jQuery.browser.mozilla ? "DOMMouseScroll" : "mousewheel";
 	        $(this).bind(mousewheel ,function(e){
@@ -467,11 +482,25 @@ var MaskView =  (function(){
 	            fn.call(this,delta);
 	            return false;
 	        });
+	    },
+	    //晃动 $('.wrap').shake(4,4,100);
+		shake: function(times,offset,delay){
+	        this.stop().each(function(){
+			    var Obj = $(this);
+			    var marginLeft = parseInt(Obj.css('margin-left'));
+			    var delay = delay > 50 ? delay : 50; 
+			    Obj.animate({'margin-left':marginLeft+offset},delay,function(){
+		        	Obj.animate({'margin-left':marginLeft},delay,function(){
+			            times = times - 1;
+			            if(times > 0)
+			            Obj.shake(times,offset,delay);
+		            })
+		        });
+		    });
+		    return this;
 	    }
     });
 })(jQuery);
-
-
 
 
 (function($){

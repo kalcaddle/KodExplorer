@@ -128,14 +128,12 @@ class explorer extends Controller{
         if (isset($this->in['type']) && $this->in['type']=='init'){
             $this->_tree_init($app);
         }
-        
         if (isset($this->in['this_path'])){
             $path=_DIR($this->in['this_path']);
         }else{
             $path=_DIR($this->in['path'].$this->in['name']);
         }
-        //if (!is_readable($path)) show_json($path,false);
-
+        if (!is_readable($path)) show_json($path,false);
         $list_file = ($app == 'editor'?true:false);//编辑器内列出文件
         $list=$this->path($path,$list_file,true);
         function sort_by_key($a, $b){
@@ -184,23 +182,23 @@ class explorer extends Controller{
         }
 
         $list_root  = $this->path(_DIR(MYHOME),$check_file,true);
-        $list_share = $this->path(_DIR(PUBLIC_PATH),$check_file,true);
+        $list_public = $this->path(PUBLIC_PATH,$check_file,true);
         if ($check_file) {//编辑器
             $root = array_merge($list_root['folderlist'],$list_root['filelist']);
-            $share = array_merge($list_share['folderlist'],$list_share['filelist']);
+            $public = array_merge($list_public['folderlist'],$list_public['filelist']);
         }else{//文件管理器
             $root  = $list_root['folderlist'];
-            $share = $list_share['folderlist'];
+            $public = $list_public['folderlist'];
         }
 
         $root_isparent = count($root)>0?true:false;
-        $public_isparent = count($share)>0?true:false;
+        $public_isparent = count($public)>0?true:false;
         $tree_data = array(
             array('name'=>$this->L['fav'],'iconSkin'=>"fav",
                 'menuType'  => "menuTreeFavRoot",'open'=>true,'children'=>$fav),                
             array('name'=>$this->L['root_path'],'children'=>$root,'menuType'=>"menuTreeRoot",
                 'iconSkin'=>"my",'open'=>true,'this_path'=> MYHOME,'isParent'=>$root_isparent),
-            array('name'=>$this->L['public_path'],'children'=>$share,'menuType'=>"menuTreeRoot",
+            array('name'=>$this->L['public_path'],'children'=>$public,'menuType'=>"menuTreeRoot",
                 'iconSkin'=>"lib",'open'=>true,'this_path'=> '*public*','isParent'=>$public_isparent)
         );
         show_json($tree_data);
@@ -717,7 +715,6 @@ class explorer extends Controller{
         }
         $list['filelist'] = $filelist_new;
         $list['folderlist'] = $folderlist_new;
-
         //读写权限判断
         $list['path_type'] = 'readable';
         if (is_writable($dir)) {

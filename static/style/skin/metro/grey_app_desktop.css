@@ -64,8 +64,8 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .topbar .content .top_right div.share_info_user .btn_download,.topbar .content .top_right div.share_info_user .btn.button_my_share { padding: 4px 20px; margin-left: 5px;}
 .topbar .content .top_right div.share_info_user .dropdown-toggle { height: 16px;}
 .common_footer { position: fixed; bottom: 0px; background: #f8f8f8; color: #999; font-size: 13px; width: 100%; text-align: center; border-top: 1px solid #e8e8e8; height: 31px; line-height: 32px; overflow: hidden;}
-.common_footer .copyright_bottom { cursor: pointer; font-size: 16px; color: #666;}
-.common_footer .copyright_bottom:hover { color: #f60;}
+.common_footer .copyright_bottom { cursor: pointer; font-size: 16px; color: #aaa; text-decoration: none;}
+.common_footer .copyright_bottom:hover { color: #f60; border-bottom: none;}
 .do_search { color: #888; min-width: 452px;}
 .do_search .search_header { padding: 10px; padding-bottom: 0px;}
 .do_search .search_header input[type='checkbox'] { padding-left: 10px;}
@@ -135,6 +135,7 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .copyright_dialog.dialog-simple .aui_inner { border: none; background: none;}
 .copyright_dialog.dialog-simple .aui_title { opacity: 0.01; filter: alpha(opacity=1); height: 150px; width: 410px; margin-bottom: -120px; position: absolute; z-index: 10;}
 .copyright_dialog.dialog-simple .aui_min,.copyright_dialog.dialog-simple .aui_max { display: none;}
+.copyright_dialog.dialog-simple .aui_nw,.copyright_dialog.dialog-simple .aui_ne { height: 0px;}
 .copyright_dialog.dialog-simple .aui_close { border-radius: 12px; opacity: 0.4; filter: alpha(opacity=40); margin-top: 3px; margin-right: 3px; z-index: 999;}
 .copyright_dialog .aui_footer { display: none;}
 .copyright_dialog .copyright_dialog_content { -webkit-box-shadow: 0px 10px 60px rgba(0,0,0,0.4); -moz-box-shadow: 0px 10px 60px rgba(0,0,0,0.4); box-shadow: 0px 10px 60px rgba(0,0,0,0.4); width: auto; border-radius: 3px; padding-bottom: 30px; background: #fff; background: rgba(255,255,255,0.9); border: 1px solid #ccc \9;}
@@ -148,14 +149,16 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .copyright_dialog .copyright_dialog_content .content div { text-align: center; padding-bottom: 5px;}
 .share_dialog.dialog-simple .aui_header { background: transparent; opacity: 1; filter: alpha(opacity=100);}
 .share_dialog.dialog-simple .aui_titleBar { bottom: 0px;}
+.share_dialog.dialog-simple .aui_nw,.share_dialog.dialog-simple .aui_ne { height: 0px;}
 .share_dialog.dialog-simple .aui_inner { border: none; background: none;}
 .share_dialog.dialog-simple .aui_title { opacity: 0.01; filter: alpha(opacity=1); height: 120px; margin-bottom: -120px;}
 .share_dialog.dialog-simple .aui_min,.share_dialog.dialog-simple .aui_max { display: none;}
 .share_dialog.dialog-simple .aui_close { border-radius: 12px; top: 6px; opacity: 0.4; filter: alpha(opacity=40);}
 .share_dialog .aui_footer { display: none;}
 .share_dialog .content_box { -webkit-box-shadow: 0 5px 30px rgba(0,0,0,0.5); -moz-box-shadow: 0 5px 30px rgba(0,0,0,0.5); box-shadow: 0 5px 30px rgba(0,0,0,0.5); border-radius: 5px; background: #fff; border: 1px solid #ccc \9; width: auto;}
-.share_dialog .content_box .title { width: 100%; color: #fff; height: 120px; border-radius: 5px 5px 0 0; background: #6699cc url('../../../images//login.png');}
+.share_dialog .content_box .title { width: 100%; color: #fff; height: 120px; border-radius: 5px 5px 0 0; background: #6699cc url('../../../images/login.png');}
 .share_dialog .content_box .titleinfo { text-align: center; font-size: 40px; line-height: 120px; font-weight: lighter;}
+.share_dialog .content_box .share_view_info { width: 200px; margin: 0 auto; margin-top: -33px; padding: 2px 5px; text-align: center; border-radius: 17px; background: #888; background: rgba(0,0,0,0.2);}
 .share_dialog .content_box .content_info { padding: 15px;}
 .share_dialog .content_box .content_info .input_line { margin: 10px 0 10px 0;}
 .share_dialog .content_box .content_info .input_line .input_title { display: block; width: 80px; line-height: 35px; font-size: 14px; overflow: hidden; float: left; padding-right: 10px; text-align: right;}
@@ -341,6 +344,7 @@ div.dialog-simple .aui_min { right: 56px;}
 div.dialog-simple .aui_dialog { background: none;}
 div.dialog-simple .resize-bottom-right { background: none !important;}
 div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
+div.dialog-simple .aui_nw,div.dialog-simple .aui_ne { height: 0px;}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
 body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(opacity=100);}
 #selContainer { position: absolute; width: 0px; height: 0px; border: 1px solid #000000; background-color: #444; z-index: 1000; opacity: 0.6; filter: alpha(opacity=60);}

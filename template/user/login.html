@@ -49,15 +49,15 @@
 			<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo $L['guest_login'];?><i class=' icon-arrow-right'></i></a></div>
 		</div>
 	</div>
-<?php include(TEMPLATE.'common/footer.html');?>
-<script src="<?php echo APPHOST;?>/index.php?share/common_js#id=<?php echo rand_string(8);?>"></script>
+<div class="common_footer"><?php echo $L['copyright_pre'].' v'.KOD_VERSION.' | '.$L['copyright_info'];?></div>
+<script src="./index.php?share/common_js#id=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
 		map:[
-			[ /^(.*\.(?:css|js|html))(.*)$/i,'$1?ver='+G.version]
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
 	seajs.use("<?php echo STATIC_JS;?>/src/user/main");

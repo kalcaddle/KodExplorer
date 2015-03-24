@@ -23,22 +23,23 @@
 	<img class="wallbackground" src="" style='overflow:hidden;position:fixed;'/>
 	<div class='bodymain html5_drag_upload_box desktop'>
 		<div class="fileContiner fileList_icon hidden">
-			<div class="file systemBox menuDefault" data-app='{"name":"","resize":1,"type":"app","width":"800","height":"500","content":"core.explorer();"}'>
+			<div class="file systemBox menuDefault" 
+			data-app={"type":"app","width":"","height":"","content":"core.explorer('',LNG.my_computer);"}>
 				<div class="ico" filetype="oexe" style="background-image:url(<?php echo STATIC_PATH;?>images/app/computer.png)"></div>
-				<div class="titleBox"><span><?php echo $L['my_cumputer'];?></span></div>
+				<div class="titleBox"><span><?php echo $L['my_computer'];?></span></div>
 			</div>
 			<div class="file systemBox menuRecycleButton" title="<?php echo $L['setting'];?>"
-			data-app={"type":"app","width":"","height":"","content":"core.explorer('*recycle*/');"}>
+			data-app={"type":"app","width":"","height":"","content":"core.explorer('*recycle*/',LNG.recycle);"}>
 				<div class="ico" filetype="oexe" style="background-image:url(<?php echo STATIC_PATH;?>images/app/recycle.png)"></div>
 				<div class="titleBox" ><span><?php echo $L['recycle'];?></span></div>
 			</div>
 			<div class="file systemBox menuDefault" title="<?php echo $L['setting'];?>"
-			data-app='{"type":"app","width":"","height":"","content":"core.setting();"}'>
+			data-app={"type":"app","width":"","height":"","content":"core.setting();"}>
 				<div class="ico" filetype="oexe" style="background-image:url(<?php echo STATIC_PATH;?>images/app/setting.png)"></div>
 				<div class="titleBox" ><span><?php echo $L['setting'];?></span></div>
 			</div>
 			<div class="file systemBox menuDefault" title="<?php echo $L['app_store'];?>"
-			data-app='{"type":"app","width":"","height":"","content":"core.appStore();"}'>
+			data-app={"type":"app","width":"","height":"","content":"core.appStore();"}>
 				<div class="ico" filetype="oexe" style="background-image:url(<?php echo STATIC_PATH;?>images/app/market.png)"></div>
 				<div class="titleBox"><span><?php echo $L['app_store'];?></span></div>
 			</div>
@@ -75,14 +76,14 @@
 		</ul>
 	</div>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
-<script src="<?php echo APPHOST;?>/index.php?user/common_js&type=desktop&id=<?php echo rand_string(8);?>"></script>
+<script src="./index.php?user/common_js&type=desktop&id=<?php echo rand_string(8);?>"></script>
 <script type="text/javascript">
 	G.this_path = "<?php echo MYHOME.'desktop/';?>";
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
 		map:[
-			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
 	seajs.use("app/src/desktop/main");

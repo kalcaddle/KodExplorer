@@ -25,7 +25,7 @@
 				<ul class="dropdown-menu topbar_language fadein pull-right" role="menu" aria-labelledby="topbar_language">
 				  	<?php 
 						$tpl="<li><a href='javascript:core.language(\"{0}\");' class='{this}'>{1}</a></li>";
-						echo getTplList(',',':',$config['setting_all']['language'],$tpl,$GLOBALS['language']);
+						echo getTplList(',',':',$config['setting_all']['language'],$tpl,LANGUAGE_TYPE);
 					?>
 				</ul>
 			</div>

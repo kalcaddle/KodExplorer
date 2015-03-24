@@ -64,8 +64,8 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .topbar .content .top_right div.share_info_user .btn_download,.topbar .content .top_right div.share_info_user .btn.button_my_share { padding: 4px 20px; margin-left: 5px;}
 .topbar .content .top_right div.share_info_user .dropdown-toggle { height: 16px;}
 .common_footer { position: fixed; bottom: 0px; background: #f8f8f8; color: #999; font-size: 13px; width: 100%; text-align: center; border-top: 1px solid #e8e8e8; height: 31px; line-height: 32px; overflow: hidden;}
-.common_footer .copyright_bottom { cursor: pointer; font-size: 16px; color: #666;}
-.common_footer .copyright_bottom:hover { color: #f60;}
+.common_footer .copyright_bottom { cursor: pointer; font-size: 16px; color: #aaa; text-decoration: none;}
+.common_footer .copyright_bottom:hover { color: #f60; border-bottom: none;}
 .do_search { color: #888; min-width: 452px;}
 .do_search .search_header { padding: 10px; padding-bottom: 0px;}
 .do_search .search_header input[type='checkbox'] { padding-left: 10px;}
@@ -135,6 +135,7 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .copyright_dialog.dialog-simple .aui_inner { border: none; background: none;}
 .copyright_dialog.dialog-simple .aui_title { opacity: 0.01; filter: alpha(opacity=1); height: 150px; width: 410px; margin-bottom: -120px; position: absolute; z-index: 10;}
 .copyright_dialog.dialog-simple .aui_min,.copyright_dialog.dialog-simple .aui_max { display: none;}
+.copyright_dialog.dialog-simple .aui_nw,.copyright_dialog.dialog-simple .aui_ne { height: 0px;}
 .copyright_dialog.dialog-simple .aui_close { border-radius: 12px; opacity: 0.4; filter: alpha(opacity=40); margin-top: 3px; margin-right: 3px; z-index: 999;}
 .copyright_dialog .aui_footer { display: none;}
 .copyright_dialog .copyright_dialog_content { -webkit-box-shadow: 0px 10px 60px rgba(0,0,0,0.4); -moz-box-shadow: 0px 10px 60px rgba(0,0,0,0.4); box-shadow: 0px 10px 60px rgba(0,0,0,0.4); width: auto; border-radius: 3px; padding-bottom: 30px; background: #fff; background: rgba(255,255,255,0.9); border: 1px solid #ccc \9;}
@@ -148,14 +149,16 @@ input { border: 1px solid #ddd; background: #fff; outline: none;}
 .copyright_dialog .copyright_dialog_content .content div { text-align: center; padding-bottom: 5px;}
 .share_dialog.dialog-simple .aui_header { background: transparent; opacity: 1; filter: alpha(opacity=100);}
 .share_dialog.dialog-simple .aui_titleBar { bottom: 0px;}
+.share_dialog.dialog-simple .aui_nw,.share_dialog.dialog-simple .aui_ne { height: 0px;}
 .share_dialog.dialog-simple .aui_inner { border: none; background: none;}
 .share_dialog.dialog-simple .aui_title { opacity: 0.01; filter: alpha(opacity=1); height: 120px; margin-bottom: -120px;}
 .share_dialog.dialog-simple .aui_min,.share_dialog.dialog-simple .aui_max { display: none;}
 .share_dialog.dialog-simple .aui_close { border-radius: 12px; top: 6px; opacity: 0.4; filter: alpha(opacity=40);}
 .share_dialog .aui_footer { display: none;}
 .share_dialog .content_box { -webkit-box-shadow: 0 5px 30px rgba(0,0,0,0.5); -moz-box-shadow: 0 5px 30px rgba(0,0,0,0.5); box-shadow: 0 5px 30px rgba(0,0,0,0.5); border-radius: 5px; background: #fff; border: 1px solid #ccc \9; width: auto;}
-.share_dialog .content_box .title { width: 100%; color: #fff; height: 120px; border-radius: 5px 5px 0 0; background: #6699cc url('../../../images//login.png');}
+.share_dialog .content_box .title { width: 100%; color: #fff; height: 120px; border-radius: 5px 5px 0 0; background: #6699cc url('../../../images/login.png');}
 .share_dialog .content_box .titleinfo { text-align: center; font-size: 40px; line-height: 120px; font-weight: lighter;}
+.share_dialog .content_box .share_view_info { width: 200px; margin: 0 auto; margin-top: -33px; padding: 2px 5px; text-align: center; border-radius: 17px; background: #888; background: rgba(0,0,0,0.2);}
 .share_dialog .content_box .content_info { padding: 15px;}
 .share_dialog .content_box .content_info .input_line { margin: 10px 0 10px 0;}
 .share_dialog .content_box .content_info .input_line .input_title { display: block; width: 80px; line-height: 35px; font-size: 14px; overflow: hidden; float: left; padding-right: 10px; text-align: right;}
@@ -341,6 +344,7 @@ div.dialog-simple .aui_min { right: 56px;}
 div.dialog-simple .aui_dialog { background: none;}
 div.dialog-simple .resize-bottom-right { background: none !important;}
 div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
+div.dialog-simple .aui_nw,div.dialog-simple .aui_ne { height: 0px;}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
 body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(opacity=100);}
 body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto; overflow-x: hidden;}
@@ -413,32 +417,25 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .group_editor .tag:hover { color: #8d3cc4; background: #ffffff;}
 #body .main .group_editor .tag.this { border-color: #8d3cc4; color: #8d3cc4; background: #ffffff;}
 #body .main .group_editor .tag span { cursor: pointer;}
-#body .alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
+#body alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
 #body .section { width: 98% !important;}
 #body .main .save { width: 60px; margin-top: 10px;}
 #body .main .content .title span { border-bottom: 2px solid #bbb;}
 #body .system_menu_save { width: 80px;}
-#body .main .section .box_line { padding: 7px; margin-bottom: -1px; border: 1px solid #e6e6e6;}
+#body .main .section .box_line { float: left; width: 94%; padding: 5px 8px; margin-bottom: -1px; border: 1px solid #e6e6e6;}
 #body .main .section .box_line span.infotitle { width: 125px; display: block; float: left; overflow: hidden; margin-right: 10px; line-height: 32px; color: #333;}
 #body .main .section .box_line input[type='text'] { display: block; float: left; width: 350px; font-weight: 200;}
-#body .main .section .box_line label { float: left; padding-right: 20px; line-height: 28px; padding-top: 5px;}
+#body .main .section .box_line label { float: left; padding-right: 20px; line-height: 28px; margin: 0;}
 #body .main .section .box_line label input { width: 20px;}
 #body .main .section .box_line label input:focus { box-shadow: none;}
 #body .main .section .box_line i { padding-left: 5px; color: #777; line-height: 30px; font-size: 12px; font-style: normal;}
 #body .main .section .box_line a.button { width: 80px;}
 #body .main .section table .title { font-size: 14px;}
-#body .main .section table .button { margin-left: 0px;}
+#body .main .section table .button { margin-left: 0px; color: #666;}
 #body .main .section table .title span { border: none;}
 #body .main .section table a.button { padding: 5px 8px;}
 #body .main .section table .menu_list .name input { width: 90%; font-weight: 400;}
 #body .main .section table .menu_list .path input { width: 90%; font-weight: 400;}
-#body .checkbox_open { display: inline-block; position: relative; text-align: left; border-radius: 20px; width: 40px; height: 28px; background-color: #ddd; overflow: hidden; margin: 0; padding-left: 20px; vertical-align: middle;}
-#body .checkbox_open input { position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: block; width: 100%; height: 100%; margin: 0; cursor: pointer; opacity: 0; filter: alpha(opacity=0); z-index: 2;}
-#body .checkbox_open label { background-color: #666; padding: 0 !important; background-image: linear-gradient(-40deg,rgba(0,0,0,0),rgba(255,255,255,0.1),rgba(0,0,0,0.2)); margin-left: -19px; border-radius: 15px; display: inline-block; width: 28px; height: 28px; text-align: center; font: bold 11px/28px Arial, Sans-Serif; color: #999; text-shadow: 0 -1px 0 rgba(0,0,0,0.7); transition: margin-left 0.2s ease-in-out;}
-#body .checkbox_open label:before { content: attr(data-off);}
-#body .checkbox_open input:checked { background: #def;}
-#body .checkbox_open input:checked + label { margin-left: 12px; background-color: #40AA53; color: white;}
-#body .checkbox_open input:checked + label:before { content: attr(data-on);}
 #body .menu_list { color: #666;}
 #body .menu_list td span { display: none;}
 #body .menu_list td input[type='text'] { padding: 6px;}

@@ -105,6 +105,7 @@ $L= array(
 	"url_path"  				=>"url地址",
 	"url_path_desc"  			=>"url地址或js代碼",
 	"no_permission_read"  		=>"該文件沒有讀取權限",
+	"no_permission_download"  	=>"管理员限制了下载和预览！",
 
 	
 	"php_env_check"  			=> "運行環境監測:",
@@ -325,7 +326,7 @@ $L= array(
 	"fav"                        =>	"收藏夾",
 	"desktop"                    =>	"桌面",
 	"browser"                    =>	"流覽器",
-	"my_cumputer"                =>	"我的電腦",
+	"my_computer"                =>	"我的電腦",
 	"recycle"                    =>	"回收站",
 	"my_document"                =>	"我的文檔",
 	"my_picture"                 =>	"我的照片",

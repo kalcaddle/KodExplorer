@@ -44,25 +44,19 @@
 	</div><!-- / frame-main end-->
 <?php include(TEMPLATE.'common/footer.html');?>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
-<script src="<?php echo APPHOST;?>/index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
+<script src="./index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
 <script type="text/javascript">
 	AUTH  = {'explorer:fileDownload':<?php echo $can_download;?>};
 	G.project = "<?php echo $_GET['project'];?>";
 	G.user = "<?php echo $_GET['user'];?>";
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.share_info = <?php echo json_encode($share_info);?>;
-
 	G.theme = "<?php echo $config_theme;?>";
-	G.list_type = "<?php echo $config_list_type;?>";
-	G.sort_field = "<?php echo $config_sort_field;?>";
-	G.sort_order = "<?php echo $config_sort_order;?>";
-	G.musictheme = "<?php echo $config_musictheme;?>";
-	G.movietheme = "<?php echo $config_movietheme;?>";
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
 		map:[
-			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
 	seajs.use("app/src/share_editor/main");

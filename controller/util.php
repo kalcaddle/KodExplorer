@@ -52,6 +52,9 @@ function _DIR_OUT(&$arr){
 }
 //前缀处理 非root用户目录/从HOME开始
 function pre_clear($path){
+    if (ST=='share') {
+        return str_replace(HOME,'',$path);
+    }
     if (substr($path,0,strlen(PUBLIC_PATH)) == PUBLIC_PATH) {
         return '*public*/'.str_replace(PUBLIC_PATH,'',$path);
     }
@@ -110,19 +113,19 @@ function checkExt($file,$changExt=false){
 function php_env_check(){
     $L = $GLOBALS['L'];
     $error = '';
-    $base_path = get_path_this(BASIC_PATH).'/';
+    $base_path = get_path_this(BASIC_PATH).'/'; 
     if(!function_exists('iconv')) $error.= '<li>'.$L['php_env_error_iconv'].'</li>';
     if(!function_exists('mb_convert_encoding')) $error.= '<li>'.$L['php_env_error_mb_string'].'</li>';
     if(!version_compare(PHP_VERSION,'5.0','>=')) $error.= '<li>'.$L['php_env_error_version'].'</li>';
     if(!function_exists('file_get_contents')) $error.='<li>'.$L['php_env_error_file'].'</li>';
-    if(!path_writable(BASIC_PATH)) $error.= '<li>'.$base_path.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data')) $error.= '<li>'.$base_path.'/data'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/system')) $error.= '<li>'.$base_path.'/data/system'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/User')) $error.= '<li>'.$base_path.'/data/User'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/thumb')) $error.= '<li>'.$base_path.'/data/thumb'.$L['php_env_error_path'].'</li>';
+    if(!path_writable(BASIC_PATH)) $error.= '<li>'.$base_path.'	'.$L['php_env_error_path'].'</li>';
+    if(!path_writable(BASIC_PATH.'data')) $error.= '<li>'.$base_path.'data	'.$L['php_env_error_path'].'</li>';
+    if(!path_writable(BASIC_PATH.'data/system')) $error.= '<li>'.$base_path.'data/system	'.$L['php_env_error_path'].'</li>';
+    if(!path_writable(BASIC_PATH.'data/User')) $error.= '<li>'.$base_path.'data/User	'.$L['php_env_error_path'].'</li>';
+    if(!path_writable(BASIC_PATH.'data/thumb')) $error.= '<li>'.$base_path.'data/thumb	'.$L['php_env_error_path'].'</li>';
     if( !function_exists('imagecreatefromjpeg')||
         !function_exists('imagecreatefromgif')||
-        !function_exists('imagecreatefrompng')||
+        !function_exists('imagecreatefrompng')||	
         !function_exists('imagecolorallocate')){
         $error.= '<li>'.$L['php_env_error_gd'].'</li>';
     }
@@ -149,12 +152,12 @@ function init_lang(){
         $lang = str_replace('-', '_',$lang);
         setcookie('kod_user_language',$lang, time()+3600*24*365);
     }
+    if ($lang == '') $lang = 'en';
     
-    $lang = str_replace(array('/','\\','..'),'',$lang);
+    $lang = str_replace(array('/','\\','..','.'),'',$lang);
     define('LANGUAGE_TYPE', $lang);
     include(LANGUAGE_PATH.$lang.'/main.php');
     $GLOBALS['L'] = $L;
-    $GLOBALS['language'] = $lang;
 }
 
 function init_setting(){

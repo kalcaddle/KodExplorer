@@ -84,9 +84,8 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		</div>
 	</div>
 
-
+<script src="./index.php?user/common_js#id=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
-<script src="<?php echo APPHOST;?>/index.php?user/common_js#id=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
@@ -97,7 +96,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
 		map:[
-			[ /^(.*\.(?:css|js))(.*)$/i,'$1?ver='+G.version]
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
 	seajs.use("app/src/edit/main");	

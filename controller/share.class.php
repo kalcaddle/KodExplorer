@@ -23,17 +23,16 @@ class share extends Controller{
             $this->assign('can_download',$this->share_info['not_download']=='1'?0:1);
         }
         //需要检查下载权限的Action
-        $arr_check_download = array('fileDownload','zipDownload');//'fileProxy','fileGet'
+        $arr_check_download = array('fileDownload','zipDownload','fileProxy','fileGet');//'fileProxy','fileGet'
         if (in_array(ACT,$arr_check_download)){
             if ($this->share_info['not_download']=='1') {
                 show_json($this->L['share_not_download_tips'],false);
             }
         }
-        
-        // //禁止下载后；也会无法预览 'fileProxy','fileGet'
-        // if (ACT == 'file' && $this->share_info['not_download']=='1') {
-        //     $this->error($this->L['share_not_download_tips']);
-        // }
+        //禁止下载后；也会无法预览 'fileProxy','fileGet'
+        if (ACT == 'file' && $this->share_info['not_download']=='1') {
+            $this->error($this->L['share_not_download_tips']);
+        }
     }
     //======//
     private function _check_share(){
@@ -163,18 +162,12 @@ class share extends Controller{
     //==========================
     //页面统一注入变量
     private function _assign_info(){
-        $config = new fileCache(USER.'data/config.php');
-        $config = $config->get();
+        $user_config = new fileCache(USER.'data/config.php');
+        $config = $user_config->get();
         if (count($config)<1) {
             $config = $GLOBALS['config']['setting_default'];
         }
         $this->assign('config_theme',$config['theme']);
-        $this->assign('config_list_type',$config['list_type']);
-        $this->assign('config_sort_field',$config['sort_field']);
-        $this->assign('config_sort_order',$config['sort_order']);
-        $this->assign('config_musictheme',$config['musictheme']);
-        $this->assign('config_movietheme',$config['movietheme']);
-
         $this->share_info['share_password'] = '';
         $this->share_info['num_view'] = intval($this->share_info['num_view']);
         $this->share_info['num_download'] = intval($this->share_info['num_download']);
@@ -192,15 +185,11 @@ class share extends Controller{
         $num = abs(intval($this->share_info['num_view'])) +1;
         $this->share_info['num_view'] = $num;        
         $this->sql->update($this->in['sid'],$this->share_info);
-    }    
-
+    }
     public function common_js(){
-        $basic_path = BASIC_PATH;
-        if ($GLOBALS['is_root']) {
-            $basic_path = '/';//对非root用户隐藏所有地址
-        }
+        $config = $GLOBALS['config']['setting_default'];
         $the_config = array(
-            'lang'          => $GLOBALS['language'],
+            'lang'          => LANGUAGE_TYPE,
             'is_root'       => 0,
             'web_root'      => '/',
             'web_host'      => HOST,
@@ -210,9 +199,17 @@ class share extends Controller{
             'app_host'      => APPHOST,
             'office_server' => OFFICE_SERVER,
             'json_data'     => "",
-            'share_page'    => 'share'
+            'share_page'    => 'share',
+
+            'theme'         => $config['theme'],           //列表排序依照的字段
+            'list_type'     => $config['list_type'],       //列表排序依照的字段
+            'sort_field'    => $config['list_sort_field'], //列表排序依照的字段  
+            'sort_order'    => $config['list_sort_order'], //列表排序升序or降序
+            'musictheme'    => $config['musictheme'],
+            'movietheme'    => $config['movietheme']
         );
 
+        //show_json($this->L);
         $js  = 'LNG='.json_encode($GLOBALS['L']).';';
         $js .= 'AUTH=[];';
         $js .= 'G='.json_encode($the_config).';';

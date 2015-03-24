@@ -41,13 +41,11 @@
 	</div>
 	<div class="box_line">
 		<span class='infotitle'><?php echo $L['auto_login'];?>:</span>
-		<span class="checkbox_open">
+			<label>
 			<input type="checkbox" name="auto_login" 
-		      <?php if($config['setting_system']['auto_login']=="1") echo 'checked="checked"';?>
-		    />
-			<label data-on="ON" data-off="OFF"></label>
-		</span>
-		<i><?php echo $L['auto_login_desc'];?></i>
+		      <?php if($config['setting_system']['auto_login']=="1") echo 'checked="checked"';?> />
+		    <i><?php echo $L['auto_login_desc'];?></i>
+		    </label>		
 	</div>
 	<div class="box_line">
 		<span class='infotitle'><?php echo $L['first_in'];?>:</span>

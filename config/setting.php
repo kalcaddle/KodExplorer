@@ -58,7 +58,7 @@ $config['role_setting'] = array(
 		'fileDownload','zipDownload','fileDownloadRemove','fileProxy','makeFileProxy'),
 	'app'		=> array('user_app','init_app','add','edit','del'),//
 	'user'		=> array('changePassword'),//可以设立公用账户
-	'editor'	=> array('fileSave'),
+	'editor'	=> array('fileGet','fileSave'),
 	'userShare' => array('set','del'),
 	'setting'	=> array('set','system_setting','php_info'),
 	'fav'		=> array('add','del','edit'),

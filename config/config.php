@@ -58,17 +58,15 @@ include(BASIC_PATH.'config/version.php');
 //数据地址定义。
 $config['pic_thumb']	= BASIC_PATH.'data/thumb/';		// 缩略图生成存放地址
 $config['cache_dir']	= BASIC_PATH.'data/cache/';		// 缓存文件地址
-$config['system_os']	= 'windows';		//windows,linux,mac
-$config['system_charset']='gbk';			//系统编码
-$config['app_charset']	 ='utf-8';			//该程序整体统一编码
-$config['app_startTime'] = mtime();         //起始时间
-$config['check_charset'] = 'ASCII,UTF-8,GBK';//文件打开自动检测编码
-//when edit a file ;check charset and auto converto utf-8;
+$config['app_startTime'] = mtime();         			//起始时间
 
 //系统编码配置
+$config['app_charset']	 ='utf-8';			//该程序整体统一编码
+$config['check_charset'] = 'ASCII,UTF-8,GBK';//文件打开自动检测编码
+//when edit a file ;check charset and auto converto utf-8;
 if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['system_os']='windows';
-	$config['system_charset']='gbk';
+	$config['system_charset']='gbk';//user set your server system charset
 } else {
 	$config['system_os']='linux';
 	$config['system_charset']='utf-8';
