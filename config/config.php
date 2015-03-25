@@ -9,7 +9,7 @@
 @date_default_timezone_set(@date_default_timezone_get());
 @set_time_limit(600);//10min pathInfoMuti,search,upload,download... 
 @ini_set('session.cache_expire',600);
-@ini_set("display_errors","On");
+@ini_set("display_errors","on");
 @error_reporting(E_ERROR|E_WARING|E_PARSE);
 //error_reporting(E_ALL);
 
@@ -31,18 +31,33 @@ define('CLASS_DIR',		LIB_DIR .'class/');			//内目录
 define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
 define('DATA_PATH',     BASIC_PATH .'data/');       //用户数据目录
 define('LOG_PATH',      DATA_PATH .'log/');         //日志目录
-define('USER_PATH',     DATA_PATH .'User/');        //用户目录
 define('USER_SYSTEM',   DATA_PATH .'system/');      //用户数据存储目录
 define('DATA_THUMB',    DATA_PATH .'thumb/');       //缩略图生成存放
 define('LANGUAGE_PATH', DATA_PATH .'i18n/');        //多语言目录
-define('PUBLIC_PATH',   DATA_PATH .'public/');      //公共共享目录,读写权限跟随用户目录的读写权限
 
-//本地使用，引号内填写office解析服务器地址 形如:"http://***/view.aspx?src="
-define('OFFICE_SERVER',"");
 define('STATIC_JS','app');  //_dev(开发状态)||app(打包压缩)
 define('STATIC_LESS','css');//less(开发状态)||css(打包压缩)
 define('STATIC_PATH',"./static/");//静态文件目录
-//define('STATIC_PATH','http://static.kalcaddle.com/static/');//静态文件统一分离
+//define('STATIC_PATH','http://static.kalcaddle.com/static/');//静态文件统分离,可单独将static部署到CDN
+
+/*
+ 可以自定义【用户目录】和【公共目录】;移到web目录之外，
+ 可以使程序更安全, 就不用限制用户的扩展名权限了;
+ */
+define('USER_PATH',     DATA_PATH .'User/');        //用户目录
+//自定义用户目录；需要先将data/User移到别的地方 例如修改成如下地址
+//define('USER_PATH',   DATA_PATH .'/Library/WebServer/Documents/User');
+
+define('PUBLIC_PATH',   DATA_PATH .'public/');     //公共目录
+//公共共享目录,读写权限跟随用户目录的读写权限 例如修改成如下地址
+//define('PUBLIC_PATH','/Library/WebServer/Documents/Public/');
+
+/*
+ * office服务器配置；默认调用的微软的接口，程序需要部署到外网。
+ * 本地部署weboffice 引号内填写office解析服务器地址 形如:  http://---/view.aspx?src=
+ */
+define('OFFICE_SERVER',"");
+
 
 include(FUNCTION_DIR.'web.function.php');
 include(FUNCTION_DIR.'file.function.php');

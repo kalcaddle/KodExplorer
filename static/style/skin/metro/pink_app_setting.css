@@ -417,7 +417,7 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .group_editor .tag:hover { color: #dc4fad; background: #ffffff;}
 #body .main .group_editor .tag.this { border-color: #dc4fad; color: #dc4fad; background: #ffffff;}
 #body .main .group_editor .tag span { cursor: pointer;}
-#body alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
+#body .alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
 #body .section { width: 98% !important;}
 #body .main .save { width: 60px; margin-top: 10px;}
 #body .main .content .title span { border-bottom: 2px solid #bbb;}
@@ -467,6 +467,7 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body a.button { text-decoration: none; cursor: pointer; text-shadow: none; border: none; box-shadow: none; border-radius: 0; margin: 5px 10px 5px 0; font-weight: 400; padding: 0.5em 1.5em; font-size: 13px; display: inline-block; height: 16px; line-height: 18px; text-align: center; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s; background: #d52d9d; color: #fff;}
 #body a.button:hover { background: #ad227f; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
 #body a.button:active { background: #581140; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
+#body .main .section table .button { color: #fff;}
 #body a.create_app { margin: 0; display: block; position: absolute; right: 21px;}
 #body .app_menu_left { min-width: 130px; width: 130px;}
 #body .app_menu_left .setting li.selected { padding-left: 12px;}

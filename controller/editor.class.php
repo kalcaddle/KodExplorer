@@ -62,7 +62,7 @@ class editor extends Controller{
 	*/
 	public function getConfig(){
 		$default = array(
-			'font_size'		=> '14px',
+			'font_size'		=> '15px',
 			'theme'			=> 'clouds',
 			'auto_wrap'		=> 0,
 			'display_char'	=> 0,

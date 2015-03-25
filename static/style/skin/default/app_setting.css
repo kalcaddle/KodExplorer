@@ -428,7 +428,7 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .group_editor .tag:hover { color: #666; background: #e6e6e6;}
 #body .main .group_editor .tag.this { border-color: #666; color: #666; background: #e6e6e6;}
 #body .main .group_editor .tag span { cursor: pointer;}
-#body alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
+#body .alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
 #body .section { width: 98% !important;}
 #body .main .save { width: 60px; margin-top: 10px;}
 #body .main .content .title span { border-bottom: 2px solid #bbb;}

@@ -70,12 +70,12 @@
               $the_use = $menu['use']=='1'?' menu_show ':'menu_hidden';
               $the_null = $menu['name']==''?' menu_default hidden ':'';
         ?>
-        <tr class="menu_list <?php echo $the_type.$the_use.$the_null;?>">   
-            <td class="name"><input type="text" name="name" value="<?php echo htmlentities(urldecode($menu['name']));?>"/>
+        <tr class="menu_list <?php echo $the_type.$the_use.$the_null;?>">
+            <td class="name"><input type="text" name="name" value="<?php echo htmlspecialchars(urldecode($menu['name']));?>"/>
                 <span><?php echo $L['ui_'.$menu['name']];?></span>
             </td>
             <td class="url">
-                <input type="text" name="url" value="<?php echo htmlentities(urldecode($menu['url']));?>">
+                <input type="text" name="url" value="<?php echo htmlspecialchars(urldecode($menu['url']));?>">
                 <span><?php echo $menu['name'];?></span>
                 <label><input type="checkbox" name="target" value="<?php echo $menu['target'];?>" 
                     <?php if($menu['target']=='_blank'){echo "checked='checked'";}?> /><?php echo $L['menu_open_window'];?></label> 

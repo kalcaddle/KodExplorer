@@ -4,9 +4,10 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title><?php echo $L['kod_name'].$L['kod_power_by'];?></title>
-	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>/images/favicon.ico">
+	<link href="<?php echo STATIC_PATH;?>images/favicon.ico" rel="Shortcut Icon" >
 	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
-	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
+	<link href=",/static/font-awesome/css/font-awesome.css" rel="stylesheet" >
+	<!-- 字体不能跨域问题 -->
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">
 	<![endif]-->
@@ -15,9 +16,9 @@
 
 <body>
 	<?php 
-		$arr = array(4,5,7,7,7,1,10,11,12,13);
+		$arr = array(4,5,7,7,7,10,11,12);
 		$get = $arr[mt_rand(0,count($arr)-1)];
-		$image = "./static/images/wall_page/".$get.".jpg";
+		$image = STATIC_PATH."images/wall_page/".$get.".jpg";
 		echo '<div class="background" style="background-image:url('.$image.')"></div>';
 	?>
 	<div class="loginbox" >

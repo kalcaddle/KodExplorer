@@ -5,6 +5,7 @@
 	<title><?php echo $L['ui_editor'].' - '.$L['kod_name'].$L['kod_power_by'];?></title>
 	<link rel="Shortcut Icon" href="<?php echo STATIC_PATH;?>images/favicon.ico">
 	<link href="<?php echo STATIC_PATH;?>style/bootstrap.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/><link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
 	<!--[if IE 7]>
 	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">
 	<![endif]-->

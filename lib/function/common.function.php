@@ -638,7 +638,7 @@ function rand_from_to($from, $to){
  * @param string $addChars 额外字符
  * @return string 
  */
-function rand_string($len = 4, $type){
+function rand_string($len = 4, $type='check_code'){
 	$str = '';
 	switch ($type) {
 		case 0://大小写中英文
