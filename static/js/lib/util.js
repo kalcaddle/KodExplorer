@@ -136,7 +136,7 @@ var Cookie = (function(){
 		}
 		var expDate=new Date(); 
 		expDate.setTime(expDate.getTime() + timeout*3600*24*1000);
-        str += "; path=/; expires="+expDate.toGMTString();
+        str += "; expires="+expDate.toGMTString();
         document.cookie = str;
 	};
 	var del = function(key){

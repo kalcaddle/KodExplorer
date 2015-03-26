@@ -11,7 +11,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<![endif]-->
 
 	
-	<link href="<?php echo STATIC_PATH;?>static/style/skin/<?php echo $config['user']['theme'];?>app_setting.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
+	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_setting.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	
 </head>
 <body>

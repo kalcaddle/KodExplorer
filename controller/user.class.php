@@ -96,7 +96,7 @@ class user extends Controller
     }
     public function common_js(){
         $basic_path = BASIC_PATH;
-        if ($GLOBALS['is_root']) {
+        if (!$GLOBALS['is_root']) {
             $basic_path = '/';//对非root用户隐藏所有地址
         }
         $the_config = array(
