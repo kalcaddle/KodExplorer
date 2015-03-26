@@ -10,7 +10,6 @@ div.topbar .content a.topbar_menu { border-color: #4499dd; border-color: rgba(25
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -38,6 +37,7 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 .topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #41bbec; position: fixed; background: url("../../../images/login.png") repeat-x 0px -44px; box-shadow: 0 0 10px rgba(0,0,0,0.2);}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}

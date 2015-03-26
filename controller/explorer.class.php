@@ -70,7 +70,7 @@ class explorer extends Controller{
     }
     public function pathRname(){
         if (!is_writable($this->path)) {
-            show_json($this->L['no_permission_write'],false);
+            show_json($this->L['no_permission_write_all'],false);
         }
         $rname_to=_DIR($this->in['rname_to']);
         $this->_pathAllow($rname_to);
@@ -516,16 +516,17 @@ class explorer extends Controller{
     public function unzip(){
         load_class('pclzip');
         ini_set('memory_limit', '2028M');//2G;
-        $path=$this->path;
+        $path=$this->path; 
         $name = get_path_this($path);
         $name = substr($name,0,strrpos($name,'.'));
         $unzip_to=get_path_father($path).$name;
         if (isset($this->in['path_to'])) {//解压到指定位置
             $unzip_to = _DIR($this->in['path_to']);
         }
-        if (!is_writeable($unzip_to)) {
+        //所在目录不可写
+        if (!is_writeable(get_path_father($path))){
             show_json($this->L['no_permission_write'],false);
-        }        
+        }
         $zip = new PclZip($path);//
         if ($GLOBALS['is_root'] == 1){
             $result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,

@@ -8,7 +8,6 @@
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -36,6 +35,7 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 .topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #DC4FAD; position: fixed;}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}
@@ -284,6 +284,9 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_content.aui_state_full { display: block; width: 100%; margin: 0; padding: 0 !important; height: 100%;}
 .aui_icon { vertical-align: middle;}
 .aui_icon div { width: 48px; height: 48px; margin: 10px 0 10px 10px; background-position: center center; background-repeat: no-repeat;}
+body div .aui_border { *border: 1px solid #bbb;}
+body div .aui_border { border: 1px solid #bbb \0/IE9;}
+:root body div .aui_border { border: 0px solid \0/IE9;}
 .aui_buttons { padding: 10px 8px; text-align: right; white-space: nowrap; background-color: #F6F6F6; border-top: solid 1px #DADEE5;}
 .aui_buttons button { margin-left: 15px; padding: 3px 20px; height: 25px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; overflow: visible; color: #000000; border: none; background: #aaa; color: #fff;}
 .aui_buttons button:focus { outline: none 0;}
@@ -426,14 +429,12 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .section .box_line span.infotitle { width: 125px; display: block; float: left; overflow: hidden; margin-right: 10px; line-height: 32px; color: #333;}
 #body .main .section .box_line input[type='text'] { display: block; float: left; width: 350px; font-weight: 200;}
 #body .main .section .box_line label { float: left; padding-right: 20px; line-height: 28px; margin: 0;}
-#body .main .section .box_line label input { width: 20px;}
 #body .main .section .box_line label input:focus { box-shadow: none;}
 #body .main .section .box_line i { padding-left: 5px; color: #777; line-height: 30px; font-size: 12px; font-style: normal;}
 #body .main .section .box_line a.button { width: 80px;}
 #body .main .section table .title { font-size: 14px;}
-#body .main .section table .button { margin-left: 0px; color: #666;}
+#body .main .section table .button { margin-left: 0px;}
 #body .main .section table .title span { border: none;}
-#body .main .section table a.button { padding: 5px 8px;}
 #body .main .section table .menu_list .name input { width: 90%; font-weight: 400;}
 #body .main .section table .menu_list .path input { width: 90%; font-weight: 400;}
 #body .menu_list { color: #666;}
@@ -447,27 +448,33 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .menu_system td span { display: inline !important;}
 #body .menu_system a.move_del { display: none !important;}
 #body .menu_hidden { opacity: 0.5;}
-#body table tr td { line-height: 2.5em;}
-#body .main .section table a.button { padding: 4px 8px;}
+#body .setting_menu table tr td.url { line-height: 30px;}
 #body a.path_ext_tips { padding: 3px 5px; margin: 0 0 0 10px; background: #888; border: none; color: #fff;}
+#body table tr.title td { line-height: 2.5em; height: 2.5em;}
+#body table tr td { line-height: 1em; height: 1em; border-right: 1px solid #ddd;}
+#body a.button { width: auto; padding: 2px 1em; height: 26px; line-height: 26px; line-height: 22px \9;}
+#body .save { width: auto;}
+#body .main .select table a.button { padding: 0 8px;}
+#body .main .group_editor .tag { height: 30px; line-height: 30px;}
+#body input[type="radio"] { width: auto; border: none;}
+#body .main .section .box_line label input[type="radio"] { width: auto; border: none; margin: 2px 1em;}
+#body .main .section .box_line label input[type="checkbox"] { width: auto; border: none; margin: 2px 1em;}
 #body table { font-size: 13px; color: #888; width: 100%; margin: 0px; border: 1px solid #ccc;}
-#body table tr { border-bottom: 1px solid #ddd; height: 30px;}
-#body table tr .title { border-bottom: 1px solid #ddd;}
-#body table tr input { display: block; width: 250px; width: 90%; color: #888;}
+#body table tr { border-bottom: 1px solid #ddd; background: #fcfcfc; height: 30px;}
+#body table tr input[type='text'] { display: block; width: 80%; color: #888;}
 #body table tr.title { background: #eee; color: #224;}
 #body table tr.title td { border-bottom: 1px solid #ddd; font-weight: 800;}
 #body table tr.title span { color: #999; font-size: 13px; padding-left: 4px; font-weight: 400;}
 #body table tr td { border-bottom: 1px solid #eee; line-height: 2.5em; height: 2.5em; padding-left: 3%;}
 #body table tr td.name { width: 30%;}
 #body table tr td.name,#body table tr td.path { border-right: 1px solid #ddd;}
-#body table tr td.action { line-height: 1.3em; width: 30%;}
+#body table tr td.action { line-height: 1.3em;}
 #body table tr td.action a { margin-right: 5px;}
 #body a.add { display: block; text-align: center; text-decoration: none; background: #f6f6f6; line-height: 2em; height: 2em; border: 1px solid #ccc; color: #555;}
 #body a.add:hover { background: #eee;}
-#body a.button { text-decoration: none; cursor: pointer; text-shadow: none; border: none; box-shadow: none; border-radius: 0; margin: 5px 10px 5px 0; font-weight: 400; padding: 0.5em 1.5em; font-size: 13px; display: inline-block; height: 16px; line-height: 18px; text-align: center; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s; background: #d52d9d; color: #fff;}
-#body a.button:hover { background: #ad227f; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
-#body a.button:active { background: #581140; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
-#body .main .section table .button { color: #fff;}
+#body a.button { text-decoration: none; cursor: pointer; font-size: 13px; margin: 5px 10px 5px 0; border: none; display: inline-block; border: 1px solid #ddd; text-shadow: none; box-shadow: none; text-align: center; font-weight: 400; padding: 1px 8px; background: #dc4fad; color: #fff; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s;}
+#body a.button:hover { background: #ba2588;}
+#body a.button:active { background: #7a1859; color: #fff;}
 #body a.create_app { margin: 0; display: block; position: absolute; right: 21px;}
 #body .app_menu_left { min-width: 130px; width: 130px;}
 #body .app_menu_left .setting li.selected { padding-left: 12px;}

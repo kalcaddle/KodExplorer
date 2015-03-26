@@ -1,4 +1,4 @@
-.topback_this { background: #e169b9;}
+.topback_this { background: #6b8ac3;}
 ::-webkit-scrollbar-track-piece { background-color: rgba(255,255,255,0.2);}
 ::-webkit-scrollbar { width: 10px; height: 10px;}
 ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 12px; background-clip: padding-box; border: 1px solid rgba(0,0,0,0.3); min-height: 28px;}
@@ -8,7 +8,6 @@
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -36,11 +35,12 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
-.topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #DC4FAD; position: fixed;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
+.topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #5579BA; position: fixed;}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}
-.topbar .content .topbar_menu { display: block; text-decoration: none; color: #fff; border: 1px solid #e064b7; height: 40px; overflow: hidden; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s; padding: 0px 1.2em; border-top: none; border-bottom: none; outline: none; float: left; margin-left: -1px; font-size: 14px;}
-.topbar .content .topbar_menu:hover,.topbar .content .topbar_menu.this { background: #e169b9;}
+.topbar .content .topbar_menu { display: block; text-decoration: none; color: #fff; border: 1px solid #6787c1; height: 40px; overflow: hidden; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s; padding: 0px 1.2em; border-top: none; border-bottom: none; outline: none; float: left; margin-left: -1px; font-size: 14px;}
+.topbar .content .topbar_menu:hover,.topbar .content .topbar_menu.this { background: #6b8ac3;}
 .topbar .content .topbar_menu.title { font-size: 20px; width: 200px; width: 202px\0; padding: 0; text-align: center;}
 .topbar .content .topbar_menu.title:hover { background: none;}
 .topbar .content .menu-desktop:before { content: "\f108";}
@@ -267,7 +267,7 @@ a.button:hover { background: #eee url("../../../images/buttons_40.png") 0 -12px 
 a.left:hover,a.middle:hover { margin-right: 1px; padding-right: 9px;}
 a.button:active { color: #000; border-color: #444;}
 a.button:focus { outline: none;}
-.messageBox { position: absolute; top: 15%; left: 0px; z-index: 88; background: #DC4FAD; color: #fff; opacity: 0.7; filter: alpha(opacity=70); -webkit-border-radius: 1px; -moz-border-radius: 1px; border-radius: 1px; -webkit-box-shadow: 0 10px 60px rgba(0,0,0,0.6); -moz-box-shadow: 0 10px 60px rgba(0,0,0,0.6); box-shadow: 0 10px 60px rgba(0,0,0,0.6); display: none;}
+.messageBox { position: absolute; top: 15%; left: 0px; z-index: 88; background: #5579BA; color: #fff; opacity: 0.7; filter: alpha(opacity=70); -webkit-border-radius: 1px; -moz-border-radius: 1px; border-radius: 1px; -webkit-box-shadow: 0 10px 60px rgba(0,0,0,0.6); -moz-box-shadow: 0 10px 60px rgba(0,0,0,0.6); box-shadow: 0 10px 60px rgba(0,0,0,0.6); display: none;}
 .messageBox .content { padding: 10px 30px; line-height: 20px; width: auto;}
 .dialogMax { z-index: 99999 !important;}
 .aui_outer { text-align: left; position: relative;}
@@ -284,6 +284,9 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_content.aui_state_full { display: block; width: 100%; margin: 0; padding: 0 !important; height: 100%;}
 .aui_icon { vertical-align: middle;}
 .aui_icon div { width: 48px; height: 48px; margin: 10px 0 10px 10px; background-position: center center; background-repeat: no-repeat;}
+body div .aui_border { *border: 1px solid #bbb;}
+body div .aui_border { border: 1px solid #bbb \0/IE9;}
+:root body div .aui_border { border: 0px solid \0/IE9;}
 .aui_buttons { padding: 10px 8px; text-align: right; white-space: nowrap; background-color: #F6F6F6; border-top: solid 1px #DADEE5;}
 .aui_buttons button { margin-left: 15px; padding: 3px 20px; height: 25px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; overflow: visible; color: #000000; border: none; background: #aaa; color: #fff;}
 .aui_buttons button:focus { outline: none 0;}
@@ -291,17 +294,17 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_buttons button:active { background: #777777;}
 .aui_buttons button[disabled] { cursor: default; color: #919191; background: #aaa; opacity: 0.5; filter: alpha(opacity=50);}
 .aui_buttons button::-moz-focus-inner { border: 0; padding: 0; margin: 0;}
-.aui_buttons button.aui_state_highlight { color: #FFF; background: #DC4FAD;}
-.aui_buttons button.aui_state_highlight:hover { color: #FFF; background: #e47ac1;}
-.aui_buttons button.aui_state_highlight:active { background: #a42178;}
-.aui_outer { border: 0px solid #DC4FAD; -webkit-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); -moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); box-shadow: 0px 5px 20px rgba(0,0,0,0.6);}
+.aui_buttons button.aui_state_highlight { color: #FFF; background: #5579BA;}
+.aui_buttons button.aui_state_highlight:hover { color: #FFF; background: #7996c9;}
+.aui_buttons button.aui_state_highlight:active { background: #314a78;}
+.aui_outer { border: 0px solid #5579BA; -webkit-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); -moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); box-shadow: 0px 5px 20px rgba(0,0,0,0.6);}
 .aui_inner { background: #FFF;}
 .aui_state_lock .aui_nw,.aui_state_lock .aui_n,.aui_state_lock .aui_ne,.aui_state_lock .aui_w,.aui_state_lock .aui_e,.aui_state_lock .aui_sw,.aui_state_lock .aui_s,.aui_state_lock .aui_se { background: rgba(0,0,0,0.5); background: #000 \9 !important; opacity: 0.5; filter: alpha(opacity=50);}
 .aui_titleBar { position: relative; height: 100%;}
-.aui_title { height: 31px; line-height: 30px; padding: 0 28px 0 10px; color: #fff; font-size: 14px; background-color: #DC4FAD; border-bottom: 1px solid #cf2998;}
+.aui_title { height: 31px; line-height: 30px; padding: 0 28px 0 10px; color: #fff; font-size: 14px; background-color: #5579BA; border-bottom: 1px solid #40619c;}
 .aui_state_focus .aui_mask { display: none;}
 .aui_state_focus .aui_outer { -webkit-box-shadow: 0px 5px 60px rgba(0,0,0,0.8); -moz-box-shadow: 0px 5px 60px rgba(0,0,0,0.8); box-shadow: 0px 5px 60px rgba(0,0,0,0.8);}
-.aui_min,.aui_max,.aui_close { display: block; position: absolute; text-decoration: none; outline: none; cursor: pointer; font-size: 16px; background: #e371bd; color: #fff; border-top: none; top: 0px; height: 22px; width: 35px; font-size: 14px; line-height: 22px; text-align: center; font-family: FontAwesome;}
+.aui_min,.aui_max,.aui_close { display: block; position: absolute; text-decoration: none; outline: none; cursor: pointer; font-size: 16px; background: #7290c6; color: #fff; border-top: none; top: 0px; height: 22px; width: 35px; font-size: 14px; line-height: 22px; text-align: center; font-family: FontAwesome;}
 .aui_min:hover,.aui_max:hover,.aui_close:hover { text-decoration: none; color: #fff; background: #cc0000;}
 .aui_min:active,.aui_max:active,.aui_close:active { color: fff; background: #f00;}
 .aui_min { right: 77px; content: "\f068";}
@@ -355,14 +358,14 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body input,#body input:focus { outline: none; box-shadow: none; border: 1px solid #bbb; padding: 8px;}
 #body input:focus { border-color: #75A1F0 !important; outline: none; box-shadow: 0 0 12px #75A1F0; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
 #body .font-icon { padding-right: 0.8em; display: inline-block;}
-#body .menu_left { min-width: 170px; position: fixed; z-index: 999; left: 0; height: 100%; width: 20%; background: #d52d9d;}
+#body .menu_left { min-width: 170px; position: fixed; z-index: 999; left: 0; height: 100%; width: 20%; background: #4265a4;}
 #body .menu_left h1 { color: #fff; font-weight: 400; padding: 15px 20px 20px 40px; font-size: 30px; margin: 0; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif;}
-#body .menu_left .setting li { line-height: 2.5em; color: #fff; font-size: 15px; box-sizing: border-box; text-indent: 10px; display: block; cursor: pointer; outline: none; -webkit-transition: padding 0.2s; -moz-transition: padding 0.2s; -o-transition: padding 0.2s; -ms-transition: padding 0.2s; transition: padding 0.2s; border-left: 4px solid #d52d9d;}
-#body .menu_left .setting li.hover { background: #de58b1; border-left: 4px solid #de58b1;}
-#body .menu_left .setting li.selected { background: #dc4fad; border-left: 4px solid #fff; padding-left: 20px;}
+#body .menu_left .setting li { line-height: 2.5em; color: #fff; font-size: 15px; box-sizing: border-box; text-indent: 10px; display: block; cursor: pointer; outline: none; -webkit-transition: padding 0.2s; -moz-transition: padding 0.2s; -o-transition: padding 0.2s; -ms-transition: padding 0.2s; transition: padding 0.2s; border-left: 4px solid #4265a4;}
+#body .menu_left .setting li.hover { background: #5c7fbd; border-left: 4px solid #5c7fbd;}
+#body .menu_left .setting li.selected { background: #5579ba; border-left: 4px solid #fff; padding-left: 20px;}
 #body .main { position: absolute; left: 20%; width: 80%; margin: 30px 0 0 20px; overflow-x: hidden;}
 #body .main .h1 .font-icon { padding-right: 16px;}
-#body .main div.h1 { font-weight: 400; color: #de58b1; padding: 0px 0 10px 10px; font-size: 26px;}
+#body .main div.h1 { font-weight: 400; color: #5c7fbd; padding: 0px 0 10px 10px; font-size: 26px;}
 #body .main .section { padding-bottom: 10px; border-top: 1px solid #ddd; padding-top: 10px; color: #666;}
 #body .main .section .box .line { margin-top: 15px; margin-bottom: 15px;}
 #body .main .section .box .login { border-bottom: 1px dashed #dde;}
@@ -380,10 +383,10 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .list .theme { margin: 5px 10px;}
 #body .main .list .info { text-align: center; margin-top: -3px;}
 #body .main .list .ico img { width: 100px; height: 65px;}
-#body .main .list.this { background-color: #ddd; color: #d52d9d; border-color: #888;}
+#body .main .list.this { background-color: #ddd; color: #4265a4; border-color: #888;}
 #body .main .list.listhover { border-color: #888;}
 #body .main .content { word-break: break-all; color: #448;}
-#body .main .content h2 { padding: 5px 0 5px 20px; margin: 10px 0; font-weight: 400; font-size: 16px; border-left: 5px solid #d52d9d;}
+#body .main .content h2 { padding: 5px 0 5px 20px; margin: 10px 0; font-weight: 400; font-size: 16px; border-left: 5px solid #4265a4;}
 #body .main .content p { margin-left: 5px; text-indent: 2em; margin-bottom: 8px; color: #666;}
 #body .main .content .box { color: #555; clear: both; color: #666;}
 #body .main .content .box .title { color: #444; border-bottom: 1px dashed #ddd; font-size: 21px; margin-bottom: 10px; margin-top: 10px;}
@@ -392,19 +395,19 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .content .box p b { padding-right: 8px;}
 #body .main .content .box p i { padding-right: 10px;}
 #body .main fieldset { margin-top: 10px; border: solid 1px #ddd; padding: 10px; color: #666;}
-#body .main fieldset legend { padding: 3px 20px; color: #FFF; background: #DC4FAD; font-size: 15px;}
-#body .main fieldset span { display: block; background: #ffffff; width: 100px; color: #224; padding: 4px 15px; margin-top: 10px; font-size: 14px; border-left: 5px solid #e682c5;}
+#body .main fieldset legend { padding: 3px 20px; color: #FFF; background: #5579BA; font-size: 15px;}
+#body .main fieldset span { display: block; background: #edf1f8; width: 100px; color: #224; padding: 4px 15px; margin-top: 10px; font-size: 14px; border-left: 5px solid #819bcc;}
 #body .main fieldset .line { margin: 0px; height: 1px; width: 100%; border-bottom: 1px solid #eee; margin-bottom: 10px; margin-top: -1px; _margin-top: -21px;}
 #body .main .content li,#body .main fieldset li { line-height: 2em; list-style-type: none; margin-left: 10px; padding-left: 25px; color: #666; word-break: break-all;}
 #body .main .content li:before,#body .main fieldset li:before { font-family: FontAwesome; content: "\f006"; padding-right: 10px; text-shadow: 0 0 1px;}
 #body .main .nav a { display: block; float: left; padding: 4px 2em; background: #eee; border: 1px solid #ddd; margin-bottom: -1px; margin-left: -1px; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
-#body .main .nav a:hover,#body .main .nav a.this { background: #de58b1; color: #444; border: 1px solid #de58b1; border-left-color: #ddd; color: #fff;}
+#body .main .nav a:hover,#body .main .nav a.this { background: #5c7fbd; color: #444; border: 1px solid #5c7fbd; border-left-color: #ddd; color: #fff;}
 #body .main .member input { display: inline-block; width: 45px; margin-left: 2px;}
 #body .main .member span { padding-left: 10px;}
 #body .main .member select { padding: 3px 5px; font-family: "微软雅黑"; color: #666;}
 #body .main .member .info { background: #efe; padding: 6px 10px; color: #8a8; border: #ccc 1px dotted; margin-top: 10px;}
-#body .main .member .edit_role { color: #dc4fad;}
-#body .main .member .edit_role:hover { border-bottom: 1px solid #dc4fad;}
+#body .main .member .edit_role { color: #5579ba;}
+#body .main .member .edit_role:hover { border-bottom: 1px solid #5579ba;}
 #body .main .together { border: 1px solid #dde; margin-top: -1px; padding: 5px 0 0 10px;}
 #body .main .together .title { float: left; width: 80px; height: 28px; margin: 5px; color: #333;}
 #body .main .together .title i { padding-left: 5px; font-style: normal;}
@@ -412,10 +415,10 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .together.input input { width: 40%; margin-left: 5px;}
 #body .main .group_editor a.revert { float: right; margin: 10px; padding: 4px 2em; border: 1px solid #ddd; background: #eee;}
 #body .main .group_editor a.revert:hover { background: #ddd; border-color: #bbb;}
-#body .main .group_editor .tag { height: 25px; line-height: 27px; margin: 2px 4px; padding: 0px 8px; text-decoration: none; color: #666; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s; display: block; float: left; color: #668; border: 1px solid #fef9fc; background: #fff;}
+#body .main .group_editor .tag { height: 25px; line-height: 27px; margin: 2px 4px; padding: 0px 8px; text-decoration: none; color: #666; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s; display: block; float: left; color: #668; border: 1px solid #e6ebf5; background: #fff;}
 #body .main .group_editor .tag input { border: none; vertical-align: initial; display: inline-block; min-height: 12px; margin-right: 6px;}
-#body .main .group_editor .tag:hover { color: #dc4fad; background: #ffffff;}
-#body .main .group_editor .tag.this { border-color: #dc4fad; color: #dc4fad; background: #ffffff;}
+#body .main .group_editor .tag:hover { color: #5579ba; background: #ffffff;}
+#body .main .group_editor .tag.this { border-color: #5579ba; color: #5579ba; background: #ffffff;}
 #body .main .group_editor .tag span { cursor: pointer;}
 #body .alert { width: 95%; position: fixed; bottom: -30px; margin-left: -25px; opacity: 0.8; filter: alpha(opacity=80); padding-top: 0px;}
 #body .section { width: 98% !important;}
@@ -426,14 +429,12 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .main .section .box_line span.infotitle { width: 125px; display: block; float: left; overflow: hidden; margin-right: 10px; line-height: 32px; color: #333;}
 #body .main .section .box_line input[type='text'] { display: block; float: left; width: 350px; font-weight: 200;}
 #body .main .section .box_line label { float: left; padding-right: 20px; line-height: 28px; margin: 0;}
-#body .main .section .box_line label input { width: 20px;}
 #body .main .section .box_line label input:focus { box-shadow: none;}
 #body .main .section .box_line i { padding-left: 5px; color: #777; line-height: 30px; font-size: 12px; font-style: normal;}
 #body .main .section .box_line a.button { width: 80px;}
 #body .main .section table .title { font-size: 14px;}
-#body .main .section table .button { margin-left: 0px; color: #666;}
+#body .main .section table .button { margin-left: 0px;}
 #body .main .section table .title span { border: none;}
-#body .main .section table a.button { padding: 5px 8px;}
 #body .main .section table .menu_list .name input { width: 90%; font-weight: 400;}
 #body .main .section table .menu_list .path input { width: 90%; font-weight: 400;}
 #body .menu_list { color: #666;}
@@ -447,27 +448,33 @@ body { -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: au
 #body .menu_system td span { display: inline !important;}
 #body .menu_system a.move_del { display: none !important;}
 #body .menu_hidden { opacity: 0.5;}
-#body table tr td { line-height: 2.5em;}
-#body .main .section table a.button { padding: 4px 8px;}
+#body .setting_menu table tr td.url { line-height: 30px;}
 #body a.path_ext_tips { padding: 3px 5px; margin: 0 0 0 10px; background: #888; border: none; color: #fff;}
+#body table tr.title td { line-height: 2.5em; height: 2.5em;}
+#body table tr td { line-height: 1em; height: 1em; border-right: 1px solid #ddd;}
+#body a.button { width: auto; padding: 2px 1em; height: 26px; line-height: 26px; line-height: 22px \9;}
+#body .save { width: auto;}
+#body .main .select table a.button { padding: 0 8px;}
+#body .main .group_editor .tag { height: 30px; line-height: 30px;}
+#body input[type="radio"] { width: auto; border: none;}
+#body .main .section .box_line label input[type="radio"] { width: auto; border: none; margin: 2px 1em;}
+#body .main .section .box_line label input[type="checkbox"] { width: auto; border: none; margin: 2px 1em;}
 #body table { font-size: 13px; color: #888; width: 100%; margin: 0px; border: 1px solid #ccc;}
-#body table tr { border-bottom: 1px solid #ddd; height: 30px;}
-#body table tr .title { border-bottom: 1px solid #ddd;}
-#body table tr input { display: block; width: 250px; width: 90%; color: #888;}
+#body table tr { border-bottom: 1px solid #ddd; background: #fcfcfc; height: 30px;}
+#body table tr input[type='text'] { display: block; width: 80%; color: #888;}
 #body table tr.title { background: #eee; color: #224;}
 #body table tr.title td { border-bottom: 1px solid #ddd; font-weight: 800;}
 #body table tr.title span { color: #999; font-size: 13px; padding-left: 4px; font-weight: 400;}
 #body table tr td { border-bottom: 1px solid #eee; line-height: 2.5em; height: 2.5em; padding-left: 3%;}
 #body table tr td.name { width: 30%;}
 #body table tr td.name,#body table tr td.path { border-right: 1px solid #ddd;}
-#body table tr td.action { line-height: 1.3em; width: 30%;}
+#body table tr td.action { line-height: 1.3em;}
 #body table tr td.action a { margin-right: 5px;}
 #body a.add { display: block; text-align: center; text-decoration: none; background: #f6f6f6; line-height: 2em; height: 2em; border: 1px solid #ccc; color: #555;}
 #body a.add:hover { background: #eee;}
-#body a.button { text-decoration: none; cursor: pointer; text-shadow: none; border: none; box-shadow: none; border-radius: 0; margin: 5px 10px 5px 0; font-weight: 400; padding: 0.5em 1.5em; font-size: 13px; display: inline-block; height: 16px; line-height: 18px; text-align: center; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s; background: #d52d9d; color: #fff;}
-#body a.button:hover { background: #ad227f; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
-#body a.button:active { background: #581140; text-shadow: none; border: none; box-shadow: none; border-radius: 0;}
-#body .main .section table .button { color: #fff;}
+#body a.button { text-decoration: none; cursor: pointer; font-size: 13px; margin: 5px 10px 5px 0; border: none; display: inline-block; border: 1px solid #ddd; text-shadow: none; box-shadow: none; text-align: center; font-weight: 400; padding: 1px 8px; background: #5579ba; color: #fff; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s;}
+#body a.button:hover { background: #38558a;}
+#body a.button:active { background: #223454; color: #fff;}
 #body a.create_app { margin: 0; display: block; position: absolute; right: 21px;}
 #body .app_menu_left { min-width: 130px; width: 130px;}
 #body .app_menu_left .setting li.selected { padding-left: 12px;}

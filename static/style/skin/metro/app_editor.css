@@ -1,4 +1,4 @@
-.topback_this { background: #e169b9;}
+.topback_this { background: #6b8ac3;}
 ::-webkit-scrollbar-track-piece { background-color: rgba(255,255,255,0.2);}
 ::-webkit-scrollbar { width: 10px; height: 10px;}
 ::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); border-radius: 12px; background-clip: padding-box; border: 1px solid rgba(0,0,0,0.3); min-height: 28px;}
@@ -8,7 +8,6 @@
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -36,11 +35,12 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
-.topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #DC4FAD; position: fixed;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
+.topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #5579BA; position: fixed;}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}
-.topbar .content .topbar_menu { display: block; text-decoration: none; color: #fff; border: 1px solid #e064b7; height: 40px; overflow: hidden; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s; padding: 0px 1.2em; border-top: none; border-bottom: none; outline: none; float: left; margin-left: -1px; font-size: 14px;}
-.topbar .content .topbar_menu:hover,.topbar .content .topbar_menu.this { background: #e169b9;}
+.topbar .content .topbar_menu { display: block; text-decoration: none; color: #fff; border: 1px solid #6787c1; height: 40px; overflow: hidden; -webkit-transition: all 0.2s; -moz-transition: all 0.2s; -o-transition: all 0.2s; -ms-transition: all 0.2s; transition: all 0.2s; padding: 0px 1.2em; border-top: none; border-bottom: none; outline: none; float: left; margin-left: -1px; font-size: 14px;}
+.topbar .content .topbar_menu:hover,.topbar .content .topbar_menu.this { background: #6b8ac3;}
 .topbar .content .topbar_menu.title { font-size: 20px; width: 200px; width: 202px\0; padding: 0; text-align: center;}
 .topbar .content .topbar_menu.title:hover { background: none;}
 .topbar .content .menu-desktop:before { content: "\f108";}
@@ -267,7 +267,7 @@ a.button:hover { background: #eee url("../../../images/buttons_40.png") 0 -12px 
 a.left:hover,a.middle:hover { margin-right: 1px; padding-right: 9px;}
 a.button:active { color: #000; border-color: #444;}
 a.button:focus { outline: none;}
-.messageBox { position: absolute; top: 15%; left: 0px; z-index: 88; background: #DC4FAD; color: #fff; opacity: 0.7; filter: alpha(opacity=70); -webkit-border-radius: 1px; -moz-border-radius: 1px; border-radius: 1px; -webkit-box-shadow: 0 10px 60px rgba(0,0,0,0.6); -moz-box-shadow: 0 10px 60px rgba(0,0,0,0.6); box-shadow: 0 10px 60px rgba(0,0,0,0.6); display: none;}
+.messageBox { position: absolute; top: 15%; left: 0px; z-index: 88; background: #5579BA; color: #fff; opacity: 0.7; filter: alpha(opacity=70); -webkit-border-radius: 1px; -moz-border-radius: 1px; border-radius: 1px; -webkit-box-shadow: 0 10px 60px rgba(0,0,0,0.6); -moz-box-shadow: 0 10px 60px rgba(0,0,0,0.6); box-shadow: 0 10px 60px rgba(0,0,0,0.6); display: none;}
 .messageBox .content { padding: 10px 30px; line-height: 20px; width: auto;}
 .dialogMax { z-index: 99999 !important;}
 .aui_outer { text-align: left; position: relative;}
@@ -284,6 +284,9 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_content.aui_state_full { display: block; width: 100%; margin: 0; padding: 0 !important; height: 100%;}
 .aui_icon { vertical-align: middle;}
 .aui_icon div { width: 48px; height: 48px; margin: 10px 0 10px 10px; background-position: center center; background-repeat: no-repeat;}
+body div .aui_border { *border: 1px solid #bbb;}
+body div .aui_border { border: 1px solid #bbb \0/IE9;}
+:root body div .aui_border { border: 0px solid \0/IE9;}
 .aui_buttons { padding: 10px 8px; text-align: right; white-space: nowrap; background-color: #F6F6F6; border-top: solid 1px #DADEE5;}
 .aui_buttons button { margin-left: 15px; padding: 3px 20px; height: 25px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; overflow: visible; color: #000000; border: none; background: #aaa; color: #fff;}
 .aui_buttons button:focus { outline: none 0;}
@@ -291,17 +294,17 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_buttons button:active { background: #777777;}
 .aui_buttons button[disabled] { cursor: default; color: #919191; background: #aaa; opacity: 0.5; filter: alpha(opacity=50);}
 .aui_buttons button::-moz-focus-inner { border: 0; padding: 0; margin: 0;}
-.aui_buttons button.aui_state_highlight { color: #FFF; background: #DC4FAD;}
-.aui_buttons button.aui_state_highlight:hover { color: #FFF; background: #e47ac1;}
-.aui_buttons button.aui_state_highlight:active { background: #a42178;}
-.aui_outer { border: 0px solid #DC4FAD; -webkit-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); -moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); box-shadow: 0px 5px 20px rgba(0,0,0,0.6);}
+.aui_buttons button.aui_state_highlight { color: #FFF; background: #5579BA;}
+.aui_buttons button.aui_state_highlight:hover { color: #FFF; background: #7996c9;}
+.aui_buttons button.aui_state_highlight:active { background: #314a78;}
+.aui_outer { border: 0px solid #5579BA; -webkit-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); -moz-box-shadow: 0px 5px 20px rgba(0,0,0,0.6); box-shadow: 0px 5px 20px rgba(0,0,0,0.6);}
 .aui_inner { background: #FFF;}
 .aui_state_lock .aui_nw,.aui_state_lock .aui_n,.aui_state_lock .aui_ne,.aui_state_lock .aui_w,.aui_state_lock .aui_e,.aui_state_lock .aui_sw,.aui_state_lock .aui_s,.aui_state_lock .aui_se { background: rgba(0,0,0,0.5); background: #000 \9 !important; opacity: 0.5; filter: alpha(opacity=50);}
 .aui_titleBar { position: relative; height: 100%;}
-.aui_title { height: 31px; line-height: 30px; padding: 0 28px 0 10px; color: #fff; font-size: 14px; background-color: #DC4FAD; border-bottom: 1px solid #cf2998;}
+.aui_title { height: 31px; line-height: 30px; padding: 0 28px 0 10px; color: #fff; font-size: 14px; background-color: #5579BA; border-bottom: 1px solid #40619c;}
 .aui_state_focus .aui_mask { display: none;}
 .aui_state_focus .aui_outer { -webkit-box-shadow: 0px 5px 60px rgba(0,0,0,0.8); -moz-box-shadow: 0px 5px 60px rgba(0,0,0,0.8); box-shadow: 0px 5px 60px rgba(0,0,0,0.8);}
-.aui_min,.aui_max,.aui_close { display: block; position: absolute; text-decoration: none; outline: none; cursor: pointer; font-size: 16px; background: #e371bd; color: #fff; border-top: none; top: 0px; height: 22px; width: 35px; font-size: 14px; line-height: 22px; text-align: center; font-family: FontAwesome;}
+.aui_min,.aui_max,.aui_close { display: block; position: absolute; text-decoration: none; outline: none; cursor: pointer; font-size: 16px; background: #7290c6; color: #fff; border-top: none; top: 0px; height: 22px; width: 35px; font-size: 14px; line-height: 22px; text-align: center; font-family: FontAwesome;}
 .aui_min:hover,.aui_max:hover,.aui_close:hover { text-decoration: none; color: #fff; background: #cc0000;}
 .aui_min:active,.aui_max:active,.aui_close:active { color: fff; background: #f00;}
 .aui_min { right: 77px; content: "\f068";}
@@ -361,8 +364,8 @@ body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(op
 .ztree li span.button.ico_loading { background: url("../../../images/loading_tree.gif") no-repeat scroll 0 2px transparent;}
 .ztree li a { padding-top: 1px; cursor: pointer; text-decoration: none; display: block; margin: 0; color: #333; vertical-align: top; height: 22px; padding-left: 10px; border: 1px solid #f3f3f3;}
 .ztree li a:hover { text-decoration: none; -webkit-transition: all 0.3s; -moz-transition: all 0.3s; -o-transition: all 0.3s; -ms-transition: all 0.3s; transition: all 0.3s; background: #ffd987; height: 22px; border: 1px solid #ffd987;}
-.ztree li a.curSelectedNode { border: 1px solid #DC4FAD; background: #DC4FAD; line-height: 22px; height: 22px; color: #fff;}
-.ztree li a.curSelectedNode_Edit { border: 1px solid #DC4FAD; background: #DC4FAD; color: black; height: 23px;}
+.ztree li a.curSelectedNode { border: 1px solid #5579BA; background: #5579BA; line-height: 22px; height: 22px; color: #fff;}
+.ztree li a.curSelectedNode_Edit { border: 1px solid #5579BA; background: #5579BA; color: black; height: 23px;}
 .ztree li a input.rename { height: 20px; line-height: 22px; width: 100px; padding: 0; margin: 0; border: none; outline: none; padding-left: 5px; font-size: 12px;}
 .ztree li a span.button.root_docu { background: none;}
 .ztree li a span.button.noline_docu { background: none;}
@@ -376,11 +379,11 @@ body div.dialog-simple.aui_state_drag .aui_header { opacity: 1; filter: alpha(op
 .ztree li a span.button.music_ico_close,.ztree li a span.button.music_ico_docu,.ztree li a span.button.music_ico_open { background-position: 0 -70px;}
 .ztree li a span.button.movie_ico_close,.ztree li a span.button.movie_ico_docu,.ztree li a span.button.movie_ico_open { background-position: 0 -220px;}
 .ztree li a span.button.download_ico_close,.ztree li a span.button.download_ico_docu,.ztree li a span.button.download_ico_open { background-position: 0 -301px;}
-ul.ztree.zTreeDragUL { margin: 0; padding: 0; position: absolute; width: auto; height: auto; background-color: #DC4FAD; border: 1px solid #DC4FAD; opacity: 0.5; filter: alpha(opacity=50);}
+ul.ztree.zTreeDragUL { margin: 0; padding: 0; position: absolute; width: auto; height: auto; background-color: #5579BA; border: 1px solid #5579BA; opacity: 0.5; filter: alpha(opacity=50);}
 ul.ztree.zTreeDragUL li a span.space { display: none !important;}
 ul.ztree.zTreeDragUL li a { padding: 4px 10px 0 10px; color: #fff;}
 ul.ztree.zTreeDragUL li span.button.switch { display: none;}
-.ztree li a.tmpTargetNode_inner { background: #a42178; border: 1px solid #cf2998; color: #fff;}
+.ztree li a.tmpTargetNode_inner { background: #314a78; border: 1px solid #40619c; color: #fff;}
 .ztree li a.tmpTargetNode_prev { border-bottom: 1px solid #f96;}
 .ztree li a.tmpTargetNode_next { border-bottom: 1px solid #f96;}
 span.tmpzTreeMove_arrow { display: inline-block; margin: 4px 0 0 2px; position: absolute; border-color: transparent transparent transparent #fff; border-style: solid; border-width: 7px 0px 7px 7px; width: 0; height: 0; _border-top-color: white; _border-bottom-color: white; _filter: chroma(color=white);}
@@ -428,7 +431,7 @@ span.tmpzTreeMove_arrow { display: inline-block; margin: 4px 0 0 2px; position: 
 .context-menu-list .context-menu-item.disabled .font-icon,.context-menu-list .context-menu-item.disable .font-icon { color: #EEE;}
 .context-menu-list .context-menu-item.disabled.hover,.context-menu-list .context-menu-item.disable.hover { color: #ccc; cursor: default; background-color: #fff;}
 .context-menu-list .context-menu-item.disabled.hover .font-icon,.context-menu-list .context-menu-item.disable.hover .font-icon { color: #EEE;}
-.context-menu-list .context-menu-item.hover { cursor: pointer; color: #fff; background: #DC4FAD; background-color: none \9;}
+.context-menu-list .context-menu-item.hover { cursor: pointer; color: #fff; background: #5579BA; background-color: none \9;}
 .context-menu-list .context-menu-item.hover .font-icon { color: #fff;}
 .context-menu-list .context-menu-item.context-menu-separator { height: 2px; line-height: 0; border-bottom: 1px solid #ddd; margin: 2px 0 2px;}
 .context-menu-list .context-menu-item > .context-menu-list { display: none; right: -5px; top: 5px;}

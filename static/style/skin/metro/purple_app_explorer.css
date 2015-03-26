@@ -8,7 +8,6 @@
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -36,6 +35,7 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 .topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #8D3CC4; position: fixed;}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}
@@ -284,6 +284,9 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_content.aui_state_full { display: block; width: 100%; margin: 0; padding: 0 !important; height: 100%;}
 .aui_icon { vertical-align: middle;}
 .aui_icon div { width: 48px; height: 48px; margin: 10px 0 10px 10px; background-position: center center; background-repeat: no-repeat;}
+body div .aui_border { *border: 1px solid #bbb;}
+body div .aui_border { border: 1px solid #bbb \0/IE9;}
+:root body div .aui_border { border: 0px solid \0/IE9;}
 .aui_buttons { padding: 10px 8px; text-align: right; white-space: nowrap; background-color: #F6F6F6; border-top: solid 1px #DADEE5;}
 .aui_buttons button { margin-left: 15px; padding: 3px 20px; height: 25px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; overflow: visible; color: #000000; border: none; background: #aaa; color: #fff;}
 .aui_buttons button:focus { outline: none 0;}
@@ -572,11 +575,11 @@ html { overflow-x: hidden; overflow-y: hidden;}
 .frame-header .header-content .header-middle #yarnball_input input:focus { outline: none;}
 .frame-header .header-content .header-right { position: absolute; right: 20px; top: 10px;}
 .frame-header .header-content .header-right .btn { border-radius: 0;}
-.frame-header .header-content .header-right input { display: block; float: left; border: 1px solid #ddd; height: 25px; padding-left: 10px; padding-right: 10px; text-shadow: 1px 1px 3px #cce; color: #888; background: #f8f8f8 url("../../../images/bg.gif") 0px -2px repeat-x; box-shadow: #e6e6e6 0px 0px 20px inset; outline: none; width: 120px; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
+.frame-header .header-content .header-right input { display: block; float: left; border: 1px solid #ddd; height: 25px; height: 27px \9; padding-left: 10px; padding-right: 10px; text-shadow: 1px 1px 3px #cce; color: #888; background: #f8f8f8 url("../../../images/bg.gif") 0px -2px repeat-x; box-shadow: #e6e6e6 0px 0px 20px inset; outline: none; width: 120px; -webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
 .frame-header .header-content .header-right input:focus { width: 160px; box-shadow: #ccc 0px 0px 20px inset;}
 .frame-main { position: absolute; left: 0; right: 0; top: 90px; bottom: 32px;}
-.frame-main .frame-left { position: absolute; left: 0; top: 0; bottom: 0; width: 199px; border-right: 1px solid #ddd; background: #f3f3f3; background-attachment: fixed; overflow: auto;}
-.frame-main .bottom_box { position: fixed; bottom: 30px; opacity: 0.9; filter: alpha(opacity=90); height: 90px; overflow: hidden; border-top: 1px solid #e6e6e6; background: #f6f6f6; width: 199px;}
+.frame-main .frame-left { position: absolute; left: 0; top: 0; bottom: 90px; width: 199px; border-right: 1px solid #ddd; background: #f3f3f3; background-attachment: fixed; overflow: auto;}
+.frame-main .bottom_box { position: fixed; bottom: 30px; height: 91px; width: 199px; opacity: 0.9; filter: alpha(opacity=90); overflow: hidden; border-right: 1px solid #ddd; border-top: 1px solid #e6e6e6; background: #f6f6f6;}
 .frame-main .bottom_box .box_content { margin: 0 auto; width: 190px; padding-left: 10px;}
 .frame-main .bottom_box a { background: #fff url("../../../images/bg.gif") 0px -5px repeat-x; display: block; border-radius: 3px; float: left; text-align: center; margin: 10px; color: #999; border: 1px solid #ddd; padding: 4px 10px 1px 10px; text-decoration: none;}
 .frame-main .bottom_box a i { display: block; font-size: 25px; padding-bottom: 5px;}

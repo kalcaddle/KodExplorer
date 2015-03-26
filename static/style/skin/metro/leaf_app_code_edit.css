@@ -8,7 +8,6 @@
 .font-icon { text-shadow: 0 0 0px;}
 .dragMaskView { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 888; background: #fff; opacity: 0.01; filter: alpha(opacity=1); -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 input,button,select,textarea { line-height: initial;}
-input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 a { text-decoration: none;}
 body { font-size: 13px; padding: 0px; margin: 0px; font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
 textarea,input,button,pre { font-family: Helvetica, arial, freesans, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif; -khtml-user-select: auto; -webkit-user-select: auto; -moz-user-select: auto; -ms-user-select: auto; -o-user-select: auto; user-select: auto;}
@@ -36,6 +35,7 @@ ul.dropdown-menu a:hover,ul.dropdown-menu .this a { transition: all 0.2s;}
 .context-menu-list .hover span b { color: #fff;}
 .context-menu-list .context-menu-item.line_top { border-top: 1px solid #ddd !important;}
 input { border: 1px solid #ddd; background: #fff; outline: none;}
+input[type="radio"],input[type="checkbox"] { border: none; background: none;}
 .topbar { width: 100%; height: 40px; color: #ddd; z-index: 100; top: 0; background: #03B3B2; position: fixed;}
 .topbar .content { padding: 0px; line-height: 40px; height: 40px; wordbreak: break-all;}
 .topbar .content i { display: inline-block; padding-right: 10px; font-size: 1.1em;}
@@ -284,6 +284,9 @@ table.aui_border,table.aui_dialog { width: 100%; border: 0; margin: 0; border-co
 .aui_content.aui_state_full { display: block; width: 100%; margin: 0; padding: 0 !important; height: 100%;}
 .aui_icon { vertical-align: middle;}
 .aui_icon div { width: 48px; height: 48px; margin: 10px 0 10px 10px; background-position: center center; background-repeat: no-repeat;}
+body div .aui_border { *border: 1px solid #bbb;}
+body div .aui_border { border: 1px solid #bbb \0/IE9;}
+:root body div .aui_border { border: 0px solid \0/IE9;}
 .aui_buttons { padding: 10px 8px; text-align: right; white-space: nowrap; background-color: #F6F6F6; border-top: solid 1px #DADEE5;}
 .aui_buttons button { margin-left: 15px; padding: 3px 20px; height: 25px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; overflow: visible; color: #000000; border: none; background: #aaa; color: #fff;}
 .aui_buttons button:focus { outline: none 0;}
@@ -380,7 +383,7 @@ html { overflow-x: hidden; overflow-y: hidden;}
 .context-menu-list.code_theme_list,.context-menu-list.code_mode_list { width: 180px !important;}
 .context-menu-list span b { display: inline-block; font-size: 12px; position: absolute; right: 10px; font-weight: 400; color: #aaa; width: 65px; text-align: right; overflow: hidden;}
 .context-menu-list .hover span b { color: #fff;}
-.edit_tab .tabs { height: 29px; background: #fff; overflow: hidden; border-bottom: 1px solid #ddd;}
+.edit_tab .tabs { height: 29px; width: 100%; background: #fff; overflow: hidden; border-bottom: 1px solid #ddd;}
 .edit_tab .tabs .tab { position: relative; height: 30px; line-height: 30px; color: #666; width: 120px; float: left; background: url("../../../images/buttons_40.png") 0 0px repeat-x; border-right: 1px solid #ddd;}
 .edit_tab .tabs .tab .name { margin-left: 5px; display: block; width: 80%; overflow: hidden; position: absolute; z-index: 2; cursor: default; height: 28px;}
 .edit_tab .tabs .tab .close { float: right; color: #ccc; position: relative; font-size: 15px; margin-right: 5px; z-index: 3; margin-top: 7px;}
@@ -542,7 +545,7 @@ body div#ace_settingsmenu,body div#kbshortcutmenu { background-color: #000; opac
 .title_box .size .share_time { padding-left: 10px; font-style: normal; color: #aaa;}
 .title_box .btn-group { float: right;}
 .title_box .btn-group .btn_download { padding: 4px 20px;}
-.title_box .btn-group .dropdown-toggle { height: 16px;}
+.title_box .btn-group .dropdown-toggle { height: 16px; height: 30px \9;}
 .content_box { width: 80%; margin: 30px auto; margin-bottom: 100px;}
 .show_image { text-align: center;}
 .show_image img { max-width: 100%;}

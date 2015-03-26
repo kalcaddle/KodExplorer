@@ -16,10 +16,13 @@
 	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config_theme;?>app_explorer.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	
 </head>
+<style>
+.frame-main .frame-left {bottom: 0px;}
+<?php if(isset($_GET['type'])){
+	echo '.topbar{display: none;}.frame-header{top:0;}.frame-main{top:50px;}';
+} ?>
+</style>
 
-<?php if(isset($_GET['type'])){?>
-<style>.topbar{display: none;}.frame-header{top:0;}.frame-main{top:50px;}</style>
-<?php } ?>
 
 <body style="overflow:hidden;" oncontextmenu="return core.contextmenu();">
 	<?php include(TEMPLATE.'common/navbar_share.html');?>

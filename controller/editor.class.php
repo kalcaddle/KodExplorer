@@ -46,7 +46,7 @@ class editor extends Controller{
 		$filestr = rawurldecode($this->in['filestr']);
 		$charset = $this->in['charset'];
 		$path =_DIR($this->in['path']);
-		if (!is_writable($path)) show_json($this->L['no_permission_write'],false);
+		if (!is_writable($path)) show_json($this->L['no_permission_write_file'],false);
 		
 		if ($charset !='' || $charset != 'utf-8') {
 			$filestr=mb_convert_encoding($filestr,$this->in['charset'],'utf-8');
@@ -88,7 +88,7 @@ class editor extends Controller{
 	public function setConfig(){
 		$file = USER.'data/editor_config.php';	
         if (!is_writeable($file)) {//配置不可写
-            show_json($this->L['no_permission_write'],false);
+            show_json($this->L['no_permission_write_file'],false);
         }
 		$key= $this->in['k'];
 		$value = $this->in['v'];

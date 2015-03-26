@@ -62,7 +62,7 @@ class setting extends Controller{
     public function set(){
         $file = $this->config['user_seting_file'];
         if (!is_writeable($file)) {//配置不可写
-            show_json($this->L['no_permission_write'],false);
+            show_json($this->L['no_permission_write_file'],false);
         }
         $key   = $this->in['k'];
         $value = $this->in['v'];

@@ -30,11 +30,10 @@ class user extends Controller
         if (ST == 'share') return true;//共享页面
         if(in_array(ACT,$this->notCheck)){//不需要判断的action
             return;
-        }else if(isset($_SESSION['kod_login']) && $_SESSION['kod_login'] === true){
+        }else if($_SESSION['kod_login']===true && $_SESSION['kod_user']['name']!=''){
             define('USER',USER_PATH.$this->user['name'].'/');
             define('USER_TEMP',USER.'data/temp/');
             define('USER_RECYCLE',USER.'recycle/');
-
             if (!file_exists(USER)) {
                 $this->logout();
             }
@@ -53,15 +52,15 @@ class user extends Controller
             $this->config['user_fav_file']     = USER.'data/fav.php';    // 收藏夹文件存放地址.
             $this->config['user_seting_file']  = USER.'data/config.php'; //用户配置文件
             $this->config['user']  = fileCache::load($this->config['user_seting_file']);
-            if(count($this->config['user'])<1){
+            if($this->config['user']['theme']==''){
                 $this->config['user'] = $this->config['setting_default'];
             }
             return;
-        }else if(isset($_COOKIE['kod_name']) && isset($_COOKIE['kod_token'])){
+        }else if($_COOKIE['kod_name']!='' && $_COOKIE['kod_token']!=''){
             $member = new fileCache(USER_SYSTEM.'member.php');
             $user = $member->get($_COOKIE['kod_name']);
             if (!is_array($user) || !isset($user['password'])) {
-                $this->login();
+                $this->logout();
             }
             if(md5($user['password'].get_client_ip()) == $_COOKIE['kod_token']){
                 session_start();//re start
@@ -72,6 +71,7 @@ class user extends Controller
                 header('location:'.get_url());
                 exit;
             }
+            $this->logout();//session user数据不存在
         }else{
             if ($this->config['setting_system']['auto_login'] != '1') {
                 $this->logout();//不自动登录
@@ -106,7 +106,7 @@ class user extends Controller
             'web_root'      => $GLOBALS['web_root'],
             'web_host'      => HOST,
             'static_path'   => STATIC_PATH,
-            'basic_path'    => BASIC_PATH,
+            'basic_path'    => $basic_path,
             'version'       => KOD_VERSION,
             'app_host'      => APPHOST,
             'office_server' => OFFICE_SERVER,
@@ -133,11 +133,6 @@ class user extends Controller
      * 登陆view
      */
     public function login($msg = ''){
-        // session_start();
-        // setcookie('kod_name', null, time()-3600); 
-        // setcookie('kod_token', null, time()-3600); 
-        // setcookie('kod_user_language', '', time()-3600);
-        // session_destroy(); 
         if (!file_exists(USER_SYSTEM.'install.lock')) {
             $this->display('install.html');exit;
         }
@@ -152,6 +147,7 @@ class user extends Controller
     public function loginFirst(){
         touch(USER_SYSTEM.'install.lock');
         header('location:./index.php?user/login');
+        exit;
     }
     /**
      * 退出处理
@@ -163,6 +159,7 @@ class user extends Controller
         setcookie('kod_user_language', '', time()-3600);
         session_destroy();
         header('location:./index.php?user/login');
+        exit;
     }
     
     /**

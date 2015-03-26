@@ -13,10 +13,6 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_setting.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	
 </head>
-<style>
-	#body table tr.title td{line-height: 2.5em;height: 2.5em;}
-	#body table tr td{line-height: 1em;height: 1em;border-right: 1px solid #ddd;}
-</style>
 <body>
 	<div id="body">
 		<div class="menu_left">	
