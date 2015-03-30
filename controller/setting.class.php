@@ -46,7 +46,7 @@ class setting extends Controller{
         }
         $setting = $GLOBALS['config']['setting_system'];
         foreach ($data as $key => $value){
-            $setting[$key] = $value;
+            $setting[$key] = rawurldecode($value);
         }
         //$setting['menu'] = $GLOBALS['config']['setting_menu_default'];
         //为了保存更多的数据；不直接覆盖文件 $data->setting_file;

@@ -64,6 +64,8 @@ $L= array(
 	"unknow_file_tips"  		=>"暫不支持打開",
 	"unknow_file_download"  	=>"下載到本地",
 	"unknow_file_office"  		=>"office預覽,此程序需要部署在外網",
+	"config_save_error_auth"	=> '配置保存失败,管理员禁止了此权限!',
+	"config_save_error_file"	=> '配置保存失败,kod目录需要有写权限!',
 
 	//editor
 	"shortcut"  			  	=> '快捷鍵',
@@ -130,6 +132,7 @@ $L= array(
 	"kod_name"  				=> "KodExplorer",
 	"kod_name_desc"  			=> "芒果雲•資源管理器",
 	"kod_power_by"  			=> " - Powered by KodExplorer",
+	"kod_name_copyright"  		=> "芒果雲•資源管理器",
 
 
 	"login"                      =>	"登六",

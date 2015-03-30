@@ -23,6 +23,7 @@
 	  -o-user-select: all;
 	  user-select: all;
 	}
+	.frame-main{bottom: 32px;}
 </style>
 
 <body>
@@ -36,13 +37,13 @@
 				<div class="size"><span></span><i class="share_time"></i></div>
 				<div class="btn-group">
 				  <a type="button" class="btn btn-primary btn_download" href=""><?php echo $L['download'];?></a>
-				  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				  <!-- <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 				    <span class="caret"></span>
 				    <span class="sr-only">Toggle Dropdown</span>
 				  </button>
 				  <ul class="dropdown-menu" role="menu">
 				    <li><a href="#" class="page_share button_my_share" id="button_share"><?php echo $L['share'];?></a></li>
-				  </ul>
+				  </ul> -->
 				</div>
 				<div class="error_tips"><?php echo $L['share_error_show_tips'];?></div>
 			</div>

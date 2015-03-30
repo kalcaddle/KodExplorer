@@ -16,7 +16,7 @@ $config['setting_all'] = array(
 	'moviethemeall'	=> "webplayer,qqplayer,vplayer,tvlive,youtube"
 );
 
-// 默认配置
+//新用户初始化配置
 $config['setting_default'] = array(
 	'list_type'			=> "icon",		// list||icon
 	'list_sort_field'	=> "name",		// name||size||ext||mtime
@@ -28,7 +28,7 @@ $config['setting_default'] = array(
 	'movietheme'		=> "webplayer"	// movie player theme
 );
 
-//初始系统配置
+//初始化系统配置
 $config['setting_system_default'] = array(
 	'system_password'	=> rand_string(10),
 	'system_name'		=> "KodExplorer",
@@ -40,7 +40,7 @@ $config['setting_system_default'] = array(
 	'new_user_folder'	=> "download,music,image,desktop"
 );
 
-//默认菜单配置
+//初始化默认菜单配置
 $config['setting_menu_default'] = array(
 	array('name'=>'desktop','type'=>'system','url'=>'index.php?desktop','target'=>'_self','use'=>'1'),
 	array('name'=>'explorer','type'=>'system','url'=>'index.php?explorer','target'=>'_self','use'=>'1'),

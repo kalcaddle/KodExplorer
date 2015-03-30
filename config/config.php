@@ -45,10 +45,10 @@ define('STATIC_PATH',"./static/");//静态文件目录
  可以使程序更安全, 就不用限制用户的扩展名权限了;
  */
 define('USER_PATH',     DATA_PATH .'User/');        //用户目录
-//自定义用户目录；需要先将data/User移到别的地方 例如修改成如下地址
+//自定义用户目录；需要先将data/User移到别的地方 再修改配置，例如：
 //define('USER_PATH',   DATA_PATH .'/Library/WebServer/Documents/User');
 define('PUBLIC_PATH',   DATA_PATH .'public/');     //公共目录
-//公共共享目录,读写权限跟随用户目录的读写权限 例如修改成如下地址
+//公共共享目录,读写权限跟随用户目录的读写权限 再修改配置，例如：
 //define('PUBLIC_PATH','/Library/WebServer/Documents/Public/');
 /*
  * office服务器配置；默认调用的微软的接口，程序需要部署到外网。

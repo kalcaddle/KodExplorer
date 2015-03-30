@@ -302,6 +302,15 @@ var objectValues = function(obj){
     return values;
 }
 
+var $sizeInt = function($obj){
+	var str = $obj+'';
+	var theSize = parseInt(str.replace('px',''));
+	if (isNaN(theSize)) {
+		return 0;
+	}else{
+		return theSize;
+	}
+}
 
 //通用遮罩层
 var MaskView =  (function(){

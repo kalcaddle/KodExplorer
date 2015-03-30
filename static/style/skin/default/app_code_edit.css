@@ -561,7 +561,7 @@ body div#ace_settingsmenu,body div#kbshortcutmenu { background-color: #000; opac
 .show_code .code { background: none; padding: 0px; margin: 0;}
 .show_code .code .ace_gutter { display: inline-block; width: 30px !important; padding: 0 10px;}
 .ace_editor { font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;}
-.office_page { bottom: 2px;}
+.office_page { bottom: -18px;}
 .show_office { margin: 0; width: 100%; height: 100%; margin-top: -50px;}
 .show_swf { width: 80%; margin: 0 auto; padding-top: 30px; height: 90%;}
 .music_player { width: 320px; height: 400px; box-shadow: 0 10px 100px #444; margin-top: 12%;}

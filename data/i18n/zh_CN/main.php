@@ -63,6 +63,9 @@ $L= array(
 	"unknow_file_tips"  		=>"暂不支持打开",
 	"unknow_file_download"  	=>"下载到本地",
 	"unknow_file_office"  		=>"office预览,此程序需要部署在外网",
+	"config_save_error_auth"	=> '配置保存失败,管理员禁止了此权限!',
+	"config_save_error_file"	=> '配置保存失败,kod目录需要有写权限!',
+
 
 	//editor
 	"shortcut"  			  	=> '快捷键',
@@ -129,7 +132,7 @@ $L= array(
 	"kod_name"  				=> "KodExplorer",
 	"kod_name_desc"  			=> "芒果云•资源管理器",
 	"kod_power_by"  			=> " - Powered by KodExplorer",
-
+	"kod_name_copyright"  		=> "芒果云•资源管理器",
 
 	//login
 	"login"                      =>	"登陆 ",
@@ -143,12 +146,12 @@ $L= array(
 	"code_error"                 =>	"验证码错误",
 	"user_not_exists"            =>	"用户名不存在!",
 	"password_error"             =>	"密码错误!",
-	"password_not_null"          =>	"密码不能为空!",	
+	"password_not_null"          =>	"密码不能为空!",
 	"old_password_error"         =>	"原密码错误!",
 	"permission"                 =>	"权限!",
 	"permission_edit"            =>	"修改权限",
-	"no_permission"              =>	"您没有此权限!",
-	"no_permission_ext"          =>	"您没有该类型文件权限",
+	"no_permission"              =>	"管理员禁止了此权限!",
+	"no_permission_ext"          =>	"管理员禁止了该类型文件权限",
 	"dialog_min"                 =>	"最小化",
 	"dialog_min_all"             =>	"最小化所有",	
 	"dialog_display_all"         =>	"显示所有窗口",

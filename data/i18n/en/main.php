@@ -64,6 +64,8 @@ $L = array(
 	"unknow_file_tips"  		=>"not to support the open",
 	"unknow_file_download"  	=>"Download",
 	"unknow_file_office"  		=>"office preview,this process needs to be deployed in the network",
+	"config_save_error_auth"	=> 'error,no permission!',
+	"config_save_error_file"	=> 'error,file no permission write!',
 
 	//editor
 	"shortcut"  			  	=> 'Shortcuts',
@@ -129,6 +131,7 @@ Even as webIDE, can be directly online development. You can also integrate the t
 	"kod_name"  				=> "KodExplorer",
 	"kod_name_desc" 			=> "kod online explorer",
 	"kod_power_by"  			=> " - Powered by KodExplorer",
+	"kod_name_copyright"  		=> "kod online explorer",
 
 	//login
 	"login"                      =>	"login",

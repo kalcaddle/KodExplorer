@@ -609,3 +609,4 @@ html { overflow-x: hidden; overflow-y: hidden;}
 .frame-main .frame-right .dropdown-menu { font-size: 13px;}
 .frame-main .frame-right .dropdown-menu a:hover,.frame-main .frame-right .dropdown-menu .this a { background: #FF8F32; color: #fff; filter: none;}
 .frame-main .frame-right .bodymain { position: absolute; zoom: 1; z-index: 0; top: 35px; bottom: 0; left: 0; overflow: auto; width: 100%; -khtml-user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -o-user-select: none; user-select: none;}
+.fileList_icon div.file { transition: all 0.2s ease 0s;}
