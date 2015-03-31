@@ -168,7 +168,14 @@ function init_setting(){
         fileCache::save($setting_file,$setting);
     }else{
         $setting = fileCache::load($setting_file);   
-    }     
+    }
+    if (!is_array($setting)) {
+        $setting = $GLOBALS['config']['setting_system_default'];
+    }
+    if (!is_array($setting['menu'])) {
+        $setting['menu'] = $GLOBALS['config']['setting_menu_default'];
+    }
+
     $GLOBALS['app']->setDefaultController($setting['first_in']);//设置默认控制器
     $GLOBALS['app']->setDefaultAction('index');    //设置默认控制器函数
 
