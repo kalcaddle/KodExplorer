@@ -422,7 +422,7 @@ Even as webIDE, can be directly online development. You can also integrate the t
 	"group_role_group_edit"      =>	"group edit",
 	"group_role_group_del"       =>	"group remove",
 	"group_role_ext_warning"     =>	"Not allowed to specify the type of file upload,<br/> rename (renamed the specified extension), <br/>edit,save, remote download,unzip",
-	"group_tips"=>"<li>1.group name can not be repeated, modify group name belongs to the reorganization of the user is automatically associated </li><li>2. extension restriction relation system safety, please be careful operation <i> (fruit in the web directory of new PHP; means reform program permissions for this user name) </i></li><li>3. user management, privilege management; access and to the authority is bound; the program will automatically associated </li><li>4. set permissions can add permissions set, subsequent permission is not inherited <i> (this permission is equivalent to the highest authority) </i></li>",	
+	"group_tips"=>"<li>1.group name can not be repeated, modify group name belongs to the reorganization of the user is automatically associated </li><li>2. extension restriction relation system safety, please be careful operation <i> (If the user create a new .php file in the web directory; means reform program permissions for this user name) </i></li><li>3. user management, privilege management; access and to the authority is bound; the program will automatically associated </li><li>4. set permissions can add permissions set, subsequent permission is not inherited <i> (this permission is equivalent to the highest authority) </i></li>",	
 
 	//explorer_ajax
 	"not_null"                   =>	"required cannot be empty!",
