@@ -1,4 +1,7 @@
-/* CSS by Brade - www.bradezone.com */
+/*
+ * adminer 4.21
+ * changed by warlee
+ */
 *{margin:0;padding:0}
 /* 颜色微调【同样颜色灰度值调节】 */
 ::-webkit-scrollbar-track-piece{background-color:#f5f5f5;border-left:1px solid #d2d2d2}
@@ -24,7 +27,7 @@ h2{font-size:24px;margin:0px;background:transparent;border:0;color:#366ec2;
 padding: 10px 0;;border-bottom: 3px solid #eee;margin-bottom: 10px;}
 h3{font-size:18px;font-weight:bold;padding:4px 0;margin:0}
 form#form{overflow:hidden}
-fieldset{float:left;min-height:48px;padding:0 4px 4px 4px;border:1px solid #ccc;margin-bottom:8px;margin-right:4px}
+fieldset{min-height:48px;padding:0 4px 4px 4px;border:1px solid #ccc;margin-bottom:8px;margin-right:4px}
 fieldset div{margin-top:4px}
 input,select,textarea{color:#555;border:1px solid #ccc;padding: 2px 5px;}
 fieldset select{margin-right:4px}
