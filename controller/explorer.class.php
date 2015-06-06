@@ -199,7 +199,7 @@ class explorer extends Controller{
             array('name'=>$this->L['root_path'],'children'=>$root,'menuType'=>"menuTreeRoot",
                 'iconSkin'=>"my",'open'=>true,'this_path'=> MYHOME,'isParent'=>$root_isparent),
             array('name'=>$this->L['public_path'],'children'=>$public,'menuType'=>"menuTreeRoot",
-                'iconSkin'=>"lib",'open'=>true,'this_path'=> '*public*','isParent'=>$public_isparent)
+                'iconSkin'=>"lib",'open'=>true,'this_path'=> PUBLIC_PATH,'isParent'=>$public_isparent)
         );
         show_json($tree_data);
     }
