@@ -97,7 +97,7 @@ $L= array(
 	"new_user_app_desc"  		=>"应用中心的应用，多个用逗号隔开",
 	"auto_login"  				=>"游客自动登录",
 	"auto_login_desc"  			=>"默认登录用户名为<code>guest</code>的用户；开启后确保<code>guest</code>用户存在",
-	"first_in"  				=>"登陆后默认进入",
+	"first_in"  				=>"登录后默认进入",
 	"menu_name"  				=>"菜单名",
 	"menu_hidden"  				=> "隐藏",
 	"menu_show"  				=>"显示",
@@ -120,7 +120,7 @@ $L= array(
 	"php_env_error_file"  		=>"未开启 file_get_contents",
 	"php_env_error_path"  		=>"不可写",
 	"php_env_error_gd"  		=>"须开启php GD库, 否则验证码、缩略图使用将不正常",
-	"install_login"  			=>"您可以用如下账号登陆",
+	"install_login"  			=>"您可以用如下账号登录",
 	"install_enter"  			=>"进入系统",
 	"install_user_default"  	=>"管理员：admin/admin(请务必修改密码)<br/>普通用户：demo/demo<br/>游客用户：guest/guest",
 
@@ -135,7 +135,7 @@ $L= array(
 	"kod_name_copyright"  		=> "芒果云•资源管理器",
 
 	//login
-	"login"                      =>	"登陆 ",
+	"login"                      =>	"登录",
 	"guest_login"                =>	"游客登录",	
 	"username"                   =>	"用户名",
 	"password"                   =>	"密码",
@@ -148,7 +148,7 @@ $L= array(
 	"password_error"             =>	"密码错误!",
 	"password_not_null"          =>	"密码不能为空!",
 	"old_password_error"         =>	"原密码错误!",
-	"permission"                 =>	"权限!",
+	"permission"                 =>	"权限",
 	"permission_edit"            =>	"修改权限",
 	"no_permission"              =>	"管理员禁止了此权限!",
 	"no_permission_ext"          =>	"管理员禁止了该类型文件权限",
@@ -346,7 +346,7 @@ $L= array(
 	"ui_editor"                  =>	"编辑器",
 	"adminer"                    =>	"adminer",
 	"ui_project_home"            =>	"项目主页",
-	"ui_login"                   =>	"登陆",
+	"ui_login"                   =>	"登录",
 	"ui_logout"                  =>	"退出",
 
 
@@ -392,7 +392,7 @@ $L= array(
 	"if_save_file"               =>	"文件尚未保存,是否保存？",
 	"if_remove"                  =>	"确认删除",
 	"member_remove_tips"         =>	"删除后该用户目录会被清空",
-	"group_remove_tips"          =>	"删除后该用户组用户无法登陆<br/>(需要重新设置用户组)",
+	"group_remove_tips"          =>	"删除后该用户组用户无法登录<br/>(需要重新设置用户组)",
 	"group_name"                 =>	"用户组名",
 	"group_name_tips"            =>	"建议英文名，不能重复",
 	"group_desc"            	 =>	"展示名称",
