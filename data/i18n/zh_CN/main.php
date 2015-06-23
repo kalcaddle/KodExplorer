@@ -135,7 +135,7 @@ $L= array(
 	"kod_name_copyright"  		=> "芒果云•资源管理器",
 
 	//login
-	"login"                      =>	"登录 ",
+	"login"                      =>	"登录",
 	"guest_login"                =>	"游客登录",	
 	"username"                   =>	"用户名",
 	"password"                   =>	"密码",
