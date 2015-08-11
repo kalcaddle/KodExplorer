@@ -18,8 +18,19 @@ $web_root = str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__
 if (substr($web_root,-10) == 'index.php/') {//解决部分主机不兼容问题
     $web_root = P($_SERVER['DOCUMENT_ROOT']).'/';
 }
+function is_HTTPS(){  
+    if(!isset($_SERVER['HTTPS']))  return FALSE;
+    if($_SERVER['HTTPS'] === 1){  //Apache
+        return TRUE;
+    }elseif($_SERVER['HTTPS'] === 'on'){ //IIS
+        return TRUE;
+    }elseif($_SERVER['SERVER_PORT'] == 443){ //其他
+        return TRUE;
+    }
+    return FALSE;
+}
 define('WEB_ROOT',$web_root);
-define('HOST','http://'.$_SERVER['HTTP_HOST'].'/');
+define('HOST', (is_HTTPS() ? 'https://' :'http://').$_SERVER['HTTP_HOST'].'/');
 define('BASIC_PATH',    P(dirname(dirname(__FILE__))).'/');
 define('APPHOST',       HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
 define('TEMPLATE',		BASIC_PATH .'template/');	//模版文件路径
