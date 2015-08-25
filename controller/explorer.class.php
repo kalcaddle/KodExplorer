@@ -101,9 +101,12 @@ class explorer extends Controller{
         }
 
         //回收站不记录前进后退
-        if($this->in['path'] != '*recycle*/' && $this->in['type'] !=='desktop'){
-            $_SESSION['this_path']=$user_path;
+        if (isset($this->in['type'])){
+            if($this->in['path'] != '*recycle*/' && $this->in['type'] !=='desktop'){
+                $_SESSION['this_path']=$user_path;
+            }   
         }
+
         $list=$this->path($this->path);
         $list['history_status']= array('back'=>$hi->isback(),'next'=>$hi->isnext());
         show_json($list);
