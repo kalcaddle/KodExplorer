@@ -254,7 +254,7 @@ class explorer extends Controller{
         }
         $state = $error==0?true:false;
         $info = $success.' success,'.$error.' error';
-        if (count($info_list) == 1 && $error==0) {
+        if ($error==0) {
             $info = $this->L['remove_success'];
         }
         show_json($info,$state);
