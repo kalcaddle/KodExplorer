@@ -131,7 +131,7 @@ function get_path_ext($path){
 
 //自动获取不重复文件(夹)名
 //如果传入$file_add 则检测存在则自定重命名  a.txt 为a{$file_add}.txt
-function get_filename_auto($path,$file_add){
+function get_filename_auto($path,$file_add = ""){
 	$i=1;
 	$father = get_path_father($path);
 	$name =  get_path_this($path);
