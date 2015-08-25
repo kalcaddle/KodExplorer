@@ -292,7 +292,8 @@ function path_haschildren($dir,$check_file=false){
 			if ($check_file) {//有子目录或者文件都说明有子内容
 				if(is_dir($fullpath.'/') || is_file($fullpath)) return true;
 			}else{//只检查有没有文件
-				if(is_dir($fullpath.'/')) return true;
+				@$ret =(is_dir($fullpath.'/'));
+				return (bool)$ret;
 			}
 		} 
 	} 	
