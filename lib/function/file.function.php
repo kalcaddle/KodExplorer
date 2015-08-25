@@ -629,8 +629,8 @@ function file_download_this($from, $file_name){
 		}
 		//下载完成，重命名临时文件到目标文件
 		del_file($file_name);
-		rename($temp_file,$file_name);
-		return true;
+		$rename_ret = @rename($temp_file,$file_name);
+		return (bool)$rename_ret;
 	}else{
 		return false;
 	}	
