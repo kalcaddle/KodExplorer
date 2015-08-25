@@ -394,7 +394,7 @@ class explorer extends Controller{
     }
     public function pathPast(){
         if (!isset($_SESSION['path_copy'])){
-            show_json($this->L['clipboard_null'],false,$data);
+            show_json($this->L['clipboard_null'],false,array());
         }
 
         session_start();//re start
