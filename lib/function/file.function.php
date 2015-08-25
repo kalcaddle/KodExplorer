@@ -50,8 +50,9 @@ function iconv_system($str){
 }
 
 function get_filesize($path){
-	return abs(sprintf("%u",filesize($path)));
-}
+	// 某些情况下filesize会出错
+	@$ret = abs(sprintf("%u",filesize($path))); 
+	return (int)$ret;}
 /**
  * 获取文件详细信息
  * 文件名从程序编码转换成系统编码,传入utf8，系统函数需要为gbk
