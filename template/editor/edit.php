@@ -89,7 +89,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
-	G.frist_file = "<?php echo (isset($_GET['filename']) ? $_GET['filename'] : '') ;?>";
+	G.frist_file = "<?php echo $_GET['filename'];?>";
 	G.code_config = <?php echo $editor_config;?>;
 	G.code_theme_all = "<?php echo $config['setting_all']['codethemeall']?>";
 	seajs.config({

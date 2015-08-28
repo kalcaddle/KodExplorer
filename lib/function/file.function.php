@@ -50,9 +50,8 @@ function iconv_system($str){
 }
 
 function get_filesize($path){
-	// 某些情况下filesize会出错
-	@$ret = abs(sprintf("%u",filesize($path))); 
-	return (int)$ret;}
+	return abs(sprintf("%u",filesize($path)));
+}
 /**
  * 获取文件详细信息
  * 文件名从程序编码转换成系统编码,传入utf8，系统函数需要为gbk
@@ -131,7 +130,7 @@ function get_path_ext($path){
 
 //自动获取不重复文件(夹)名
 //如果传入$file_add 则检测存在则自定重命名  a.txt 为a{$file_add}.txt
-function get_filename_auto($path,$file_add = ""){
+function get_filename_auto($path,$file_add){
 	$i=1;
 	$father = get_path_father($path);
 	$name =  get_path_this($path);
@@ -292,8 +291,7 @@ function path_haschildren($dir,$check_file=false){
 			if ($check_file) {//有子目录或者文件都说明有子内容
 				if(is_dir($fullpath.'/') || is_file($fullpath)) return true;
 			}else{//只检查有没有文件
-				@$ret =(is_dir($fullpath.'/'));
-				return (bool)$ret;
+				if(is_dir($fullpath.'/')) return true;
 			}
 		} 
 	} 	
@@ -630,8 +628,8 @@ function file_download_this($from, $file_name){
 		}
 		//下载完成，重命名临时文件到目标文件
 		del_file($file_name);
-		$rename_ret = @rename($temp_file,$file_name);
-		return (bool)$rename_ret;
+		rename($temp_file,$file_name);
+		return true;
 	}else{
 		return false;
 	}	

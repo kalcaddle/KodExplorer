@@ -50,7 +50,7 @@
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script src="./index.php?user/common_js#id=<?php echo rand_string(8);?>"></script>
 <script type="text/javascript">
-	G.project = "<?php echo (isset($_GET['project']) ? $_GET['project'] : '') ;?>";
+	G.project = "<?php echo $_GET['project'];?>";
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],
