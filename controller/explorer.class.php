@@ -101,9 +101,12 @@ class explorer extends Controller{
         }
 
         //回收站不记录前进后退
-        if($this->in['path'] != '*recycle*/' && $this->in['type'] !=='desktop'){
-            $_SESSION['this_path']=$user_path;
+        if (isset($this->in['type'])){
+            if($this->in['path'] != '*recycle*/' && $this->in['type'] !=='desktop'){
+                $_SESSION['this_path']=$user_path;
+            }   
         }
+
         $list=$this->path($this->path);
         $list['history_status']= array('back'=>$hi->isback(),'next'=>$hi->isnext());
         show_json($list);
@@ -254,7 +257,7 @@ class explorer extends Controller{
         }
         $state = $error==0?true:false;
         $info = $success.' success,'.$error.' error';
-        if (count($info_list) == 1 && $error==0) {
+        if ($error==0) {
             $info = $this->L['remove_success'];
         }
         show_json($info,$state);
@@ -391,7 +394,7 @@ class explorer extends Controller{
     }
     public function pathPast(){
         if (!isset($_SESSION['path_copy'])){
-            show_json($this->L['clipboard_null'],false,$data);
+            show_json($this->L['clipboard_null'],false,array());
         }
 
         session_start();//re start

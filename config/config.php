@@ -97,7 +97,7 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 }
 
 $in = parse_incoming();
-session_start();
+@session_start();
 session_write_close();//避免session锁定问题;之后要修改$_SESSION 需要先调用session_start()
 $config['autorun'] = array(
 	array('controller'=>'user','function'=>'loginCheck'),
