@@ -97,7 +97,7 @@ $L= array(
 	"new_user_app_desc"  		=>"應用中心的應用，多個用逗號隔開",
 	"auto_login"  				=>"遊客自動登錄",
 	"auto_login_desc"  			=>"默認登錄用戶名為<code>guest</code>的用戶；開啟後確保<code>guest</code>用戶存在",
-	"first_in"  				=>"登陸後默認進入",
+	"first_in"  				=>"登錄後默認進入",
 	"menu_name"  				=>"菜單名",
 	"menu_hidden"  				=> "隱藏",
 	"menu_show"  				=>"顯示",
@@ -120,7 +120,7 @@ $L= array(
 	"php_env_error_file"  		=>"未開啟 file_get_contents",
 	"php_env_error_path"  		=>"不可寫",
 	"php_env_error_gd"  		=>"須開啟php GD庫, 否則驗證碼、縮略圖使用將不正常",
-	"install_login"  			=>"您可以用如下賬號登陸",
+	"install_login"  			=>"您可以用如下賬號登錄",
 	"install_enter"  			=>"進入系統",
 	"install_user_default"  	=>"管理員：admin/admin(請務必修改密碼)<br/>普通用戶：demo/demo<br/>遊客用戶：guest/guest",
 
@@ -135,8 +135,8 @@ $L= array(
 	"kod_name_copyright"  		=> "芒果雲•資源管理器",
 
 
-	"login"                      =>	"登六",
-	"guest_login"                =>	"遊客登六",	
+	"login"                      =>	"登錄",
+	"guest_login"                =>	"遊客登錄",	
 	"username"                   =>	"用護名",
 	"password"                   =>	"密碼",
 	"login_code"                 =>	"驗證碼",
@@ -344,7 +344,7 @@ $L= array(
 	"ui_editor"                  =>	"編輯器",
 	"adminer"                    =>	"adminer",
 	"ui_project_home"            =>	"專案主頁",
-	"ui_login"                   =>	"登六",
+	"ui_login"                   =>	"登錄",
 	"ui_logout"                  =>	"退出",
 
 	//設置
@@ -389,7 +389,7 @@ $L= array(
 	"if_save_file"               =>	"檔尚未保存,是否保存？",
 	"if_remove"                  =>	"確認刪除",
 	"member_remove_tips"         =>	"刪除後該用護目錄會被清空",
-	"group_remove_tips"          =>	"刪除後該用護組用護無法登六<br/>(需要重新設置用護組)",
+	"group_remove_tips"          =>	"刪除後該用護組用護無法登錄<br/>(需要重新設置用護組)",
 	"group_name"                 =>	"用護組名",
 	"group_name_tips"            =>	"建議英文名，不能重複",
 	"group_desc"            	 =>	"展示名稱",
