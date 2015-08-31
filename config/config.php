@@ -10,7 +10,7 @@
 @set_time_limit(600);//10min pathInfoMuti,search,upload,download... 
 @ini_set('session.cache_expire',600);
 @ini_set("display_errors","on");
-@error_reporting(E_ERROR|E_WARING|E_PARSE);
+@error_reporting(E_ERROR|E_WARNING|E_PARSE);
 //error_reporting(E_ALL);
 
 function P($path){return str_replace('\\','/',$path);}
