@@ -18,8 +18,22 @@ $web_root = str_replace(P($_SERVER['SCRIPT_NAME']),'',P(dirname(dirname(__FILE__
 if (substr($web_root,-10) == 'index.php/') {//解决部分主机不兼容问题
     $web_root = P($_SERVER['DOCUMENT_ROOT']).'/';
 }
+function is_HTTPS(){  
+    if(!isset($_SERVER['HTTPS'])){
+    	return false;
+    }
+    if($_SERVER['HTTPS'] === 1){  //Apache
+        return true;
+    }elseif($_SERVER['HTTPS'] === 'on'){ //IIS
+        return true;
+    }elseif($_SERVER['SERVER_PORT'] == 443){ //其他
+        return true;
+    }
+    return false;
+}
+
 define('WEB_ROOT',$web_root);
-define('HOST','http://'.$_SERVER['HTTP_HOST'].'/');
+define('HOST', (is_HTTPS() ? 'https://' :'http://').$_SERVER['HTTP_HOST'].'/');
 define('BASIC_PATH',    P(dirname(dirname(__FILE__))).'/');
 define('APPHOST',       HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
 define('TEMPLATE',		BASIC_PATH .'template/');	//模版文件路径
@@ -50,12 +64,12 @@ define('USER_PATH',     DATA_PATH .'User/');        //用户目录
 define('PUBLIC_PATH',   DATA_PATH .'public/');     //公共目录
 //公共共享目录,读写权限跟随用户目录的读写权限 再修改配置，例如：
 //define('PUBLIC_PATH','/Library/WebServer/Documents/Public/');
+
 /*
  * office服务器配置；默认调用的微软的接口，程序需要部署到外网。
  * 本地部署weboffice 引号内填写office解析服务器地址 形如:  http://---/view.aspx?src=
  */
-define('OFFICE_SERVER',"");
-
+define('OFFICE_SERVER',"https://view.officeapps.live.com/op/view.aspx?src=");
 
 include(FUNCTION_DIR.'web.function.php');
 include(FUNCTION_DIR.'file.function.php');
@@ -86,7 +100,12 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 }
 
 $in = parse_incoming();
-session_start();
+if(isset($in['PHPSESSID'])){//office edit post
+    session_id($in['PHPSESSID']);
+}
+
+@session_start();
+check_post_many();
 session_write_close();//避免session锁定问题;之后要修改$_SESSION 需要先调用session_start()
 $config['autorun'] = array(
 	array('controller'=>'user','function'=>'loginCheck'),

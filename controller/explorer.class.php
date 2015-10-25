@@ -26,15 +26,25 @@ class explorer extends Controller{
         }
         $dir = rtrim($dir,'/').'/';
         $this->assign('dir',$dir);
-        $this->display('index.php');
-    }
 
+        if (is_wap()) {
+            $this->display('index_wap.php');
+        }else{
+            $this->display('index.php');
+        }        
+    }
     public function pathInfo(){
         $info_list = json_decode($this->in['list'],true);
         foreach ($info_list as &$val) {          
             $val['path'] = _DIR($val['path']);
         }
         $data = path_info_muti($info_list,$this->L['time_type_info']);
+
+        //属性查看，单个文件则生成临时下载地址。
+        if (count($info_list)==1 && 
+            $info_list[0]['type']=='file') {            
+            $data['download_path'] = $this->_make_file_proxy($info_list[0]['path']);
+        }
         _DIR_OUT($data['path']);
         show_json($data);
     }
@@ -101,7 +111,8 @@ class explorer extends Controller{
         }
 
         //回收站不记录前进后退
-        if($this->in['path'] != '*recycle*/' && $this->in['type'] !=='desktop'){
+        if($this->in['path'] != '*recycle*/' && 
+            (!isset($this->in['type']) || $this->in['type'] !=='desktop')){
             $_SESSION['this_path']=$user_path;
         }
         $list=$this->path($this->path);
@@ -165,7 +176,6 @@ class explorer extends Controller{
             show_json($tree_data);
             return;
         }
-
         $check_file = ($app == 'editor'?true:false);
         $favData=new fileCache($this->config['user_fav_file']);
         $fav_list = $favData->get();
@@ -245,7 +255,7 @@ class explorer extends Controller{
         foreach ($list as $val) {
             $path_this = _DIR($val['path']);
             $filename  = get_path_this($path_this);
-            $filename = get_filename_auto(USER_RECYCLE.$filename,date(' h.i.s'));//已存在处理 创建副本
+            $filename = get_filename_auto(USER_RECYCLE.$filename,date(' h:i:s'));//已存在处理 创建副本
             if (@rename($path_this,$filename)) {
                 $success++;
             }else{
@@ -254,7 +264,7 @@ class explorer extends Controller{
         }
         $state = $error==0?true:false;
         $info = $success.' success,'.$error.' error';
-        if (count($info_list) == 1 && $error==0) {
+        if ($error==0) {
             $info = $this->L['remove_success'];
         }
         show_json($info,$state);
@@ -294,6 +304,7 @@ class explorer extends Controller{
         $new= rtrim($this->path,'/');
         $this->_pathAllow($new);
         if(touch($new)){
+            chmod_path($new,0777);
             if (isset($this->in['content'])) {
                 file_put_contents($new,$this->in['content']);
             }
@@ -306,6 +317,7 @@ class explorer extends Controller{
         $new = rtrim($this->path,'/');
         $this->_pathAllow($new);
         if(mkdir($new,0777)){
+            chmod_path($new,0777);
             show_json($this->L['create_success']);
         }else{
             show_json($this->L['create_error'],false);
@@ -329,7 +341,7 @@ class explorer extends Controller{
         for ($i=0; $i < $list_num; $i++) { 
             $cute_list[$i]['path'] = $cute_list[$i]['path'];
         }
-        $_SESSION['path_copy']= json_encode($cute_list);            
+        $_SESSION['path_copy']= json_encode($cute_list);
         $_SESSION['path_copy_type']='cute';
         show_json($this->L['cute_success']);
     }
@@ -350,9 +362,6 @@ class explorer extends Controller{
         }
         $state = $error==0?true:false;
         $info = $success.' success,'.$error.' error';
-        if (count($info_list) == 1 && $error==0) {
-            $info = $this->L['success'];
-        }
         show_json($info,$state);
     }
 
@@ -364,7 +373,12 @@ class explorer extends Controller{
         foreach ($clipboard as $val) {
             $path_copy = _DIR($val['path']);
             $filename = get_path_this($path_copy);
-            $path = get_filename_auto($path_past.$filename);
+            if ($this->in['filename_auto']==1) {
+                $path = get_filename_auto($path_past.$filename,'','filename_auto');
+            }else{
+                $path = get_filename_auto($path_past.$filename);
+            }
+
             copy_dir($path_copy,$path);
             $data[] = iconv_app(get_path_this($path));
         }
@@ -391,11 +405,12 @@ class explorer extends Controller{
     }
     public function pathPast(){
         if (!isset($_SESSION['path_copy'])){
-            show_json($this->L['clipboard_null'],false,$data);
+            show_json($this->L['clipboard_null'],false,array());
         }
 
         session_start();//re start
-        $error = '';$data = array();
+        $error = '';
+        $data = array();
         $clipboard = json_decode($_SESSION['path_copy'],true);
         $copy_type = $_SESSION['path_copy_type'];
         $path_past=$this->path;
@@ -416,7 +431,7 @@ class explorer extends Controller{
             }
             if ($clipboard[$i]['type'] == 'folder'){
                 if ($path_copy == substr($path_past,0,strlen($path_copy))){
-                    $error .="<li style='color:#f33;'>{$filename_out}'.$this->L['current_has_parent'].'</li>";
+                    $error .="<em style='color:#fff;'>{$filename_out}".$this->L['current_has_parent']."</em>";
                     continue;
                 }
             }
@@ -472,7 +487,7 @@ class explorer extends Controller{
         $zip_file = $this->zip(USER_TEMP);
         show_json($this->L['zip_success'],true,get_path_this($zip_file));
     }
-    public function zip($zip_path){
+    public function zip($zip_path=''){
         load_class('pclzip');
         ini_set('memory_limit', '2028M');//2G;
         $zip_list = json_decode($this->in['list'],true);
@@ -482,7 +497,7 @@ class explorer extends Controller{
         }
         //指定目录
         $basic_path = $zip_path;
-        if (!isset($zip_path)){
+        if ($zip_path==''){
             $basic_path =get_path_father($zip_list[0]['path']);    
         }
         if ($list_num == 1){
@@ -506,7 +521,7 @@ class explorer extends Controller{
                 show_json("Error:".$archive->errorInfo(true),false);
             }
             $info = $this->L['zip_success'].$this->L['size'].":".size_format(filesize($zipname));
-            if (!isset($zip_path)) {
+            if ($zip_path=='') {
                 show_json($info,true,iconv_app(get_path_this($zipname)));
             }else{
                 return iconv_app($zipname);
@@ -537,7 +552,7 @@ class explorer extends Controller{
                                 PCLZIP_OPT_SET_CHMOD,0777,
                                 PCLZIP_CB_PRE_EXTRACT,"checkExtUnzip",
                                 PCLZIP_OPT_REPLACE_NEWER);//解压到某个地方,覆盖方式
-        }        
+        }
         if ($result == 0) {
             show_json("Error : ".$zip->errorInfo(true),fasle);
         }else{
@@ -550,7 +565,7 @@ class explorer extends Controller{
         }
         load_class('imageThumb');
         $image= $this->path;
-        $image_md5  = md5_file($image);//文件md5
+        $image_md5  = @md5_file($image);//文件md5
         if (strlen($image_md5)<5) {
             $image_md5 = md5($image);
         }
@@ -586,7 +601,7 @@ class explorer extends Controller{
                 $result = array(
                     'uuid'      => $this->in['uuid'],
                     'length'    => (int)$info['length'],
-                    'size'      => (int)filesize($info['path'].'.download'),
+                    'size'      => (int)filesize($info['path']),
                     'time'      => mtime()
                 );
                 show_json($result);
@@ -600,46 +615,101 @@ class explorer extends Controller{
         }
         //下载
         $save_path = _DIR($this->in['save_path']);
-        if (!is_writeable($save_path)) show_json($this->L['no_permission_write'],false);
+        if (!is_writeable($save_path)){
+           show_json($this->L['no_permission_write'],false); 
+        }
 
         $url = rawurldecode($this->in['url']);
         $header = url_header($url);
-        if (!$header) show_json($this->L['download_error_exists'],false);
-
+        if (!$header){
+            show_json($this->L['download_error_exists'],false);
+        }
         $save_path = $save_path.urldecode($header['name']);
-        if (!checkExt($save_path)) $save_path = _DIR($this->in['save_path']).date().'.temp';
-
-        $save_path = iconv_system($save_path);
-        $save_path = get_filename_auto($save_path);
-
+        if (!checkExt($save_path)){//不允许的扩展名
+            $save_path = _DIR($this->in['save_path']).date().'.txt';
+        }
+        $save_path = get_filename_auto(iconv_system($save_path));
+        $save_path_temp = $save_path.'.downloading';
         session_start();
-        $_SESSION[$uuid] = array('length'=>$header['length'],'path'=>$save_path);
+        $_SESSION[$uuid] = array('length'=>$header['length'],'path'=>$save_path_temp);
         session_write_close();
 
-        if (file_download_this($url,$save_path)){
-            $name = get_path_this(iconv_app($save_path));
-            show_json($this->L['download_success'],true,$name);
+        if (file_download_this($url,$save_path_temp)){
+            if (@rename($save_path_temp,$save_path)) {//下载完后重命名
+                $name = get_path_this(iconv_app($save_path));
+                show_json($this->L['download_success'],true,$name);
+            }else{
+                show_json($this->L['download_error_create'],false);
+            }
         }else{
             show_json($this->L['download_error_create'],false);
         }
     }
 
-    //生成临时文件key
-    public function makeFileProxy(){
+    public function _make_file_proxy($file_path){
+        if (!file_exists($file_path)) {
+            return '';
+        }
+        if (!$GLOBALS['is_root'] && $GLOBALS['auth']['explorer:fileDownload']!=1){
+            return '';
+        }
+
         load_class('mcrypt');
-        $pass = $this->config['setting_system']['system_password'];
-        $fid = Mcrypt::encode($this->path,$pass,60*50*24);
-        show_json($fid);
+        $pass = $GLOBALS['config']['setting_system']['system_password'];
+        $fid = Mcrypt::encode($file_path,$pass,$GLOBALS['config']['settings']['download_url_time']);
+        //文件对外界公开的地址;有效期在user_setting.php中设定；末尾追加文件名为了kod远程下载
+        $file_name = urlencode(get_path_this($file_path));
+        return APPHOST.'index.php?user/public_link&fid='.$fid.'&file_name=/'.$file_name;
     }
+
+    //生成临时文件key
+    public function officeView(){
+        if (!file_exists($this->path)) {
+            show_tips($this->L['not_exists']);
+        }
+        if (file_exists(LIB_DIR.'plugins/officeView')) {
+            include(LIB_DIR.'plugins/officeView/index.php');
+            exit;
+        }
+        $file_url = $this->_make_file_proxy($this->path);
+        $host = $_SERVER['server_name'];
+        //微软接口调用的预览
+        if (strstr($host,'10.10.') ||
+            strstr($host,'192.168.')||
+            strstr($host,'127.0.') ||
+            !strstr($host,'.')) {
+            $local_tips = $this->L['unknow_file_office'].
+            ', <a href="http://kalcaddle.com/help.html#office" target="_blank">'.
+            $this->L['more'].'>></a>';
+            show_tips($local_tips);
+        }else{
+            $office_url = OFFICE_SERVER.rawurlencode($file_url);
+            header("location:".$office_url);
+        }
+    }
+    public function officeSave(){
+        if ($_FILES["file"]["error"] > 0){
+            exit("Return Code: ".$_FILES["file"]["error"]);
+        }else{
+            // $str=file_get_contents($_FILES["file"]["tmp_name"]);
+            // file_put_contents($this->path.'.doc',$str);
+            move_uploaded_file($_FILES["file"]["tmp_name"],$this->path);
+            echo 'succeed';
+        }
+    }
+
+
     //代理输出
     public function fileProxy(){
         file_put_out($this->path);
     }
+
     
     /**
      * 上传,html5拖拽  flash 多文件
      */
     public function fileUpload(){
+        //show('error',false);
         $save_path = $this->path;
         if (!is_writeable($save_path)) show_json($this->L['no_permission_write'],false);
 
@@ -679,11 +749,11 @@ class explorer extends Controller{
             $value['mode']='';$value['is_readable'] = 1;$value['is_writable'] = 1;
             $value['exists'] = intval(file_exists(_DIR($share_list[$key]['path'])));
             if ($value['type']=='file') {
-                if(in_array($val['name'],$ex_name)) continue;
+                if(in_array($value['name'],$ex_name)) continue;
                 $value['ext'] = get_path_ext($share_list[$key]['path']);
                 $list['filelist'][] = $value;
             }else{
-                if(in_array($val['name'],$ex_name)) continue;
+                if(in_array($value['name'],$ex_name)) continue;
                 $list['folderlist'][] = $value;
             }
         }

@@ -53,7 +53,8 @@ class share extends Controller{
         $this->share_info = $list[$this->in['sid']];
         $share_info = $this->share_info;
         //检查是否过期
-        if ($share_info['time'].length!=0) {
+        if (isset($share_info['time'])&&
+            $share_info['time'].length!=0) {
             $date = date_create_from_format('y/m/d',$share_info['time_to']);
             if (time() > $date) {
                 $this->error($this->L['share_error_time']);
@@ -110,7 +111,8 @@ class share extends Controller{
             $this->error($this->L['share_error_path']);
         }
         $this->share_path = $share_path;
-        $this->path = $share_path.$this->_clear($this->in['path']);
+        $path_full = isset($this->in['path'])?$this->in['path']:'';
+        $this->path = $share_path.$this->_clear($path_full);
     }
     private function _clear($path){
         return  iconv_system(_DIR_CLEAR(rawurldecode($path)));
@@ -170,7 +172,9 @@ class share extends Controller{
         $this->assign('config_theme',$config['theme']);
         $this->share_info['share_password'] = '';
         $this->share_info['num_view'] = intval($this->share_info['num_view']);
-        $this->share_info['num_download'] = intval($this->share_info['num_download']);
+
+        $this->share_info['num_download'] = isset($this->share_info['num_download'])?
+            intval($this->share_info['num_download']):0;
         $this->share_info['path'] = get_path_this(iconv_app($this->path));
         $this->assign('share_info',$this->share_info);
     }
@@ -302,9 +306,45 @@ class share extends Controller{
         show_json($list);
     }
 
+    //生成临时文件key
+    public function officeView(){
+        if (!file_exists($this->path)) {
+            show_tips("file not exists!");
+        }
+        if (file_exists(LIB_DIR.'plugins/officeView')) {
+            include(LIB_DIR.'plugins/officeView/index.php');
+            exit;
+        }
+        $file_url = $this->_make_file_proxy($this->path);
+        $host = $_SERVER['server_name'];
+        //微软接口调用的预览
+        if (strstr($host,'10.10.') ||
+            strstr($host,'192.168.')||
+            strstr($host,'127.0.') ||
+            !strstr($host,'.')) {
+            $local_tips = $this->L['unknow_file_office'].
+            ', <a href="http://kalcaddle.com/help.html#office" target="_blank">'.
+            $this->L['more'].'>></a>';
+            show_tips($local_tips);
+        }else{
+            $office_url = OFFICE_SERVER.rawurlencode($file_url);
+            header("location:".$office_url);
+        }
+    }
+    
 
     //代理输出
     public function fileProxy(){
+        $mime = get_file_mime(get_path_ext($this->path));
+        if($mime == 'text/plain'){//文本则转编码
+            $filecontents = file_get_contents($this->path);
+            $charset=get_charset($filecontents);
+            if ($charset!='' || $charset!='utf-8') {
+                $filecontents=mb_convert_encoding($filecontents,'utf-8',$charset);
+            }
+            echo $filecontents;
+            return;
+        }
         file_put_out($this->path);
     }
     public function fileDownload(){
@@ -390,6 +430,12 @@ class share extends Controller{
         );
         show_json($data);
     }
+
+    //-----------------------------------------------
+    /*
+    * 获取字符串编码
+    * @param:$ext 传入字符串
+    */
     private function _get_charset(&$str) {
         if ($str == '') return 'utf-8';
         //前面检测成功则，自动忽略后面
@@ -402,7 +448,6 @@ class share extends Controller{
         if ($charset == 'ascii') $charset = 'utf-8';
         return strtolower($charset);
     }
-
 
     public function image(){
         if (filesize($this->path) <= 1024*10) {//小于10k 不再生成缩略图

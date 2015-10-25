@@ -29,7 +29,7 @@ class editor extends Controller{
 		if (filesize($filename) >= 1024*1024*20) show_json($this->L['edit_too_big'],false);
 
 		$filecontents=file_get_contents($filename);//文件内容
-		$charset=$this->_get_charset($filecontents);
+		$charset=get_charset($filecontents);
 		if ($charset!='' || $charset!='utf-8') {
 			$filecontents=mb_convert_encoding($filecontents,'utf-8',$charset);
 		}

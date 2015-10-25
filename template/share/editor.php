@@ -47,7 +47,7 @@
 <script src="./index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
 <script type="text/javascript">
 	AUTH  = {'explorer:fileDownload':<?php echo $can_download;?>};
-	G.project = "<?php echo $_GET['project'];?>";
+	G.project = "<?php echo (isset($_GET['project'])?$_GET['project']:'') ;?>";
 	G.user = "<?php echo $_GET['user'];?>";
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.share_info = <?php echo json_encode($share_info);?>;

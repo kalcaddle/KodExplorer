@@ -26,7 +26,7 @@ class Mcrypt{
 	 * @param int $expiry 密文有效期,单位s,0 为永久有效
 	 * @return string 处理后的 原文或者 经过 base64_encode 处理后的密文
 	 */
-	public function encode($string,$key = '', $expiry = 3600){
+	public static function encode($string,$key = '', $expiry = 3600){
 		$ckey_length = 4;
 		$key = md5($key ? $key : $this->default_key); //解密密匙
 		$keya = md5(substr($key, 0, 16));		 //做数据完整性验证  
@@ -74,7 +74,7 @@ class Mcrypt{
 	 * @param int $expiry 密文有效期,单位s,0 为永久有效
 	 * @return string 处理后的 原文或者 经过 base64_encode 处理后的密文
 	 */
-	public function decode($string,$key = '')
+	public static function decode($string,$key = '')
 	{
 		$string = str_replace(array('-', '_', '.'),array('+', '/', '='), $string);
 		$ckey_length = 4;

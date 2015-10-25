@@ -1711,16 +1711,17 @@ artDialog.prompt = function (content, yes, value) {
 		zIndex: _zIndex(),
 		icon: 'question',
 		fixed: true,
+		padding:0,
 		lock: true,
 		opacity: .1,
 		content: [
 			'<div style="margin-bottom:5px;font-size:12px">',
 				content,
 			'</div>',
-			'<div>',
+			'<div class="prompt_input">',
 				'<input value="',
 					value,
-				'" style="width:18em;padding:6px 4px" />',
+				'" style="padding:6px 4px" />',
 			'</div>'
 			].join(''),
 		init: function () {

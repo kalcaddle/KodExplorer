@@ -24,7 +24,7 @@ class user extends Controller
     }
     
     /**
-     * 登陆状态检测;并初始化数据状态
+     * 登录状态检测;并初始化数据状态
      */
     public function loginCheck(){
         if (ST == 'share') return true;//共享页面
@@ -88,9 +88,12 @@ class user extends Controller
     public function public_link(){
         load_class('mcrypt');
         $pass = $this->config['setting_system']['system_password'];
-        $path = Mcrypt::decode($this->in['fid'],$pass);
+        $path = Mcrypt::decode($this->in['fid'],$pass);//一天内解密有效
         if (strlen($path) == 0) {
             show_json($this->L['error'],false);
+        }
+        if (!file_exists($path)) {
+            show_tips($this->L['not_exists']);
         }
         file_put_out($path);
     }
@@ -107,13 +110,13 @@ class user extends Controller
             'web_host'      => HOST,
             'static_path'   => STATIC_PATH,
             'basic_path'    => $basic_path,
-            'version'       => KOD_VERSION,
             'app_host'      => APPHOST,
-            'office_server' => OFFICE_SERVER,
             'myhome'        => MYHOME,
-            'upload_max'    => get_post_max(),
-            'json_data'     => "",
+            'upload_max'    => $this->config['settings']['upload_chunk_size'],
+            'version'       => KOD_VERSION,
+            'version_desc'  => $this->config['settings']['version_desc'],
 
+            'json_data'     => "",
             'theme'         => $this->config['user']['theme'], //列表排序依照的字段
             'list_type'     => $this->config['user']['list_type'], //列表排序依照的字段
             'sort_field'    => $this->config['user']['list_sort_field'], //列表排序依照的字段  
@@ -122,6 +125,9 @@ class user extends Controller
             'movietheme'    => $this->config['user']['movietheme']
         );
 
+        if (!isset($GLOBALS['auth'])) {
+            $GLOBALS['auth'] = array();
+        }
         $js  = 'LNG='.json_encode($GLOBALS['L']).';';
         $js .= 'AUTH='.json_encode($GLOBALS['auth']).';';
         $js .= 'G='.json_encode($the_config).';';
@@ -130,19 +136,23 @@ class user extends Controller
     }
 
     /**
-     * 登陆view
+     * 登录view
      */
     public function login($msg = ''){
         if (!file_exists(USER_SYSTEM.'install.lock')) {
             $this->display('install.html');exit;
         }
         $this->assign('msg',$msg);
-        $this->display('login.html');
+        if (is_wap()) {
+            $this->display('login_wap.html');
+        }else{
+            $this->display('login.html');
+        } 
         exit;
     }
 
     /**
-     * 首次登陆
+     * 首次登录
      */
     public function loginFirst(){
         touch(USER_SYSTEM.'install.lock');
@@ -154,16 +164,11 @@ class user extends Controller
      */
     public function logout(){
         session_start();
-        setcookie('kod_name', '', time()-3600); 
-        setcookie('kod_token', '', time()-3600);
-        setcookie('kod_user_language', '', time()-3600);
-        session_destroy();
-        header('location:./index.php?user/login');
-        exit;
+        user_logout();
     }
     
     /**
-     * 登陆数据提交处理
+     * 登录数据提交处理
      */
     public function loginSubmit(){
         if(!isset($this->in['name']) || !isset($this->in['password'])) {
@@ -213,6 +218,7 @@ class user extends Controller
         $password_new=$this->in['password_new'];
         if (!$password_now && !$password_new)show_json($this->L['password_not_null'],false);
         if ($this->user['password']==md5($password_now)){
+            $member_file = USER_SYSTEM.'member.php';
             $sql=new fileCache(USER_SYSTEM.'member.php');
             $this->user['password'] = md5($password_new);
             $sql->update($this->user['name'],$this->user);
@@ -238,7 +244,6 @@ class user extends Controller
         $group  = new fileCache(USER_SYSTEM.'group.php');
         $auth= $group->get($this->user['role']);
         
-
         //向下版本兼容处理
         //未定义；新版本首次使用默认开放的功能
         if(!isset($auth['userShare:set'])){
@@ -257,7 +262,8 @@ class user extends Controller
         $auth['explorer:zipDownload']       = $auth['explorer:fileDownload'];
         $auth['explorer:fileProxy']         = $auth['explorer:fileDownload'];
         $auth['editor:fileGet']             = $auth['explorer:fileDownload'];
-        $auth['explorer:makeFileProxy']     = $auth['explorer:fileDownload'];
+        $auth['explorer:officeView']        = $auth['explorer:fileDownload'];
+        $auth['explorer:officeSave']        = $auth['editor:fileSave'];
         $auth['userShare:del']              = $auth['userShare:set'];
         if ($auth[$key] != 1) show_json($this->L['no_permission'],false);
 

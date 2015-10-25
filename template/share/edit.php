@@ -90,7 +90,7 @@ http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-language_tools.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
 	AUTH  = {'explorer:fileDownload':<?php echo $can_download;?>};
-	G.frist_file = "<?php echo $_GET['filename'];?>";
+	G.frist_file = "<?php echo (isset($_GET['filename'])?$_GET['filename']:'') ;?>";
 	G.user = "<?php echo $_GET['user'];?>";
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.code_config = <?php echo json_encode($editor_config);?>;

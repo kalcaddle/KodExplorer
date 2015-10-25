@@ -136,8 +136,10 @@ var // currently active contextMenu trigger
                 offset.top -= height;
             }
             
+            //change by warlee;
+            //+8 避免按下hover菜单弹起后响应菜单动作
             if (offset.left + width > right) {
-                offset.left -= width;
+                offset.left -= width+8;
             }
             
             opt.$menu.css(offset);
@@ -635,14 +637,14 @@ var // currently active contextMenu trigger
                 data = $this.data(),
                 opt = data.contextMenu,
                 root = data.contextMenuRoot;
-
-            if (root !== opt ) {
-                root.$selected && root.$selected.trigger('contextmenu:blur');
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                root.$selected = opt.$selected = opt.$node;
-                return;
-            }
+                
+            // if (root !== opt ) {
+            //     root.$selected && root.$selected.trigger('contextmenu:blur');
+            //     e.preventDefault();
+            //     e.stopImmediatePropagation();
+            //     root.$selected = opt.$selected = opt.$node;
+            //     return;
+            // }
             
             $this.trigger('contextmenu:blur');
         },
@@ -660,9 +662,12 @@ var // currently active contextMenu trigger
                 return;
             }
 
-            if (e.which ==3) {//changed by warlee
-                return;//不是右键触发，暂时取消；损失右键弹出后移动松起触发的功能
-            };
+            // if (e.which ==3) {//changed by warlee
+            //     return;
+            //     //不是右键触发，暂时取消;
+            //     //避免右键出来鼠标在菜单内弹起导致触发问题；
+            //     //损失右键弹出后移动松起触发的功能
+            // }
 
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -1046,7 +1051,15 @@ var // currently active contextMenu trigger
             $menu.css({position: 'absolute', display: 'block'});
             // don't apply yet, because that would break nested elements' widths
             // add a pixel to circumvent word-break issue in IE9 - #80
-            $menu.data('width', Math.ceil($menu.width()) + 1);
+            
+            //change by warlee
+            //加入条件判断；
+            if (G.isIE) {
+                $menu.data('width', Math.ceil($menu.width()));
+            }else{
+                $menu.data('width', Math.ceil($menu.width()) + 1);
+            }
+
             // reset styles so they allow nested elements to grow/shrink naturally
             $menu.css({
                 position: 'static',

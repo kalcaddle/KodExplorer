@@ -50,7 +50,8 @@ function iconv_system($str){
 }
 
 function get_filesize($path){
-	return abs(sprintf("%u",filesize($path)));
+	@$ret = abs(sprintf("%u",filesize($path))); 
+	return (int)$ret;
 }
 /**
  * 获取文件详细信息
@@ -130,7 +131,26 @@ function get_path_ext($path){
 
 //自动获取不重复文件(夹)名
 //如果传入$file_add 则检测存在则自定重命名  a.txt 为a{$file_add}.txt
-function get_filename_auto($path,$file_add){
+function get_filename_auto($path,$file_add = "",$same_file_type=''){
+	if (is_dir($path)) {//文件夹则忽略
+		return $path;
+	}
+
+	//重名处理方式;replace,skip,filename_auto
+	if ($same_file_type == '') {
+		$same_file_type = 'replace';
+	}
+
+
+	//重名处理
+	if (file_exists($path)) {
+		if ($same_file_type=='replace') {
+			return $path;
+		}else if($same_file_type=='skip'){
+			return false;
+		}
+	}
+
 	$i=1;
 	$father = get_path_father($path);
 	$name =  get_path_this($path);
@@ -140,13 +160,13 @@ function get_filename_auto($path,$file_add){
 		$name = substr($name,0,strlen($name)-strlen($ext));
 	}
 	while(file_exists($path)){
-		if (isset($file_add) && $file_add != '') {
+		if ($file_add != '') {
 			$path = $father.$name.$file_add.$ext;
-			$file_add.'-';
+			$file_add.='-';
 		}else{
 			$path = $father.$name.'('.$i.')'.$ext;
 			$i++;
-		}		
+		}
 	}
 	return $path;
 }
@@ -289,9 +309,12 @@ function path_haschildren($dir,$check_file=false){
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir.$file;
 			if ($check_file) {//有子目录或者文件都说明有子内容
-				if(is_dir($fullpath.'/') || is_file($fullpath)) return true;
+				if(is_file($fullpath) || is_dir($fullpath.'/')){
+					return true;
+				}
 			}else{//只检查有没有文件
-				if(is_dir($fullpath.'/')) return true;
+				@$ret =(is_dir($fullpath.'/'));
+				return (bool)$ret;
 			}
 		} 
 	} 	
@@ -356,7 +379,8 @@ function del_dir($dir){
 
 function copy_dir($source, $dest){
 	if (!$dest) return false;
-	if ($source == substr($dest,0,strlen($source))) return;//防止无限递归
+
+	if ($source == substr($dest,0,strlen($source))) return;//防止父文件夹拷贝到子文件夹，无限递归
 	$result = false;
 	if (is_file($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
@@ -368,10 +392,10 @@ function copy_dir($source, $dest){
 		chmod($__dest, 0777);
 	}elseif (is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
-			$dest = $dest . basename($source);
-			mkdir($dest, 0777);
-		} else {
-			mkdir($dest, 0777);
+			$dest = $dest . basename($source);		
+		}
+		if (!is_dir($dest)) {
+			mkdir($dest,0777);
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
@@ -387,7 +411,7 @@ function copy_dir($source, $dest){
 		closedir($dh);
 	}
 	return $result;
-} 
+}
 
 /**
  * 创建目录
@@ -397,11 +421,13 @@ function copy_dir($source, $dest){
  * @return bool 
  */
 function mk_dir($dir, $mode = 0777){
-	if (is_dir($dir) || mkdir($dir, $mode))
+	if (is_dir($dir) || @mkdir($dir, $mode)){		
 		return true;
-	if (!mk_dir(dirname($dir), $mode))
+	}
+	if (!mk_dir(dirname($dir), $mode)){		
 		return false;		
-	return mkdir($dir, $mode);
+	}
+	return @mkdir($dir, $mode);
 }
 
 /*
@@ -481,11 +507,12 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
 function chmod_path($path,$mod){
 	//$mod = 0777;//
 	if (!isset($mod)) $mod = 0777;
-	if (!is_dir($path)) return chmod($path,$mod);
+	if (!is_dir($path)) return @chmod($path,$mod);
 	if (!$dh = opendir($path)) return false;
 	while (($file = readdir($dh)) !== false){
 		if ($file != "." && $file != "..") {
 			$fullpath = $path . '/' . $file;
+			chmod($fullpath,$mod);
 			return chmod_path($fullpath,$mod);
 		} 
 	}
@@ -573,19 +600,22 @@ function file_put_out($file,$download=false){
 		$start = 0;
 	}
 	$size = get_filesize($file);
+	$mime = get_file_mime(get_path_ext($file));
+	if ($download || strstr($mime,'application/')) {//下载或者application则设置下载头
+		$filename = get_path_this($file);//解决在IE中下载时中文乱码问题
+		if( preg_match('/MSIE/',$_SERVER['HTTP_USER_AGENT']) || 
+			preg_match('/Trident/',$_SERVER['HTTP_USER_AGENT'])){
+			if($GLOBALS['config']['system_os']!='windows'){//win主机 ie浏览器；中文文件下载urlencode问题
+				$filename = str_replace('+','%20',urlencode($filename));
+			}
+		}
+		header("Content-Type: application/octet-stream");
+		header("Content-Disposition: attachment;filename=".$filename);
+	}
+
 	header("Cache-Control: public");
 	header("X-Powered-By: kodExplorer.");
-	if ($download) {
-		header("Content-Type: application/octet-stream");
-		$filename = get_path_this($file);//解决在IE中下载时中文乱码问题
-		if(preg_match('/MSIE/',$_SERVER['HTTP_USER_AGENT'])){
-			$filename = str_replace('+','%20',urlencode($filename));
-		}
-		header("Content-Disposition: attachment;filename=".$filename);
-	}else{
-		$mime = get_file_mime(get_path_ext($file));
-		header("Content-Type: ".$mime);
-	}
+	header("Content-Type: ".$mime);
 	if ($start > 0){
 		header("HTTP/1.1 206 Partial Content");
 		header("Content-Ranges: bytes".$start ."-".($size - 1)."/" .$size);
@@ -600,13 +630,15 @@ function file_put_out($file,$download=false){
 	while (!feof($fp)) {
 		print (fread($fp, 1024 * 8)); //输出文件  
 		flush(); 
-		ob_flush();  
+		ob_flush();
 	}  
 	fclose($fp);
 }
 
 /**
- * 文件下载到服务器
+ * 远程文件下载到服务器
+ * 支持fopen的打开都可以；支持本地、url 
+ * 
  */
 function file_download_this($from, $file_name){
 	set_time_limit(0);
@@ -615,20 +647,16 @@ function file_download_this($from, $file_name){
 		$new_fp = @fopen ($file_name, "wb");
 		fclose($new_fp);
 
-		$temp_file = $file_name.'.download';
-		$download_fp = @fopen ($temp_file, "wb");
+		$download_fp = @fopen ($file_name, "wb");
 		while(!feof($fp)){
 			if(!file_exists($file_name)){//删除目标文件；则终止下载
 				fclose($download_fp);
-				del_file($temp_file);
-				del_file($file_name);
 				return false;
 			}
 			fwrite($download_fp, fread($fp, 1024 * 8 ), 1024 * 8);
 		}
 		//下载完成，重命名临时文件到目标文件
-		del_file($file_name);
-		rename($temp_file,$file_name);
+		fclose($download_fp);		
 		return true;
 	}else{
 		return false;

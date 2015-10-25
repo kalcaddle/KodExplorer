@@ -58,7 +58,7 @@
 <script type="text/javascript">
 	AUTH  = {'explorer:fileDownload':<?php echo $can_download;?>};
 	G.user = "<?php echo $_GET['user'];?>";
-	G.path = "<?php echo urlencode($_GET['path']);?>";
+	G.path = "<?php echo (isset($_GET['path'])?urlencode($_GET['path']):'') ;?>";
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.share_info = <?php echo json_encode($share_info);?>;
 	G.theme = "<?php echo $config_theme;?>";

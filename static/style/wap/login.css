@@ -6,52 +6,47 @@
 */
 body {
 	background:#f6f6f6;font-size: 13px; padding: 0px; margin: 0px; color:#666;
-	font-family: 'Helvetica Neue', "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif;
+	font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;
 }
 
 body, input, textarea{-webkit-font-smoothing: antialiased;font-smoothing: antialiased;}
 input,button { font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;}
-.loginbox{box-shadow: 0px 10px 60px rgba(0,0,0,0.4);width:428px;border-radius:4px;padding-bottom: 30px;
-    background: rgba(255,255,255,0.9);background: #fff \9;
-    position:absolute;top:46%;left:50%;margin-top:-209px;margin-left: -214px;}
 a{text-decoration:none;color: #adf;font-weight: 800;}
 a:hover{color:#fff;}
+
 .background{
-	position:absolute;overflow: hidden;z-index: -10;
-	width:100%;height: 100%;
+	position: absolute;
   	right: 0px;top: 0px; bottom: 0px;left: 0px;
+	background-size: 100% 100%;
 }
-.title{width:100%;background:#6699cc url(../images/login.png);height: 150px;
-    padding-top:0px;border-top-left-radius: 3px;border-top-right-radius: 3px;}
-.title .logo{text-align: center;font-size: 35px;width: 100%;padding-top:40px;color:#fff;
-    -webkit-box-reflect: below -4px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.2)));font-weight:lighter;}
-.title .logo i{color:#aaddff;font-weight: 400;margin-right: 10px;}
-.title .info{text-align: right;font-size: 14px;color:#aaddff;padding-right: 14px;padding-top:30px;}	
+.title{width:100%;background:#6699cc url(../../images/login.png);height:150px;padding-top:0px;}
+.title .logo{text-align: center;font-size: 35px;width: 100%;padding-top:40px;color:#fff;font-weight:lighter;}
+.title .logo i{color:#aaddff;font-weight: 400;}
+.title .info{text-align: center;font-size: 14px;color:#aaddff;padding-top:20px;text-shadow:#75A1F0 0 0 3px;}	
 
 .w80{width: 80px;}
-.inputs{padding: 30px 30px 0px 45px;}
+.inputs{padding: 30px 10px 0px 15px;}
 .inputs div{margin-bottom: 15px;}
-.inputs div span{display: block;float: left;width:80px;line-height:30px;height:30px;}
-.inputs div input{height:33px;width: 240px;}
+.inputs div span{display: block;float: left;width:70px;line-height:30px;height:30px;}
+.inputs div input{height:33px;width:180px;}
 .inputs .check_code{margin-bottom: 0;}
 .inputs .check_code input{width:110px;display: block;float: left;}
 .inputs .check_code img{display: block;float: left;padding-left: 10px;width: 70px;height: 32px;}	
 
-.form{padding-top: 13px;}
+.form{padding-top: 13px;width:300px;margin: 0 auto;}
 input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}
-input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0; 
-	-webkit-transition: all 0.218s; -moz-transition: all 0.218s; -o-transition: all 0.218s; -ms-transition: all 0.218s; transition: all 0.218s;}
+input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;}
 
-.actions{padding-left:105px;}
+.actions{padding-left:80px;}
 .actions .checkbox{display: inline-block;margin: 0px;margin-left: 20px;}
 .checkbox{border:none;padding-right: 10px;}
 .actions #submit{border:none;outline: none;background: #6699cc;color:#fff;
-	padding: 5px 30px;margin-left: 20px;padding: 2px 15px\9;}
+	padding: 5px 30px;margin-left:5px;}
 .actions #submit:hover{background: #369;}
 .actions #submit:active{background: #444;}
 .msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
-.common_footer{color:#eee;position: absolute;bottom:0px;text-align: center;width: 100%;
-	background:#444;background: rgba(0,0,0,0.3);padding: 10px;
+.common_footer{color:#999;position: absolute;bottom:0px;text-align: center;width: 100%;
+	background:#eee;padding: 10px;
 }
 
 .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}

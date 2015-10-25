@@ -14,14 +14,11 @@
 	
 	<link href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>app_desktop.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet" id='link_css_list'/>
 	
-	<style type="text/css" media="screen">
-	.desktop{background-image: url('<?php echo $wall;?>');background-color:#222;}
-	</style>
 </head>
 <body style="overflow: hidden;" oncontextmenu="return core.contextmenu();">
 	<?php include(TEMPLATE.'common/navbar.html');?>
-	<img class="wallbackground" src="" style='overflow:hidden;position:fixed;'/>
-	<div class='bodymain html5_drag_upload_box desktop'>
+	<div class='bodymain html5_drag_upload_box desktop' style="background-image: url('<?php echo $wall;?>');">
+		<img class="wallbackground" src="<?php echo $wall;?>"/>
 		<div class="fileContiner fileList_icon hidden">
 			<div class="file systemBox menuDefault" 
 			data-app={"type":"app","width":"","height":"","content":"core.explorer('',LNG.my_computer);"}>
@@ -88,19 +85,6 @@
 	});
 	seajs.use("app/src/desktop/main");
 </script>
-<div class="global_share">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-	<a class="jiathis_button_weixin"></a>
-	<a class="jiathis_button_tsina"></a>
-	<a class="jiathis_button_tieba"></a>
-	<a class="jiathis_button_cqq"></a>
-	<a class="jiathis_button_email"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
-	<a class="jiathis_counter_style"></a>
-	</div>
-	<!-- JiaThis Button END -->	
-</div>
-<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js" charset="utf-8"></script>
 </body>
 </html>
+

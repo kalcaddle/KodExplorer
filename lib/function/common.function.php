@@ -305,6 +305,25 @@ function array_get($arr,$index){
    }
 }
 
+function show_tips($message){
+	echo<<<END
+<html>
+	<style>
+	#msgbox{border: 1px solid #ddd;border: 1px solid #eee;padding: 30px;border-radius: 5px;background: #f6f6f6;
+	font-family: 'Helvetica Neue', "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif;
+	color:888;font-size:13px;margin:0 auto;margin-top:10%;width: 400px;font-size: 16;color:#666;}
+	#msgbox #title{padding-left:20px;font-weight:800;font-size:25px;}
+	#msgbox #message{padding:20px;}
+	</style>
+	<body>
+	<div id="msgbox">
+	<div id="title">tips</div>
+	<div id="message">$message</div>
+	</body>
+</html>
+END;
+	exit;
+} 
 /**
  * 打包返回AJAX请求的数据
  * @params {int} 返回状态码， 通常0表示正常

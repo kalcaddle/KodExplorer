@@ -36,7 +36,6 @@ body, input, textarea{-webkit-font-smoothing: antialiased;font-smoothing: antial
 .tips_box .tips_close{font-size: 22px;padding-left: 10px;color: #fff;cursor: pointer;pointer-events:all;}
 .tips_box .tips_close:hover{color: #f30;border-bottom: none;text-decoration: none;}
 
-
 /*editor*/
 /*.tabs .ace_editor{font-family:Consolas,Monaco,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Lucida Console,monospace,Courier New;}*/
 .ace_editor
