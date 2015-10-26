@@ -672,7 +672,7 @@ class explorer extends Controller{
             exit;
         }
         $file_url = $this->_make_file_proxy($this->path);
-        $host = $_SERVER['server_name'];
+        $host = $_SERVER['HTTP_HOST'];
         //微软接口调用的预览
         if (strstr($host,'10.10.') ||
             strstr($host,'192.168.')||
