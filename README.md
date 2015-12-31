@@ -63,4 +63,4 @@
 
 
 #### *Security :
-#####This Application has been fixed and secured by Ben Khlifa Fahmi ![](https://www.benkhlifa.com/) , From the Tunisian Whitehats Security Team.
+#####This Application has been fixed and secured by Ben Khlifa Fahmi (https://www.benkhlifa.com/) , From the Tunisian Whitehats Security Team.
