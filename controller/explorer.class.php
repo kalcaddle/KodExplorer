@@ -4,6 +4,7 @@
 * @author warlee | e-mail:kalcaddle@qq.com
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
 * @license http://kalcaddle.com/tools/licenses/license.txt
+* @secured by Ben Khlifa Fahmi
 */
 
 class explorer extends Controller{
@@ -50,6 +51,10 @@ class explorer extends Controller{
     }
 
     public function pathChmod(){
+       		if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"])
+			{
+			if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+				{
         $info_list = json_decode($this->in['list'],true);
         $mod = octdec('0'.$this->in['mod']);
         $success=0;$error=0;
@@ -67,6 +72,9 @@ class explorer extends Controller{
             $info = $this->L['success'];
         }
         show_json($info,$state);
+}}else{
+header('Location: 403.php');
+}
     }
 
     private function _pathAllow($path){
@@ -79,7 +87,11 @@ class explorer extends Controller{
         }
     }
     public function pathRname(){
-        if (!is_writable($this->path)) {
+        		if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"])
+			{
+			if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+				{
+if (!is_writable($this->path)) {
             show_json($this->L['no_permission_write_all'],false);
         }
         $rname_to=_DIR($this->in['rname_to']);
@@ -89,6 +101,9 @@ class explorer extends Controller{
         }
         rename($this->path,$rname_to);
         show_json($this->L['rname_success']);
+}}else{
+    header('Location: 403.php');
+}
     }
     public function pathList(){
         load_class('history');
@@ -249,7 +264,9 @@ class explorer extends Controller{
         }
     }
     public function pathDelete(){
-        $list = json_decode($this->in['list'],true);
+                if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+$list = json_decode($this->in['list'],true);
         if (!is_writable(USER_RECYCLE)) show_json($this->L['no_permission_write'],false);
         $success=0;$error=0;
         foreach ($list as $val) {
@@ -268,9 +285,15 @@ class explorer extends Controller{
             $info = $this->L['remove_success'];
         }
         show_json($info,$state);
+    }}else{
+        header('Location: 403.php');
+    }
     }
     public function pathDeleteRecycle(){
-        if(!isset($this->in['list'])){
+		if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"])
+			{
+			if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+				{        if(!isset($this->in['list'])){
             if (!del_dir(USER_RECYCLE)) {
                 show_json($this->L['remove_fali'],false);
             }else{
@@ -297,10 +320,12 @@ class explorer extends Controller{
         }else{
             $code = $error==0?true:false;
             show_json($this->L['remove_success'].$success.'success,'.$error.'error',$code);
-        }       
+        }       }}else{header('Location: 403.php');}
     }
 
     public function mkfile(){
+        if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
         $new= rtrim($this->path,'/');
         $this->_pathAllow($new);
         if(touch($new)){
@@ -311,10 +336,17 @@ class explorer extends Controller{
             show_json($this->L['create_success'],true,get_path_this($new));
         }else{
             show_json($this->L['create_error'],false);
-        }
+        }}
+}else{
+    header("Location: 403.php");
+}
     }
     public function mkdir(){
-        $new = rtrim($this->path,'/');
+        		if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"])
+			{
+			if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest')
+				{
+$new = rtrim($this->path,'/');
         $this->_pathAllow($new);
         if(mkdir($new,0777)){
             chmod_path($new,0777);
@@ -322,6 +354,9 @@ class explorer extends Controller{
         }else{
             show_json($this->L['create_error'],false);
         }
+    }}else{
+    header('Location: 403.php');
+}
     }
     public function pathCopy(){
         session_start();//re start
@@ -593,6 +628,8 @@ class explorer extends Controller{
 
     // 远程下载
     public function serverDownload() {
+         if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
         $uuid = 'download_'.$this->in['uuid'];
         if ($this->in['type'] == 'percent') {//获取下载进度
             //show_json($_SESSION[$uuid]);
@@ -643,6 +680,8 @@ class explorer extends Controller{
             }
         }else{
             show_json($this->L['download_error_create'],false);
+        }}}else{
+            header('Location: 403.php');
         }
     }
 
