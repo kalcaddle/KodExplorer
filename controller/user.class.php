@@ -171,7 +171,7 @@ class user extends Controller
      * 登录数据提交处理
      */
     public function loginSubmit(){
-        if(!isset($this->in['name']) || !isset($this->in['password'])) {
+        if(isset($this->in['name']) || isset($this->in['password'])) {
             $msg = $this->L['login_not_null'];
         }else{
             //错误三次输入验证码            
