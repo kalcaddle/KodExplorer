@@ -122,7 +122,7 @@ $L= array(
 	"php_env_error_gd"  		=>"必須開啟php GD庫, 否則驗證碼、縮圖使用將不正常",
 	"install_login"  			=>"您可以用如下帳號登陸",
 	"install_enter"  			=>"進入系統",
-	"install_user_default"  	=>"管理員：admin/admin(請務必修改密碼)<br/>普通使用者：demo/demo<br/>遊客使用者：guest/guest",
+	"install_user_default"  	=>"管理員：admin/admin(請務必修改密碼)<br/>一般使用者：demo/demo<br/>遊客使用者：guest/guest",
 
 	"copyright_desc"  			=>"這是一款備受好評的web檔案管理系統，你可以用它來做內部檔案管理或共用、也可以用來管理伺服器上的網站，取代Ftp
 		，甚至可以當作webIDE直接線上開發。同時你也可以將此程式二次開發整合進你現有的系統。",
@@ -139,7 +139,7 @@ $L= array(
 	"guest_login"                =>	"遊客登入",	
 	"username"                   =>	"使用者名稱",
 	"password"                   =>	"密碼",
-	"login_code"                 =>	"驗證碼",
+	"login_code"                 =>	"驗證",
 	"login_rember_password"      =>	"記住密碼",
 	"us"                         =>	"千帆網路工作室",
 	"login_not_null"             =>	"使用者名稱密碼不能為空!",
@@ -170,7 +170,7 @@ $L= array(
 	"getting"                    =>	"取得中...",
 	"sending"                    =>	"資料傳送中...",
 	"data_error"                 =>	"資料出錯！",
-	"get_success"                =>	"獲取成功!",
+	"get_success"                =>	"取得成功!",
 	"save_success"               =>	"儲存成功!",	
 	"success"                    =>	"作業成功",
 	"error"                      =>	"作業失敗",
