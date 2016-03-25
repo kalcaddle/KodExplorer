@@ -2,8 +2,8 @@
 $L= array(
 	"upload_clear"  			=>'清除',
 	"upload_setting"  			=>"設定",
-	"upload_tips"  				=>'採取分片上傳,不再受php.ini限制;推薦Chrome體驗資料夾拖曳上傳',
-	"upload_exist"  			=>"同名檔案處理",
+	"upload_tips"  				=>'採取分段上傳,不再受php.ini限制;推薦Chrome體驗資料夾拖曳上傳',
+	"upload_exist"  			=>"重名檔案處理",
 	"upload_exist_rename"  		=>"重新命名",
 	"upload_exist_replace"  	=>"覆蓋",
 	"upload_exist_skip"  		=>"略過",
@@ -18,7 +18,7 @@ $L= array(
 	"createProject"  			=>"新增志編輯器工程",
 	"only_read"	  			  	=>"唯讀",
 	"only_read_desc"  			=>"此目錄無寫權限<br/>可以在作業系統中設定此目錄的權限",
-	"explorerNew"  			  	=>'kod 連結',
+	"explorerNew"  			  	=>'KOD連結',
 	'zip_download_ready'  		=>'壓縮後會自動下載,請稍後...',
 	"set_background"  			=>"設定為桌面桌布",
 
@@ -65,7 +65,7 @@ $L= array(
 	"unknow_file_download"  	=>"下載至本機",
 	"unknow_file_office"  		=>"Office預覽,此程式需要部署在外部網路",
 	"config_save_error_auth"	=> '設定儲存失敗,管理員禁止了此權限!',
-	"config_save_error_file"	=> '設定儲存失敗,kod目錄需要有寫入權限!',
+	"config_save_error_file"	=> '設定儲存失敗,KOD目錄需要有寫入權限!',
 
 	//editor
 	"shortcut"  			  	=> '快速鍵',
@@ -93,7 +93,7 @@ $L= array(
 	"path_hidden_desc"  		=> "預設不顯示的目錄和檔案,逗號隔開",
 	"new_user_folder"  			=> "新使用者預設建立目錄",
 	"new_user_folder_desc"		=> "用逗號隔開",
-	"new_user_app"  			=>"新使用者預設建立app",
+	"new_user_app"  			=>"新使用者預設建立應用程式",
 	"new_user_app_desc"  		=>"應用中心的應用，多個用逗號隔開",
 	"auto_login"  				=>"遊客自動登入",
 	"auto_login_desc"  			=>"預設登入使用者名稱為<code>guest</code>的使用者；開啟後確保<code>guest</code>使用者存在",
@@ -256,7 +256,7 @@ $L= array(
 	"app_display"			 	 => '顯示',
 	"app_display_border"		 => '無邊框(選中即無邊框)',	
 	"app_display_size"			 => '調整大小(選中即可調整)',		
-	"app_size"			 		 => '尺寸',
+	"app_size"			 		 => '大小',
 	"app_url"			 		 => '連結網址,
 	"app_code"			 		 => 'JS代碼',
 
