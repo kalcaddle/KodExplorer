@@ -257,7 +257,7 @@ $L= array(
 	"app_display_border"		 => '無邊框(選中即無邊框)',	
 	"app_display_size"			 => '調整大小(選中即可調整)',		
 	"app_size"			 		 => '大小',
-	"app_url"			 		 => '連結網址,
+	"app_url"			 		 => '連結網址',
 	"app_code"			 		 => 'JS代碼',
 
 	//檔案管理
