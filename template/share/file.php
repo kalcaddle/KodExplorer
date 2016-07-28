@@ -52,12 +52,12 @@
 	</div><!-- / frame-main end-->
 <?php include(TEMPLATE.'common/footer.html');?>
 <script src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
-<script src="./index.php?share/common_js&user=<?php echo $_GET['user'];?>&sid=<?php echo $_GET['sid'];?>&#=<?php echo rand_string(8);?>"></script>
+<script src="./index.php?share/common_js&user=<?php echo htmlentities($_GET['user']);?>&sid=<?php echo htmlentities($_GET['sid']);?>&#=<?php echo rand_string(8);?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ace.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script src="<?php echo STATIC_PATH;?>js/lib/ace/src-min-noconflict/ext-static_highlight.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript">
 	AUTH  = {'explorer:fileDownload':<?php echo $can_download;?>};
-	G.user = "<?php echo $_GET['user'];?>";
+	G.user = "<?php echo htmlentities($_GET['user']);?>";
 	G.path = "<?php echo (isset($_GET['path'])?urlencode($_GET['path']):'') ;?>";
 	G.sid = "<?php echo $_GET['sid'];?>";
 	G.share_info = <?php echo json_encode($share_info);?>;

@@ -4,6 +4,7 @@
 * @author warlee | e-mail:kalcaddle@qq.com
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
 * @license http://kalcaddle.com/tools/licenses/license.txt
+* @secured by Ben Khlifa Fahmi
 */
 
 class editor extends Controller{
@@ -43,7 +44,9 @@ class editor extends Controller{
 		show_json($data);
 	}
 	public function fileSave(){
-		$filestr = rawurldecode($this->in['filestr']);
+		 if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+       $filestr = rawurldecode($this->in['filestr']);
 		$charset = $this->in['charset'];
 		$path =_DIR($this->in['path']);
 		if (!is_writable($path)) show_json($this->L['no_permission_write_file'],false);
@@ -55,6 +58,9 @@ class editor extends Controller{
 		fwrite($fp,$filestr);
 		fclose($fp);
 		show_json($this->L['save_success']);
+}}else{
+	header('Location: index.php');
+}
 	}
 
 	/*

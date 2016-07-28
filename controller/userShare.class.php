@@ -34,6 +34,9 @@ class userShare extends Controller{
      * 编辑
      */
     public function set(){
+        if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+
         $share_info = $this->_getData();
 
         //含有sid则为更新，否则为插入
@@ -60,17 +63,26 @@ class userShare extends Controller{
             show_json($this->L['error'],false);
         }
         show_json($this->L['error'],false);
+}}else{
+header('Location: 403.php');
+}
     }
 
     /**
      * 删除
      */
     public function del() {
-        $list = json_decode($this->in['list'],true);
-        foreach ($list as $val) {
-            $this->sql->delete($val['path']);
+        if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                $list = json_decode($this->in['list'],true);
+                foreach ($list as $val) {
+                    $this->sql->delete($val['path']);
+                }
+                show_json($this->L['success'],true);
+            }
+        }else{
+            header('Location: 403.php');
         }
-        show_json($this->L['success'],true);
     }
 
     public function _getData(){

@@ -4,6 +4,7 @@
 * @author warlee | e-mail:kalcaddle@qq.com
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
 * @license http://kalcaddle.com/tools/licenses/license.txt
+* @Secured by Ben Khlifa Fahmi
 */
 
 class app extends Controller{
@@ -81,9 +82,13 @@ class app extends Controller{
      * 添加
      */
     public function add() {  
-        $res=$this->sql->add(rawurldecode($this->in['name']),$this->_init());
+         if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+       $res=$this->sql->add(rawurldecode($this->in['name']),$this->_init());
         if($res) show_json($this->L['success']);
-        show_json($this->L['error_repeat'],false);
+        show_json($this->L['error_repeat'],false);}}else{
+    header('Location: 403.php');
+}
     }
 
     /**
@@ -91,21 +96,28 @@ class app extends Controller{
      */
     public function edit() {
         //查找到一条记录，修改为该数组
-        if($this->sql->replace_update(
+         if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+if($this->sql->replace_update(
             rawurldecode($this->in['old_name']),
             rawurldecode($this->in['name']),$this->_init())){
             show_json($this->L['success']);
         }
-        show_json($this->L['error_repeat'],false);
+        show_json($this->L['error_repeat'],false);}}else{
+header('Location: 403.php');}
     }
     /**
      * 删除
      */
     public function del() {
-        if($this->sql->delete(rawurldecode($this->in['name']))){
+         if ($_SERVER['HTTP_REFERER'] != $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]) {
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+       if($this->sql->delete(rawurldecode($this->in['name']))){
             show_json($this->L['success']);
         }
-        show_json($this->L['error'],false);
+        show_json($this->L['error'],false);}}else{
+    header('Location: 403.php');
+    }
     }
 
     public function get_url_title(){
