@@ -250,12 +250,14 @@ class explorer extends Controller{
     }
     public function pathDelete(){
         $list = json_decode($this->in['list'],true);
-        if (!is_writable(USER_RECYCLE)) show_json($this->L['no_permission_write'],false);
+        if (!is_dir(USER_RECYCLE)){
+			mk_dir(USER_RECYCLE);
+		}
         $success=0;$error=0;
         foreach ($list as $val) {
             $path_this = _DIR($val['path']);
             $filename  = get_path_this($path_this);
-            $filename = get_filename_auto(USER_RECYCLE.$filename,date(' h:i:s'));//已存在处理 创建副本
+            $filename = get_filename_auto(USER_RECYCLE.$filename,date(' h:i:s'),'folder_rename');//已存在处理 创建副本
             if (@rename($path_this,$filename)) {
                 $success++;
             }else{
@@ -560,9 +562,11 @@ class explorer extends Controller{
         }
     }
     public function image(){
-        if (filesize($this->path) <= 1024*10) {//小于10k 不再生成缩略图
-            file_put_out($this->path);
-        }
+        if (filesize($this->path) <= 1024*20 ||
+			!function_exists('imagecolorallocate') ) {//小于20k或者不支持gd库 不再生成缩略图
+			file_put_out($this->path);
+			return;
+		}
         load_class('imageThumb');
         $image= $this->path;
         $image_md5  = @md5_file($image);//文件md5
@@ -585,8 +589,8 @@ class explorer extends Controller{
             }
         }
         if (!file_exists($image_thum) || filesize($image_thum)<100){//缩略图生成失败则用默认图标
-            $image_thum=STATIC_PATH.'images/image.png';
-        }
+			$image_thum=$this->path;
+		}
         //输出
         file_put_out($image_thum);
     }

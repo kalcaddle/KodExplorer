@@ -137,9 +137,20 @@ function php_env_check(){
     if(!function_exists('file_get_contents')) $error.='<li>'.$L['php_env_error_file'].'</li>';
     if(!path_writable(BASIC_PATH)) $error.= '<li>'.$base_path.'	'.$L['php_env_error_path'].'</li>';
     if(!path_writable(BASIC_PATH.'data')) $error.= '<li>'.$base_path.'data	'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/system')) $error.= '<li>'.$base_path.'data/system	'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/User')) $error.= '<li>'.$base_path.'data/User	'.$L['php_env_error_path'].'</li>';
-    if(!path_writable(BASIC_PATH.'data/thumb')) $error.= '<li>'.$base_path.'data/thumb	'.$L['php_env_error_path'].'</li>';
+
+    $parent = get_path_father(BASIC_PATH);
+	$arr_check = array(
+		BASIC_PATH,
+		BASIC_PATH.'data',
+		BASIC_PATH.'data/system',
+		BASIC_PATH.'data/User',
+		BASIC_PATH.'data/thumb',
+	);
+	foreach ($arr_check as $value) {
+		if(!path_writable($value)){
+			$error.= '<li>'.str_replace($parent,'',$value).'/	'.$L['php_env_error_path'].'</li>';
+		}
+	}
     if( !function_exists('imagecreatefromjpeg')||
         !function_exists('imagecreatefromgif')||
         !function_exists('imagecreatefrompng')||	
@@ -209,52 +220,13 @@ function init_setting(){
         include($setting_user);
     }
 }
-
-//防止恶意请求
-function check_post_many(){
-    $check_time = 4;
-    $maxt_num   = 40;//5秒内最大请求次数。超过则自动退出
-    $total_time = 60;//10nmin
-    $total_time_num = 500;
-    
-    //管理员不受限制
-    if( isset($_SESSION['kod_user']) && 
-        $_SESSION['kod_user']['role']=='root'){
-        return;
-    }
-    //上传不受限制
-    $URI = $GLOBALS['in']['URLremote'];
-    if (isset($URI[1]) && $URI[1] =='fileUpload') {
-        return;
-    }
-    $session_key = 'check_post_many';
-    $_SESSION['check_session_has'] = 'kodexplorer';
-    if (!isset($_SESSION[$session_key])) {
-        $_SESSION[$session_key] = array('last_time'=>time(),'total_num'=>0,'max_time'=>time(),'max_num'=>0);
-    }else{
-        $info = $_SESSION[$session_key]; 
-        //----短期内并发控制       
-        if (time()-$info['last_time'] >=$check_time) {//大于时长s 则清空
-            $info = array('last_time'=>time(),'total_num'=>0,'max_time'=>time(),'max_num'=>0);
-        }else{
-            if ($info['total_num'] >=$maxt_num) {//大于100次则直接退出
-                user_logout();
-            }else{
-                $info['total_num'] +=1;
-            }
-        }
-        //----总量控制
-        if (time()-$info['max_time'] >=$total_time) {//大于时长s 则清空
-            $info = array('last_time'=>time(),'total_num'=>0,'max_time'=>time(),'max_num'=>0);
-        }else{
-            if ($info['total_num'] >=$total_time_num) {//大于100次则直接退出
-                user_logout();
-            }else{
-                $info['max_num'] +=1;
-            }
-        }
-        $_SESSION[$session_key] = $info;
-    }
+//登陆是否需要验证码
+function need_check_code(){
+	if(!function_exists('imagecolorallocate')){
+		return false;
+	}else{
+		return true;
+	}
 }
 function is_wap(){    
     if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', 

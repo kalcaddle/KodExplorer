@@ -22,7 +22,7 @@
 				<div><span><?php echo $L['username'];?>：</span><input id="username" name='name' type="text" placeholder="<?php echo $L['username'];?>" required/> </div> 
 				<div><span><?php echo $L['password'];?>：</span><input id="password" name='password' type="password" placeholder="<?php echo $L['password'];?>" required /></div>
 				
-            	<?php if(isset($_SESSION['code_error_time']) && intval($_SESSION['code_error_time']) >=3){?>
+            	<?php if(need_check_code() && isset($_SESSION['code_error_time']) && intval($_SESSION['code_error_time']) >=3){?>
 				<div class='check_code'>
 					<span><?php echo $L['login_code'];?>：</span>
 					<input name='check_code' class="check_code" type="text" placeholder="<?php echo $L['login_code'];?>" required /> <img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />

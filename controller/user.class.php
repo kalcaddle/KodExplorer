@@ -179,7 +179,7 @@ class user extends Controller
             $password = rawurldecode($this->in['password']);
             
             session_start();//re start 有新的修改后调用
-            if(isset($_SESSION['code_error_time'])  && 
+            if(need_check_code() && isset($_SESSION['code_error_time'])  && 
                intval($_SESSION['code_error_time']) >=3 && 
                $_SESSION['check_code'] !== strtolower($this->in['check_code'])){
                 // pr($_SESSION['check_code'].'--'.strtolower($this->in['check_code']));exit;

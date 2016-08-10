@@ -127,21 +127,13 @@ function get_path_ext($path){
     return $ext;
 }
 
-
-
 //自动获取不重复文件(夹)名
 //如果传入$file_add 则检测存在则自定重命名  a.txt 为a{$file_add}.txt
-function get_filename_auto($path,$file_add = "",$same_file_type=''){
-	if (is_dir($path)) {//文件夹则忽略
+//$same_file_type  rename,replace,skip,folder_rename
+function get_filename_auto($path,$file_add = "",$same_file_type='replace'){
+	if (is_dir($path) && $same_file_type!='folder_rename') {//文件夹则忽略
 		return $path;
 	}
-
-	//重名处理方式;replace,skip,filename_auto
-	if ($same_file_type == '') {
-		$same_file_type = 'replace';
-	}
-
-
 	//重名处理
 	if (file_exists($path)) {
 		if ($same_file_type=='replace') {
@@ -172,14 +164,28 @@ function get_filename_auto($path,$file_add = "",$same_file_type=''){
 }
 
 /**
- * 判断文件夹是否可写
+ * 文件或目录是否可写 is_writeable();
+ * 兼容性处理：挂载目录755 bug
  */
-function path_writable($path) {	
-	$file = $path.'/test'.time().'.txt';
-	$dir  = $path.'/test'.time();
-	if(@is_writable($path) && @touch($file) && @unlink($file)) return true;
-	if(@mkdir($dir,0777) && @rmdir($dir)) return true;
-	return false;
+function path_writable($path){
+    if (is_dir($path)) {
+        $file = $path.'/writeable_test_'.time().'.txt';
+		@touch($file);
+		if(file_exists($file)){
+		    @unlink($file);
+		    return true;
+		}
+		return false;
+    }else if(file_exists($path)){
+        $fp = @fopen($path,'a+');
+        if($fp){
+            fclose($fp);
+            return true;
+        }
+        fclose($fp);
+        return false;
+    }
+    return false;//不存在
 }
 
 /**
@@ -589,19 +595,15 @@ function ext_type($ext){
  * 默认以附件方式下载；$download为false时则为输出文件
  */
 function file_put_out($file,$download=false){
-	if (!is_file($file)) show_json('not a file!');
-	set_time_limit(0); 
-	//ob_clean();//清除之前所有输出缓冲
+if (!is_file($file)) show_json('not a file!');
 	if (!file_exists($file)) show_json('file not exists',false);
-	if (isset($_SERVER['HTTP_RANGE']) && ($_SERVER['HTTP_RANGE'] != "") && 
-		preg_match("/^bytes=([0-9]+)-$/i", $_SERVER['HTTP_RANGE'], $match) && ($match[1] < $fsize)) { 
-		$start = $match[1];
-	}else{
-		$start = 0;
-	}
-	$size = get_filesize($file);
+	if (!is_readable($file)) show_json('file not readable',false);
+	
+	set_time_limit(0);
+	ob_clean();//清除之前所有输出缓冲 TODO
 	$mime = get_file_mime(get_path_ext($file));
-	if ($download || strstr($mime,'application/')) {//下载或者application则设置下载头
+	if ($download || 
+		(strstr($mime,'application/') && $mime!='application/x-shockwave-flash')  ) {//下载或者application则设置下载头
 		$filename = get_path_this($file);//解决在IE中下载时中文乱码问题
 		if( preg_match('/MSIE/',$_SERVER['HTTP_USER_AGENT']) || 
 			preg_match('/Trident/',$_SERVER['HTTP_USER_AGENT'])){
@@ -611,27 +613,79 @@ function file_put_out($file,$download=false){
 		}
 		header("Content-Type: application/octet-stream");
 		header("Content-Disposition: attachment;filename=".$filename);
+	}else{
+		//缓存文件
+		header('Expires: '.date('D, d M Y H:i:s',time()+3600*24*20).' GMT');
+		header("Cache-Pragma: public");
+		header("Cache-Control: cache, must-revalidate");
+		if (isset($_SERVER['If-Modified-Since']) && (strtotime($_SERVER['If-Modified-Since']) == filemtime($file))) {
+	        header('HTTP/1.1 304 Not Modified');
+	        header('Last-Modified: '.date('D, d M Y H:i:s', filemtime($file)).' GMT');//304
+	        exit;
+	    } else {
+	        header('Last-Modified: '.date('D, d M Y H:i:s', filemtime($file)).' GMT', true, 200);
+	    }
+		$etag = '"'.md5(date('D, d M Y H:i:s',filemtime($file))).'"';
+	    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag){
+			header('HTTP/1.1 304 Not Modified');
+			header('Etag: '.$etag);
+			exit;
+		}else{
+			header('Etag: '.$etag);
+		}
 	}
-
-	header("Cache-Control: public");
 	header("X-Powered-By: kodExplorer.");
 	header("Content-Type: ".$mime);
-	if ($start > 0){
-		header("HTTP/1.1 206 Partial Content");
-		header("Content-Ranges: bytes".$start ."-".($size - 1)."/" .$size);
-		header("Content-Length: ".($size - $start));		
-	}else{
-		header("Accept-Ranges: bytes");
-		header("Content-Length: $size");
-	}
+	header("Accept-Ranges: bytes");
+	$size 	= get_filesize($file);
+	$length = $size;           // Content length
+    $start  = 0;               // Start byte
+    $end    = $size - 1;       // End byte
+	if (isset($_SERVER['HTTP_RANGE']) || isset($_GET['start'])) {//分段请求；视频拖拽
+        $c_start = $start;
+        $c_end   = $end;
+        if(isset($_GET['start'])){
+        	$c_start = intval($_GET['start']);
+        }else{//range 
+	        list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+	        if (strpos($range, ',') !== false) {
+	            header('HTTP/1.1 416 Requested Range Not Satisfiable');
+	            header("Content-Range: bytes $start-$end/$size");
+	            exit;
+	        }
+	        if ($range == '-') {
+	            $c_start = $size - substr($range, 1);
+	        }else{
+	            $range  = explode('-', $range);
+	            $c_start = $range[0];
+	            $c_end   = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $size;
+	        }
+	        $c_end = ($c_end > $end) ? $end : $c_end;
+	        if ($c_start > $c_end || $c_start > $size - 1 || $c_end >= $size) {
+	            header('HTTP/1.1 416 Requested Range Not Satisfiable');
+	            header("Content-Range: bytes $start-$end/$size");
+	            exit;
+	        }
+	    }
+        $start  = $c_start;
+        $end    = $c_end;
+        $length = $end - $start + 1;
+        header('HTTP/1.1 206 Partial Content');
+    }
+    header("Content-Range: bytes $start-$end/$size");
+    header("Content-Length: ".$length);
 
-	$fp = fopen($file, "rb");
+	//header("X-Sendfile: $file");exit;
+	if(!$fp = @fopen($file, "rb")){
+		exit;
+	}
 	fseek($fp, $start);
 	while (!feof($fp)) {
-		print (fread($fp, 1024 * 8)); //输出文件  
+		set_time_limit(0);
+		print(fread($fp,1024*4)); //输出文件  
 		flush(); 
 		ob_flush();
-	}  
+	}
 	fclose($fp);
 }
 
@@ -642,12 +696,10 @@ function file_put_out($file,$download=false){
  */
 function file_download_this($from, $file_name){
 	set_time_limit(0);
-	$fp = @fopen ($from, "rb");
-	if ($fp){
-		$new_fp = @fopen ($file_name, "wb");
-		fclose($new_fp);
-
-		$download_fp = @fopen ($file_name, "wb");
+	if ($fp = @fopen ($from, "rb")){
+		if(!$download_fp = @fopen($file_name, "wb")){
+			return false;
+		}
 		while(!feof($fp)){
 			if(!file_exists($file_name)){//删除目标文件；则终止下载
 				fclose($download_fp);
@@ -656,7 +708,8 @@ function file_download_this($from, $file_name){
 			fwrite($download_fp, fread($fp, 1024 * 8 ), 1024 * 8);
 		}
 		//下载完成，重命名临时文件到目标文件
-		fclose($download_fp);		
+		fclose($download_fp);
+		fclose($fp);
 		return true;
 	}else{
 		return false;
