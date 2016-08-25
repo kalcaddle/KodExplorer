@@ -49,6 +49,13 @@
     【文件拖拽上传】除了ie8以下的大部分浏览器支持；建议使用chrome、360、猎豹、uc等
     【文件夹拖拽上传】除了ie10以下、firefox大部分浏览器都支持，建议使用chrome、360、猎豹、uc等
 
+#### 4.使用Docker快速部署
+
+```
+docker build -t kodexplorer .
+docker run -d -p 80:80 --name KODExplorer kodexplorer
+```
+
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
 
 ## editor
