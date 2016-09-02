@@ -306,6 +306,16 @@ class share extends Controller{
         show_json($list);
     }
 
+    public function _make_file_proxy($file_path){
+        if (!file_exists($file_path)) {
+            return '';
+        }
+        load_class('mcrypt');
+        $pass = $GLOBALS['config']['setting_system']['system_password'];
+        $fid = Mcrypt::encode($file_path,$pass,$GLOBALS['config']['settings']['download_url_time']);
+        $file_name = urlencode(get_path_this($file_path));
+        return APPHOST.'index.php?user/public_link&fid='.$fid.'&file_name=/'.$file_name;
+    }
     //生成临时文件key
     public function officeView(){
         if (!file_exists($this->path)) {
