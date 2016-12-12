@@ -359,7 +359,7 @@ function show_json($data,$code = true,$info=''){
  * $tpl="<li class='list {this}' theme='{0}'>{1}_{2}</li>\n";
  * echo getTplList('|','=',$arr,$tpl,'mac'),'<br/>';
  */
-function getTplList($cute1, $cute2, $arraylist, $tpl,$this,$this_str=''){
+function getTplList($cute1, $cute2, $arraylist, $tpl,$this_tag,$this_str=''){
 	$list = explode($cute1, $arraylist);
 	if ($this_str == '') $this_str ="this";
 	$html = '';
@@ -369,7 +369,7 @@ function getTplList($cute1, $cute2, $arraylist, $tpl,$this,$this_str=''){
 		foreach ($info as $key => $value) {
 			$arr_replace[$key]='{'.$key .'}';
 		}
-		if ($info[0] == $this) {
+		if ($info[0] == $this_tag) {
 			$temp = str_replace($arr_replace, $info, $tpl);
 			$temp = str_replace('{this}', $this_str, $temp);
 		} else {
