@@ -1,65 +1,90 @@
 <?php 
 
 /**
- * 类名：CreatMiniature
- * 功能：生成多种类型的缩略图
+ * 功能：图片处理
  * 基本参数：$srcFile,$echoType
- * 方法用到的参数：
- * $toFile,生成的文件 * $toW,生成的宽  $toH,生成的高*
- * $bk1,背景颜色参数 以255为最高 * $bk2,背景颜色参数 * $bk3,背景颜色参数
  * 
- * 例子：
- * include('thumb.php');
- * $cm=new CreatMiniature();
- * $cm->SetVar('1.jpg','file');
- * $cm->Distortion('dis_bei.jpg',150,200);
-
- * $cm->Prorate('pro_bei.jpg',150,200);//附带切割
- * $cm->Cut('cut_bei.jpg',150,200);
- * $cm->BackFill('fill_bei.jpg',150,200);
+ * eg：
+ * $cm=new imageThumb('1.jpg','file');
+ * 
+ * $cm->Distortion('dis_bei.jpg',150,200);	//生成固定宽高缩略图；
+ * $cm->Prorate('pro_bei.jpg',150,200);		//等比缩略图；附带切割
+ * $cm->Cut('cut_bei.jpg',150,200);			//等比缩略图；多出部分切割
+ * $cm->BackFill('fill_bei.jpg',150,200);	//等比缩略图；多出部分填充
+ *
+ * $cm->imgRotate('out.jpg',90);			//旋转图片
  */
-class CreatMiniature {
-	// 公共变量
+class imageThumb {
 	var $srcFile = '';	//原图
+	var $imgData = '';	//图片信息
 	var $echoType;		//输出图片类型，link--不保存为文件；file--保存为文件
 	var $im = '';		//临时变量
 	var $srcW = '';		//原图宽
 	var $srcH = '';		//原图高  
-	// 设置变量及初始化
-	function SetVar($srcFile, $echoType){
+
+	function __construct($srcFile, $echoType){
 		$this->srcFile = $srcFile;
 		$this->echoType = $echoType;
+		$this->im = self::image($srcFile);
+		if(!$this->im){
+			return false;
+		}
 
 		$info = '';
-		$data = GetImageSize($this->srcFile, $info);
+		$this->imgData = GetImageSize($srcFile, $info);
+		$this->srcW = imageSX($this->im);
+		$this->srcH = imageSY($this->im);
+		return $this;
+	}
+	public static function image($file){
+		$info = '';
+		$data = GetImageSize($file, $info);
+		$img  = false;
 		switch ($data[2]) {
-			case 1:
+			case IMAGETYPE_GIF:
 				if (!function_exists('imagecreatefromgif')) {
-					exit();
+					break;
 				} 
-				$this->im = ImageCreateFromGIF($this->srcFile);
+				$img = imagecreatefromgif($file);
 				break;
-			case 2:
+			case IMAGETYPE_JPEG:
 				if (!function_exists('imagecreatefromjpeg')) {
-					exit();
+					break;
 				} 
-				$this->im = ImageCreateFromJpeg($this->srcFile);
+				$img = imagecreatefromjpeg($file);
 				break;
-			case 3:
-				$this->im = ImageCreateFromPNG($this->srcFile);
+			case IMAGETYPE_PNG:
+				if (!function_exists('imagecreatefrompng')) {
+					break;
+				}
+				$img = imagecreatefrompng($file);
+				imagesavealpha($img,true);
 				break;
-		} 
-		$this->srcW = ImageSX($this->im);
-		$this->srcH = ImageSY($this->im);
-	} 
+			case IMAGETYPE_BMP:
+				$img = imagecreatefrombmp($file);
+				break;
+			default:break;
+		}
+		return $img;
+	}
+
+	public static function imageSize($file){
+		$img = self::image($file);
+		$result = false;
+		if($img){
+			$result = array('width'=>imageSX($img),"height"=>imageSY($img));
+			imageDestroy($img);
+		}
+		return $result;
+	}
+
 	// 生成扭曲型缩图
-	function Distortion($toFile, $toW, $toH){
-		$cImg = $this->CreatImage($this->im, $toW, $toH, 0, 0, 0, 0, $this->srcW, $this->srcH);
-		return $this->EchoImage($cImg, $toFile);
-		ImageDestroy($cImg);
+	function distortion($toFile, $toW, $toH){
+		$cImg = $this->creatImage($this->im, $toW, $toH, 0, 0, 0, 0, $this->srcW, $this->srcH);
+		return $this->echoImage($cImg, $toFile);
 	} 
 	// 生成按比例缩放的缩图
-	function Prorate($toFile, $toW, $toH){
+	function prorate($toFile, $toW, $toH){
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
@@ -70,17 +95,15 @@ class CreatMiniature {
 			$ftoW = $ftoH * ($this->srcW / $this->srcH);
 		} 
 		if ($this->srcW > $toW || $this->srcH > $toH) {
-			$cImg = $this->CreatImage($this->im, $ftoW, $ftoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
-			return $this->EchoImage($cImg, $toFile);
-			ImageDestroy($cImg);
+			$cImg = $this->creatImage($this->im, $ftoW, $ftoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
+			return $this->echoImage($cImg, $toFile);
 		} else {
-			$cImg = $this->CreatImage($this->im, $this->srcW, $this->srcH, 0, 0, 0, 0, $this->srcW, $this->srcH);
-			return $this->EchoImage($cImg, $toFile);
-			ImageDestroy($cImg);
+			$cImg = $this->creatImage($this->im, $this->srcW, $this->srcH, 0, 0, 0, 0, $this->srcW, $this->srcH);
+			return $this->echoImage($cImg, $toFile);
 		} 
 	} 
 	// 生成最小裁剪后的缩图
-	function Cut($toFile, $toW, $toH){
+	function cut($toFile, $toW, $toH){
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
@@ -90,14 +113,13 @@ class CreatMiniature {
 			$ctoW = $toW;
 			$ctoH = $ctoW * ($this->srcH / $this->srcW);
 		} 
-		$allImg = $this->CreatImage($this->im, $ctoW, $ctoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
-		$cImg = $this->CreatImage($allImg, $toW, $toH, 0, 0, ($ctoW - $toW) / 2, ($ctoH - $toH) / 2, $toW, $toH);
-		return $this->EchoImage($cImg, $toFile);
-		ImageDestroy($cImg);
-		ImageDestroy($allImg);
+		$allImg = $this->creatImage($this->im, $ctoW, $ctoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
+		$cImg = $this->creatImage($allImg, $toW, $toH, 0, 0, ($ctoW - $toW) / 2, ($ctoH - $toH) / 2, $toW, $toH);
+		imageDestroy($allImg);
+		return $this->echoImage($cImg, $toFile);		
 	} 
 	// 生成背景填充的缩图,默认用白色填充剩余空间，传入$isAlpha为真时用透明色填充
-	function BackFill($toFile, $toW, $toH,$isAlpha=false,$red=255, $green=255, $blue=255){
+	function backFill($toFile, $toW, $toH,$isAlpha=false,$red=255, $green=255, $blue=255){
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
@@ -108,60 +130,136 @@ class CreatMiniature {
 			$ftoW = $ftoH * ($this->srcW / $this->srcH);
 		} 
 		if (function_exists('imagecreatetruecolor')) {
-			@$cImg = ImageCreateTrueColor($toW, $toH);
+			@$cImg = imageCreateTrueColor($toW, $toH);
 			if (!$cImg) {
-				$cImg = ImageCreate($toW, $toH);
+				$cImg = imageCreate($toW, $toH);
 			} 
 		} else {
-			$cImg = ImageCreate($toW, $toH);
+			$cImg = imageCreate($toW, $toH);
 		}
-		
 
 		$fromTop = ($toH - $ftoH)/2;//从正中间填充
 		$backcolor = imagecolorallocate($cImg,$red,$green, $blue); //填充的背景颜色
 		if ($isAlpha){//填充透明色
-			$backcolor=ImageColorTransparent($cImg,$backcolor);
+			$backcolor=imageColorTransparent($cImg,$backcolor);
 			$fromTop = $toH - $ftoH;//从底部填充
 		}		
 
-		ImageFilledRectangle($cImg, 0, 0, $toW, $toH, $backcolor);
+		imageFilledRectangle($cImg, 0, 0, $toW, $toH, $backcolor);
 		if ($this->srcW > $toW || $this->srcH > $toH) {
-			$proImg = $this->CreatImage($this->im, $ftoW, $ftoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
+			$proImg = $this->creatImage($this->im, $ftoW, $ftoH, 0, 0, 0, 0, $this->srcW, $this->srcH);
 			if ($ftoW < $toW) {
-				ImageCopy($cImg, $proImg, ($toW - $ftoW) / 2, 0, 0, 0, $ftoW, $ftoH);
+				imageCopy($cImg, $proImg, ($toW - $ftoW) / 2, 0, 0, 0, $ftoW, $ftoH);
 			} else if ($ftoH < $toH) {
-				ImageCopy($cImg, $proImg, 0, $fromTop, 0, 0, $ftoW, $ftoH);
+				imageCopy($cImg, $proImg, 0, $fromTop, 0, 0, $ftoW, $ftoH);
 			} else {
-				ImageCopy($cImg, $proImg, 0, 0, 0, 0, $ftoW, $ftoH);
+				imageCopy($cImg, $proImg, 0, 0, 0, 0, $ftoW, $ftoH);
 			} 
 		} else {
-			ImageCopyMerge($cImg, $this->im, ($toW - $ftoW) / 2,$fromTop, 0, 0, $ftoW, $ftoH, 100);
+			imageCopyMerge($cImg, $this->im, ($toW - $ftoW) / 2,$fromTop, 0, 0, $ftoW, $ftoH, 100);
 		} 
-		return $this->EchoImage($cImg, $toFile);
-		ImageDestroy($cImg);
+		return $this->echoImage($cImg, $toFile);
 	} 
 
-	function CreatImage($img, $creatW, $creatH, $dstX, $dstY, $srcX, $srcY, $srcImgW, $srcImgH){
+	function creatImage($img, $creatW, $creatH, $dstX, $dstY, $srcX, $srcY, $srcImgW, $srcImgH){
 		if (function_exists('imagecreatetruecolor')) {
 			@$creatImg = ImageCreateTrueColor($creatW, $creatH);
-			if ($creatImg)
-				ImageCopyResampled($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
-			else {
+			@imagealphablending($creatImg,false);//是不合并颜色,直接用$img图像颜色替换,包括透明色;
+			@imagesavealpha($creatImg,true);//不要丢了$thumb图像的透明色;
+			if ($creatImg){
+				imageCopyResampled($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
+			}else {
 				$creatImg = ImageCreate($creatW, $creatH);
-				ImageCopyResized($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
+				imageCopyResized($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
 			} 
 		} else {
 			$creatImg = ImageCreate($creatW, $creatH);
-			ImageCopyResized($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
+			imageCopyResized($creatImg, $img, $dstX, $dstY, $srcX, $srcY, $creatW, $creatH, $srcImgW, $srcImgH);
 		} 
 		return $creatImg;
-	} 
+	}
+
+
+	// Rotate($toFile, 90);
+	public function imgRotate($toFile,$degree) {
+		if (!$this->im ||
+			$degree % 360 === 0 || 
+			!function_exists('imageRotate')) {
+			return false;
+		}
+		$rotate  = imageRotate($this->im,360-$degree,0);
+		$result  = false;
+		switch ($this->imgData[2]) {
+			case IMAGETYPE_GIF:
+				$result = imagegif($rotate, $toFile);
+				break;
+			case IMAGETYPE_JPEG:
+				$result = imagejpeg($rotate, $toFile,100);//压缩质量
+				break;
+			case IMAGETYPE_PNG:
+				$result = imagePNG($rotate, $toFile);
+				break;
+			default:break;
+		}
+		imageDestroy($rotate);
+		imageDestroy($this->im);
+		return $result;
+	}
+
 	// 输出图片，link---只输出，不保存文件。file--保存为文件
-	function EchoImage($img, $to_File){
+	function echoImage($img, $toFile){
+		$result = false;
 		switch ($this->echoType) {
-			case 'link':return ImagePNG($img);break;				
-			case 'file':return ImagePNG($img, $to_File);break;
+			case 'link':$result = imagePNG($img);break;				
+			case 'file':$result = imagePNG($img, $toFile);break;
 			//return ImageJpeg($img, $to_File);				
-		} 
+		}
+		imageDestroy($img);
+		imageDestroy($this->im);
+		return $result;
 	} 
 }
+
+if(!function_exists('imagecreatefrombmp')){
+	function imagecreatefrombmp( $filename ){
+		$file = fopen( $filename, "rb" );
+		$read = fread( $file, 10 );
+		while( !feof( $file ) && $read != "" ){
+			$read .= fread( $file, 1024 );
+		}
+		$temp = unpack( "H*", $read );
+		$hex = $temp[1];
+		$header = substr( $hex, 0, 104 );
+		$body = str_split( substr( $hex, 108 ), 6 );
+		if( substr( $header, 0, 4 ) == "424d" ){
+			$header = substr( $header, 4 );
+			// Remove some stuff?
+			$header = substr( $header, 32 );
+			// Get the width
+			$width = hexdec( substr( $header, 0, 2 ) );
+			// Remove some stuff?
+			$header = substr( $header, 8 );
+			// Get the height
+			$height = hexdec( substr( $header, 0, 2 ) );
+			unset( $header );
+		}
+		$x = 0;
+		$y = 1;
+		$image = imagecreatetruecolor( $width, $height );
+		foreach( $body as $rgb ){
+			$r = hexdec( substr( $rgb, 4, 2 ) );
+			$g = hexdec( substr( $rgb, 2, 2 ) );
+			$b = hexdec( substr( $rgb, 0, 2 ) );
+			$color = imagecolorallocate( $image, $r, $g, $b );
+			imagesetpixel( $image, $x, $height-$y, $color );
+			$x++;
+			if( $x >= $width ){
+				$x = 0;
+				$y++;
+			}
+		}
+		return $image;
+	}
+}
+
+

@@ -1,4 +1,8 @@
 <?php
+
+//changed by warlee --kodexplorer
+//add pre name filter; PCLZIP_CB_PRE_FILE_NAME
+//
 // --------------------------------------------------------------------------------
 // PhpConcept Library - Zip Module 2.8.2
 // --------------------------------------------------------------------------------
@@ -166,6 +170,8 @@
   define( 'PCLZIP_CB_POST_EXTRACT', 78002 );
   define( 'PCLZIP_CB_PRE_ADD', 78003 );
   define( 'PCLZIP_CB_POST_ADD', 78004 );
+  define( 'PCLZIP_CB_PRE_FILE_NAME', 78005);//解压前处理文件名
+
   /* For futur use
   define( 'PCLZIP_CB_PRE_LIST', 78005 );
   define( 'PCLZIP_CB_POST_LIST', 78006 );
@@ -216,7 +222,7 @@
   {
 
     // ----- Tests the zlib
-    if (!function_exists('gzopen'))
+    if (!function_exists('gzopen64') && !function_exists('gzopen') )
     {
       die('Abort '.basename(__FILE__).' : Missing zlib extensions');
     }
@@ -263,6 +269,7 @@
   //   PCLZIP_OPT_COMMENT :
   //   PCLZIP_CB_PRE_ADD :
   //   PCLZIP_CB_POST_ADD :
+  //   PCLZIP_CB_PRE_FILE_NAME
   // Return Values :
   //   0 on failure,
   //   The list of the added files, with a status of the add action.
@@ -301,6 +308,7 @@
                                                    PCLZIP_OPT_ADD_PATH => 'optional',
                                                    PCLZIP_CB_PRE_ADD => 'optional',
                                                    PCLZIP_CB_POST_ADD => 'optional',
+                                                   PCLZIP_CB_PRE_FILE_NAME => 'optional',
                                                    PCLZIP_OPT_NO_COMPRESSION => 'optional',
                                                    PCLZIP_OPT_COMMENT => 'optional',
                                                    PCLZIP_OPT_TEMP_FILE_THRESHOLD => 'optional',
@@ -446,6 +454,7 @@
   //   PCLZIP_OPT_PREPEND_COMMENT :
   //   PCLZIP_CB_PRE_ADD :
   //   PCLZIP_CB_POST_ADD :
+  //   PCLZIP_CB_PRE_FILE_NAME
   // Return Values :
   //   0 on failure,
   //   The list of the added files, with a status of the add action.
@@ -484,6 +493,7 @@
                                                    PCLZIP_OPT_ADD_PATH => 'optional',
                                                    PCLZIP_CB_PRE_ADD => 'optional',
                                                    PCLZIP_CB_POST_ADD => 'optional',
+                                                   PCLZIP_CB_PRE_FILE_NAME => 'optional',
                                                    PCLZIP_OPT_NO_COMPRESSION => 'optional',
                                                    PCLZIP_OPT_COMMENT => 'optional',
                                                    PCLZIP_OPT_ADD_COMMENT => 'optional',
@@ -691,6 +701,7 @@
   //   PCLZIP_OPT_REMOVE_PATH :
   //   PCLZIP_OPT_REMOVE_ALL_PATH :
   //   PCLZIP_CB_PRE_EXTRACT :
+  //   PCLZIP_CB_PRE_FILE_NAME:
   //   PCLZIP_CB_POST_EXTRACT :
   // Return Values :
   //   0 or a negative value on failure,
@@ -737,6 +748,7 @@
                                                    PCLZIP_OPT_REMOVE_ALL_PATH => 'optional',
                                                    PCLZIP_OPT_ADD_PATH => 'optional',
                                                    PCLZIP_CB_PRE_EXTRACT => 'optional',
+                                                   PCLZIP_CB_PRE_FILE_NAME=>'optional',
                                                    PCLZIP_CB_POST_EXTRACT => 'optional',
                                                    PCLZIP_OPT_SET_CHMOD => 'optional',
                                                    PCLZIP_OPT_BY_NAME => 'optional',
@@ -847,6 +859,7 @@
   //     structure.
   //     This option must be used alone (any other options are ignored).
   //   PCLZIP_CB_PRE_EXTRACT :
+  //   PCLZIP_CB_PRE_FILE_NAME:
   //   PCLZIP_CB_POST_EXTRACT :
   // Return Values :
   //   0 on failure,
@@ -899,6 +912,7 @@
                                                    PCLZIP_OPT_EXTRACT_AS_STRING => 'optional',
                                                    PCLZIP_OPT_ADD_PATH => 'optional',
                                                    PCLZIP_CB_PRE_EXTRACT => 'optional',
+                                                   PCLZIP_CB_PRE_FILE_NAME => 'optional',
                                                    PCLZIP_CB_POST_EXTRACT => 'optional',
                                                    PCLZIP_OPT_SET_CHMOD => 'optional',
                                                    PCLZIP_OPT_REPLACE_NEWER => 'optional'
@@ -1744,6 +1758,7 @@
         case PCLZIP_CB_POST_EXTRACT :
         case PCLZIP_CB_PRE_ADD :
         case PCLZIP_CB_POST_ADD :
+        case PCLZIP_CB_PRE_FILE_NAME:
         /* for futur use
         case PCLZIP_CB_PRE_DELETE :
         case PCLZIP_CB_POST_DELETE :
@@ -2563,7 +2578,15 @@
     $p_header['offset'] = 0;
     $p_header['filename'] = $p_filename;
 // TBC : Removed    $p_header['stored_filename'] = $v_stored_filename;
-    $p_header['stored_filename'] = $p_filedescr['stored_filename'];
+
+
+    //add by warlee 文件名处理【编码 or 文件名处理】
+    if (isset($p_options[PCLZIP_CB_PRE_FILE_NAME])) {
+		  $p_header['stored_filename'] = $p_options[PCLZIP_CB_PRE_FILE_NAME]($p_filedescr['stored_filename']);
+    }else{
+    	$p_header['stored_filename'] = $p_filedescr['stored_filename'];
+    }
+
     $p_header['extra'] = '';
     $p_header['status'] = 'ok';
     $p_header['index'] = -1;
@@ -3664,6 +3687,11 @@
         $p_entry['filename'] = substr($p_entry['filename'], $p_remove_path_size);
 
       }
+    }
+	
+	//add by warlee 文件名处理【编码 or 文件名处理】
+    if (isset($p_options[PCLZIP_CB_PRE_FILE_NAME])) {
+		$p_entry['filename'] = $p_options[PCLZIP_CB_PRE_FILE_NAME]($p_entry['filename']);
     }
 
     // ----- Add the path

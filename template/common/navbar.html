@@ -1,4 +1,5 @@
-<div class="init_loading"><div><img src="<?php echo STATIC_PATH;?>images/loading_simple.gif"/></div></div>
+<div class="full_background"></div>
+<div class="init_loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
 <div class="topbar">
 	<div class="content">
 		<div class="top_left">
@@ -18,33 +19,39 @@
 		?>
 		</div>
 		<div class="top_right">
+			<?php if(!isset($config['settings']['language'])){ ?>
 			<div class="menu_group">
 				<a id='topbar_language' data-toggle="dropdown" href="#" class="topbar_menu">
 				<i class='font-icon icon-flag'></i>&nbsp;<b class="caret"></b>
 				</a>
-				<ul class="dropdown-menu topbar_language fadein pull-right" role="menu" aria-labelledby="topbar_language">
+				<ul class="dropdown-menu topbar_language pull-right animated menuShow" role="menu" aria-labelledby="topbar_language">
 				  	<?php 
-						$tpl="<li><a href='javascript:core.language(\"{0}\");' class='{this}'>{1}</a></li>";
-						echo getTplList(',',':',$config['setting_all']['language'],$tpl,LANGUAGE_TYPE);
+				  		$tpl = "";
+				  		foreach ($config['setting_all']['language'] as $key => $value) {
+				  			$name = $value[0];
+				  			$select = LANGUAGE_TYPE == $key ? "this":"";
+				  			$tpl .= "<li><a href='javascript:core.language(\"{$key}\");' title=\"{$key}/{$value[1]}/{$value[2]}\" class='{$select}'><i class='lang-flag flag-{$key}'></i>{$name}</a></li>";
+				  		}
+						echo $tpl;
 					?>
 				</ul>
 			</div>
+			<?php } ?>
+			<!-- 全局设置语言则不再显示 -->
+			
 			<div class="menu_group">
 				<a href="#" id='topbar_user' data-toggle="dropdown" class="topbar_menu"><i class="font-icon icon-user"></i><?php echo $_SESSION['kod_user']['name'];?>&nbsp;<b class="caret"></b></a>
-				<ul class="dropdown-menu menu-topbar_user fadein pull-right" role="menu" aria-labelledby="topbar_user">
-					
-					<?php if($_SESSION['kod_user']['role']=='root'){ ?>
-						<li><a href="javascript:core.setting('system');"><i class="font-icon icon-cog"></i><?php echo $L['system_setting'];?></a></li>
-						<li><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo $L['setting_member'];?></a></li>
-					<?php } ?>
-					<li><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo $L['setting_user'];?></a></li>
-					<li><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo $L['setting_theme'];?></a></li>
-					<li><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo $L['full_screen'];?></a></li>
-					<li><a href="javascript:core.setting('help');"><i class="font-icon icon-question"></i><?php echo $L['setting_help'];?></a></li>
-					<li><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo $L['setting_about'];?></a></li>
+				<ul class="dropdown-menu menu-topbar_user pull-right animated menuShow" role="menu" aria-labelledby="topbar_user">
+					<li class="menu_system_setting"><a href="javascript:core.setting('system');"><i class="font-icon icon-cog"></i><?php echo $L['system_setting'];?></a></li>
+					<li class="menu_system_group"><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo $L['setting_member'];?></a></li>
+					<li class="menu_system_user"><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo $L['setting_user'];?></a></li>
+					<li class="menu_system_theme"><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo $L['setting_theme'];?></a></li>
+					<li class="menu_system_full"><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo $L['full_screen'];?></a></li>
+					<li class="menu_system_help"><a href="javascript:core.setting('help');"><i class="font-icon icon-question"></i><?php echo $L['setting_help'];?></a></li>
+					<li class="menu_system_about"><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo $L['setting_about'];?></a></li>
 					<li role="presentation" class="divider"></li>
-					<li><a href="./index.php?user/logout"><i class="font-icon icon-signout"></i><?php echo $L['ui_logout'];?></a></li>
-				</ul>			
+					<li class="menu_system_logout"><a href="./index.php?user/logout"><i class="font-icon icon-signout"></i><?php echo $L['ui_logout'];?></a></li>
+				</ul>
 			</div>
 		</div>
 		<div style="clear:both"></div>

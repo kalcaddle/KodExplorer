@@ -8,7 +8,7 @@ https://raw.github.com/vrana/adminer/master/designs/ng9/adminer.css
  * add at last;
  * https://github.com/vrana/adminer
  * 
- * adminer.php :allow in iframe(header("X-Frame-Options: deny");header("X-XSS-Protection: 0");)
+ * adminer.php :allow in iframe(  if($b->headers()){header("X-Frame-Options: deny");header("X-XSS-Protection: 0");} )
  */
 ::-webkit-scrollbar-track-piece{
     background-color: rgba(180,180,180,0.06);
@@ -474,13 +474,13 @@ p#dbs {padding-left: 21px;}
     margin-bottom: -1px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    border: 1px solid #304150;
-    background: #3c5165;
+    border: none;
+    background: #527290;
     color: #3c5165;
 }
 #menu #dbs span{display:none;}
 #menu select{
-    background-color: #4b6580;
+    background-color: #456079;
     border: none;
     color: #fff;
     border-radius: 4px;
@@ -490,20 +490,20 @@ p#dbs {padding-left: 21px;}
     height: 23px;
     line-height: 23px;
 }
-#menu select:hover{background-color:#4d749c;}
+#menu select:hover{background-color:#31475f;}
 
 #menu .links{
     padding-bottom: 5px;
-    border: 1px solid #304150;
-    border-top: 1px solid #34495e;
-    background: #34495e;
+    border: none;
+    border-top: 1px solid #445f77;
+    background: #445f77;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     margin: 0 10px;
     padding: 0;
     text-align: center;
     display: table;
-    width: 250px;
+    width: 252px;
     overflow: hidden;
 }
 #menu .links a {
@@ -514,9 +514,8 @@ p#dbs {padding-left: 21px;}
     text-decoration: none;
     color: #b3d3f3;
 }
-#menu .links a:hover{
-    background: #45596d;
-}
+#menu .links a:hover{background: #507394;}
+#menu .links a:active{background: #5f83a5;}
 
 #menu #tables{
     margin: 0 -15px !important;
@@ -580,7 +579,8 @@ textarea:focus,pre:focus,input:focus {
 #tables a[title] {
     float: none;
     display: block;
-    color:#b9cbdc;
+    color: #b9cbdc;
+    z-index: 1;
 }
 #tables a[title]:hover,
 #tables a.active, 
@@ -592,15 +592,19 @@ textarea:focus,pre:focus,input:focus {
 #tables br {display: none;}
 #tables a {
     float: right;
-    text-decoration:none;
+    text-decoration: none;
     padding: 5px 16px;
     line-height: 17px;
     color: #48a5bf;
     font-size: 13px;
+    position: relative;
+    z-index: 999;
 }
 #tables a.select:hover {
     color:#FFC107;background:#425b75;
 }
+#schema .table a b:hover{color:#f30;}
+
 
 select, input[type=file]{
     height: 27px;line-height: 27px;
@@ -698,6 +702,15 @@ pre, textarea {
 }
 #help a.jush-help{
     color: #bb7103;
+}
+
+#schema + .links a{
+    position: fixed;
+    top: 66px;
+    right: 10px;
+    padding: 4px 8px;
+    background: #48a5bf;
+    color: #fff;
 }
 
 

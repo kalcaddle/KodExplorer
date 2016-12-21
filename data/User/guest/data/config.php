@@ -1,1 +1,0 @@
-<?php exit;?>{"list_type":"icon","list_sort_field":"name","list_sort_order":"up","theme":"simple\/","codetheme":"clouds","wall":"7","musictheme":"mp3player","movietheme":"webplayer"}

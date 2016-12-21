@@ -8,7 +8,7 @@ background: #000; overflow: hidden;}
 
 #PV_Close{position: fixed; _position: absolute; z-index: 9999; right:-70px; top:-75px;height:140px;
 width:140px;text-decoration:none;background:#000;border-radius:70px;opacity:0.4;filter:alpha(opacity=40);}
-#PV_Close span{display:block;margin-top:81px;margin-left:34px;color:#fff;
+#PV_Close span{display:block;margin-top:75px;margin-left:35px;color:#fff;
 font-size:35px;font-family: Arial, sans-serif;}
 #PV_Close:hover{opacity:0.6;filter:alpha(opacity=80);}
 #PV_Close:hover span{color:#f30;}
@@ -22,11 +22,11 @@ font-size:35px;font-family: Arial, sans-serif;}
 	#PV_Error {position: absolute; z-index: 2;
 	background:#000;width:60px;height:60px;border-radius:4px;opacity:0.4;filter:alpha(opacity=40);color:#d00;font-size:16px;line-height:50px;text-align:center;}
 
-	#PV_PerHint {position: absolute; z-index: 3; width: 62px; height: 28px; text-align: center; font: bold 13px/28px Tahoma; color: #fff; background:#000;border-radius:4px;opacity:0.4;filter:alpha(opacity=40); cursor: default}
-	#PV_Hint {position: absolute; z-index: 3; height: 25px; color: #fff; font: 12px/25px Tahoma, "ËÎÌå"; text-align: center}
+	#PV_PerHint {position: absolute; z-index: 3;margin-top: 5%; width: 62px; height: 28px; text-align: center; font: bold 13px/28px Tahoma; color: #fff; background:#000;border-radius:4px;opacity:0.4;filter:alpha(opacity=40); cursor: default}
+	#PV_Hint {position: absolute; z-index: 3; height: 25px; color: #fff; font: 12px/25px Tahoma, "Ã‹ÃŽÃŒÃ¥"; text-align: center}
 	#PV_Control {position: absolute; z-index: 4; height: 54px; background:rgba(0,0,0,0.6); border-top: solid 1px #000; overflow: hidden;}
 		#PV_Items {position: absolute; z-index: 5; padding: 1px 0 0; margin: 0; list-style: none; height: 60px; overflow: hidden;}
-			#PV_Items li {float: left; width: 36px; padding: 0; margin: 0; list-style: none; cursor: pointer}
+			#PV_Items li {float: left; width: 36px; padding: 0; margin: 0; list-style: none; cursor: pointer;position: relative;}
 			#PV_Items img {border: none; width: 35px; height: 35px;-webkit-box-reflect: below 1px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(20%,transparent),color-stop(60%,rgba(255,255,255,0.1)),to(rgba(255,255,255,0.8)));}
 		#PV_Buttons {position: absolute; z-index: 6; margin: 20px auto 0 auto}
 			#PV_Buttons a {float: left; color: #808080; text-align: center; text-decoration: none}
@@ -48,4 +48,96 @@ font-size:35px;font-family: Arial, sans-serif;}
 				#PV_AutoPlay a:hover {color: #ccc; background-position: -40px -20px}
 				#PV_AutoPlay a.seled {color: #fff; background-position: -40px -40px;font-weight:800;}
 
+#PV_Buttons{opacity:0.9;}
+#PV_Zoom{margin:0;margin-right: 10px;}
+#PV_Buttons #PV_Zoom a,#PV_Buttons #PV_Btn_Full,#PV_Buttons .rotate{
+	background-image: none;
+	margin-right: 2px;
+	border-radius: 4px;
+	width: 24px;
+	line-height: 20px;
+	background:#333;
+	height: 20px;
+	border:2px solid #555;
+	border-color:rgba(255,255,255,0.1);
+}
+#PV_Buttons #PV_Zoom a:hover
+,#PV_Buttons #PV_Btn_Full:hover,
+#PV_Buttons .rotate:hover
+{border: 2px solid #888;background:#222;}
+#PV_Select{
+	margin: 0 15px;
+	height: 40px;
+	margin-left: 7px;
+	margin-top: 0px;
+	width: 90px;
+	overflow: visible;
+	background-image: none;
+}
+#PV_Buttons a{
+	display: inline-block;
+	width: 40px;
+	height: 25px;
+	z-index: 0;
+	color: #fff;
+	position: relative;
+	line-height: 25px;
+	font-size: 13px;
+	margin-right: -10px;
+	margin-top: 4px;
+	border-radius: 4px;
+	background: #777;
+}
 
+#PV_Items li.current:after {
+    box-shadow: 0 0 30px #fff inset;
+    content: "+";
+    position: absolute;
+    z-index: 99;
+    /* left: 50%; */
+    left: 0;
+    width: 100%;
+    opacity: 0.5;
+    height: 100%;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+#PV_Number{
+	color: #bbb;
+	display: block;
+	font-size: 12px;
+	background: rgba(100,100,100,0.3);
+	padding: 4px 11px;
+	border-radius: 20px;
+	position: fixed;
+	right: 10px;
+	bottom: 65px;
+	z-index: 100;
+}
+#PV_Buttons a i{padding-left:2px;}
+#PV_Buttons a#PV_Btn_Prev{display: inline-block;margin-left: -4px;}
+#PV_Buttons a#PV_Btn_Slide{
+	background: #888;
+	border-radius: 50%;
+	z-index: 10;
+	width: 31px;line-height: 31px;
+	margin-top: 0px;
+	height: 31px;
+	box-shadow: 0 0 5px #333;
+}
+
+#PV_Buttons a#PV_Btn_Prev,
+#PV_Buttons a#PV_Btn_Slide,
+#PV_Buttons a#PV_Btn_Next{
+	background-image: -webkit-linear-gradient(top,#bbb,#666);
+    background-image: -moz-linear-gradient(top,#bbb,#666);
+    background-image: -o-linear-gradient(top,#bbb,#666);
+    background-image: -ms-linear-gradient(top,#bbb,#666);
+    background-image: linear-gradient(top,#bbb,#666);
+    -pie-background: linear-gradient(to top,#bbb,#666);
+}
+
+#PV_Buttons a.seled#PV_Btn_Slide i:before{content: "\f04d";}
+#PV_Buttons a:hover{background: #999;color:#fff;}

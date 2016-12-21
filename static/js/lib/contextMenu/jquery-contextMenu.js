@@ -368,6 +368,9 @@ var // currently active contextMenu trigger
         },
         key: function(e) { 
             var opt = $currentTrigger.data('contextMenu') || {};
+            if ((e && $(e.target).is('textarea')) || $(e.target).is('input')){//add by warlee
+                return;
+            }
             switch (e.keyCode) {
                 case 9:
                 case 38: // up
@@ -856,7 +859,7 @@ var // currently active contextMenu trigger
             if (root === undefined) {
                 root = opt;
             }
-            // create contextMenu
+            // create contextMenu 
             opt.$menu = $('<ul class="context-menu-list"></ul>').addClass(opt.className || "").data({
                 'contextMenu': opt,
                 'contextMenuRoot': root
@@ -1057,7 +1060,7 @@ var // currently active contextMenu trigger
             if (G.isIE) {
                 $menu.data('width', Math.ceil($menu.width()));
             }else{
-                $menu.data('width', Math.ceil($menu.width()) + 1);
+                $menu.data('width', Math.ceil($menu.width()) + 0.1);
             }
 
             // reset styles so they allow nested elements to grow/shrink naturally
@@ -1154,6 +1157,10 @@ function splitAccesskey(val) {
 $.fn.contextMenu = function(operation) {
     if (operation === undefined) {
         this.first().trigger('contextmenu');
+    }else if (operation.action && typeof(operation.action)=='function') {//add by warlee;to set position or others
+        this.first().trigger('contextmenu');
+        var $menu = this.data('contextMenu').$menu;
+        operation.action($menu,this.first());
     } else if (operation.x && operation.y) {
         this.first().trigger($.Event("contextmenu", {pageX: operation.x, pageY: operation.y}));
     } else if (operation === "hide") {
@@ -1229,6 +1236,7 @@ $.contextMenu = function(operation, options) {
             if (!initialized) {
                 // make sure item click is registered first
                 $document
+                    .on('mouseup.contextMenu', '.context-menu-input', handle.inputClick)
                     .on({
                         'contextmenu:hide.contextMenu': handle.hideMenu,
                         'prevcommand.contextMenu': handle.prevItem,
@@ -1236,8 +1244,7 @@ $.contextMenu = function(operation, options) {
                         'contextmenu.contextMenu': handle.abortevent,
                         'mouseenter.contextMenu': handle.menuMouseenter,
                         'mouseleave.contextMenu': handle.menuMouseleave
-                    }, '.context-menu-list')
-                    .on('mouseup.contextMenu', '.context-menu-input', handle.inputClick)
+                    }, '.context-menu-list')                    
                     .on({
                         'mouseup.contextMenu': handle.itemClick,
                         'contextmenu:focus.contextMenu': handle.focusItem,

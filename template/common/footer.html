@@ -1,4 +1,17 @@
 <div class="common_footer">
-	<?php echo $L['copyright_pre'].' v'.KOD_VERSION.' | '.$L['copyright_info'];?> 
-	<a href="javascript:core.copyright();" class="icon-info-sign copyright_bottom"></a>
+	<?php 
+		if(is_wap()){
+			echo '<span class="pr-10"><a href="javascript:void(0);" forceWap="1">'.$L['wap_page_phone'].'</a> | '.
+				 '<a href="javascript:void(0);" forceWap="0">'.$L['wap_page_pc'].'</a></span> ';
+		}
+		if(isset($GLOBALS['config']['settings']['copyright'])){
+			echo $GLOBALS['config']['settings']['copyright'];
+		}else{
+			echo $L['copyright_pre'].' v'.KOD_VERSION.' | '.$L['copyright_info'];
+		}
+		echo '    <a href="javascript:core.copyright();" class="icon-info-sign copyright_bottom"></a>';
+	?>
 </div>
+<script type="text/javascript"><?php echo $GLOBALS['config']['settings']['global_js'];?></script>
+<style type="text/css"><?php echo $GLOBALS['config']['settings']['global_css'];?></style>
+<!-- <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>  -->

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 * @link http://www.kalcaddle.com/
 * @author warlee | e-mail:kalcaddle@qq.com
@@ -14,42 +14,85 @@ class editor extends Controller{
 
 	// 多文件编辑器
 	public function index(){
+		$this->code_theme_set();
 		$this->display('editor.php');
 	}
 	// 单文件编辑
 	public function edit(){
-		$this->assign('editor_config',$this->getConfig());//获取编辑器配置信息
+		$this->code_theme_set();
 		$this->display('edit.php');
+	}
+
+	private function code_theme_set(){
+		$set_class = '';
+		//获取编辑器配置数据
+		$editor_config = $this->config['editor_default'];
+		$config_file = USER.'data/editor_config.php';
+		if (!file_exists($config_file)) {//不存在则创建
+			$sql=fileCache::save($config_file,$editor_config);
+		}else{
+			$editor_config=fileCache::load($config_file);
+		}
+
+		$black_theme = array("ambiance","idle_fingers","monokai","pastel_on_dark","twilight",
+					"solarized_dark","tomorrow_night_blue","tomorrow_night_eighties");
+		if(in_array($editor_config['theme'],$black_theme)){
+			$set_class = 'class="code_theme_black"';
+		}
+		$this->assign('editor_config',json_encode($editor_config));//获取编辑器配置信息
+		$this->assign('code_theme_black',$set_class);//获取编辑器配置信息
 	}
 
 	// 获取文件数据
 	public function fileGet(){
 		$filename=_DIR($this->in['filename']);
-		if (!is_readable($filename)) show_json($this->L['no_permission_read'],false);
-		if (filesize($filename) >= 1024*1024*20) show_json($this->L['edit_too_big'],false);
-
+		if (!file_exists($filename)){
+			show_json($this->L['not_exists'],false);
+		}
+		if (!is_readable($filename)){
+			show_json($this->L['no_permission_read_all'],false);
+		}
+		if (filesize($filename) >= 1024*1024*40) show_json($this->L['edit_too_big'],false);
 		$filecontents=file_get_contents($filename);//文件内容
 		$charset=get_charset($filecontents);
-		if ($charset!='' || $charset!='utf-8') {
-			$filecontents=mb_convert_encoding($filecontents,'utf-8',$charset);
+		if ($charset!='' &&
+			$charset!='utf-8' &&
+			function_exists("mb_convert_encoding")
+			){
+			$filecontents=@mb_convert_encoding($filecontents,'utf-8',$charset);
 		}
 		$data = array(
 			'ext'		=> get_path_ext($filename),
 			'name'      => iconv_app(get_path_this($filename)),
 			'filename'	=> rawurldecode($this->in['filename']),
 			'charset'	=> $charset,
-			'content'	=> $filecontents			
+			'base64'	=> false,
+			'content'	=> $filecontents
 		);
+		if(!json_encode(array("data"=>$filecontents))){
+			$data['content'] = base64_encode($filecontents);
+			$data['base64']  = true;
+		}
 		show_json($data);
 	}
 	public function fileSave(){
 		$filestr = rawurldecode($this->in['filestr']);
 		$charset = $this->in['charset'];
 		$path =_DIR($this->in['path']);
-		if (!is_writable($path)) show_json($this->L['no_permission_write_file'],false);
-		
-		if ($charset !='' || $charset != 'utf-8') {
-			$filestr=mb_convert_encoding($filestr,$this->in['charset'],'utf-8');
+		if(isset($this->in['create_file']) && !file_exists($path)){//不存在则创建
+			if(!@touch($path)){
+				show_json($this->L['create_error'],false);
+			}
+		}
+		if (!path_writeable($path)) show_json($this->L['no_permission_write_file'],false);
+
+		//支持二进制文件读写操作（base64方式）
+		if(isset($this->in['base64'])){
+			$filestr = base64_decode($filestr);
+		}else if ($charset !='' && $charset != 'utf-8' && $charset != 'ascii' &&
+			function_exists("mb_convert_encoding")
+			) {
+			$filestr=@mb_convert_encoding($filestr,$this->in['charset'],'utf-8');
 		}
 		$fp=fopen($path,'wb');
 		fwrite($fp,$filestr);
@@ -60,64 +103,19 @@ class editor extends Controller{
 	/*
 	* 获取编辑器配置信息
 	*/
-	public function getConfig(){
-		$default = array(
-			'font_size'		=> '15px',
-			'theme'			=> 'clouds',
-			'auto_wrap'		=> 0,
-			'display_char'	=> 0,
-			'auto_complete'	=> 1,
-			'function_list' => 1
-		);
-		$config_file = USER.'data/editor_config.php';		
-		if (!file_exists($config_file)) {//不存在则创建
-			$sql=new fileCache($config_file);
-			$sql->reset($default);
-		}else{
-			$sql=new fileCache($config_file);
-			$default = $sql->get();
-		}
-		if (!isset($default['function_list'])) {
-			$default['function_list'] = 1;
-		}
-		return json_encode($default);
-    }
-	/*
-	* 获取编辑器配置信息
-	*/
 	public function setConfig(){
-		$file = USER.'data/editor_config.php';	
-        if (!is_writeable($file)) {//配置不可写
-            show_json($this->L['no_permission_write_file'],false);
-        }
+		$file = USER.'data/editor_config.php';
+		if (!is_writeable($file)) {//配置不可写
+			show_json($this->L['no_permission_write_file'],false);
+		}
 		$key= $this->in['k'];
 		$value = $this->in['v'];
-        if ($key !='' && $value != '') {
-        	$sql=new fileCache($file);
-        	if(!$sql->update($key,$value)){
-        		$sql->add($key,$value);//没有则添加一条
-        	}
-            show_json($this->L["setting_success"]);
-        }else{
-            show_json($this->L['error'],false);
-        }
-    }
-
-    //-----------------------------------------------
-	/*
-	* 获取字符串编码
-	* @param:$ext 传入字符串
-	*/
-	private function _get_charset(&$str) {
-		if ($str == '') return 'utf-8';
-		//前面检测成功则，自动忽略后面
-		$charset=strtolower(mb_detect_encoding($str,$this->config['check_charset']));
-		if (substr($str,0,3)==chr(0xEF).chr(0xBB).chr(0xBF)){
-			$charset='utf-8';
-		}else if($charset=='cp936'){
-			$charset='gbk';
+		if ($key !='' && $value != '') {
+			$sql=new fileCache($file);
+			$sql->set($key,$value);//没有则添加一条
+			show_json($this->L["setting_success"]);
+		}else{
+			show_json($this->L['error'],false);
 		}
-		if ($charset == 'ascii') $charset = 'utf-8';
-		return strtolower($charset);
 	}
 }

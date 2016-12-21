@@ -8,40 +8,82 @@
 
 
 /**
- * 获取客户端IP地址
+ * client ip address
  * 
  * @param boolean $s_type ip类型[ip|long]
  * @return string $ip
  */
 function get_client_ip($b_ip = true){
 	$arr_ip_header = array( 
-	    "HTTP_CLIENT_IP",
-	    "HTTP_X_FORWARDED_FOR",
-	    "REMOTE_ADDR",
-	    "HTTP_CDN_SRC_IP",
-	    "HTTP_PROXY_CLIENT_IP",
-	    "HTTP_WL_PROXY_CLIENT_IP"
+		"HTTP_CLIENT_IP",
+		"HTTP_X_FORWARDED_FOR",
+		"REMOTE_ADDR",
+		"HTTP_CDN_SRC_IP",
+		"HTTP_PROXY_CLIENT_IP",
+		"HTTP_WL_PROXY_CLIENT_IP"
 	);
 	$client_ip = 'unknown';
 	foreach ($arr_ip_header as $key) {
-	    if (!empty($_SERVER[$key]) && strtolower($_SERVER[$key]) != "unknown") {
-	        $client_ip = $_SERVER[$key];
-	        break;
-	    }
+		if (!empty($_SERVER[$key]) && strtolower($_SERVER[$key]) != "unknown") {
+			$client_ip = $_SERVER[$key];
+			break;
+		}
 	}
 	if ($pos = strpos($client_ip,',')){
 		$client_ip = substr($client_ip,$pos+1);
 	}
 	return $client_ip;
 } 
+function get_host() {
+	$protocol = (!empty($_SERVER['HTTPS'])
+                 && $_SERVER['HTTPS'] !== 'off'
+                 || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
 
+	if( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+		strlen($_SERVER['HTTP_X_FORWARDED_PROTO']) > 0 ){
+		$protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'].'://';
+	}
+	$url_host = $_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT']=='80' ? '' : ':'.$_SERVER['SERVER_PORT']);
+	$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url_host;
+	$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $host;//proxy
+	return $protocol.$host;
+}
+// current request url
+function this_url(){
+	$url = get_host().$_SERVER['REQUEST_URI'];
+	return $url;
+}
+function reset_path($str){
+	return str_replace('\\','/',$str);
+}
+function get_webroot($app_path){
+	$web_root = str_replace(reset_path($_SERVER['SCRIPT_NAME']),'',$app_path.'index.php').'/';
+	if (substr($web_root,-10) == 'index.php/') {//解决部分主机不兼容问题
+		$web_root = reset_path($_SERVER['DOCUMENT_ROOT']).'/';
+	}
+	return $web_root;
+}
 
-// url头部数据
+function is_wap(){   
+	if(!isset($_SERVER['HTTP_USER_AGENT'])){
+		return false;
+	} 
+	if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', 
+		strtolower($_SERVER['HTTP_USER_AGENT']))){
+		return true;
+	}
+	if((isset($_SERVER['HTTP_ACCEPT'])) && 
+		(strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false)){
+		return true;
+	}
+	return false;
+}
+
+// url header data
 function url_header($url){
 	$name = '';$length=0;
 	$header = @get_headers($url,true);
 	if (!$header) return false;
-
 	if(isset($header['Content-Length'])){
 		if(is_array($header['Content-Length'])){
 			$length = array_pop($header['Content-Length']);
@@ -56,32 +98,39 @@ function url_header($url){
 			$dis = $header['Content-Disposition'];
 		}
 		$i = strpos($dis,"filename=");
-		if($i!= false){
+		if($i!== false){
 			$name = substr($dis,$i+9);
+			$j = strpos($name,"; ");//多个参数，
+			if($j!== false){
+				$name = substr($name,0,$j);
+			}
 			$name = trim($name,'"');
 		}
 	}
-	if(!$name){
-	    $name = get_path_this($url);
-	    if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
-	    if (!$name) $name = 'index.html';
+	if(isset($header['X-OutFileName'])){
+		$name = $header['X-OutFileName'];
 	}
-	// $header['name'] = $name;
-	// return $header;
+	if(!$name){
+		$name = get_path_this($url);
+		if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
+		if (!$name) $name = 'index.html';
+	}
+	$name = rawurldecode($name);
+	$name = str_replace(array('/','\\'),'-',$name);//safe;
 	return array('length'=>$length,'name'=>$name);
 } 
 
 
-// url检查
+// check url if can use
 function check_url($url){
 	$array = get_headers($url,true);
-	if (preg_match('/404/', $array[0])) {
-		return false;
-	} elseif (preg_match('/403/', $array[0])) {
-		return false;
-	} else {
-		return true;
-	} 
+	$error = array('/404/','/403/','/500/');
+	foreach ($error as $value) {
+		if (preg_match($value, $array[0])) {
+			return false;
+		}
+	}
+	return true;
 } 
 
 /**
@@ -101,15 +150,9 @@ function curl_get_contents($url){
 	return $file_contents;
 }
 
-// 返回refer URL 地址
+// refer URL
 function refer_url(){
 	return isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : '';
-} 
-// 返回当前页面的 URL 地址
-function this_url(){
-	$s_url = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] ? 'https' : 'http';
-	$s_url .= '://';
-	return $s_url . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 } 
 
 function select_var($array){
@@ -125,6 +168,21 @@ function select_var($array){
 	return $chosen;
 }
 
+/**
+ * 解析url获得url参数
+ * @param $query
+ * @return array array
+ */
+function parse_url_query($url){
+	$arr = parse_url($url);
+	$queryParts = explode('&',$arr['query']);
+	$params = array();
+	foreach ($queryParts as $param) {
+		$item = explode('=', $param);
+		$params[$item[0]] = $item[1];
+	}
+	return $params;
+}
 
 function stripslashes_deep($value){ 
 	$value = is_array($value) ? array_map('stripslashes_deep', $value) : (isset($value) ? stripslashes($value) : null); 
@@ -146,7 +204,7 @@ function parse_incoming(){
 	$_POST	 = stripslashes_deep($_POST);
 	$return = array();
 	$return = array_merge($_GET,$_POST);
-	$remote = array_get($return,0);
+	$remote = array_get_index($return,0);
 	$remote = explode('/',trim($remote[0],'/'));
 	$return['URLremote'] = $remote;
 	return $return;
@@ -171,17 +229,6 @@ function url2absolute($index_url, $preg_url){
 	return $index_url_temp;
 }
 
-// 将字符串转换成URL的编码，gbk的和utf8的 $to="gbk" 或"utf8"
-function urlcode($str, $to){
-	if ($to == "gbk") {
-		$result = RawUrlEncode($str); //gbk字符(主要是中文)转换为url %BA%EC形式
-	} else {
-		$key = mb_convert_encoding($str, "utf-8", "gbk"); //对于百度utf8中文url
-		$result = urlencode($key);
-	} 
-	return $result;
-} 
-
 // 输出js
 function exec_js($js){
 	echo "<script language='JavaScript'>\n" . $js . "</script>\n";
@@ -196,39 +243,8 @@ function no_cache(){
 function go_url($url, $msg = ''){
 	header("Content-type: text/html; charset=utf-8\r\n");
 	echo "<script type='text/javascript'>\n";
-	echo "window.location.href='$direction';";
+	echo "window.location.href='$url';";
 	echo "</script>\n";
-	exit;
-} 
-
-/**
- * 消息框。eg
- * msg("falied","/",10);
- * msg("ok");
- */
-function show_msg($message, $url = '#', $time = 3, $isgo = 1)
-{
-	$goto = "content='$time;url=$url'";
-	if ($isgo != "1") {
-		$goto = "";
-	} //是否自动跳转
-	echo<<<END
-<html>
-	<meta http-equiv='refresh' $goto charset="utf-8">
-	<style>
-	#msgbox{width:400px;border: 1px solid #ddd;font-family:微软雅黑;color:888;font-size:13px;margin:0 auto;margin-top:150px;}
-	#msgbox #title{background:#3F9AC6;color:#fff;line-height:30px;height:30px;padding-left:20px;font-weight:800;}
-	#msgbox #message{text-align:center;padding:20px;}
-	#msgbox #info{text-align:center;padding:5px;border-top:1px solid #ddd;background:#f2f2f2;color:#888;}
-	</style>
-	<body>
-	<div id="msgbox">
-	<div id="title">提示信息</div>
-	<div id="message">$message</div>
-	<div id="info">$time 秒后自动跳转，如不想等待可 <a href='$url'>点击这里</a></div></center>
-	</body>
-</html>
-END;
 	exit;
 } 
 
@@ -291,61 +307,60 @@ function send_http_status($i_status, $s_message = ''){
 	} 
 } 
 
-// 获取操作系统信息
+//是否是windows
+function client_is_windows(){
+	static $is_windows;
+	if(!is_array($is_windows)){
+		$is_windows = array(0);
+		$os = get_os();
+		if(strstr($os,'Windows')){
+			$is_windows = array(1);
+		}	
+	}	
+	return $is_windows[0];
+}
+
+// 获取操作系统信息 TODO
 function get_os (){
 	$agent = $_SERVER['HTTP_USER_AGENT'];
-	$os = false;
-	if (eregi('win', $agent) && strpos($agent, '95')) {
-		$os = 'Windows 95';
-	} else if (eregi('win 9x', $agent) && strpos($agent, '4.90')) {
-		$os = 'Windows ME';
-	} else if (eregi('win', $agent) && ereg('98', $agent)) {
-		$os = 'Windows 98';
-	} else if (eregi('win', $agent) && eregi('nt 5.1', $agent)) {
-		$os = 'Windows XP';
-	} else if (eregi('win', $agent) && eregi('nt 5', $agent)) {
-		$os = 'Windows 2000';
-	} else if (eregi('win', $agent) && eregi('nt', $agent)) {
-		$os = 'Windows NT';
-	} else if (eregi('win', $agent) && ereg('32', $agent)) {
-		$os = 'Windows 32';
-	} else if (eregi('linux', $agent)) {
-		$os = 'Linux';
-	} else if (eregi('unix', $agent)) {
-		$os = 'Unix';
-	} else if (eregi('sun', $agent) && eregi('os', $agent)) {
-		$os = 'SunOS';
-	} else if (eregi('ibm', $agent) && eregi('os', $agent)) {
-		$os = 'IBM OS/2';
-	} else if (eregi('Mac', $agent) && eregi('PC', $agent)) {
-		$os = 'Macintosh';
-	} else if (eregi('PowerPC', $agent)) {
-		$os = 'PowerPC';
-	} else if (eregi('AIX', $agent)) {
-		$os = 'AIX';
-	} else if (eregi('HPUX', $agent)) {
-		$os = 'HPUX';
-	} else if (eregi('NetBSD', $agent)) {
-		$os = 'NetBSD';
-	} else if (eregi('BSD', $agent)) {
-		$os = 'BSD';
-	} else if (ereg('OSF1', $agent)) {
-		$os = 'OSF1';
-	} else if (ereg('IRIX', $agent)) {
-		$os = 'IRIX';
-	} else if (eregi('FreeBSD', $agent)) {
-		$os = 'FreeBSD';
-	} else if (eregi('teleport', $agent)) {
-		$os = 'teleport';
-	} else if (eregi('flashget', $agent)) {
-		$os = 'flashget';
-	} else if (eregi('webzip', $agent)) {
-		$os = 'webzip';
-	} else if (eregi('offline', $agent)) {
-		$os = 'offline';
-	} else {
-		$os = 'Unknown';
-	} 
+	$preg_find = array(
+		"Windows 95"	=>array('win','95'),
+		"Windows ME"	=>array('win 9x','4.90'),
+		"Windows 98"	=>array('win','98'),
+		"Windows 2000"	=>array('win','nt 5.0',),
+		"Windows XP"	=>array('win','nt 5.1'),
+		"Windows Vista"	=>array('win','nt 6.0'),
+		"Windows 7"		=>array('win','nt 6.1'),
+		"Windows 32"	=>array('win','32'),
+		"Windows NT"	=>array('win','nt'),
+		"Mac OS"		=>array('Mac OS'),
+		"Linux"			=>array('linux'),
+		"Unix"			=>array('unix'),
+		"SunOS"			=>array('sun','os'),
+		"IBM OS/2"		=>array('ibm','os'),
+		"Macintosh"		=>array('Mac','PC'),
+		"PowerPC"		=>array('PowerPC'),
+		"AIX"			=>array('AIX'),
+		"HPUX"			=>array('HPUX'),
+		"NetBSD"		=>array('NetBSD'),
+		"BSD"			=>array('BSD'),
+		"OSF1"			=>array('OSF1'),
+		"IRIX"			=>array('IRIX'),
+		"FreeBSD"		=>array('FreeBSD'),
+	);
+
+	$os='';
+	foreach ($preg_find as $key => $value) {
+		if(count($value)==1 && stripos($agent,$value[0])){
+			$os=$key;break;
+		}else if(count($value)==2 
+				 && stripos($agent,$value[0])
+				 && stripos($agent,$value[1])
+				 ){
+			$os=$key;break;
+		}
+	}
+	if ($os=='') {$os = "Unknown"; }
 	return $os;
 }
 
@@ -398,6 +413,8 @@ function get_file_mime($ext){
 		"exe" => "application/octet-stream",
 		"fif" => "application/fractals",
 		"flr" => "x-world/x-vrml",
+		"flv" => "video/x-flv",
+		"f4v" => "application/octet-stream",
 		"gif" => "image/gif",
 		"gtar" => "application/x-gtar",
 		"gz" => "application/x-gzip",
@@ -419,7 +436,8 @@ function get_file_mime($ext){
 		"jpe" => "image/jpeg",
 		"jpeg" => "image/jpeg",
 		"jpg" => "image/jpeg",
-		"js" => "application/x-javascript",
+		"js" => "application/javascript",
+		"json" => "application/json",
 		"latex" => "application/x-latex",
 		"lha" => "application/octet-stream",
 		"lsf" => "video/x-la-asf",
@@ -428,6 +446,8 @@ function get_file_mime($ext){
 		"m13" => "application/x-msmediaview",
 		"m14" => "application/x-msmediaview",
 		"m3u" => "audio/x-mpegurl",
+		'm4a' => "audio/mp4",
+		'm4v' => "audio/mp4",
 		"man" => "application/x-troff-man",
 		"mdb" => "application/x-msaccess",
 		"me" => "application/x-troff-me",
@@ -439,7 +459,8 @@ function get_file_mime($ext){
 		"movie" => "video/x-sgi-movie",
 		"mp2" => "video/mpeg",
 		"mp3" => "audio/mpeg",
-		"mp4" => "video/mpeg",
+		"mp4" => "video/mp4",
+		"mp4v" => "video/mp4",
 		"mpa" => "video/mpeg",
 		"mpe" => "video/mpeg",
 		"mpeg" => "video/mpeg",
@@ -450,6 +471,9 @@ function get_file_mime($ext){
 		"mvb" => "application/x-msmediaview",
 		"nws" => "message/rfc822",
 		"oda" => "application/oda",
+		"ogg" => "audio/ogg",
+		"oga" => "audio/ogg",
+		"ogv" => "audio/ogg",
 		"p10" => "application/pkcs10",
 		"p12" => "application/x-pkcs12",
 		"p7b" => "application/x-pkcs7-certificates",
@@ -521,9 +545,11 @@ function get_file_mime($ext){
 		"ustar" => "application/x-ustar",
 		"vcf" => "text/x-vcard",
 		"vrml" => "x-world/x-vrml",
-		"wav" => "audio/x-wav",
+		"wav" => "audio/wav",
 		"wcm" => "application/vnd.ms-works",
 		"wdb" => "application/vnd.ms-works",
+		"webm" => "video/webm",
+		"webmv" => "video/webm",
 		"wks" => "application/vnd.ms-works",
 		"wmf" => "application/x-msmetafile",
 		"wps" => "application/vnd.ms-works",
@@ -562,7 +588,7 @@ function get_file_mime($ext){
 				"Rhtml","rb","ru","gemspec","rake","Guardfile","Rakefile","Gemfile","rs","sass","scad","scala",
 				"scm","rkt","scss","sh","bash",".bashrc","sjs","smarty","tpl","snippets","soy","space","sql",
 				"styl","stylus","svg","tcl","tex","txt","textile","toml","twig","ts","typescript","str","vala",
-				"vbs","vb","vm","v","vh","sv","svh","vhd","vhdl","xml","rdf","rss",
+				"vbs","vb","vm","v","vh","sv","svh","vhd","vhdl","xml","rdf","rss","log",
 				"wsdl","xslt","atom","mathml","mml","xul","xbl","xaml","xq","yaml","yml","htm",
 				"xib","storyboard","plist","csproj");
 	if (array_key_exists($ext,$mimetypes)){

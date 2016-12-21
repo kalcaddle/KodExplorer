@@ -11,15 +11,15 @@ body {
 
 body, input, textarea{-webkit-font-smoothing: antialiased;font-smoothing: antialiased;}
 input,button { font-family: "微软雅黑", "Microsoft Yahei", "STXihei", arial, sans-serif;}
-a{text-decoration:none;color: #adf;font-weight: 800;}
-a:hover{color:#fff;}
+a{text-decoration:none;color: #69C;font-weight: 800;}
+a:hover{color:#f30;}
 
 .background{
 	position: absolute;
-  	right: 0px;top: 0px; bottom: 0px;left: 0px;
+	right: 0px;top: 0px; bottom: 0px;left: 0px;
 	background-size: 100% 100%;
 }
-.title{width:100%;background:#6699cc url(../../images/login.png);height:150px;padding-top:0px;}
+.title{width:100%;background:#6699cc url(../../images/common/login.png);height:150px;padding-top:0px;}
 .title .logo{text-align: center;font-size: 35px;width: 100%;padding-top:40px;color:#fff;font-weight:lighter;}
 .title .logo i{color:#aaddff;font-weight: 400;}
 .title .info{text-align: center;font-size: 14px;color:#aaddff;padding-top:20px;text-shadow:#75A1F0 0 0 3px;}	
@@ -28,10 +28,17 @@ a:hover{color:#fff;}
 .inputs{padding: 30px 10px 0px 15px;}
 .inputs div{margin-bottom: 15px;}
 .inputs div span{display: block;float: left;width:70px;line-height:30px;height:30px;}
-.inputs div input{height:33px;width:180px;}
+.inputs div input{height:33px;width:180px;border-radius:0;}
 .inputs .check_code{margin-bottom: 0;}
-.inputs .check_code input{width:110px;display: block;float: left;}
-.inputs .check_code img{display: block;float: left;padding-left: 10px;width: 70px;height: 32px;}	
+.inputs .check_code input{width:100px;height: 40px;float: left;}
+.inputs .check_code img{
+	float: left;
+	padding-left: 0;
+	width: 80px;
+	margin-left: -1px;
+	height: 40px;
+	border: 1px solid #ccc;
+}	
 
 .form{padding-top: 13px;width:300px;margin: 0 auto;}
 input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}
@@ -45,8 +52,12 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 .actions #submit:hover{background: #369;}
 .actions #submit:active{background: #444;}
 .msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
-.common_footer{color:#999;position: absolute;bottom:0px;text-align: center;width: 100%;
+.common_footer{
+	color:#999;text-align: center;width: 100%;
 	background:#eee;padding: 10px;
+	position: absolute;
+	margin-top: 20px;
+	bottom: 0px;
 }
 
 .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
@@ -57,6 +68,6 @@ h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 
 .guest{text-align:center;margin: 0 auto;padding: 30px 0 20px 0;}
 .guest a{color:#69C;text-decoration:none;border:2px solid #cdf;
-    border-radius:20px;padding:6px 1.5em;;display: inline-block;}
+	border-radius:20px;padding:6px 1.5em;;display: inline-block;}
 .guest a i{padding-left: 8px;}
 .guest a:hover{color:#f60;border-color:#f60;}

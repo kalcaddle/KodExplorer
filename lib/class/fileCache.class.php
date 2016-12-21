@@ -6,231 +6,196 @@
 * @license http://kalcaddle.com/tools/licenses/license.txt
 */
 
-
 /**
 * 数据的缓存存储类；key=>value 模式；value可以是任意类型数据。
 * 完整流程测试；读取最低5000次/s  含有写的1000次/s
-* add   添加单条数据；已存在则返回false
-* reset 重置所有数据；不传参数代表清空数据
-* get:  获取数据；获取全部；获取指定key数据；获取指定多个key的数据;查找方式获取多条数据
-*     1. get();
-*     2. get("demo")
-*     3. get(array('demo','admin'))
-*     4. get('group','','root')
-* update: 更新数据；更新指定key数据；获取指定多个key的数据; 查找方式更新多条数据
-*     1. update("demo",array('name'=>'ddd',...))
-*     2. update(array('demo','admin'),array(array('name'...),array('name'...)))
-*     3. update('group','system','root')
+* get($find=null)
+*     1.get();                      //返回所有
+*     2.get(key);                   //直接通过key获取
+*     3.get(data_key,value);        //搜索key为value的数据 直接返回数据不含key     
+*     4.get(array('key','value'));  //搜索数据，符合key为指定value的所有数据;key value形式
+* 
+* set($find=null,$change=null)
+*     1.set(string,val)             //添加或更新;  
+*     2.set(array('key','value_find'),array('key','change_to'))  //查找方式更新 多条数据
 *
-* replace_update($key_old,$key_new,$value_new)替换方式更新；满足key更新的需求
-*
-* delete:  获取数据；获取全部；获取指定key数据；获取指定多个key的数据;查找方式获取多条数据
-*     1. delete("demo")
-*     2. delete(array('demo','admin'))
-*     3. delete('group','','root')
-*     例如:====================================
-*     ['sss':['name':'sss','group':'root'],'bbb':['name':'bbb','group':'root']
-*     ,'ccc':['name':'ccc','group':'system'],'ddd':['name':'ddd','group':'root']
-*     查找方式删除  delete('group','','root');
-*     查找方式更新  update('group','system','root');
-*     查找方式获取  get('group','','root');
+* remove($find,$value)
+*     1.remove();          //清空
+*     2.remove(string);    //删除  eg:set('37'),删除key为37的数据 存在且删除成功则返回true 
+*     3.remove(array('key','value_find')); //查找方式删除;多条数据   
+* reset($arr);//初始化数据
 */
+
+
 define('CONFIG_EXIT', '<?php exit;?>');
-class fileCache
-{
-    private $data;
-    private $file;
-    function __construct($file) {
-        $this->file = $file;
-        $this->data= self::load($file);
-    }
-    
-    /**
-    * 重置所有数据；不传参数代表清空数据
-    */
-    public function reset($list=array()){
-        $this->data = $list;
-        self::save($this->file,$this->data);
-    }
+class fileCache{
+	private $data;
+	private $file;
+	private $file_hash;//最后一次修改；保存时判断，如果有新修改则先读取再保存
 
-    /**
-    * 添加一条数据，不能重复；如果已存在则返回false;1k次/s
-    */
-    public function add($k,$v){
-        if (!isset($this->data[$k])) {
-            $this->data[$k] = $v;
-            self::save($this->file,$this->data);
-            return true;
-        }
-        return false;
-    }
+	function __construct($file) {
+		$this->file = $file;
+		$this->data= self::load($file);
+		$this->file_change_check();
+	}
+	
+	public function get($find=null,$value=null){
+		if (is_null($find)){
+			return $this->data;
+		}else if(is_array($find)){//查找内容数据方式获取；返回多条            
+			$result = array();
+			foreach ($this->data as $key => $val) {
+				if ($val[$find[0]] == $find[1]) {
+					$result[$key] = $this->data[$key];
+				}
+			}
+			if(count($result)!=0){
+				return $result;
+			}            
+		}else{//单条数据获取
+			$find .= '';//字符串
+			if(!is_null($value)){//通过某个key寻找单条数据
+				foreach ($this->data as $key => $val) {
+					if ($val[$find] == $value) {
+						return $val;
+					}
+				}                
+			}
+			if(isset($this->data[$find])){
+				return $this->data[$find];
+			}
+		}
+		return false;
+	}
 
-    /**
-    * 获取数据;不存在则返回false;100w次/s
-    * $k null   不传则返回全部;
-    * $k string 为字符串；则根据key获取数据，只有一条数据
-    * $search_value 设置时；表示以查找的方式筛选数据筛选条件为 $key=$k 值为$search_value的数据；多条
-    */
-    public function get($k = '',$v='',$search_value=false){
-        if ($k === '') return $this->data;
-        
-        $search = array();
-        if ($search_value === false) {
-            if (is_array($k)) {
-                //多条数据获取
-                $num = count($k);
-                for ($i=0; $i < $num; $i++) {
-                    $search[$k[$i]] = $this->data[$k[$i]];
-                }
-                return $search;
-            }else if(isset($this->data[$k])){
-                //单条数据获取
-                return $this->data[$k];
-            }
-        }else{
-            //查找内容数据方式获取；返回多条
-            foreach ($this->data as $key => $val) {
-                if ($val[$k] == $search_value) {
-                    $search[$key] = $this->data[$key];
-                }
-            }
-            return $search;
-        }
-        return false;
-    }
+	//添加或更新
+	public function set($find,$value){
+		$this->file_change_check();
+		//最后有修改则先更新本地。
+		if(is_string($find)){//单条数据更新
+			$this->data[$find] = $value;
+		}else if(is_array($find)){//查找方式更新；更新多条                
+			foreach ($this->data as $key => $val) {
+				if ($val[$find[0]] == $find[1]) {
+					$this->data[$key][$value[0]] = $value[1];
+				}
+			}
+		}else{
+			return false;
+		}
+		self::save($this->file,$this->data);
+		return true;
+	}
 
-    /**
-    * 更新数据;不存在;或者任意一条不存在则返回false;不进行保存
-    * $k $v string 为字符串；则根据key只更新一条数据
-    * $k $v array  array($key1,$key2,...),array($value1,$value2,...) 
-    *              则表示更新多条数据
-    * $search_value 设置时；表示以查找的方式更新数据中的数据
-    */
-    public function update($k,$v,$search_value=false){
-        if ($search_value === false) {
-            if (is_array($k)) {
-                //多条数据更新
-                $num = count($k);
-                for ($i=0; $i < $num; $i++) { 
-                    $this->data[$k[$i]] = $v[$i];
-                }
-                self::save($this->file,$this->data);
-                return true;
-            }else if(isset($this->data[$k])){
-                //单条数据更新
-                $this->data[$k] = $v;
-                self::save($this->file,$this->data);
-                return true;
-            }
-        }else{
-            //查找方式更新；更新多条
-            foreach ($this->data as $key => $val) {
-                if ($val[$k] == $search_value) {
-                    $this->data[$key][$k] = $v;
-                }
-            }
-            self::save($this->file,$this->data);
-            return true;
-        }
-        return false;
-    }
+	//删除，查找删除
+	public function remove($find){
+		$this->file_change_check();
+		if(is_string($find)){//单条数据删除
+			unset($this->data[$find]);            
+		}else if(is_array($find)){//查找删除
+			foreach ($this->data as $key => $val) {
+				if ($val[$find[0]] == $find[1]){
+					unset($this->data[$key]);
+				}
+			}
+		}else{
+			return false;
+		}
+		self::save($this->file,$this->data);
+		return true;
+	}
 
-    /*
-    * 替换方式更新；满足key更新的需求
-    */
-    public function replace_update($key_old,$key_new,$value_new){
-        if(isset($this->data[$key_old])){
-            $value = $this->data[$key_old];
-            unset($this->data[$key_old]);
-            $this->data[$key_new] = $value_new;
-            self::save($this->file,$this->data);
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-    * 删除;不存在返回false
-    */
-    public function delete($k,$v='',$search_value=false){
-        if ($search_value === false) {
-            if (is_array($k)) {
-                //多条数据更新
-                $num = count($k);
-                for ($i=0; $i < $num; $i++) { 
-                    unset($this->data[$k[$i]]);
-                }
-                self::save($this->file,$this->data);
-                return true;
-            }else if(isset($this->data[$k])){
-                //单条数据删除
-                unset($this->data[$k]);
-                self::save($this->file,$this->data);
-                return true;
-            }
-        }else{
-            //查找内容数据方式删除；删除多条
-            foreach ($this->data as $key => $val) {
-                if ($val[$k] == $search_value){
-                    unset($this->data[$key]);
-                }
-            }
-            self::save($this->file,$this->data);
-            return true;
-        }
-        return false;
-    }
+	private function file_change_check(){
+		if(is_null($this->file_hash)){
+			$this->file_hash = @md5_file($this->file);
+			return;
+		}        
+		//是否发生改变
+		$last_hash = @md5_file($this->file);
+		if($last_hash != $this->file_hash){
+			$this->data= self::load($this->file);
+		}
+	}
 
-    
+	public function reset($data,$save = true){
+		$this->data = $data;
+		if($save){
+			self::save($this->file,$this->data);
+		}		
+	}
 
-    //=====================================================
-    /**
-    * 排序
-    */
-    public static function arr_sort(&$arr,$key, $type = 'asc'){
-        $keysvalue = $new_array = array();
-        foreach ($arr as $k => $v) {
-            $keysvalue[$k] = $v[$key];
-        } 
-        if ($type == 'asc') {
-            asort($keysvalue);
-        } else {
-            arsort($keysvalue);
-        } 
-        reset($keysvalue);
-        foreach ($keysvalue as $k => $v) {
-            $new_array[$k] = $arr[$k];
-        } 
-        return $new_array;
-    }
+	
 
-    /**
-    * 加载数据；并解析成程序数据
-    */
-    public static function load($file){//10000次需要4s 数据量差异不大。
-        if (!file_exists($file)) touch($file);
-        $str = file_get_contents($file);
-        $str = substr($str, strlen(CONFIG_EXIT));
-        $data= json_decode($str,true);
-        if (is_null($data)) $data = array();
-        return $data;
-    }
-    /**
-    * 保存数据；
-    */
-    public static function save($file,$data){//10000次需要6s 
-        if (!$file) return;
-        if (file_exists($file) && !is_writable($file)) {
-            show_json('the path "data/" can not write!',false);
-        }
-        if($fp = fopen($file, "w")){
-            if (flock($fp, LOCK_EX)) {  // 进行排它型锁定
-                $str = CONFIG_EXIT.json_encode($data);
-                fwrite($fp, $str);
-                fflush($fp);            // flush output before releasing the lock
-                flock($fp, LOCK_UN);    // 释放锁定
-            }
-            fclose($fp);            
-        }
-    }
+	//=====================================================
+	public static function arr_sort(&$arr,$key, $type = 'asc'){
+		$keysvalue = $new_array = array();
+		foreach ($arr as $k => $v) {
+			$keysvalue[$k] = $v[$key];
+		} 
+		if ($type == 'asc') {
+			asort($keysvalue);
+		} else {
+			arsort($keysvalue);
+		} 
+		reset($keysvalue);
+		foreach ($keysvalue as $k => $v) {
+			$new_array[$k] = $arr[$k];
+		} 
+		return $new_array;
+	}
+
+	public function get_max_id(){
+		$min_id = 100;
+		if(count($this->data)==0){
+			return $min_id;//一切从100开始
+		}
+		$id_arr = array_keys($this->data);
+		rsort($id_arr,SORT_NUMERIC);//id从高到底
+		$the_id = intval($id_arr[0])+1;
+		if($the_id<=$min_id){
+			return $min_id;
+		}
+		return $the_id;
+	}
+
+	/**
+	* 加载数据；并解析成程序数据
+	*/
+	public static function load($file){//10000次需要4s 数据量差异不大。
+		if (!file_exists($file)) touch($file);
+		$str = file_get_contents($file);
+
+		$str = substr($str, strlen(CONFIG_EXIT));
+		$data= json_decode($str,true);
+		if (is_null($data)) $data = array();
+		return $data;
+	}
+	/**
+	* 保存数据；
+	*/
+	public static function save($file,$data){//10000次需要6s 
+		if (!$file) return;
+		if (!file_exists($file)){
+			@touch($file);
+		}
+
+		chmod_path($file,0777);
+		if (!path_writeable($file)) {
+			show_json('the path "data/" can not write!',false);
+		}
+		$json_str = json_encode($data);
+		if(is_null($json_str)){//含有二进制或非utf8字符串对应检测
+			show_json('json_encode error!',false);
+		}
+
+		if($fp = fopen($file, "w")){
+			if (flock($fp, LOCK_EX)) {  // 进行排它型锁定
+				$str = CONFIG_EXIT.$json_str;
+				fwrite($fp, $str);
+				fflush($fp);            // flush output before releasing the lock
+				flock($fp, LOCK_UN);    // 释放锁定
+			}
+			fclose($fp);
+		}
+	}
 }

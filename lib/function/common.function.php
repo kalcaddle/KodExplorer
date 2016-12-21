@@ -20,6 +20,7 @@ function _autoload($className){
 		// error code;
 	} 
 }
+
 /**
  * 生产model对象
  */
@@ -27,7 +28,6 @@ function init_model($model_name){
 	if (!class_exists($model_name.'Model')) {
 		$model_file = MODEL_DIR.$model_name.'Model.class.php';
 		require_once ($model_file);
-		
 		if(!is_file($model_file)){
 			return false;
 		}
@@ -60,9 +60,9 @@ function init_controller($controller_name){
 function load_class($class){
 	$filename = CLASS_DIR.$class.'.class.php';
 	if (file_exists($filename)) {
-		require($filename);
+		require_once($filename);
 	}else{
-		pr($filename.' is not exist',1);
+		show_tips($filename.' is not exist');
 	}
 }
 /**
@@ -71,9 +71,9 @@ function load_class($class){
 function load_function($function){
 	$filename = FUNCTION_DIR.$function.'.function.php';
 	if (file_exists($filename)) {
-		require($filename);
+		require_once($filename);
 	}else{
-		pr($filename.' is not exist',1);
+		show_tips($filename.' is not exist');
 	}
 }
 /**
@@ -145,37 +145,28 @@ function spend_time(&$pretime){
 } 
 
 function check_code($code){
+	ob_clean();
+	header("Content-type: image/png");
+	$width = 70;$height=27;
 	$fontsize = 18;$len = strlen($code);
-    $width = 70;$height=27;
-    $im = @imagecreatetruecolor($width, $height) or die("create image error!");
-    $background_color = imagecolorallocate($im, 255, 255, 255);
-    imagefill($im, 0, 0, $background_color);  
-    for ($i = 0; $i < 2000; $i++) {//获取随机淡色            
-        $line_color = imagecolorallocate($im, mt_rand(180,255),mt_rand(160, 255),mt_rand(100, 255));
-        imageline($im,mt_rand(0,$width),mt_rand(0,$height), //画直线
-            mt_rand(0,$width), mt_rand(0,$height),$line_color);
-        imagearc($im,mt_rand(0,$width),mt_rand(0,$height), //画弧线
-            mt_rand(0,$width), mt_rand(0,$height), $height, $width,$line_color);
-    }
-    $border_color = imagecolorallocate($im, 160, 160, 160);   
-    imagerectangle($im, 0, 0, $width-1, $height-1, $border_color);//画矩形，边框颜色200,200,200
-
-    for ($i = 0; $i < $len; $i++) {//写入随机字串
-        $current = $code[mt_rand(0, strlen($code)-1)];
-        $text_color = imagecolorallocate($im,mt_rand(30, 140),mt_rand(30,140),mt_rand(30,140));
-        imagechar($im,10,$i*$fontsize+6,rand(1,$height/3),$code[$i],$text_color);
-    }
-    if(function_exists("imagejpeg")){
-		header("Content-Type: image/jpeg");
-		imagejpeg($im, null,90);//图片质量
-	}else if(function_exists("imagegif")){
-		header("Content-Type: image/gif");
-		imagegif($im);
-	}else if(function_exists("imagepng")){
-		header("Content-Type: image/x-png");
-		imagepng($im);
+	$im = @imagecreatetruecolor($width, $height) or die("create image error!");
+	$background_color = imagecolorallocate($im,255, 255, 255);
+	imagefill($im, 0, 0, $background_color);  
+	for ($i = 0; $i < 2000; $i++) {//获取随机淡色            
+		$line_color = imagecolorallocate($im, mt_rand(180,255),mt_rand(160, 255),mt_rand(100, 255));
+		imageline($im,mt_rand(0,$width),mt_rand(0,$height), //画直线
+			mt_rand(0,$width), mt_rand(0,$height),$line_color);
+		imagearc($im,mt_rand(0,$width),mt_rand(0,$height), //画弧线
+			mt_rand(0,$width), mt_rand(0,$height), $height, $width,$line_color);
 	}
-    imagedestroy($im);//销毁图片
+	$border_color = imagecolorallocate($im, 160, 160, 160);   
+	imagerectangle($im, 0, 0, $width-1, $height-1, $border_color);//画矩形，边框颜色200,200,200
+	for ($i = 0; $i < $len; $i++) {//写入随机字串
+		$text_color = imagecolorallocate($im,mt_rand(30, 140),mt_rand(30,140),mt_rand(30,140));
+		imagechar($im,10,$i*$fontsize+6,rand(1,$height/3),$code[$i],$text_color);
+	}
+	imagejpeg($im);//显示图
+	imagedestroy($im);//销毁图片
 }
 
 /**
@@ -230,6 +221,12 @@ function add_slashes($string){
 if (!function_exists('hex2bin')) {
 	function hex2bin($hexdata)	{
 		return pack('H*', $hexdata);
+	}
+}
+
+if (!function_exists('gzdecode')) {
+	function gzdecode($data){
+		return gzinflate(substr($data,10,-8));
 	}
 }
 
@@ -306,32 +303,70 @@ function array_union(){
 	} 
 }
 // 取出数组中第n项
-function array_get($arr,$index){
+function array_get_index($arr,$index){
    foreach($arr as $k=>$v){
-       $index--;
-       if($index<0) return array($k,$v);
+	   $index--;
+	   if($index<0) return array($k,$v);
    }
 }
 
-function show_tips($message){
+function show_tips($message,$url= '', $time = 3){
+	$goto = "content='$time;url=$url'";
+	$info = "Auto jump after {$time}s, <a href='$url'>Click Here</a>";
+	if ($url == "") {
+		$goto = "";
+		$info = "";
+	} //是否自动跳转
 	echo<<<END
 <html>
+	<meta http-equiv='refresh' $goto charset="utf-8">
 	<style>
-	#msgbox{border: 1px solid #ddd;border: 1px solid #eee;padding: 30px;border-radius: 5px;background: #f6f6f6;
+	#msgbox{border: 1px solid #ddd;border: 1px solid #eee;padding: 20px 40px 40px 40px;border-radius: 5px;background: #f6f6f6;
 	font-family: 'Helvetica Neue', "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif;
-	color:888;font-size:13px;margin:0 auto;margin-top:10%;width: 400px;font-size: 16;color:#666;}
-	#msgbox #title{padding-left:20px;font-weight:800;font-size:25px;}
-	#msgbox #message{padding:20px;}
+	color:888;margin:0 auto;margin-top:10%;width:400px;font-size:14px;color:#666;}
+	#msgbox #info{margin-top: 10px;color:#aaa;font-size: 12px;}
+	#msgbox #title{color: #888;border-bottom: 1px solid #ddd;padding: 10px 0;margin: 0 0 15px;font-size:18px;}
+	#msgbox #info a{color: #64b8fb;text-decoration: none;padding: 2px 0px;border-bottom: 1px solid;}
 	</style>
 	<body>
 	<div id="msgbox">
-	<div id="title">tips</div>
-	<div id="message">$message</div>
+		<div id="title">Warning!</div>
+		<div id="message">$message</div>
+		<div id="info">$info</div>
+	</div>
 	</body>
 </html>
 END;
 	exit;
-} 
+}
+
+
+function get_caller_info() {
+	$trace = debug_backtrace();
+	foreach($trace as $i=>$call){
+		if (isset($call['object']) && is_object($call['object'])) { 
+			$call['object'] = "  ".get_class($call['object']); 
+		}
+		if (is_array($call['args'])) {
+			foreach ($call['args'] AS &$arg) {
+				if (is_object($arg)) {
+					$arg = "  ".get_class($arg);
+				}
+			}
+		}
+		$trace_text[$i] = "#".$i." ".basename($call['file']).'【'.$call['line'].'】 ';
+		$trace_text[$i].= (!empty($call['object'])?$call['object'].$call['type']:'');
+		if($call['function']=='show_json'){
+			$trace_text[$i].= $call['function'].'(args)';
+		}else{
+			$trace_text[$i].= $call['function'].'('.json_encode($call['args'],true).')';
+		}		
+	}
+	unset($trace_text[0]);
+	$trace_text = array_reverse($trace_text);
+	return $trace_text;
+}
+
 /**
  * 打包返回AJAX请求的数据
  * @params {int} 返回状态码， 通常0表示正常
@@ -339,10 +374,14 @@ END;
  */
 function show_json($data,$code = true,$info=''){
 	$use_time = mtime() - $GLOBALS['config']['app_startTime'];
-	$result = array('code' => $code,'use_time'=>$use_time,'data' => $data);
+	$result = array('code'=>$code,'use_time'=>$use_time,'data'=>$data);
+	if(defined("GLOBAL_DEBUG") && GLOBAL_DEBUG==1){
+		$result['call'] = get_caller_info();
+	}
 	if ($info != '') {
 		$result['info'] = $info;
 	}
+	ob_clean();
 	header("X-Powered-By: kodExplorer.");
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($result);
@@ -352,16 +391,16 @@ function show_json($data,$code = true,$info=''){
 /**
  * 简单模版转换，用于根据配置获取列表：
  * 参数：cute1:第一次切割的字符串，cute2第二次切割的字符串,
- * arraylist为待处理的字符串，$this 为标记当前项，$this_str为当项标记的替换。
+ * arraylist为待处理的字符串，$current 为标记当前项，$current_str为当项标记的替换。
  * $tpl为处理后填充到静态模版({0}代表切割后左值,{1}代表切割后右值,{this}代表当前项填充值)
  * 例子：
  * $arr="default=淡蓝(默认)=5|mac=mac海洋=6|mac1=mac1海洋=7";
  * $tpl="<li class='list {this}' theme='{0}'>{1}_{2}</li>\n";
  * echo getTplList('|','=',$arr,$tpl,'mac'),'<br/>';
  */
-function getTplList($cute1, $cute2, $arraylist, $tpl,$this_tag,$this_str=''){
+function getTplList($cute1, $cute2, $arraylist, $tpl,$current,$current_str=''){
 	$list = explode($cute1, $arraylist);
-	if ($this_str == '') $this_str ="this";
+	if ($current_str == '') $current_str ="this";
 	$html = '';
 	foreach ($list as $value) {
 		$info = explode($cute2, $value);
@@ -369,9 +408,9 @@ function getTplList($cute1, $cute2, $arraylist, $tpl,$this_tag,$this_str=''){
 		foreach ($info as $key => $value) {
 			$arr_replace[$key]='{'.$key .'}';
 		}
-		if ($info[0] == $this_tag) {
+		if ($info[0] == $current) {
 			$temp = str_replace($arr_replace, $info, $tpl);
-			$temp = str_replace('{this}', $this_str, $temp);
+			$temp = str_replace('{this}', $current_str, $temp);
 		} else {
 			$temp = str_replace($arr_replace, $info, $tpl);
 			$temp = str_replace('{this}', '', $temp);
@@ -380,17 +419,6 @@ function getTplList($cute1, $cute2, $arraylist, $tpl,$this_tag,$this_str=''){
 	} 
 	return $html;
 } 
-
-//获取当前url地址
-function get_url() {
-	$sys_protocal = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] 
-					== '443' ? 'https://' : 'http://';
-	$php_self   = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-	$path_info  = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
-	$relate_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 
-				$php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.$_SERVER['QUERY_STRING'] : $path_info);
-	return $sys_protocal.(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '').$relate_url;
-}
 
 /**
  * 去掉HTML代码中的HTML标签，返回纯文本
@@ -643,7 +671,7 @@ function debug_out(){
  * @return unknown_type 
  */
 function rand_from_to($from, $to){
-	$size = $from - $to; //数值区间
+	$size = $to - $from; //数值区间
 	$max = 30000; //最大
 	if ($size < $max) {
 		return $from + mt_rand(0, $size);
@@ -668,9 +696,6 @@ function rand_from_to($from, $to){
 function rand_string($len = 4, $type='check_code'){
 	$str = '';
 	switch ($type) {
-		case 0://大小写中英文
-			$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-			break;
 		case 1://数字
 			$chars = str_repeat('0123456789', 3);
 			break;
@@ -680,11 +705,14 @@ function rand_string($len = 4, $type='check_code'){
 		case 3://小写字母
 			$chars = 'abcdefghijklmnopqrstuvwxyz';
 			break;
+		case 4://大小写中英文
+			$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+			break;
 		default: 
 			// 默认去掉了容易混淆的字符oOLl和数字01，要添加请使用addChars参数
 			$chars = 'ABCDEFGHIJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
 			break;
-	} 
+	}
 	if ($len > 10) { // 位数过长重复字符串一定次数
 		$chars = $type == 1 ? str_repeat($chars, $len) : str_repeat($chars, 5);
 	} 

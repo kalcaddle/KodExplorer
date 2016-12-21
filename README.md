@@ -2,6 +2,9 @@
 ========
   KodExplorer是一款开源的基于Web的在线文件管理、代码编辑器。它提供了类windows经典用户界面，一整套在线文件管理、文件预览、编辑、上传下载、在线解压缩、音乐播放功能。让你直接在浏览器端实现web开发、源码文件预览、网站部署。同时拥有与本地操作一样方便、快捷、安全的体验。
  `商业版授权请联系：kalcaddle#qq.com`
+
+
+ https://www.paypal.me/kalcaddle
  
 ####  1.是什么：
  - kodExplorer为千帆网络工作室开发的一款服务器文件管理程序。
@@ -33,21 +36,13 @@
 
     [如何使用] 下载程序,解压上传到你的服务器路径下,data目录设置777权限。访问体验超便捷的服务吧！
     (为确保数据安全，最好配置服务器不允许列目录)
-    [关于上传问题] 程序没有做任何限制,如果需要上传大文件,则修改
-      php.ini：`upload_max_filesize = 1000M post_max_size = 1000M`  [详情：http://955.cc/R2yT]
-      注意不能大于2g，可能否则导致php无法正常运行(不支持post)。
-    [关于解压缩问题] 程序不做任何限制,如若失败请设置php内存限制。memory_limit  1000M
-    [关于解压缩乱码] linux服务器压缩，下载到windows下中文会乱码。是由于系统导致的。所以尽量不要跨系统操作。
     [关于"系统错误"] 请配置php错误提示级别error_reporting; 配置php.ini或者允许error_reporting函数
     [关于兼容性] 建议使用chrome firefox ie9+  体验更完整。ie8以下基本上不做兼容处理。chrome支持文件夹拖拽上传。
     [文件打开] office文件在线预览功能,服务器必须在公网(外部能访问该服务器);
         内部或局域网需要使用请参考qq群共享“web office搭建”,然后配置kod程序config/config.php OFFICE_SERVER
     [安全提示] 为确保数据安全，请设置http服务器不允许列目录。[详情：http://955.cc/R2vw]
-    [忘记密码] 修改data/system/member.php 密码为明文的md5值 例如将admin密码重设为admin
-        则修改第一行："name":"admin","password":"21232f297a57a5a743894a0e4a801fc3"
-
-    【文件拖拽上传】除了ie8以下的大部分浏览器支持；建议使用chrome、360、猎豹、uc等
-    【文件夹拖拽上传】除了ie10以下、firefox大部分浏览器都支持，建议使用chrome、360、猎豹、uc等
+    [文件拖拽上传] 除了ie8以下的大部分浏览器支持；建议使用chrome、360、猎豹、uc等
+    [文件夹拖拽上传] 除了ie10以下、firefox大部分浏览器都支持，建议使用chrome、360、猎豹、uc等
 
 ![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
 

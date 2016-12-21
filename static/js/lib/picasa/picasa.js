@@ -1,125 +1,6 @@
-// JavaScript Document
-
-var getDom = function(element) {
+var picasaGetDom=function(element) {
 	return typeof(element) == 'object' ? element : document.getElementById(element);
 };
-
-// 窗口大小
-var getWindowSize = function() {
-	var windowWidth, windowHeight;
-	if (self.innerHeight) { // all except Explorer
-		windowWidth = self.innerWidth;
-		windowHeight = self.innerHeight;
-	} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
-		windowWidth = document.documentElement.clientWidth;
-		windowHeight = document.documentElement.clientHeight;
-	} else if (document.body) { // other Explorers
-		windowWidth = window.screen.width;
-		windowHeight= window.screen.height;
-	}
-	
-	var visibleWidth, visibleHeight;
-	visibleWidth = document.body.clientWidth;
-	visibleHeight = document.body.clientHeight;
-	return new Array(windowWidth, windowHeight, visibleWidth, visibleHeight);
-};
-
-// 获取鼠标位置
-var getXY = function (e){
-	var XY;
-	if(navigator.userAgent.match(/msie/i)){
-		var scrollPos;
-		if (typeof window.pageYOffset != 'undefined'){
-			scrollPos = [window.pageXOffset, window.pageYOffset];
-		}else if(typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat'){
-			scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop];
-		}else if(typeof document.body != 'undefined'){
-			scrollPos =[document.body.scrollLeft, document.body.scrollTop];
-		}
-		XY =[
-			window.event.clientX + scrollPos[0] - document.body.clientLeft,
-			window.event.clientY + scrollPos[1] - document.body.clientTop
-		];
-	}else{
-		XY = [e.pageX, e.pageY];
-	}
-	return XY;
-};
-
-// 透明度
-opacity = {
-	set : function() {
-		var args = arguments;
-		var o = getDom(args[0]);
-		try{
-			o.filters.alpha.opacity = args[1];
-		}catch(e){
-			o.style.opacity = args[1]/100;
-			o.style.filter = 'alpha(opacity='+ (args[1]) +')';
-		}
-	},
-	get : function() {
-		var o = getDom(arguments[0]), p;
-		try{
-			p = parseInt(o.filters.alpha.opacity, 10);
-			if(isNaN(p)) p=100;
-		}catch(e){
-			p = o.style.opacity;
-			p *= 100;
-		}
-		return p;
-	}
-},
-
-// 显示隐藏下拉框
-displaySelect = function(status) {
-	var selects = document.getElementsByTagName('select');
-	var count = selects.length;
-	for (var i=0;i<count;i++){
-		selects[i].style.visibility = status ? 'visible' : 'hidden';
-	}
-},
-
-// 事件操作
-Event = {
-	'add' : function(o, e, h) {
-		o = getDom(o);
-		if(o.addEventListener){
-			o.addEventListener(e, h, false);
-		}else if(o.attachEvent){
-			o.attachEvent('on'+e, function(){
-				return h.call(o, window.event);
-			});
-		}else{
-			var oldHandler = o['on'+e] || function(){};
-			o['on'+e] = function(){
-				oldHandler();
-				h();
-			}
-		}
-	},
-	'remove' : function(o, e, h) {
-		o = getDom(o);
-		if(o.removeEventListener){
-			o.removeEventListener(e, h, false);
-		}else if(o.detachEvent){
-			o.detachEvent('on'+e, h);
-		}else{
-			o['on'+e] = null;
-		}
-	},
-	'end' : function(e) {
-		e = e || window.event;
-		e.stopPropagation && (e.preventDefault(), e.stopPropagation()) || (e.cancelBubble = true, e.returnValue = false);
-	}
-};
-
-
-
-/*============================================================
-	- 主体函数 Picasa
-	- Cody By Mudoo 09.02
-============================================================*/
 function Picasa(){}
 Picasa.prototype = {
 	author			: 'Mudoo',
@@ -137,7 +18,7 @@ Picasa.prototype = {
 	
 	// 参数
 	itemWidth		: 36,			// 列表项宽度(像素)
-	maskOpacity		: 50,			// 遮罩层透明度
+	maskOpacity		: 80,			// 遮罩层透明度
 	fadeOutTime		: 200,			// 隐藏遮罩层动画时间
 	itemsOpacity	: 60,			// 列表项透明度
 	perHintOpacity	: 40,			// 百分比提示框透明度
@@ -147,8 +28,8 @@ Picasa.prototype = {
 	zoomModulus		: 10,			// 缩放系数
 	zoomSpeed		: .8,			// 缩放步长
 	zoomMin			: 5,			// 缩放最小百分比
-	zoomMax			: 5000,			// 缩放最大百分比
-	defaulePerMax	: 85,			// 初始图片最大占屏幕百分比
+	zoomMax			: 300,			// 缩放最大百分比
+	defaulePerMax	: 90,			// 初始图片最大占屏幕百分比
 	toQuickInterval	: 200,			// 切换到快速模式间歇(1秒=1000)
 	quickDoInterval	: 50,			// 快速模式动作间歇(1秒=1000)
 	autoInterval	: 3000,			// 自动播放间歇(1秒=1000)
@@ -197,18 +78,128 @@ Picasa.prototype = {
 		'loaderror'	: 'image load error!'
 	},
 
+	
+	// 窗口大小
+	getWindowSize:function() {
+		var windowWidth, windowHeight;
+		if (self.innerHeight) { // all except Explorer
+			windowWidth = self.innerWidth;
+			windowHeight = self.innerHeight;
+		} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+			windowWidth = document.documentElement.clientWidth;
+			windowHeight = document.documentElement.clientHeight;
+		} else if (document.body) { // other Explorers
+			windowWidth = window.screen.width;
+			windowHeight= window.screen.height;
+		}
+		
+		var visibleWidth, visibleHeight;
+		visibleWidth = document.body.clientWidth;
+		visibleHeight = document.body.clientHeight;
+		return new Array(windowWidth, windowHeight, visibleWidth, visibleHeight);
+	},
+
+	// 获取鼠标位置
+	getXY:function (e){
+		var XY;
+		if(navigator.userAgent.match(/msie/i)){
+			var scrollPos;
+			if (typeof window.pageYOffset != 'undefined'){
+				scrollPos = [window.pageXOffset, window.pageYOffset];
+			}else if(typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat'){
+				scrollPos = [document.documentElement.scrollLeft, document.documentElement.scrollTop];
+			}else if(typeof document.body != 'undefined'){
+				scrollPos =[document.body.scrollLeft, document.body.scrollTop];
+			}
+			XY =[
+				window.event.clientX + scrollPos[0] - document.body.clientLeft,
+				window.event.clientY + scrollPos[1] - document.body.clientTop
+			];
+		}else{
+			XY = [e.pageX, e.pageY];
+		}
+		return XY;
+	},
+
+	// 透明度
+	opacity:{
+		set : function() {
+			var args = arguments;
+			var o = picasaGetDom(args[0]);
+			try{
+				o.filters.alpha.opacity = args[1];
+			}catch(e){
+				o.style.opacity = args[1]/100;
+				o.style.filter = 'alpha(opacity='+ (args[1]) +')';
+			}
+		},
+		get : function() {
+			var o = picasaGetDom(arguments[0]), p;
+			try{
+				p = parseInt(o.filters.alpha.opacity, 10);
+				if(isNaN(p)) p=100;
+			}catch(e){
+				p = o.style.opacity;
+				p *= 100;
+			}
+			return p;
+		}
+	},
+	// 显示隐藏下拉框
+	displaySelect:function(status) {
+		var selects = document.getElementsByTagName('select');
+		var count = selects.length;
+		for (var i=0;i<count;i++){
+			selects[i].style.visibility = status ? 'visible' : 'hidden';
+		}
+	},
+	// 事件操作
+	Event:{
+		add : function(o, e, h) {
+			o = picasaGetDom(o);
+			if(o.addEventListener){
+				o.addEventListener(e, h, false);
+			}else if(o.attachEvent){
+				o.attachEvent('on'+e, function(){
+					return h.call(o, window.event);
+				});
+			}else{
+				var oldHandler = o['on'+e] || function(){};
+				o['on'+e] = function(){
+					oldHandler();
+					h();
+				}
+			}
+		},
+		remove : function(o, e, h) {
+			o = picasaGetDom(o);
+			if(o.removeEventListener){
+				o.removeEventListener(e, h, false);
+			}else if(o.detachEvent){
+				o.detachEvent('on'+e, h);
+			}else{
+				o['on'+e] = null;
+			}
+		},
+		end : function(e) {
+			e = e || window.event;
+			e.stopPropagation && (e.preventDefault(), e.stopPropagation()) || (e.cancelBubble = true, e.returnValue = false);
+		}
+	},
+
 	initData:function(){		
 		var img, name;
 		var self = this;
 		self.arrItems = [];
 		$(self.selector).each(function(index){
 			$(this).attr('PicasaNo', index);
-			var thumb = $(this).attr('thumb');
+			var thumb = $(this).find('img').attr('data-original');
 			img = [thumb,$(this).attr('picasa')];
 			name = core.pathThis(img[1]);
 			self.arrItems.push(new Array(img,name,[0,0],''));
 		});
 		this.arrCount = this.arrItems.length;
+		$('#PicasaView a,#PicasaView img').attr('draggable',false);
 		if (this.inited) {
 			//若初始化，则填充缩略图列表
 			this.createItems();
@@ -231,6 +222,9 @@ Picasa.prototype = {
 			this.setElementEvent();
 			if(this.wheel) this.setWheel();		
 			this.inited = true;
+			$('window').resize(function(){
+				self.setFrameResize();
+			})
 		}
 	},
 
@@ -246,6 +240,7 @@ Picasa.prototype = {
 		this.frame.innerHTML =
 			'<div id="PV_Loading"></div>'+
 			'<div id="PV_Error" >error</div>'+
+			'<div id="PV_Number"></div>'+
 			'<a href="#" id="PV_Close" ><span>×</span></a>'+
 			'<img id="PV_Picture" src="" />'+
 			'<img id="PV_Picture_Temp" src="" />'+
@@ -255,31 +250,35 @@ Picasa.prototype = {
 			'	<ul id="PV_Items"></ul>'+
 			'	<div id="PV_Buttons">'+
 			'		<div id="PV_Zoom"><a href="javascript: void(0);" id="PV_Btn_ZoomActual">1:1</a><a href="javascript: void(0);" id="PV_Btn_ZoomOut">-</a><a href="javascript: void(0);" id="PV_Btn_ZoomIn">+</a></div>'+
-			'		<div id="PV_Select" class="PV_Btn_Normal"><a href="javascript: void(0);" id="PV_Btn_Prev"></a><a href="javascript: void(0);" id="PV_Btn_Slide"></a><a href="javascript: void(0);" id="PV_Btn_Next"></a></div>'+
-			'		<div id="PV_AutoPlay"><a href="javascript: void(0);" id="PV_Btn_AutoPlay">自动播放</a></div>'+
+			'		<div id="PV_Select" class="PV_Btn_Normal">'+
+			'			<a href="javascript: void(0);" id="PV_Btn_Prev"><i class="icon-arrow-left"></i></a>'+
+			'			<a href="javascript: void(0);" id="PV_Btn_Slide"><i class="icon-play"></i></a>'+
+			'			<a href="javascript: void(0);" id="PV_Btn_Next"><i class="icon-arrow-right"></i></a></div>'+
+			'		<a href="javascript:void(0);" id="PV_rotate_Left" class="rotate"><i class=" icon-rotate-left"></i></a>'+
+			'		<a href="javascript:void(0);" id="PV_rotate_Right" class="rotate"><i class="icon-rotate-right"></i></a>'+
+			'		<a href="javascript:void(0);" id="PV_Btn_Full"><i class="icon-fullscreen"></i></a>'+
 			'	</div>'+
 			'</div>';
 		document.body.appendChild(this.frame);
 		this.CloseBox = document.getElementById('PV_Close');
 
 		// 框架对象
-		this.Picture	= getDom('PV_Picture');				// 大图
-		this.Loading	= getDom('PV_Loading');				// 加载提示图
-		this.Error		= getDom('PV_Error');				// 错误提示图
-		this.fPerHint	= getDom('PV_PerHint');				// 缩放百分比提示框
-		this.fHint		= getDom('PV_Hint');				// 底部提示框
-		this.fControl	= getDom('PV_Control');				// 控制栏
-		this.fItems		= getDom('PV_Items');				// 列表项
-		this.fButtons	= getDom('PV_Buttons');				// 控制按钮
+		this.Picture	= picasaGetDom('PV_Picture');				// 大图
+		this.Loading	= picasaGetDom('PV_Loading');				// 加载提示图
+		this.Error		= picasaGetDom('PV_Error');					// 错误提示图
+		this.fPerHint	= picasaGetDom('PV_PerHint');				// 缩放百分比提示框
+		this.fHint		= picasaGetDom('PV_Hint');					// 底部提示框
+		this.fControl	= picasaGetDom('PV_Control');				// 控制栏
+		this.fItems		= picasaGetDom('PV_Items');					// 列表项
+		this.fButtons	= picasaGetDom('PV_Buttons');				// 控制按钮
 
 		// 按钮对象
-		this.btnZoomIn		= getDom('PV_Btn_ZoomIn');		// 放大(+)
-		this.btnZoomOut		= getDom('PV_Btn_ZoomOut');		// 缩小(-)
-		this.btnZoomActual	= getDom('PV_Btn_ZoomActual');	// 原始尺寸(1:1)
-		this.btnPrev		= getDom('PV_Btn_Prev');		// 上一张图片
-		this.btnSlide		= getDom('PV_Btn_Slide');		// 幻灯片演示
-		this.btnNext		= getDom('PV_Btn_Next');		// 下一张图片
-		this.btnAutoPlay	= getDom('PV_Btn_AutoPlay');	// 自动播放
+		this.btnZoomIn		= picasaGetDom('PV_Btn_ZoomIn');		// 放大(+)
+		this.btnZoomOut		= picasaGetDom('PV_Btn_ZoomOut');		// 缩小(-)
+		this.btnZoomActual	= picasaGetDom('PV_Btn_ZoomActual');	// 原始尺寸(1:1)
+		this.btnPrev		= picasaGetDom('PV_Btn_Prev');			// 上一张图片
+		this.btnAutoPlay	= picasaGetDom('PV_Btn_Slide');			// 幻灯片演示
+		this.btnNext		= picasaGetDom('PV_Btn_Next');			// 下一张图片
 		
 		this.mask.style.display = 'none';
 		this.frame.style.display = 'none';
@@ -290,14 +289,14 @@ Picasa.prototype = {
 		this.activeImage.onerror = function() {self.doLoad = setTimeout(function() {self.loadError();}, 0)}
 		
 		// 设置遮罩层透明度
-		opacity.set(this.mask, this.maskOpacity);
+		this.opacity.set(this.mask, this.maskOpacity);
 	},
 	
 	// 生成列表项
 	createItems : function() {
 		var itemStr = '';
 		for (var i=0; i<this.arrCount; i++){
-			itemStr += '<li number="'+i+'"><img src="'+ this.arrItems[i][0][0] +'" /></li>';
+			itemStr += '<li number="'+i+'"><img src="'+ this.arrItems[i][0][0] +'" draggable="false"/></li>';
 		}		
 		this.fItems.innerHTML = itemStr;
 		this.fItems.style.width = (this.arrCount*36) +'px';
@@ -306,13 +305,13 @@ Picasa.prototype = {
 	// 设置框架布局
 	setFrameLayout : function() {
 		this._setFrame();
-		opacity.set(this.fPerHint, 0);
+		this.opacity.set(this.fPerHint, 0);
 		$(this.mask).fadeIn(this.fadeOutTime);
 	},
 	setFrameResize:function(){
 		var self = this;
 		self._setFrame();
-		var winSize = getWindowSize();
+		var winSize = this.getWindowSize();
 		var widthPer = Math.round(this.activeImage.width/winSize[2]*100);
 		var heightPer = Math.round(this.activeImage.height/winSize[1]*100);
 		var sizePer = 100;
@@ -326,8 +325,8 @@ Picasa.prototype = {
 	},
 	_setFrame:function() {
 		//this.mask.style.display = '';
-		this.frame.style.display = '';		
-		var winSize = getWindowSize();
+		this.frame.style.display = '';
+		var winSize = this.getWindowSize();
 		this.mask.style.width = winSize[2] +'px';
 		this.mask.style.height = winSize[1] +'px';		
 		this.frame.style.width = winSize[2] +'px';
@@ -362,7 +361,7 @@ Picasa.prototype = {
 		//this.CloseBox.onclick = function() {self.close()}//点击按钮关闭
 		this.frame.onclick = function() {self.close()}//点击蒙版关闭
 		
-		this.Picture.onclick = Event.end;
+		this.Picture.onclick = this.Event.end;
 		this.Picture.ondblclick = function() {
 			var zoomPer = self.currentSizePer==self.defaultSizePer ? self.fullSizePer : self.defaultSizePer;
 			if(self.moveDistance.join(',')!='0,0') {
@@ -373,21 +372,20 @@ Picasa.prototype = {
 		}
 		this.dragPicture();
 		
-		this.Loading.onclick = Event.end;
-		this.Error.onclick = Event.end;		
-		this.fPerHint.onclick = Event.end;		
-		this.fControl.onclick = Event.end;
+		this.Loading.onclick = this.Event.end;
+		this.Error.onclick = this.Event.end;		
+		this.fPerHint.onclick = this.Event.end;		
+		this.fControl.onclick = this.Event.end;
 		this.fControl.ondblclick = function() {
-			var zoomPer = self.currentSizePer==self.defaultSizePer ? self.fullSizePer : self.defaultSizePer;
-			if(self.moveDistance.join(',')!='0,0') {
-				zoomPer = self.defaultSizePer;
-				self.moveDistance = [0, 0];
-			}
-			self.zoomAction(zoomPer, true);
+			// var zoomPer = self.currentSizePer==self.defaultSizePer ? self.fullSizePer : self.defaultSizePer;
+			// if(self.moveDistance.join(',')!='0,0') {
+			// 	zoomPer = self.defaultSizePer;
+			// 	self.moveDistance = [0, 0];
+			// }
+			// self.zoomAction(zoomPer, true);
 		}
 		this.fControl.onmouseover = function() {clearInterval(self.doFade); self.doFade = self.fadeAction(1, self.fItems, 100)}
 		this.fControl.onmouseout = function() {clearInterval(self.doFade); self.doFade = self.fadeAction(0, self.fItems, self.itemsOpacity)}
-		
 		this.btnZoomIn.onmouseover = function() {self.hint(self.lng.zoomin);}
 		this.btnZoomIn.onmouseout = function() {self.hint();}
 		this.btnZoomIn.onclick = function() {self.zoomAction(1); return false;}
@@ -402,34 +400,50 @@ Picasa.prototype = {
 		this.btnZoomActual.onmouseout = function() {self.hint();}
 		this.btnZoomActual.onclick = function() {self.zoomAction(self.currentSizePer==100 ? self.defaultSizePer : 0); return false;}
 
-		this.btnPrev.onmouseover = function() {self.hint(self.lng.prev);getDom('PV_Select').className='PV_Btn_PrevOver';}
-		this.btnPrev.onmouseout = function() {self.hint();getDom('PV_Select').className='PV_Btn_Normal';}
+		this.btnPrev.onmouseover = function() {self.hint(self.lng.prev);picasaGetDom('PV_Select').className='PV_Btn_PrevOver';}
+		this.btnPrev.onmouseout = function() {self.hint();picasaGetDom('PV_Select').className='PV_Btn_Normal';}
 		this.btnPrev.onclick = function() {self.changeImage(self.currentNo-1); return false;}
 		this.setQuickAction(this.btnPrev, 'self.changeImage(self.currentNo-1);');
 		
-		this.btnSlide.onmouseover = function() {self.hint(self.lng.slide);getDom('PV_Select').className='PV_Btn_SildeOver';}
-		this.btnSlide.onmouseout = function() {self.hint();getDom('PV_Select').className='PV_Btn_Normal';}
-		this.btnSlide.onclick = function() {return false;}
+		// this.btnSlide.onmouseover = function() {self.hint(self.lng.slide);picasaGetDom('PV_Select').className='PV_Btn_SildeOver';}
+		// this.btnSlide.onmouseout = function() {self.hint();picasaGetDom('PV_Select').className='PV_Btn_Normal';}
+		// this.btnSlide.onclick = function() {self.autoPlayAction(); return false;}
 	
-		this.btnNext.onmouseover = function() {self.hint(self.lng.next);getDom('PV_Select').className='PV_Btn_NextOver';}
-		this.btnNext.onmouseout = function() {self.hint();getDom('PV_Select').className='PV_Btn_Normal';}
+		this.btnNext.onmouseover = function() {self.hint(self.lng.next);picasaGetDom('PV_Select').className='PV_Btn_NextOver';}
+		this.btnNext.onmouseout = function() {self.hint();picasaGetDom('PV_Select').className='PV_Btn_Normal';}
 		this.btnNext.onclick = function() {self.changeImage(self.currentNo+1); return false;}
 		this.setQuickAction(this.btnNext, 'self.changeImage(self.currentNo+1);');
-		
+
+		//TODO 点击缩略图问题
+		$('#PV_Btn_Full').die("click").bind('click',function(e){
+			try{
+				core.fullScreen();
+			}catch(e){}
+		});
+		$('#PV_rotate_Left').die("click").bind('click',function(e){
+			try{
+				ui.imageRotate(270);
+			}catch(e){}
+		})
+		$('#PV_rotate_Right').die("click").bind('click',function(e){
+			try{
+				ui.imageRotate(90);
+			}catch(e){}
+		});
+
 		this.btnAutoPlay.onmouseover = function() {self.hint(self.lng.autoplay);}
 		this.btnAutoPlay.onmouseout = function() {self.hint();}
 		this.btnAutoPlay.onclick = function() {self.autoPlayAction(); return false;}
 	},
-	
+
 	// 开始显示
 	display : function() {		
 		var self = this;
-		PicasaOpen = self;
-		var o = getDom(arguments[0]);
+		var o = picasaGetDom(arguments[0]);
 		if(!this.inited) this.initialize();
 		
 		if(this.hotkey) this.setKeyboard(true);
-		displaySelect(false);
+		this.displaySelect(false);
 		
 		this.setFrameLayout();
 		this.currentNo = parseInt(o.getAttribute('PicasaNo'),10);
@@ -440,7 +454,7 @@ Picasa.prototype = {
 			self.fadeAction(1, self.fItems, self.itemsOpacity, 0);
 		}, 0);
 	},
-	
+
 	// 切换图片
 	changeImage : function() {
 		if(this.isDraging) return;
@@ -454,11 +468,20 @@ Picasa.prototype = {
 
 		this.currentNo = No;
 		this.moveAction(true);
-		this.loadImage();
+		this.loadImage();		
+	},
+	resetImage:function(image){
+		this.arrItems[this.currentNo][0][1] = image;
+		this.currentNo -= 1;
+		this.changeImage(this.currentNo+1);
 	},
 	
 	// 加载图片
 	loadImage : function() {
+		$("#PV_Number").html(this.currentNo + "/" +this.arrCount);
+		$('#PV_Items .current').removeClass('current');
+		$('#PV_Items [number='+this.currentNo+']').addClass('current');
+
 		clearTimeout(this.doLoad);
 		var self = this;
 		this.isLoaded = false;
@@ -473,11 +496,11 @@ Picasa.prototype = {
 		this.hint();
 		this.activeImage.src = this.arrItems[this.currentNo][0][1];
 		this.Picture.src = this.activeImage.src;
-		$('#PV_Picture').css('display','none').fadeIn();
+		$('#PV_Picture').css('display','none').fadeIn(200);
 	},
 	loadedAction : function() {
 		this.isLoaded = true;		
-		var winSize = getWindowSize();
+		var winSize = this.getWindowSize();
 		var widthPer = Math.round(this.activeImage.width/winSize[2]*100);
 		var heightPer = Math.round(this.activeImage.height/winSize[1]*100);
 		var sizePer = 100;
@@ -507,7 +530,7 @@ Picasa.prototype = {
 		if(this.isAutoPlaying) this.autoPlay();
 	},
 	loadError : function() {
-		if (!PicasaOpen) return;//动画方式退出。
+		if ($('#PicasaView').css("display")!="none") return;//动画方式退出。
 		this.Picture.style.display = 'none';
 		this.Loading.style.display = 'none';
 		this.Error.style.display = '';
@@ -529,7 +552,6 @@ Picasa.prototype = {
 			this.autoPlay();
 			this.isAutoPlaying = true;
 		}
-		
 		this.setButton(this.btnAutoPlay, this.isAutoPlaying);
 	},
 	autoPlay : function() {
@@ -553,14 +575,14 @@ Picasa.prototype = {
 				self.fHint.style.display = 'none';
 				self.isDraging = true;
 			}
-			var mouseXY = getXY(e);
+			var mouseXY = self.getXY(e);
 			self.Picture.style.left = (currentCoord[0]+mouseXY[0]-currentXY[0]) +'px';
 			self.Picture.style.top = (currentCoord[1]+mouseXY[1]-currentXY[1]) +'px';
 			return false;
 		}
 		function initDrag(e) {
 			currentCoord = [self.Picture.offsetLeft, self.Picture.offsetTop];
-			currentXY = getXY(e);
+			currentXY = self.getXY(e);
 			
 			document.onmousemove = dragMove;
 			document.onmouseup = stopDrag;  
@@ -606,7 +628,6 @@ Picasa.prototype = {
 		}
 		
 		this.setButton(this.btnZoomActual, (this.currentSizePer==100));
-		
 		var size = this.arrItems[this.currentNo][2];
 		this.currentZoomSize = [Math.round(size[0]*this.currentSizePer/100), Math.round(size[1]*this.currentSizePer/100)];
 		this.currentZoomCoord = [Math.round(this.initialCoord[0]-this.currentZoomSize[0]/2), Math.round(this.initialCoord[1]-this.currentZoomSize[1]/2)];
@@ -682,7 +703,7 @@ Picasa.prototype = {
 	// 渐变
 	fadeAction : function() {
 		var args = arguments;
-		if(args[3]) opacity.set(args[1], args[3]);
+		if(args[3]) this.opacity.set(args[1], args[3]);
 		
 		var self = this;
 		var modulus = args[0]==1 ? this.fadeInModulus : this.fadeOutModulus;
@@ -693,15 +714,15 @@ Picasa.prototype = {
 	},
 	fadeLoop : function() {
 		var args = arguments;
-		var o = getDom(args[0]);
-		var currOpacity = opacity.get(o);
+		var o = picasaGetDom(args[0]);
+		var currOpacity = this.opacity.get(o);
 		var modulus = parseInt(args[2], 10) || 5;
 		var speed = Math.round((args[1]-currOpacity)/modulus*10)/10;
 		
 		if(speed!=0) {
 			speed = speed>0 ? Math.ceil(speed) : Math.floor(speed);
 			currOpacity += speed;
-			opacity.set(o, currOpacity);
+			this.opacity.set(o, currOpacity);
 		}else{
 			clearInterval(args[3]);
 		}
@@ -745,7 +766,7 @@ Picasa.prototype = {
 			clearTimeout(self.doToQuick);
 			clearInterval(self.doQuick);
 		}
-		Event.add(args[0], 'mouseout', function() {
+		this.Event.add(args[0], 'mouseout', function() {
 			clearTimeout(self.doToQuick);
 			clearInterval(self.doQuick);
 		});
@@ -787,7 +808,7 @@ Picasa.prototype = {
 			this.zoomAction(this.defaultSizePer);
 			isHotKey = true;
 		}		
-		if(isHotKey) Event.end(e);
+		if(isHotKey) this.Event.end(e);
 	},
 	
 	// 滚轮操作
@@ -816,11 +837,11 @@ Picasa.prototype = {
 	},
 	frameWheelAction : function(e) {
 		this.zoomAction(this.getWheel(e));
-		Event.end(e);
+		this.Event.end(e);
 	},
 	itemWheelAction : function(e) {
 		this.changeImage((this.currentNo-this.getWheel(e)));
-		Event.end(e);
+		this.Event.end(e);
 	},
 	
 	// 设置按钮
@@ -844,7 +865,7 @@ Picasa.prototype = {
 		
 		if(this.isAutoPlaying) this.autoPlayAction();
 		this.setKeyboard(false);
-		displaySelect(true);
+		this.displaySelect(true);
 		$(this.mask).fadeOut(this.fadeOutTime);
 		$(this.frame).fadeOut(this.fadeOutTime);
 		this.activeImage.src = '';
@@ -852,7 +873,6 @@ Picasa.prototype = {
 	
 	// 结束关闭
 	close : function() {
-		PicasaOpen = false;
 		if (this.Error.style.display=='' 
 			|| this.hintTxt == 'loading...') {
 			this.stopAll();
@@ -860,7 +880,6 @@ Picasa.prototype = {
 			this.zoomAction(2,true,true,true);
 		}		
 	},
-	
 	// 销毁
 	destruction : function() {
 		this.stopAll();		
@@ -880,12 +899,12 @@ Picasa.prototype = {
 		this.btnZoomOut		= null;
 		this.btnZoomActual	= null;
 		this.btnPrev		= null;
-		this.btnSlide		= null;
-		this.btnNext		= null;
 		this.btnAutoPlay	= null;
+		this.btnNext		= null;
 		
 		this.activeImage = null;
 		window[this.name] = null;
 		//try{window.CollectGarbage();}catch(e){};
 	}
 }
+
