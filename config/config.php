@@ -20,8 +20,8 @@ if(GLOBAL_DEBUG){
 }else{
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
-	@ini_set("display_errors","off");//on off
-	@error_reporting(0); // 0
+	@ini_set("display_errors","on");//on off
+	@error_reporting(E_ERROR|E_PARSE|E_WARNING);// 0
 }
 
 header("Content-type: text/html; charset=utf-8");

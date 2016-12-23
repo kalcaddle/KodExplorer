@@ -192,7 +192,6 @@ class share extends Controller{
 	}
 	public function common_js(){
 		$out = ob_get_clean();
-		$config = $GLOBALS['config']['setting_default'];
 		$the_config = array(
 			'lang'          => LANGUAGE_TYPE,
 			'is_root'       => 0,
@@ -201,13 +200,14 @@ class share extends Controller{
 			'app_host'      => APPHOST,
 			'static_path'   => STATIC_PATH,
 			'version'       => KOD_VERSION,
-			'version_desc'  => $this->config['settings']['version_desc'],
+			'version_desc'  => isset($this->config['settings']['version_desc'])?$this->config['settings']['version_desc']:"",
 
 			'upload_max'	=> file_upload_size(),
 			'json_data'     => "",
 			'share_page'    => 'share'
 		);
 
+		$user_config = $GLOBALS['config']['setting_default'];
 		if(isset($this->in['user'])){
 			$member = system_member::load_data();
 			$user = $member->get($this->in['user']);
