@@ -8,20 +8,20 @@
 
 define('GLOBAL_DEBUG',0);//0 or 1
 @date_default_timezone_set(@date_default_timezone_get());
-@set_time_limit(1200);//10min pathInfoMuti,search,upload,download...
+@set_time_limit(1200);//20min pathInfoMuti,search,upload,download...
 @ini_set("max_execution_time",1200);
 @ini_set('session.cache_expire',1800);
-ob_start();
+
 if(GLOBAL_DEBUG){
 	define('STATIC_JS','_dev');  //_dev||app
 	define('STATIC_LESS','less');//less||css
 	@ini_set("display_errors","on");
-	@error_reporting(E_ERROR|E_WARNING|E_PARSE);//E_ALL or E_ERROR|E_WARNING|E_PARSE
+	@error_reporting(E_ERROR|E_PARSE|E_WARNING);
 }else{
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
-	@ini_set("display_errors","on");//on off
-	@error_reporting(E_ERROR|E_WARNING|E_PARSE); // 0
+	@ini_set("display_errors","off");//on off
+	@error_reporting(0); // 0
 }
 
 header("Content-type: text/html; charset=utf-8");
@@ -38,8 +38,8 @@ define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
 
 /*
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;
- * 1. 需要先将data/的子目录移到别的地方 例如D:/ 则先将data下面的所有文件夹拷贝到D:/
- * 2. 修改配置 define('DATA_PATH','D:/');
+ * 1. 需要先将data文件夹移到别的地方 例如将data文件夹拷贝到D:/
+ * 2. 修改配置 define('DATA_PATH','D:/data/');
  */
 define('DATA_PATH',     BASIC_PATH .'data/');       //用户数据目录
 define('USER_PATH',     DATA_PATH .'User/');        //用户目录
@@ -83,7 +83,8 @@ $config['cache_dir']	= BASIC_PATH.'data/cache/';		// 缓存文件地址
 $config['app_startTime'] = mtime();         			//起始时间
 $config['app_charset']	 = 'utf-8';			            //该程序整体统一编码
 $config['settings']['static_path'] = "./static/";     //静态文件目录
-$config['check_charset'] = 'ASCII,UTF-8,GBK,GB2312,BIG5,EUC-KR,EUC-JP,shift-jis,eucjp-win,sjis-win,JIS'; //文件打开自动检测编码
+$config['check_charset'] = 'ansii,utf-8,gbk,gb2312,utf-16,ucs-2,euc-kr,euc-jp,shift-jis,eucjp-win,sjis-win,jis,latin1'; //文件打开自动检测编码
+
 
 //when edit a file ;check charset and auto converto utf-8;
 if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {

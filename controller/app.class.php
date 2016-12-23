@@ -49,17 +49,16 @@ class app extends Controller{
 	 */
 	public function user_app() {
 		$path = _DIR($this->in['path']);
-		if (isset($this->in['action']) && $this->in['action'] == 'add'){
+		if (isset($this->in['action']) && 
+			$this->in['action'] == 'add'){
 			$path .= '.oexe';
 		}
 		
 		if (!checkExt($path)) {
 			show_json($this->L['error']);exit;
 		}
-		$data = json_decode($this->in['data'],true);
-		if(!is_array($data)){
-			show_json($this->L['error'],false);
-		}
+
+		$data = $this->_init();
 		unset($data['name']);unset($data['desc']);unset($data['group']);
 		$res  = file_put_contents($path, json_encode($data));
 		show_json($this->L['success']);
@@ -123,6 +122,11 @@ class app extends Controller{
 	}
 
 	private function _init(){
-		return  json_decode(rawurldecode($this->in['data']));
+		$data = rawurldecode($this->in['data']);
+		$arr  = json_decode($data,true);
+		if(!is_array($arr)){
+			show_json($this->L['error'],false);
+		}
+		return $arr;
 	}
 }

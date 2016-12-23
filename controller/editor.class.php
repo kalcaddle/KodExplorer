@@ -55,6 +55,7 @@ class editor extends Controller{
 		if (filesize($filename) >= 1024*1024*40) show_json($this->L['edit_too_big'],false);
 		$filecontents=file_get_contents($filename);//文件内容
 		$charset=get_charset($filecontents);
+
 		if ($charset!='' &&
 			$charset!='utf-8' &&
 			function_exists("mb_convert_encoding")
@@ -73,6 +74,7 @@ class editor extends Controller{
 			$data['content'] = base64_encode($filecontents);
 			$data['base64']  = true;
 		}
+		//unset($data['content']);
 		show_json($data);
 	}
 	public function fileSave(){

@@ -317,13 +317,15 @@ function show_tips($message,$url= '', $time = 3){
 		$goto = "";
 		$info = "";
 	} //是否自动跳转
+
+	$message = nl2br(htmlentities($message));
 	echo<<<END
 <html>
 	<meta http-equiv='refresh' $goto charset="utf-8">
 	<style>
 	#msgbox{border: 1px solid #ddd;border: 1px solid #eee;padding: 20px 40px 40px 40px;border-radius: 5px;background: #f6f6f6;
 	font-family: 'Helvetica Neue', "Microsoft Yahei", "微软雅黑", "STXihei", "WenQuanYi Micro Hei", sans-serif;
-	color:888;margin:0 auto;margin-top:10%;width:400px;font-size:14px;color:#666;}
+	color:888;margin:0 auto;margin-top:10%;width:400px;font-size:14px;color:#666;word-wrap: break-word;word-break: break-all;}
 	#msgbox #info{margin-top: 10px;color:#aaa;font-size: 12px;}
 	#msgbox #title{color: #888;border-bottom: 1px solid #ddd;padding: 10px 0;margin: 0 0 15px;font-size:18px;}
 	#msgbox #info a{color: #64b8fb;text-decoration: none;padding: 2px 0px;border-bottom: 1px solid;}
@@ -381,7 +383,7 @@ function show_json($data,$code = true,$info=''){
 	if ($info != '') {
 		$result['info'] = $info;
 	}
-	ob_clean();
+	ob_end_clean();	
 	header("X-Powered-By: kodExplorer.");
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($result);

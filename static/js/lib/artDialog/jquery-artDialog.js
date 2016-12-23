@@ -164,6 +164,10 @@ artDialog.fn = artDialog.prototype = {
 		.content(config.content, true)
 		.size(config.width, config.height)
 		.time(config.time);
+		if( config.width == "100%" && //100%则全屏
+			config.height == "100%"){
+			DOM.wrap.addClass('dialogMax dialogMaxFirst');
+		}
 
 		config.follow
 		? that.follow(config.follow)
@@ -989,16 +993,15 @@ artDialog.fn = artDialog.prototype = {
 		}
 
 		if ($wrap.hasClass('dialogMax')) {//还原
+			var dataSize = $wrap.data('initSize');
 			$wrap.removeClass('dialogMax');
-			$wrap.css({
-				'left':$wrap.data('initSize').left + 'px',
-				'top':$wrap.data('initSize').top + 'px',
-				'width':$wrap.data('initSize').width,
-				'height':$wrap.data('initSize').height
-			});
-			$main.css({
-				'height':$wrap.data('initSize').height
-			});
+			if(!dataSize){
+				var winWidth  = _$window.width();
+				var winHeight = _$window.height();
+				dataSize = {left:winWidth*0.1,top:winHeight*0.1,width:winWidth*0.8,height:winHeight*0.7};
+			}
+			that.size(dataSize.width,dataSize.height);
+			$wrap.css(dataSize);
 		}else{//最大化
 			var dialogDom = $wrap.context;
 			var size = {

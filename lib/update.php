@@ -11,11 +11,10 @@ if(UPDATE_DEV){
 }
 
 function update_check($self_file){
-	del_file($self_file);
 	//version <3.3 to 3.3
 	if( file_exists(THE_DATA_PATH.'system/member.php') &&
 		!file_exists(THE_DATA_PATH.'system/system_member.php')){
-		new updateToV330();
+		new updateToV330($self_file);
 		header('location:./index.php?user/logout');
 		exit;
 	}
@@ -24,14 +23,17 @@ function update_check($self_file){
 class updateToV330{
 	private $user_array;
 	private $role_array;
-	function __construct() {
+	function __construct($self_file) {
 		$this->user_array = array();
 		$this->role_array = array();
 		$this->init_role();
 		$this->init_group();
-		$this->init_user();
+		$result = $this->init_user();
 		$this->init_system();
-		$this->clear_path();
+		if($result){
+			$this->clear_path();
+			del_file($self_file);
+		}
 	}
 	private function init_role(){
 		$file_in = THE_DATA_PATH.'system/group.php';
@@ -179,7 +181,7 @@ class updateToV330{
 			$this->reset_user_config($value);
 			$data_new[$id] = $value;
 		}
-		$sql->save($file_out,$data_new);
+		return $sql->save($file_out,$data_new);
 	}
 	private function init_system(){
 		$file_in = THE_DATA_PATH.'system/system_setting.php';
@@ -195,10 +197,15 @@ class updateToV330{
 	private function clear_path(){
 		del_file(THE_DATA_PATH.'system/group.php');
 		del_file(THE_DATA_PATH.'system/member.php');
+		del_file(BASIC_PATH.'readme.txt');
+		del_file(BASIC_PATH.'README.md');
+		
 		del_dir(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
 		del_dir(THE_DATA_PATH.'i18n');
 		del_dir(THE_DATA_PATH.'thumb');
 		del_dir(BASIC_PATH.'__MACOSX');
+		del_dir(THE_DATA_PATH.'session');
+		mk_dir(THE_DATA_PATH.'session');
 		mk_dir(THE_DATA_PATH.'temp/thumb');
 	}
 }

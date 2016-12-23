@@ -72,7 +72,7 @@ abstract class Controller {
 	 */
 	protected function display($tpl_file){
 		global $L,$LNG;
-		$out = ob_get_clean();
+		ob_end_clean();
 		extract($this->values);
 		require($this->tpl.$tpl_file);
 	} 

@@ -12,6 +12,18 @@
 		echo '    <a href="javascript:core.copyright();" class="icon-info-sign copyright_bottom"></a>';
 	?>
 </div>
-<script type="text/javascript"><?php echo $GLOBALS['config']['settings']['global_js'];?></script>
-<style type="text/css"><?php echo $GLOBALS['config']['settings']['global_css'];?></style>
+
+
+<script type="text/javascript">
+<?php 
+echo isset($GLOBALS['config']['settings']['global_js'])?$GLOBALS['config']['settings']['global_js']:"";
+?>
+</script>
+
+<style type="text/css">
+<?php 
+echo isset($GLOBALS['config']['settings']['global_css'])?$GLOBALS['config']['settings']['global_css']:"";
+?>
+</style>
+
 <!-- <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>  -->

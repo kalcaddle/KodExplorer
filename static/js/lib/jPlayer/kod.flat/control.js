@@ -49,18 +49,10 @@ var jPlayerConfigInit = function($player,config){
 		},
 		loadedmetadata:function(){//载入后重置窗口大小
 			try{
-				var name = $player.parents('.dialog-simple').find('.aui_titleBar').attr('id');
-				var dialog = $.artDialog.list[name];
-				if(name != 'movie_player_dialog' || $(this).height() < 10){
-					return;
-				}
-				var $vedio = $player.find('video');
-				if($vedio.length !=0){
-					dialog.size($vedio.width(),$vedio.height());
-					setTimeout(function(){
-						dialog.size($vedio.width(),$vedio.height());
-					},100);
-				}
+				$player.data('player_resize','0');
+				setTimeout(function(){
+					jPlayerResizeVedio($player);
+				},200);
 			}catch(e){};
 		},
 		error: function(current) {
@@ -93,6 +85,10 @@ var jPlayerConfigInit = function($player,config){
 		},
 		playing:function(){
 			$($player).find('.video-play-loading').hide();
+			if($player.data('player_resize') != '1'){
+				$player.data('player_resize','1');
+				jPlayerResizeVedio($($player));
+			}
 		},
 		play: function() {
 			$($player).find('.video-play').stop(true, true).fadeOut(150);
@@ -109,6 +105,30 @@ var jPlayerConfigInit = function($player,config){
 	};
 	$.extend(playerConfig,config);
 	return playerConfig;
+}
+
+var jPlayerResizeVedio = function($player){
+	var name = $player.parents('.dialog-simple').find('.aui_titleBar').attr('id');
+	var dialog = $.artDialog.list[name];
+	var $vedio = $player.find('video');
+	if(name != 'movie_player_dialog' || $vedio.length == 0){
+		return;
+	}
+	var vWidth    = $vedio.width(),
+		vHeight   = $vedio.height(),
+		winWidth  = $(window).width(),
+		winHeight = $(window).height(),
+		r = vWidth/vHeight;
+
+	if(vHeight >= winHeight*0.8){
+		vHeight = winHeight*0.8;
+		vWidth  = vHeight*r;
+	}
+	if(vWidth >= winWidth*0.8){
+		vWidth = winWidth*0.8;
+		vHeight = vWidth/r;
+	}
+	dialog.size(vWidth,vHeight);
 }
 
 var jPlayerBindControl = function($player){

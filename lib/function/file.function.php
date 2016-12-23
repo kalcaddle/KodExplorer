@@ -766,7 +766,7 @@ function file_put_out($file,$download=false){
 	if (!is_readable($file)) show_json('file not readable',false);
 	$filename = get_path_this($file);
 	set_time_limit(0);
-	$out = ob_get_clean();//清除之前所有输出缓冲 TODO
+	ob_end_clean();
 	$mime = get_file_mime(get_path_ext($file));
 	$time = gmdate('D, d M Y H:i:s', filemtime($file));
 	if ($download ||
@@ -847,7 +847,7 @@ function file_download_this($from, $file_name,$header_size=0){
 		if(!$download_fp = @fopen($file_name, "wb")){
 			return false;
 		}
-		while(!feof($fp)){
+		while(!feof($fp) && (connection_status() == 0)){//没有关闭页面
 			if(!file_exists($file_name)){//删除目标文件；则终止下载
 				fclose($download_fp);
 				return false;

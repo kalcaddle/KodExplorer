@@ -174,18 +174,18 @@ class fileCache{
 	* 保存数据；
 	*/
 	public static function save($file,$data){//10000次需要6s 
-		if (!$file) return;
+		if (!$file) return false;
 		if (!file_exists($file)){
 			@touch($file);
 		}
 
 		chmod_path($file,0777);
 		if (!path_writeable($file)) {
-			show_json('the path "data/" can not write!',false);
+			show_tips('"data/" can not write!');
 		}
 		$json_str = json_encode($data);
 		if(is_null($json_str)){//含有二进制或非utf8字符串对应检测
-			show_json('json_encode error!',false);
+			show_tips('json_encode error!');
 		}
 
 		if($fp = fopen($file, "w")){
@@ -197,5 +197,6 @@ class fileCache{
 			}
 			fclose($fp);
 		}
+		return true;
 	}
 }
