@@ -37,7 +37,7 @@
 </style>
 <?php } ?>
 
-<body style="overflow:hidden;" oncontextmenu="return core.contextmenu();" class="page_editor">
+<body style="overflow:hidden;" oncontextmenu="return core.contextmenu();" id="page_editor">
 	<?php include(TEMPLATE.'common/navbar_share.html');?>
 	<div class="frame-main">
 		<div class='frame-left'>
