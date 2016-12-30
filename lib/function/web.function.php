@@ -189,6 +189,25 @@ function stripslashes_deep($value){
 	return $value; 
 }
 
+function parse_url_route(){
+	$param = str_replace($_SERVER['SCRIPT_NAME'],"",$_SERVER['PHP_SELF']);
+	if($param && substr($param,0,1) == '/'){
+		$arr = explode('&',$param);
+		$arr[0] = ltrim($arr[0],'/');
+		foreach ($arr as  $cell) {
+			$cell = explode('=',$cell);
+			if(is_array($cell)){
+				if(!isset($cell[1])){
+					$cell[1] = '';
+				}
+				$_GET[$cell[0]] = $cell[1];
+				$_REQUEST[$cell[0]] = $cell[1];
+			}
+		}
+	}
+}
+
+
 /**
  * GET/POST数据统一入口
  * 将GET和POST的数据进行过滤，去掉非法字符以及hacker code，返回一个数组
@@ -197,6 +216,7 @@ function stripslashes_deep($value){
  * @return array $_GET和$_POST数据过滤处理后的值
  */
 function parse_incoming(){
+	parse_url_route();
 	global $_GET, $_POST,$_COOKIE;
 
 	$_COOKIE = stripslashes_deep($_COOKIE);

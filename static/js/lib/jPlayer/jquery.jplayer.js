@@ -1134,6 +1134,7 @@
 					htmlObj.setAttribute("width", "1"); // Non-zero
 					htmlObj.setAttribute("height", "1"); // Non-zero
 					htmlObj.setAttribute("tabindex", "-1");
+					
 					createParam(htmlObj, "flashvars", flashVars);
 					createParam(htmlObj, "allowscriptaccess", "always");
 					createParam(htmlObj, "bgcolor", this.options.backgroundColor);

@@ -23,6 +23,19 @@ a{text-decoration:none;color: #adf;}
 	width:100%;height: 100%;
 	right: 0px;top: 0px; bottom: 0px;left: 0px;
 }
+
+.init_loading{
+	position: fixed;left:45%;top:40%;font-size:1.25em;z-index: 999999;width: auto;
+}
+.init_loading div{
+	padding: 20px;background:#000;opacity:0.6;
+	margin: 0 auto;
+	color: #FFF;border-radius: 6px;		
+	text-align: center;line-height: 30px;
+}
+.init_loading img{border-radius: 10px;}
+
+
 .title{
 	width:100%;background:#6699cc url(../images/common/login.png);height: 150px;
 	font-weight:100;
@@ -75,7 +88,7 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 
 .loginbox .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
 .loginbox .error{padding:10px;color:#a94442;background-color: #f2dede;border:#ebccd1 1px solid;font-size:14px;}
-.loginbox .error a{background-color: #f2dede;border:#ebccd1 1px solid;}
+.loginbox .error a{background-color: #f2dede;color: #03A9F4;}
 .loginbox h4{margin: 0;padding: 3px 10px;border-left: 3px solid;margin-bottom: 10px;}
 
 .loginbox .guest{text-align:center;margin: 0 auto;padding: 20px 0 0px 0;}

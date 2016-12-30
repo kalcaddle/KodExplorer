@@ -34,20 +34,15 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	    type: 'text',
 	    value: ':',
 	    context: 'php'
-	}, {
-	    type: 'keyword',
-	    value: 'case',
-	    indent: true,
-	    dontBreak: true
-	}, {
+	},{
 	    type: 'keyword',
 	    value: 'default',
-	    indent: true,
+	    //indent: true,
 	    dontBreak: true
 	}, {
 	    type: 'keyword',
-	    value: 'break',
-	    indent: false,
+	    value: 'break',//for,while,foreach中的break indent为true
+	    //indent: true,
 	    dontBreak: true
 	}, {
 	    type: 'punctuation.doctype.end',
@@ -72,13 +67,19 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	    value: ';'
 	}];
 	
-	exports.spaces = [{
+	exports.spaces = [{//需要在前面或后面追加空格；关键字
 	    type: 'xml-pe',
 	    prepend: true
 	},{
 	    type: 'entity.other.attribute-name',
 	    prepend: true
-	}, {
+	}, 
+
+	//add by warlee
+	{type: 'keyword',append: true},
+	{type: 'identifier',append: true},
+
+	{
 	    type: 'storage.type',
 	    value: 'var',
 	    append: true
@@ -147,9 +148,10 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	    var nextToken = {};
 	    var breakAdded = false;
 	    var value = '';
+	    var nextLineIndent = 0;
+	    var switchBreakMatch = 0;
 	
 	    while (token!==null) {
-	        //console.log(token);	
 	        if( !token ){
 	            token = iterator.stepForward();
 	            continue;
@@ -167,7 +169,7 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	        }else if( token.type == 'meta.tag.name.script' && context == 'js' ){
 	            context = 'html';
 	        }
-	
+
 	        nextToken = iterator.stepForward();
 	        if (nextToken && nextToken.type.indexOf('meta.tag.name') == 0) {
 	            nextTag = nextToken.value;
@@ -181,12 +183,26 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	        if (token.type == 'text') {
 	            token.value = token.value.trim();
 	        }
-	        
-	        //add by warlee
-	        if (token.type == 'keyword' || token.type == "identifier") {
-	            token.value = token.value.trim()+" ";
+
+	        //未知代码 add by warlee
+	        if(context == undefined){
+	        	code += token.value+"\n";
+	        	token = nextToken;
+	            continue;
 	        }
-	        
+	        //块注释保持初始
+	        if(token.type == "comment.doc"){
+	        	token.value += "\n";
+
+	        	//块注释最后追加indent
+	        	if(nextToken && nextToken.type!='comment.doc'){
+	        		for (var j = 0; j < indentation; j++) {
+                        token.value += "\t";
+                    }
+	        	}
+	        }
+
+
 	        if (!token.value) {
 	            token = nextToken;
 	            continue;
@@ -213,6 +229,9 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	        if (token.type.indexOf('meta.tag.name') == 0) {
 	            tag = token.value;
 	        }
+	        //console.log(123,nextLineIndent,indentation,token,nextToken);
+
+	        //处理indent对齐
 	        breakAdded = false;
 	        for (i in newLines) {
 	            if (
@@ -230,25 +249,25 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	                    newLines[i].context === context
 	                )
 	            ) {
-	                if (newLines[i].indent === false) {
+					if (newLines[i].indent === false) {
 	                    indentation--;
 	                }
-	
 	                if (
 	                    newLines[i].breakBefore &&
 	                    ( !newLines[i].prev || newLines[i].prev.test(lastToken.value) )
 	                ) {
 	                    code += "\n";
 	                    breakAdded = true;
-	                    for (i = 0; i < indentation; i++) {
+	                    for (var j = 0; j < indentation+nextLineIndent; j++) {
 	                        code += "\t";
 	                    }
 	                }
-	
 	                break;
 	            }
 	        }
-	
+
+
+	        //处理换行
 	        if (dontBreak===false) {
 	            for (i in newLines) {
 	                if (
@@ -265,22 +284,47 @@ ace.define("ace/ext/beautify/php_rules",["require","exports","module","ace/token
 	                        newLines[i].context === context
 	                    )
 	                ) {
-	                    if (newLines[i].indent === true) {
+	                    if (newLines[i].indent === true && token.value !="break") {
 	                        indentation++;
 	                    }
-	
 	                    if (!newLines[i].dontBreak  && !breakAdded) {
-	                        code += "\n";
-	                        for (i = 0; i < indentation; i++) {
-	                            code += "\t";
+	                    	var br = "\n",table="\t";
+	                    	if(token.value == "}" || token.value == "else"){
+	                    		br = "";table="";
+	                    	}
+	                    	if(nextToken && nextToken.value == "else"){
+	                    		br = "";table="";
+	                    	}
+	                        code += br;
+	                        for (i = 0; i < indentation+nextLineIndent; i++) {
+	                            code += table;
 	                        }
 	                    }
-	
 	                    break;
 	                }
 	            }
 	        }
-	
+
+	        if(token.type == 'keyword'){
+	        	switch(token.value){
+	        		case 'switch':
+	        		case 'function':nextLineIndent = 0;break;
+	        		case 'case':
+	        		case 'default':
+	        			if(switchBreakMatch === 0){
+	        				nextLineIndent+=1;
+	        				switchBreakMatch = 1;
+	        			}
+	        			break;
+	        		case 'break':
+	        			switchBreakMatch = 0;
+	        			nextLineIndent -= 1;
+	        			nextLineIndent = nextLineIndent<0?0:nextLineIndent;
+	        			break;
+	        		default:break;
+	        	}
+	        }
+
 	        code += value;
 	        if ( lastToken.type == 'support.php_tag' && lastToken.value == '?>' ) {
 	            dontBreak = false;

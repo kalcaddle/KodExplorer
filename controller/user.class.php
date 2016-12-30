@@ -1,1 +1,488 @@
-<?php class user extends Controller{private $user;private $auth;private $notCheck;function __construct(){parent::__construct();‚š‘®îŠžÝªìù­Å²ìêà«¢â™…†°ÏÆº°‹²²¦Äà•Ï€óùìí¨²‹Ú ö¼Ë™ŸåŸ¦—;$this->tpl=TEMPLATE.'user/';Ÿø…Ò É´¶š´ª”¡™½Ô¥˜ôœÔÁ¶ô¨Õ›¿Å‰‘åƒ–¸£àìÚú¡†ÃŸÍ™ÅæŽá¼Ð™±ø;if(!isset($_SESSION)){$this->login(DATA_PATH."<br/>".$GLOBALS['L']['path_can_not_write_data']);}else{$this->user=&$_SESSION['kod_user'];if(!isset($this->user['path'])&& isset($this->user['name'])){$this->user['path']=$this->user['name'];}}$this->notCheck=array('loginFirst','login','logout','loginSubmit','checkCode','public_link','qrcode','sso');´ÖÊšÚàÓýÂÁÙ½ãßÎ§€ÁÅ…Ï§Á¡Áóš°Á;$this->notCheckApp=array('share','debug');žó€ÔòÂ–Ìù­Ð¢­îã;$this->config['forceWap']=is_wap()&&(!isset($_COOKIE['forceWap'])|| $_COOKIE['forceWap']=='1');›¶ÕÜªðŽëÄó†ãôúäÊí§à»©Ûéúþ˜éãŒÝ˜¨”î†¾à”«;}public function loginCheck(){if(in_array(ST,$this->notCheckApp))return;if(in_array(ACT,$this->notCheck))return;if(isset($_SESSION['kod_login'])&& $_SESSION['kod_login']===!0){$‰²=system_member::get_info($this->user['user_id']);$this->login_success($‰²);return;}else if($_COOKIE['kod_user_id']!='' && $_COOKIE['kod_token']!=''){$‰²=system_member::get_info($_COOKIE['kod_user_id']);if(!is_array($‰²)|| !isset($‰²['password'])){$this->logout();}if($this->make_login_token($‰²)==$_COOKIE['kod_token']){@session_start();$_SESSION['kod_login']=!0;$_SESSION['kod_user']=$‰²;$_SESSION['CSRF-TOKEN']=rand_string(0x014);setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'],time()+0x0e10*0x0000018*0x064);setcookie('kod_user_id',$_COOKIE['kod_user_id'],time()+0x0e10*0x0000018*0x064);setcookie('kod_token',$_COOKIE['kod_token'],time()+0x0e10*0x0000018*0x064);@session_write_close();unset($_SESSION);@session_start();if(!isset($_SESSION['kod_user'])|| !is_array($_SESSION['kod_user'])){$this->login(DATA_PATH."<br/>".$GLOBALS['L']['path_can_not_write_data']);}else{$this->login_success($‰²);}return;}$this->logout();}else{if($this->config['setting_system']['auto_login']!='1'){$this->logout();}else{if(!file_exists(USER_SYSTEM.'install.lock')){$this->display('install.html');exit;}header('location:./index.php?user/loginSubmit&name=guest&password=guest');exit;Éœ—ªØÁ‡Â¼†Ú¦éæ…ƒšñ–ØÒª…ø³¸„²åóûƒ‹§ÛÍ;}}}private function login_success($ŸŠ){$this->user=$ŸŠ;if(!$ŸŠ['path']){$this->login($this->L['kod_version_error']);}else if($ŸŠ['status']==0){$this->login($this->L['login_error_user_not_use']);}else if($ŸŠ['role']==''){$this->login($this->L['login_error_role']);}define('USER',USER_PATH.$this->user['path'].'/');define('USER_TEMP',USER.'data/temp/');â¶£òÐ•‰ªè³°â;define('USER_RECYCLE',USER.'recycle/');›ÏÛ—Óæ¿°µíÏ¿¤ËñÄ®©ç¢úý«¦æßÖÊÇÀ²ã‘Žúåõ»–«ªæëÎ²Þ“áˆû„ƒù¯©á¬×Áß»Óí·¹ãó;if(!file_exists(USER)){$this->logout();}if($this->user['role']=='1'){define('MYHOME',USER.'home/');define('HOME','');$GLOBALS['web_root']=WEB_ROOT;$GLOBALS['is_root']=0x001;}else{$ž·ü=user_home_path($this->user);define('HOME',$ž·ü);define('MYHOME','/');$GLOBALS['web_root']='';$GLOBALS['is_root']=0;}$this->config['user']=fileCache::load(USER.'data/config.php');if(!isset($this->config['user']['file_repeat'])|| !isset($this->config['user']['resize_config'])){$this->config['user']['file_repeat']=$this->config['setting_default']['file_repeat'];$this->config['user']['recycle_open']=$this->config['setting_default']['recycle_open'];$this->config['user']['resize_config']=$this->config['setting_default']['resize_config'];}if($this->config['user']['theme']==''){$this->config['user']=$this->config['setting_default'];}}public function sso(){$êÛÌã=!1;÷‘Ù‘’‡éÔæ¦©ÔÞâ¹Ò´ÊñëÇßÖ£á¤‡ßõî×÷²‰“¹óè ›“õúõ°Î«úÀ—Â¡îå;$“="not login";Ü»Ýí‹ñ;if(isset($_SESSION)&& $_SESSION['kod_login']==0x001){$€Û=$_SESSION['kod_user'];if($€Û['role']=='1' || !isset($this->in['check'])|| !isset($this->in['value'])){$êÛÌã=!0;}$›î¿=!1;switch($this->in['check']){case 'user_id':$›î¿=$€Û['user_id'];break;‘ê§¨­È˜”Ì«‚°´ßì¶¾ÛÁ°„ÂÍÝûŽõâýÛôéƒ˜Ì¶¬™á¯Ê—·ÍÍ“þ˜ÒŒå±‰ó§ìòƒáÝ‡€õÓ¶£ì˜;case 'user_name':$›î¿=$€Û['name'];âïü°ƒ°œà¼‚’Æö¹³ê½•;break;¿˜Ìâ†ä¶½•™­;case 'role_id':$›î¿=$€Û['role'];break;úÍ‚·Ð”þÈÎ³´;case 'role_name':$üÑß=system_role::get_info($€Û['role']);$›î¿=$üÑß['name'];ð’×¯§ðÝº»Ü;break;case 'group_id':$›î¿=array_keys($€Û['group_info']);¯óîøÃ¢­Ðë«¢ÌèŽøŠþ‹á¯³ÒîžËÆü«¶¬ ¦¦ãÉÓ´¶þ×ƒçæûòåˆÔ–¼¨¤¬·Âøþ¿¤¶ìÄÝ“©§;break;æ·áÏžÞÂ…ç—›¤¿¿Ð÷ƒÊ÷Ãî¯°´ŽÄÝµ¬½”“ôöã“Õ¦˜½¾´âþó´ö÷þï»î ì£®±‚;case 'group_name':$›î¿=array();ùñµðÕÈÇüà†»•èºŠž²ƒž¢¾Ã¬±ñÝ´Ö¼ôÐ¯ªÂ…òŠ‚;foreach($€Û['group_info'] as $½êù=>$õ™«ø·){$·Å’ã=system_group::get_info($½êù);¬Û€¡­¯Ë;$›î¿[]=$·Å’ã['name'];ú·”‹õþ†îôŸ›íÖé¦ü‹”‚ÎÁÝÎ;}break;¯ü³î÷ëƒ„áƒŠÑ÷ªìæ‚ÖŽ;default:break;}if(!$êÛÌã&& $›î¿!=!1){if((is_string($›î¿)&& $›î¿==$this->in['value'])||(is_array($›î¿)&& in_array($this->in['value'],$›î¿))){$êÛÌã=!0;}else{$“=$this->in['check'].' not accessed, It\'s must be "'.$this->in['value'].'"';}}}if($êÛÌã){@session_name('KOD_SESSION_SSO');@session_id($_COOKIE['KOD_SESSION_SSO']);@session_start();$_SESSION[$this->in['app']]='success';@session_write_close();header('location:'.$this->in['link']);exit;}$this->login($“);}public function public_link(){$š´Õè=$this->config['setting_system']['system_password'];ØÁ¶ˆ¾ê÷·Öú¼¸ýÇ‹öñ÷ÞóÎ;$“£‡Çù=$this->in['fid'];©—ðà °Ë˜ç£“¤Ü’ëçŠÞßè;$¯ÖåÒ=Mcrypt::decode($“£‡Çù,$š´Õè);Ïëûù„ìÚ¤§¼†ÊÐ«§ã˜íöî×Éž¯;if(strlen($¯ÖåÒ)==0){show_json($this->L['error'],!1);}$ñ=isset($_GET['download']);file_put_out($¯ÖåÒ,$ñ);Ë»ÙÏ©µóÆÜ±Í§ƒøÏæ‘ÞÕ‰Î®ÒíÝƒßíâŸÍ®Û§ý…ÜòÌº¥š;}public function common_js(){$¨”±=ob_get_clean();$å=BASIC_PATH;$”‚Îò=USER_PATH;$àè=GROUP_PATH;«×—°´Šüî¯;if(!$GLOBALS['is_root']){$å='/';$”‚Îò='/';$àè='/';}$Ñ=array('lang' =>LANGUAGE_TYPE,'is_root' =>$GLOBALS['is_root'],'user_id' =>$this->user['user_id'],'web_root' =>$GLOBALS['web_root'],'web_host' =>HOST,'app_host' =>APPHOST,'static_path' =>STATIC_PATH,'basic_path' =>$å,'user_path' =>$”‚Îò,'group_path' =>$àè,'myhome' =>MYHOME,'upload_max' =>file_upload_size(),'version' =>KOD_VERSION,'json_data' =>"",'self_share' =>system_member::user_share_list($this->user['user_id']),'user_config' =>$this->config['user'],'KOD_GROUP_PATH' =>KOD_GROUP_PATH,'KOD_GROUP_SHARE' =>KOD_GROUP_SHARE,'KOD_USER_SHARE' =>KOD_USER_SHARE,'KOD_USER_RECYCLE' =>KOD_USER_RECYCLE,'KOD_USER_FAV' =>KOD_USER_FAV,'KOD_GROUP_ROOT_SELF' =>KOD_GROUP_ROOT_SELF,'KOD_GROUP_ROOT_ALL' =>KOD_GROUP_ROOT_ALL,);if(isset($this->config['setting_system']['version_hash'])){$Ñ['version_hash']=$this->config['setting_system']['version_hash'];}if(!isset($GLOBALS['auth'])){$GLOBALS['auth']=array();}$¬ƒçÒ='LNG='.json_encode($GLOBALS['L']).';';$¬ƒçÒ.= 'AUTH='.json_encode($GLOBALS['auth']).';';$¬ƒçÒ.= 'G='.json_encode($Ñ).';';â„ÄÖŠó¸óÄçŒ;header("Content-Type: application/javascript");¡ô®ŸäÞ¸¶·äº ·Ïî¹;echo $¬ƒçÒ;‹©È€â½ÄÊÉµ‹í×€öåü¯´•×ÕÍ¨Ä‡î—ÅúÁ;}public function login($¤ÌÀï—=''){if(!file_exists(USER_SYSTEM.'install.lock')){chmod_path(BASIC_PATH,0777);$this->display('install.html');exit;}$this->assign('msg',$¤ÌÀï—);if(is_wap()){$this->display('login_wap.html');}else{$this->display('login.html');}exit;}public function loginFirst(){if(!file_exists(USER_SYSTEM.'install.lock')){touch(USER_SYSTEM.'install.lock');if(!isset($this->in['password'])){$this->in['password']='admin';}$û…Íü£='1';$â õ=system_member::load_data();$‹Ø«Ø=$â õ->get($û…Íü£);$‹Ø«Ø['password']=md5($this->in['password']);ˆ§ëÊ¶çî„¨ß›žÛ¡ìØÄ²¼å©¼»µ–æŽ˜×ïŠß—öªÎÞšÒˆúí§Ö”°ÔÇìºðªö¦ÁÝµÙµ¦ä–¾ÛÀ»ÛàÃ;$â õ->set($û…Íü£,$‹Ø«Ø);®ß€ß´ÇÍï¹øæàºÅ—•û½ù’ûÕÓ‰’¯éÖ‡¹Âµ™Â•Î‹â¿ÅÜ§¦—ì½¬èú¦ú÷üÎ‚;if($‹Ø«Ø['path']=='' && $‹Ø«Ø['create_time']==''){$ìæ†¦©=new system_member();$ìæ†¦©->init_install();}}header('location:./index.php?user/login');exit;÷¶Ï½“öãªä¢ÖÍžýÉ–ú™˜‹™†ñŸ­œÜíˆ¯þåÏ¾øÇ£¤¬ÅúúäùÅûôß•ø›ó™È;}public function logout(){session_start();user_logout();¥·šŒ‡Ø†Îûª;}public function loginSubmit(){if(isset($this->in['login_token'])){$Â¦÷¨ =$this->config['settings']['api_login_tonken'];$¤–=explode('|',$this->in['login_token']);if(strlen($Â¦÷¨ )<0x05|| count($¤–)!=0x0002|| md5(base64_decode($¤–[0]).$Â¦÷¨ )!=$¤–[0x001]){$this->login_display("Api param error!",!1);}$this->in['name']=urlencode(base64_decode($¤–[0]));$——Õ=!0;}else{if(!isset($this->in['name'])|| !isset($this->in['password'])){$this->login_display($this->L['login_not_null'],!1);}if(need_check_code()&& $this->in['name']!='guest' && $_SESSION['check_code']!==strtolower($this->in['check_code'])){$this->login_display($this->L['code_error'],!1);}}session_start();$œ¦=rawurldecode($this->in['name']);ŽÏÙ•©ßä¦‹àè²Ù‘Ò—¶éµð‚ÌÆŽüä«¤»à;$É±ËßÛ=rawurldecode($this->in['password']);$‚¸¦=system_member::load_data();ý;$˜´¨=$‚¸¦->get('name',$œ¦);›ìº˜Ñå½ŽÇ¯Øùû;if($——Õ&& $˜´¨){}else if($˜´¨===!1|| md5($É±ËßÛ)!=$˜´¨['password']){$this->login_display($this->L['password_error'],!1);}else if($˜´¨['status']==0){$this->login_display($this->L['login_error_user_not_use'],!1);}else if($˜´¨['role']==''){$this->login_display($this->L['login_error_role'],!1);}if($˜´¨['last_login']==''){$Õ¨ý=init_controller('app');$Õ¨ý->init_app($˜´¨);}$˜´¨['last_login']=time();$‚¸¦->set($˜´¨['user_id'],$˜´¨);ÄÌ¦ÂŒ¾ö´Œà¨Š›ÀÜ‚þëÉ®ÅÃ«;$_SESSION['kod_login']=!0;ýò¶£·„ÉùˆñÅ•¦½šÂþ;$_SESSION['kod_user']=$˜´¨;ãŽ®©ÒÙ¨í®¦àåÊ˜é•“ùž…¿´•æò¯©ò§íñ‹ü µÐúÝ¾©… Ð¹ùåÌô…Ò´¹çœ¬˜Å;$_SESSION['CSRF-TOKEN']=rand_string(0x014);setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'],time()+0x0e10*0x0000018*0x064);Ì±²‚‚­à;setcookie('kod_user_id',$˜´¨['user_id'],time()+0x0e10*0x0000018*0x064);áç·›âžè×£»Ü¤©Š½ï©ý£»ËÔîÍ×¯™ô–úÝÍ—Áì€š¼§ìáÑö Á¡žåÝê»Ì¹“é;if($this->in['rember_password']=='1'){setcookie('kod_token',$this->make_login_token($˜´¨),time()+0x0e10*0x0000018*0x064);}$this->login_display('ok',!0);}private function login_display($­ßþ©¾,$À€ºÁ){if(isset($this->in['is_ajax'])){show_json($­ßþ©¾,$À€ºÁ);}else{if($À€ºÁ){$Êþ='./';if(isset($this->in['link'])){$Êþ=rawurldecode($this->in['link']);}header('location:'.$Êþ);}else{$this->login($­ßþ©¾);•°‚×Ò¡½°ŒùýÅŽè®»É®äˆû¦‰¶ç£‚çæ»ÉûëËÔ¾ì’ï;}}exit;¿›×í×¡œ¼ª™â³ÐËÖÒ³;}private function make_login_token($Žü»){$Éº¶£=$this->config['setting_system']['system_password'];return md5($Žü»['password'].$Éº¶£.$Žü»['user_id']);}public function version_install(){}public function changePassword(){$™ï=rawurldecode($this->in['password_now']);¤“úà¾”ÄñäÉ¸ÄˆÇÂÃÂŒÓüÂ÷¨ò¨Ââô´ÁšÈ½ú‡ÑÀø·ÐÃð–Ë¸Øûääù¨Ü£œ†åþû›Á–ãþ’ëÑ;$åŠ¤©=rawurldecode($this->in['password_new']);µ“†±÷ê«¡ÈÎ½Îµ½ËÐþá´þó¡ÑÆ‡Üë°Ø¦¦Ž¹­¿²™ëÓá»‘±ðÎüÂÎ;if(!$™ï&& !$åŠ¤©)show_json($this->L['password_not_null'],!1);if($this->user['password']==md5($™ï)){$÷ÍÔ™=system_member::load_data();$this->user['password']=md5($åŠ¤©);$÷ÍÔ™->set($this->user['user_id'],$this->user);show_json('success');}else{show_json($this->L['old_password_error'],!1);}}private function checkCSRF(){return;if(!isset($_SERVER['HTTP_X_CSRF_TOKEN'])|| $_SERVER['HTTP_X_CSRF_TOKEN']!=$_SESSION['CSRF-TOKEN']){show_json('xtoken_error',!1);}}public function authCheck(){if(in_array(ST,$this->notCheckApp))return;if(in_array(ACT,$this->notCheck))return;$ ü=system_role::get_info($this->user['role']);if(!array_key_exists(ST,$this->config['role_setting']))return;if(!in_array(ACT,$this->config['role_setting'][ST]))return;$this->checkCSRF();øäç¦¥›¿‘î¢ÍÔ¿ÏÒ‚ž²úì‡”£µ;if(isset($GLOBALS['is_root'])&& $GLOBALS['is_root']==0x001)return;$«=ST.':'.ACT;if(!isset($ ü['userShare:set'])){$ ü['userShare:set']=0x001;}if(!isset($ ü['explorer:fileDownload'])){$ ü['explorer:fileDownload']=0x001;}$ ü['user:common_js']=0x001;$ ü['explorer:pathDeleteRecycle']=$ ü['explorer:pathDelete'];Å;$ ü['explorer:pathCopyDrag']=$ ü['explorer:pathCuteDrag'];ÝçüÍŠËÎß‹ž²Ž½å‰ªìž·‘ÓÂ¼Û£—ÜéÙ„Ô¸;$ ü['explorer:officeSave']=$ ü['editor:fileSave'];öžÔÖ;$ ü['explorer:imageRotate']=$ ü['editor:fileSave'];$ ü['explorer:fileDownloadRemove']=$ ü['explorer:fileDownload'];°ïÂÛÜà”î;$ ü['explorer:zipDownload']=$ ü['explorer:fileDownload'];$ ü['explorer:fileProxy']=!0;úÃìäñ;$ ü['editor:fileGet']=!0;$ ü['explorer:officeView']=!0;ÜÕ¬±­Ö¥·;if(!$ ü['explorer:fileDownload']){$ ü['explorer:zip']=!1;}$ ü['userShare:del']=$ ü['userShare:set'];if($ ü[$«]!=0x001)show_json($this->L['no_permission'],!1);$GLOBALS['auth']=$ ü;²…²Æôçž ø™äæþƒØºÙ·Ç¶Žóç»Ë;$ò=array('mkfile' =>$this->check_key('path'),'pathRname' =>$this->check_key('rname_to'),'fileUpload'=> isset($_FILES['file']['name'])?$_FILES['file']['name']:'','fileSave' =>$this->check_key('path'));­˜¡àß–Èý·Â˜œ©˜ ƒÒù;if(array_key_exists(ACT,$ò)&& !checkExt($ò[ACT])){show_json($this->L['no_permission_ext'],!1);}}private function check_key($›°È){if(!isset($this->in[$›°È])){return '';}return is_string($this->in[$›°È])?rawurldecode($this->in[$›°È]):'';}public function checkCode(){session_start();load_class('myCaptcha');$Û=new myCaptcha(mt_rand(0x00003,0x000004));$_SESSION['check_code']=$Û->get_string();•ã¤¶Å;}public function qrcode(){if(!function_exists('imagecolorallocate')){header('location:http://qr.liantu.com/api.php?text='.$this->in['url']);exit;}include CLASS_DIR.'phpqrcode.php';QRcode::png(rawurldecode($this->in['url']));}}
+<?php
+/*
+* @link http://www.kalcaddle.com/
+* @author warlee | e-mail:kalcaddle@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kalcaddle.com/tools/licenses/license.txt
+*/
+
+class user extends Controller{
+	private $user;  //ç”¨æˆ·ç›¸å…³ä¿¡æ¯
+	private $auth;  //ç”¨æˆ·æ‰€å±žç»„æƒé™
+	private $notCheck;
+	function __construct(){
+		parent::__construct();
+		$this->tpl  = TEMPLATE  . 'user/';
+		if(!isset($_SESSION)){//é¿å…sessionä¸å¯å†™å¯¼è‡´å¾ªçŽ¯è·³è½¬
+			$this->login(DATA_PATH."<br/>".$GLOBALS['L']['path_can_not_write_data']);
+		}else{
+			$this->user = &$_SESSION['kod_user'];
+			if(!isset($this->user['path']) && isset($this->user['name'])){//æ—§ç‰ˆæœ¬æ•°æ®
+				$this->user['path'] = $this->user['name'];
+			}
+		}
+		//ä¸éœ€è¦åˆ¤æ–­çš„action
+		$this->notCheck = array('loginFirst','login','logout','loginSubmit','checkCode','public_link','qrcode','sso');
+		$this->notCheckApp = array('share','debug');
+		$this->config['forceWap'] = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
+	}
+
+	/**
+	 * ç™»å½•çŠ¶æ€æ£€æµ‹;å¹¶åˆå§‹åŒ–æ•°æ®çŠ¶æ€
+	 */
+	public function loginCheck(){
+		if(in_array(ST,$this->notCheckApp)) return;//ä¸éœ€è¦åˆ¤æ–­çš„æŽ§åˆ¶å™¨
+		if(in_array(ACT,$this->notCheck))   return;//ä¸éœ€è¦åˆ¤æ–­çš„action
+		if(isset($_SESSION['kod_login']) && $_SESSION['kod_login']===true){
+			$user = system_member::get_info($this->user['user_id']);
+			$this->login_success($user);
+			return;
+		}else if($_COOKIE['kod_user_id']!='' && $_COOKIE['kod_token']!=''){
+			$user = system_member::get_info($_COOKIE['kod_user_id']);
+			if (!is_array($user) || !isset($user['password'])) {
+				$this->logout();
+			}
+			if($this->make_login_token($user) == $_COOKIE['kod_token']){
+				@session_start();//re start
+				$_SESSION['kod_login'] = true;
+				$_SESSION['kod_user']= $user;
+				$_SESSION['CSRF-TOKEN'] = rand_string(20);
+				setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'], time()+3600*24*100);
+				setcookie('kod_user_id', $_COOKIE['kod_user_id'], time()+3600*24*100);
+				setcookie('kod_token',$_COOKIE['kod_token'],time()+3600*24*100);
+				//$this->login_success($user);
+
+				//check if session work
+				@session_write_close();
+				unset($_SESSION);
+				@session_start();
+				if( !isset($_SESSION['kod_user']) || 
+					!is_array($_SESSION['kod_user'])){
+					$this->login(DATA_PATH."<br/>".$GLOBALS['L']['path_can_not_write_data']);
+				}else{
+					$this->login_success($user);
+				}
+				return;
+			}
+			$this->logout();//session useræ•°æ®ä¸å­˜åœ¨
+		}else{
+			if ($this->config['setting_system']['auto_login'] != '1') {
+				$this->logout();//ä¸è‡ªåŠ¨ç™»å½•
+			}else{
+				if (!file_exists(USER_SYSTEM.'install.lock')) {
+					$this->display('install.html');
+					exit;
+				}
+				header('location:./index.php?user/loginSubmit&name=guest&password=guest');
+				exit;
+			}
+		}
+	}
+	private function login_success($user){
+		$this->user = $user;
+		if(!$user['path']){//æœåŠ¡å™¨ç®¡ç†åŽç«‹å³ç”Ÿæ•ˆ
+			$this->login($this->L['kod_version_error']);
+		}else if($user['status'] == 0){
+			$this->login($this->L['login_error_user_not_use']);
+		}else if($user['role']==''){
+			$this->login($this->L['login_error_role']);
+		}
+		define('USER',USER_PATH.$this->user['path'].'/');//utf-8
+		define('USER_TEMP',USER.'data/temp/');
+		define('USER_RECYCLE',USER.'recycle/');
+		if (!file_exists(iconv_system(USER))) {
+			$this->login( "User/".get_path_this(USER)." ".$this->L['not_exists']);
+		}
+
+		$user_home = user_home_path($this->user);//utf-8
+		if ($this->user['role'] == '1') {
+			define('MYHOME',$user_home);
+			define('HOME','');
+			$GLOBALS['web_root'] = WEB_ROOT;//æœåŠ¡å™¨ç›®å½•
+			$GLOBALS['is_root'] = 1;
+		}else{
+			define('HOME',$user_home);
+			define('MYHOME','/');
+			$GLOBALS['web_root'] = '';//ä»ŽæœåŠ¡å™¨å¼€å§‹åˆ°ç”¨æˆ·ç›®å½•
+			$GLOBALS['is_root'] = 0;
+		}
+		$this->config['user']  = fileCache::load(USER.'data/config.php');
+		if( !isset($this->config['user']['file_repeat']) ||
+			!isset($this->config['user']['resize_config'])){
+			$this->config['user']['file_repeat'] = $this->config['setting_default']['file_repeat'];
+			$this->config['user']['recycle_open'] = $this->config['setting_default']['recycle_open'];
+			$this->config['user']['resize_config'] = $this->config['setting_default']['resize_config'];
+		}
+		if($this->config['user']['theme']==''){
+			$this->config['user'] = $this->config['setting_default'];
+		}
+	}
+
+	/**
+	 * å…±äº«kodç™»é™†å¹¶è·³è½¬
+	 * check: æ ¡éªŒæ–¹å¼:user_id|user_name|role_id|role_name|group_id|group_name,ä¸ºç©ºåˆ™æ‰€æœ‰ç™»é™†ç”¨æˆ·
+	 * value: å¯¹åº”çš„å€¼
+	 * link : ç™»é™†åŽçš„è·³è½¬é“¾æŽ¥
+	 */
+	public function sso(){
+		$result = false;
+		$error  = "not login";
+		if(isset($_SESSION) && $_SESSION['kod_login'] == 1){//é¿å…sessionä¸å¯å†™å¯¼è‡´å¾ªçŽ¯è·³è½¬
+			$user = $_SESSION['kod_user'];
+			//admin æˆ–è€…ä¸å¡«åˆ™å…è®¸æ‰€æœ‰kodç”¨æˆ·ç™»é™†
+			if( $user['role'] == '1' || 
+				!isset($this->in['check']) ||
+				!isset($this->in['value']) ){
+				$result = true;
+			}
+
+			$check_value = false;
+			switch ($this->in['check']) {
+				case 'user_id':$check_value = $user['user_id'];break;
+				case 'user_name':$check_value = $user['name'];break;
+				case 'role_id':$check_value = $user['role'];break;
+				case 'role_name':
+					$role = system_role::get_info($user['role']);
+					$check_value = $role['name'];
+					break;
+				case 'group_id':
+					$check_value = array_keys($user['group_info']);
+					break;
+				case 'group_name':
+					$check_value = array();
+					foreach ($user['group_info'] as $group_id=>$val){
+						$item = system_group::get_info($group_id);
+						$check_value[] = $item['name'];
+					}
+					break;
+				default:break;
+			}
+			if(!$result && $check_value != false){
+				if( (is_string($check_value) && $check_value == $this->in['value']) || 
+					(is_array($check_value)  && in_array($this->in['value'],$check_value))
+					){
+					$result = true;
+				}else{
+					$error = $this->in['check'].' not accessed, It\'s must be "'.$this->in['value'].'"';
+				}
+			}
+		}
+		if($result){
+			@session_name('KOD_SESSION_SSO');
+			@session_id($_COOKIE['KOD_SESSION_SSO']);
+			@session_start();
+			$_SESSION[$this->in['app']] = 'success';
+			@session_write_close();
+			header('location:'.$this->in['link']);
+			exit;
+		}
+		$this->login($error);
+	}
+
+	//ä¸´æ—¶æ–‡ä»¶è®¿é—®
+	public function public_link(){
+		$pass = $this->config['setting_system']['system_password'];
+		$fid = $this->in['fid'];//$this->in['fid']  ç¬¬ä¸‰é¡¹
+		$path = Mcrypt::decode($fid,$pass);
+		if (strlen($path) == 0) {
+			show_json($this->L['error'],false);
+		}
+		$is_download = isset($_GET['download']);
+		file_put_out($path,$is_download);
+	}
+	public function common_js(){
+		$out = ob_get_clean();
+		$basic_path = BASIC_PATH;
+		$user_path  = USER_PATH;
+		$group_path = GROUP_PATH;
+		if (!$GLOBALS['is_root']) {//å¯¹éžrootç”¨æˆ·éšè—åœ°å€
+			$basic_path = '/';
+			$user_path  = '/';
+			$group_path = '/';
+		}
+		$the_config = array(
+			'lang'          => LANGUAGE_TYPE,
+			'system_os'		=> $this->config['system_os'],
+			'is_root'       => $GLOBALS['is_root'],
+			'user_id'       => $this->user['user_id'],
+			'web_root'      => $GLOBALS['web_root'],
+			'web_host'      => HOST,
+			'app_host'      => APPHOST,
+			'static_path'   => STATIC_PATH,
+			'basic_path'    => $basic_path,
+			'user_path'     => $user_path,
+			'group_path'    => $group_path,
+			
+			'myhome'        => MYHOME,
+			'upload_max'	=> file_upload_size(),
+			'param_rewrite' => $this->config['settings']['param_rewrite'],
+			'version'       => KOD_VERSION,
+			'json_data'     => "",
+			'self_share'	=> system_member::user_share_list($this->user['user_id']),
+			'user_config' 	=> $this->config['user'],
+
+			//è™šæ‹Ÿç›®å½•
+			'KOD_GROUP_PATH'		=>	KOD_GROUP_PATH,
+			'KOD_GROUP_SHARE'		=>	KOD_GROUP_SHARE,
+			'KOD_USER_SHARE'		=>	KOD_USER_SHARE,
+			'KOD_USER_RECYCLE'		=>	KOD_USER_RECYCLE,
+			'KOD_USER_FAV'			=>	KOD_USER_FAV,
+			'KOD_GROUP_ROOT_SELF'	=>	KOD_GROUP_ROOT_SELF,
+			'KOD_GROUP_ROOT_ALL'	=>	KOD_GROUP_ROOT_ALL,
+		);
+		if(isset($this->config['setting_system']['version_hash'])){
+			$the_config['version_hash'] = $this->config['setting_system']['version_hash'];
+		}
+		if (!isset($GLOBALS['auth'])) {
+			$GLOBALS['auth'] = array();
+		}
+		$js  = 'LNG='.json_encode($GLOBALS['L']).';';
+		$js .= 'AUTH='.json_encode($GLOBALS['auth']).';';
+		$js .= 'G='.json_encode($the_config).';';
+		header("Content-Type: application/javascript");
+		echo $js;
+	}
+
+	/**
+	 * ç™»å½•view
+	 */
+	public function login($msg = ''){
+		if (!file_exists(USER_SYSTEM.'install.lock')) {
+			chmod_path(BASIC_PATH,0777);
+			$this->display('install.html');
+			exit;
+		}
+		$this->assign('msg',$msg);
+		if (is_wap()) {
+			$this->display('login_wap.html');
+		}else{
+			$this->display('login.html');
+		}
+		exit;
+	}
+
+	/**
+	 * é¦–æ¬¡ç™»å½•
+	 */
+	public function loginFirst(){
+		if (!file_exists(USER_SYSTEM.'install.lock')) {
+			touch(USER_SYSTEM.'install.lock');
+			if(!isset($this->in['password'])){
+				$this->in['password'] = 'admin';
+			}
+			$root = '1';
+			$sql=system_member::load_data();
+			$user = $sql->get($root);
+			$user['password'] = md5($this->in['password']);
+			$sql->set($root,$user);
+			if( $user['path'] == '' && $user['create_time'] == ''){
+				$member = new system_member();
+				$member->init_install();
+			}
+		}
+		header('location:./index.php?user/login');
+		exit;
+	}
+	/**
+	 * é€€å‡ºå¤„ç†
+	 */
+	public function logout(){
+		session_start();
+		user_logout();
+	}
+
+	/**
+	 * ç™»å½•æ•°æ®æäº¤å¤„ç†ï¼›ç™»é™†è·³è½¬ï¼š
+	 * 
+	 * è‡ªåŠ¨ç™»é™†ï¼šindex.php?user/loginSubmit&name=guest&password=guest&link=http://baidu.com
+	 * ç™»é™†è‡ªåŠ¨è·³è½¬ï¼šindex.php?user/login&link=http://baidu.com
+	 * apiç™»é™†:index.php?user/loginSubmit&login_token=ZGVtbw==|da9926fdab0c7c32ab2c329255046793
+	 */
+	public function loginSubmit(){
+		if(isset($this->in['login_token'])){
+			$api_token = $this->config['settings']['api_login_tonken'];
+			$param = explode('|',$this->in['login_token']);
+			if( strlen($api_token) < 5 ||
+				count($param) != 2 || 
+				md5(base64_decode($param[0]).$api_token) != $param[1]
+				){
+				$this->login_display("Api param error!",false);
+			}
+			$this->in['name'] = urlencode(base64_decode($param[0]));
+			$api_login_check = true;
+		}else{
+			if(!isset($this->in['name']) || !isset($this->in['password'])) {
+				$this->login_display($this->L['login_not_null'],false);
+			}
+			if( need_check_code()
+				&& $this->in['name'] != 'guest'
+				&& $_SESSION['check_code'] !== strtolower($this->in['check_code']) ){
+				$this->login_display($this->L['code_error'],false);
+			}
+		}
+		
+		session_start();//re start æœ‰æ–°çš„ä¿®æ”¹åŽè°ƒç”¨
+		$name = rawurldecode($this->in['name']);
+		$password = rawurldecode($this->in['password']);
+		$member = system_member::load_data();
+		$user = $member->get('name',$name);
+		if($api_login_check && $user){//apiè‡ªåŠ¨ç™»é™†
+		}else if ($user === false || md5($password)!=$user['password']){
+			$this->login_display($this->L['password_error'],false);//$member->get()
+		}else if($user['status'] == 0){
+			$this->login_display($this->L['login_error_user_not_use'],false);
+		}else if($user['role']==''){
+			$this->login_display($this->L['login_error_role'],false);
+		}
+		//é¦–æ¬¡ç™»é™†ï¼Œåˆå§‹åŒ–app æ²¡æœ‰æœ€åŽç™»å½•æ—¶é—´
+		if($user['last_login'] == ''){
+			$app = init_controller('app');
+			$app->init_app($user);
+		}
+		$user['last_login'] = time();//è®°å½•æœ€åŽç™»å½•æ—¶é—´
+		$member->set($user['user_id'],$user);
+		$_SESSION['kod_login'] = true;
+		$_SESSION['kod_user']= $user;
+		$_SESSION['CSRF-TOKEN'] = rand_string(20);
+		setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'], time()+3600*24*100);
+		setcookie('kod_user_id', $user['user_id'], time()+3600*24*100);
+		if ($this->in['rember_password'] == '1') {
+			setcookie('kod_token',$this->make_login_token($user),time()+3600*24*100);
+		}
+		$this->login_display('ok',true);
+	}
+	private function login_display($msg,$success){
+		if(isset($this->in['is_ajax'])){
+			show_json($msg,$success);
+		}else{
+			if($success){
+				$href = './';
+				if(isset($this->in['link'])){
+					$href = rawurldecode($this->in['link']);
+				}
+				header('location:'.$href);
+			}else{
+				$this->login($msg);
+			}
+		}
+		exit;
+	}
+
+	//ç™»é™†token
+	private function make_login_token($user_info){
+		//$ua = $_SERVER['HTTP_USER_AGENT'];
+		$system_pass = $this->config['setting_system']['system_password'];
+		return md5($user_info['password'].$system_pass.$user_info['user_id']);
+	}
+	public function version_install(){
+	}
+
+	/**
+	 * ä¿®æ”¹å¯†ç 
+	 */
+	public function changePassword(){
+		$password_now=rawurldecode($this->in['password_now']);
+		$password_new=rawurldecode($this->in['password_new']);
+		if (!$password_now && !$password_new)show_json($this->L['password_not_null'],false);
+		if ($this->user['password']==md5($password_now)){
+			$sql=system_member::load_data();
+			$this->user['password'] = md5($password_new);
+			$sql->set($this->user['user_id'],$this->user);
+			show_json('success');
+		}else {
+			show_json($this->L['old_password_error'],false);
+		}
+	}
+
+	//CSRF é˜²æŠ¤ï¼›cookieè®¾ç½®ï¼šCSRF-TOKENï¼›header:æäº¤X-CSRF-TOKEN
+	//explorer/fileProxy
+	private function checkCSRF(){
+		return;
+		//if(GLOBAL_DEBUG) return;//è°ƒè¯•ä¸å¼€å¯
+		if( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])||
+			$_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['CSRF-TOKEN']){
+			show_json('xtoken_error',false);
+		}
+	}
+
+	/**
+	 * æƒé™éªŒè¯ï¼›ç»Ÿä¸€å…¥å£æ£€éªŒ
+	 */
+	public function authCheck(){
+		if (in_array(ST,$this->notCheckApp)) return;//ä¸éœ€è¦åˆ¤æ–­çš„æŽ§åˆ¶å™¨
+		if (in_array(ACT,$this->notCheck)) return;
+		$auth= system_role::get_info($this->user['role']);
+		if (!array_key_exists(ST,$this->config['role_setting']) ) return;
+		if (!in_array(ACT,$this->config['role_setting'][ST])) return;//è¾“å‡ºå¤„ç†è¿‡çš„æƒé™
+		$this->checkCSRF();
+		if (isset($GLOBALS['is_root']) && $GLOBALS['is_root'] == 1) return;
+
+		$key = ST.':'.ACT;
+		//å‘ä¸‹ç‰ˆæœ¬å…¼å®¹å¤„ç†
+		//æœªå®šä¹‰ï¼›æ–°ç‰ˆæœ¬é¦–æ¬¡ä½¿ç”¨é»˜è®¤å¼€æ”¾çš„åŠŸèƒ½
+		if(!isset($auth['userShare:set'])){
+			$auth['userShare:set'] = 1;
+		}
+		if(!isset($auth['explorer:fileDownload'])){
+			$auth['explorer:fileDownload'] = 1;
+		}
+		//é»˜è®¤æ‰©å±•åŠŸèƒ½ ç­‰ä»·æƒé™
+		$auth['user:common_js'] = 1;//æƒé™æ•°æ®é…ç½®åŽè¾“å‡ºåˆ°å‰ç«¯
+		$auth['explorer:pathDeleteRecycle'] = $auth['explorer:pathDelete'];
+		$auth['explorer:pathCopyDrag']      = $auth['explorer:pathCuteDrag'];
+
+		$auth['explorer:officeSave']        = $auth['editor:fileSave'];
+		$auth['explorer:imageRotate']       = $auth['editor:fileSave'];
+		$auth['explorer:fileDownloadRemove']= $auth['explorer:fileDownload'];
+		$auth['explorer:zipDownload']       = $auth['explorer:fileDownload'];
+
+		//å½»åº•ç¦æ­¢ä¸‹è½½ï¼›æ–‡ä»¶èŽ·å–
+		//$auth['explorer:fileProxy']         = $auth['explorer:fileDownload'];
+		//$auth['editor:fileGet']             = $auth['explorer:fileDownload'];
+		//$auth['explorer:officeView']        = $auth['explorer:fileDownload'];
+		$auth['explorer:fileProxy']         = true;
+		$auth['editor:fileGet']             = true;
+		$auth['explorer:officeView']        = true;
+		if(!$auth['explorer:fileDownload']){
+			$auth['explorer:zip'] = false;
+		}
+
+		$auth['userShare:del']              = $auth['userShare:set'];
+		if ($auth[$key] != 1) show_json($this->L['no_permission'],false);
+
+		$GLOBALS['auth'] = $auth;//å…¨å±€
+		//æ‰©å±•åé™åˆ¶ï¼šæ–°å»ºæ–‡ä»¶&ä¸Šä¼ æ–‡ä»¶&é‡å‘½åæ–‡ä»¶&ä¿å­˜æ–‡ä»¶&zipè§£åŽ‹æ–‡ä»¶
+		$check_arr = array(
+			'mkfile'    =>  $this->check_key('path'),
+			'pathRname' =>  $this->check_key('rname_to'),
+			'fileUpload'=>  isset($_FILES['file']['name'])?$_FILES['file']['name']:'',
+			'fileSave'  =>  $this->check_key('path')
+		);
+		if (array_key_exists(ACT,$check_arr) && !checkExt($check_arr[ACT])){
+			show_json($this->L['no_permission_ext'],false);
+		}
+	}
+	private function check_key($key){
+		if(!isset($this->in[$key])){
+			return '';
+		}
+		return is_string($this->in[$key])? rawurldecode($this->in[$key]):'';
+	}
+
+	public function checkCode() {
+		session_start();//re start
+		load_class('myCaptcha');
+		$captcha = new myCaptcha(mt_rand(3,4));
+		$_SESSION['check_code'] = $captcha->get_string();
+	}
+
+	public function qrcode(){
+		if(!function_exists('imagecolorallocate')){
+			header('location:http://qr.liantu.com/api.php?text='.$this->in['url']);
+			exit;
+		}
+		include CLASS_DIR.'phpqrcode.php';
+		QRcode::png(rawurldecode($this->in['url']));
+	}
+}
+

@@ -141,7 +141,6 @@ var // currently active contextMenu trigger
             if (offset.left + width > right) {
                 offset.left -= width+8;
             }
-            
             opt.$menu.css(offset);
         },
         // position the sub-menu
@@ -149,9 +148,10 @@ var // currently active contextMenu trigger
             if ($.ui && $.ui.position) {
                 // .position() is provided as a jQuery UI utility
                 // (...and it won't work on hidden elements)
+                // http://www.runoob.com/jqueryui/api-position.html
                 $menu.css('display', 'block').position({
                     my: "left top",
-                    at: "right top",
+                    at: "right top-9",//change by warlee; -9 避免点不到问题
                     of: this,
                     collision: "flipfit fit"
                 }).css('display', '');
@@ -161,6 +161,9 @@ var // currently active contextMenu trigger
                     top: 0,
                     left: this.outerWidth()
                 };
+                offset.top += offset.top-10;
+                console.log(offset);
+
                 $menu.css(offset);
             }
         },

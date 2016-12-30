@@ -1,1 +1,1422 @@
-<?php class explorer extends Controller{public $path;public $user;public function __construct(){parent::__construct();Â¾¡”«³· ¸…Õ¦¦ƒ¨ò½ÙóÅªÜ¨ŒÈ;$this->tpl=TEMPLATE.'explorer/';ı×Ú;$this->user=$_SESSION['kod_user'];if(isset($this->in['path'])){$this->path=_DIR($this->in['path']);$this->check_system_path();}}public function index(){$îé¬§Š='';»ÓÁ¾ü´üÖ©;if(isset($this->in['path'])&& $this->in['path']!=''){$îé¬§Š=_DIR_CLEAR($_GET['path']);$îé¬§Š=rtrim($îé¬§Š,'/').'/';}$this->assign('dir',$îé¬§Š);if($this->config['forceWap']){$this->display('index_wap.php');}else{$this->display('index.php');}}private function check_system_path(){if(!in_array(ACT,array('mkfile','mkdir','search','pathCuteDrag','pathCopyDrag','pathPast','fileDownload'))){return;}if($GLOBALS['path_type']==KOD_USER_SHARE&& !strstr(trim($this->in['path'],'/'),'/')){show_json($this->L['error'],!1);}if(in_array($GLOBALS['path_type'],array(KOD_USER_FAV,KOD_GROUP_ROOT_ALL,KOD_GROUP_ROOT_SELF))){show_json($this->L['system_path_not_change'],!1);}}public function pathInfo(){$‚†ë=json_decode($this->in['list'],!0);if(!$‚†ë){show_json($this->L['error'],!1);}foreach($‚†ë as &$ÂæÁ){$ÂæÁ['path']=_DIR($ÂæÁ['path']);}$Âşà²é=path_info_muti($‚†ë,$this->L['time_type_info']);if(!$Âşà²é){show_json($this->L['not_exists'],!1);}if(count($‚†ë)==0x001&& $‚†ë[0]['type']!='folder'){if($GLOBALS['is_root']|| $GLOBALS['auth']['explorer:fileDownload']==0x001){$Âşà²é['download_path']=_make_file_proxy($‚†ë[0]['path']);}$Ú=$‚†ë[0]['path'];if($Âşà²é['size']<0x064*0x00000400*0x00000400|| isset($this->in['get_md5'])){$Âşà²é['file_md5']=@md5_file($Ú);}else{$Âşà²é['file_md5']="...";}$óˆ¯Ü=get_path_ext($Ú);if(in_array($óˆ¯Ü,array('jpg','gif','png','jpeg','bmp'))){load_class('imageThumb');$îÚ†ë=imageThumb::imageSize($Ú);if($îÚ†ë){$Âşà²é['image_size']=$îÚ†ë;}}}$Âşà²é['path']=_DIR_OUT($Âşà²é['path']);show_json($Âşà²é);}public function pathChmod(){$´µ=json_decode($this->in['list'],!0);if(!$´µ){show_json($this->L['error'],!1);}$…ŞÒ=octdec('0'.$this->in['mod']);$ »° =0;¾şŸÇÏ;$ß¿=0;foreach($´µ as $«²•Û){$Ë÷ªÑÖ=_DIR($«²•Û['path']);¹ğ˜ÖÔ£‚”¢¢Û±ñ’±‚øİ´ºœÚ²Æ­‰ÄíıŞšÔ´½×Èàù¥“ì§¥ŸªŸüß®;if(chmod_path($Ë÷ªÑÖ,$…ŞÒ)){$ »° ++;}else{$ß¿++;}}$û‰ê=$ß¿==0?!0:!1;‰¥õ‡…‘Ü¹Îµƒ°°©ÃÑé¼û‰ºÛ·ñØÁİœùÒ¥ŸÈ­¤Ú‹İªÀáÚğ‹;$İ=$ »° .' success,'.$ß¿.' error';if(count($´µ)==0x001&& $ß¿==0){$İ=$this->L['success'];}show_json($İ,$û‰ê);}public function mkfile(){$Ù”†=BASIC_PATH.'static/others/newfile-tpl/';space_size_use_check();Ö«‰©Ğ¨òşÌÍŠ;$÷Ê='skip';if(isset($this->in['repeat_type'])){$÷Ê=$this->in['repeat_type'];}$¼šòÊ=rtrim($this->path,'/');$¼šòÊ=get_filename_auto($¼šòÊ,'',$÷Ê);Ñ‘ˆŞ——ííÃö˜•Ÿ‹”ìÙ;if(@touch($¼šòÊ)){chmod_path($¼šòÊ,0777);if(isset($this->in['content'])){file_put_contents($¼šòÊ,$this->in['content']);}else{$Ñ=get_path_ext($¼šòÊ);$§¥¥Á˜=$Ù”†.'newfile.'.$Ñ;if(file_exists($§¥¥Á˜)){$¹–‰Œ¨=file_get_contents($§¥¥Á˜);file_put_contents($¼šòÊ,$¹–‰Œ¨);}}space_size_use_change($¼šòÊ);show_json($this->L['create_success'],!0,_DIR_OUT(iconv_app($¼šòÊ)));}else{show_json($this->L['create_error'],!1);}}public function mkdir(){space_size_use_check();$ô¬='skip';†ŒĞ›øª¹“û£º¢Éü»º·ÑÃÃúêØƒ©‡÷Õ÷ä›şğëšê—Ôı”÷¹¶Á¶òüî;if(isset($this->in['repeat_type'])){$ô¬=$this->in['repeat_type'];}$Á²À=rtrim($this->path,'/');$Á²À=get_filename_auto($Á²À,'',$ô¬);if(mk_dir($Á²À,0777)){chmod_path($Á²À,0777);show_json($this->L['create_success'],!0,_DIR_OUT(iconv_app($Á²À)));}else{show_json($this->L['create_error'],!1);}}public function pathRname(){$Ã=_DIR($this->in['rname_to']);­Œ¡É‹“µ¦şÍú;if(file_exist_case($Ã)){show_json($this->L['name_isexists'],!1);}if(@rename($this->path,$Ã)){show_json($this->L['rname_success'],!0,_DIR_OUT(iconv_app($Ã)));}else{show_json($this->L['no_permission_write_all'],!1);}}public function search(){if(!isset($this->in['search']))show_json($this->L['please_inpute_search_words'],!1);$áó·™µ=intval($this->in['is_content']);İÑô“¢×;$°”§½¶=intval($this->in['is_case']);§ïÉôëÆ×ßşğ•íüÈËÏ¾Üãàú»Ú¬Ï‚é‡ò³Ñ›¤›â;$ïáØ†Ğ=trim($this->in['ext']);§ù‹ïõÆÊ¢—ÍŒÁ¿ï;if($GLOBALS['path_type']==KOD_USER_SHARE&& strstr($this->path,KOD_USER_SHARE)){show_json($this->L['path_cannot_search'],!1);}$ã‹ìô=path_search($this->path,iconv_system(rawurldecode($this->in['search'])),$áó·™µ,$ïáØ†Ğ,$°”§½¶);show_json(_DIR_OUT($ã‹ìô));Ğ¯ë¡†¼¾®Ë¹¹¼¯ˆÑ˜ÕŞ·—Ÿ§óƒ³áø¢·ŞòæË•íˆÔœÔÖ‘¾×™‘ğïï¨ˆĞü“…;}public function pathList(){$Œ§—ê=$this->in['path'];if($Œ§—ê=="")$Œ§—ê='/';$¶±ì¿†=$this->path($this->path);if($this->path== MYHOME|| $this->path==HOME){$this->_self_root_load($¶±ì¿†['folderlist']);}if($¶±ì¿†['info']['path_type']==KOD_GROUP_PATH&& !strstr(trim(_DIR_CLEAR($this->in['path']),'/'),'/')){$this->_self_group_load($¶±ì¿†['folderlist']);}$¶±ì¿†['user_space']=$this->user['config'];show_json($¶±ì¿†);}public function treeList(){$á=$this->in['app'];if(isset($this->in['type'])&& $this->in['type']=='init'){$this->_tree_init($á);}switch(trim(rawurldecode($this->in['path']))){case KOD_USER_FAV:show_json($this->_tree_fav(),!0);break;case KOD_GROUP_ROOT_SELF:show_json($this->_group_self(),!0);break;case KOD_GROUP_ROOT_ALL:show_json($this->_group_tree('1'),!0);break;default:break;}if((isset($this->in['tree_icon'])&& $this->in['tree_icon']!='groupPublic')&& !strstr(trim(rawurldecode($this->in['path']),'/'),'/')&&($GLOBALS['path_type']==KOD_GROUP_PATH|| $GLOBALS['path_type']==KOD_GROUP_SHARE)){$¹Àä«=$this->_group_tree($GLOBALS['path_id']);show_json($¹Àä«,!0);return;}$ÕÔ=_DIR($this->in['path']);if(!is_readable($ÕÔ))show_json($this->L['no_permission_read'],!1);$ä¦¶=($á=='editor'?!0:!1);…Ó­ïï­§¡;$¹Àä«=$this->path($ÕÔ,$ä¦¶,!0);function sort_by_key($¨¥û½‡,$‘Á){if($¨¥û½‡['name']==$‘Á['name'])return 0;return($¨¥û½‡['name']>$‘Á['name'])?0x001:-0x001;}usort($¹Àä«['folderlist'],"sort_by_key");–ÍÂÏ²è‡«•°èË¡ØøÈú”°£º­àÂĞò…µêòË¸¶œë £—µÁÈŸêø‡´óœä—×’øšãì ™×“å‘Êƒüê§”¡éİÁ÷Èºşü¯œâ;usort($¹Àä«['filelist'],"sort_by_key");ÀÙ­¯ó†ÃÚ—İ”ù†©œïˆİçĞ™çÎÈ…²ø¨Ğ‰ƒş¸÷…üÒœ‹±±†¸Ú¢¨â€‘´™ø„áı¶ñ÷ßÃ‚âÂºÛÇ·®äÃà–É™ñëÂÕìÓŠ‡Í;if($ÕÔ==MYHOME|| $ÕÔ==HOME){}if($á=='editor'){$é=array_merge($¹Àä«['folderlist'],$¹Àä«['filelist']);show_json($é,!0);}else{show_json($¹Àä«['folderlist'],!0);}}private function _self_group_load(&$ÆÜÄ){foreach($ÆÜÄ as $ Æ=>$ã){if($ã['name']=='share'){$ÆÜÄ[$ Æ]=array('name' =>$this->L['group_share'],'menuType' =>"menufolder folderBox",'ext' =>"folder_share",'isParent' =>!0,'is_readable' =>!0,'is_writeable' =>!0,'path' =>KOD_GROUP_PATH.':'.$GLOBALS['path_id'].'/share/','type' =>'folder','open' =>!1,'isParent' =>!1);break;}}$ÆÜÄ=array_values($ÆÜÄ);}private function _self_root_load(&$«º•‘ş){foreach($«º•‘ş as $§È‘šµ=>$ï£§ú){if($ï£§ú['name']=='share'){$«º•‘ş[$§È‘šµ]=array('name' =>$this->L['my_share'],'menuType' =>"menuTreeUser",'ext' =>"folder_share",'isParent' =>!0,'is_readable' =>!0,'is_writeable' =>!0,'path' =>KOD_USER_SHARE.':'.$this->user["user_id"].'/','type' =>'folder','open' =>!1,'isParent' =>!1);break;}}$«º•‘ş=array_values($«º•‘ş);if($this->config['user']['recycle_open']=="1"){}}private function _tree_fav(){$Š•ÂĞñ=($this->in['app']=='editor'?!0:!1);$“Î‚öÑ=new fileCache(USER.'data/fav.php');ş´Œõ;$Õ‡ö‹=$“Î‚öÑ->get();ƒâÚøìï»¾âÃ¶õ“¹íå¢‘ò¡Æş˜¤ÔŸ›àú„‘;$æë÷ÔÛ=array();$GLOBALS['path_from_auth_check']=!0;foreach($Õ‡ö‹ as $øÊµ=>$…){$ò¨=path_haschildren(_DIR($…['path']),$Š•ÂĞñ);if(!isset($…['type'])){$…['type']='folder';}if(in_array($…['type'],array('group'))){$ò¨=!0;}$Êüæâ¡=array('name' =>$…['name'],'ext' =>$…['ext'],'menuType' =>"menuTreeFav",'path' =>$…['path'],'type' =>$…['type'],'open' =>!1,'isParent' =>$ò¨);if(isset($…['type'])&& $…['type']!='folder'){$Êüæâ¡['ext']=$…['type'];}$æë÷ÔÛ[]=$Êüæâ¡;}$GLOBALS['path_from_auth_check']=!1;return $æë÷ÔÛ;}private function _tree_init($ıÁ){if($ıÁ=='editor' && isset($this->in['project'])){$ü©=$this->path(_DIR($this->in['project']),!0,!0);$õı=array_merge($ü©['folderlist'],$ü©['filelist']);$«’·¥İ=array(array('name'=> get_path_this($this->in['project']),'children' =>$õı,'menuType' =>"menuTreeRoot",'ext' =>"folder",'path' =>$this->in['project'],'type' =>'folder','open' =>!0,'isParent' =>count($õı)>0?!0:!1));show_json($«’·¥İ);return;}$³â’¦‹=($ıÁ=='editor'?!0:!1);$ÕÅ=$this->_tree_fav($ıÁ);±¼¥Ï»çş¸‘›¯“Û¢Ë‚€¹µãÌÜî–êÅÜßşÄ‘¼êá÷Òà±ãûá;$½–Û¿=KOD_GROUP_PATH.':1/';if(system_member::user_auth_group(0x001)==!1){$½–Û¿=KOD_GROUP_SHARE.':1/';}$ô=$this->path(_DIR($½–Û¿),$³â’¦‹,!0);$ãÑéù¼=$this->path(_DIR(MYHOME),$³â’¦‹,!0);if($³â’¦‹){$°›¯=array_merge($ãÑéù¼['folderlist'],$ãÑéù¼['filelist']);$‡‘äÙò=array_merge($ô['folderlist'],$ô['filelist']);}else{$°›¯=$ãÑéù¼['folderlist'];$‡‘äÙò=$ô['folderlist'];}$¾=count($°›¯)>0?!0:!1;$ø²€¶É=count($‡‘äÙò)>0?!0:!1;óëÛ×¾ÆÒû÷©š¨ÅÉ•ÌÛú§Î’å¿‹™¿Ââ¹Ã‘¦ éäç¼áßæûˆ­Åú¢™¢ñ¬ˆ±·¡ğú…´É¡Ûé‹ÀÒÈ£²¯;$«’·¥İ=array('webroot'=>array(),'fav'=>array('name' =>$this->L['fav'],'ext' =>"treeFav",'menuType' =>"menuTreeFavRoot",'children' =>$ÕÅ,'path' =>KOD_USER_FAV,'type' =>'folder','open' =>!0,'isParent' =>count($ÕÅ)>0?!0:!1),'my_home'=>array('name' =>$this->L['root_path'],'menuType' =>"menuTreeRoot",'ext' =>"treeSelf",'children' =>$°›¯,'path' =>MYHOME,'type' =>'folder','open' =>!0,'isParent' =>$¾),'public'=>array('name' =>$this->L['public_path'],'menuType' =>"menuTreeGroupRoot",'ext' =>"groupPublic",'children' =>$‡‘äÙò,'path' =>$½–Û¿,'type' =>'folder','open' =>!0,'isParent' =>$ø²€¶É),'my_group'=>array('name' =>$this->L['my_kod_group'],'menuType' =>"menuTreeGroupRoot",'ext' =>"groupSelfRoot",'children' =>$this->_group_self(),'path' =>KOD_GROUP_ROOT_SELF,'type' =>'folder','open' =>!0,'isParent' =>!0),'group'=>array('name' =>$this->L['kod_group'],'menuType' =>"menuTreeGroupRoot",'ext' =>"groupRoot",'children' =>$this->_group_tree('1'),'path' =>KOD_GROUP_ROOT_ALL,'type' =>'folder','open' =>!0,'isParent' =>!0),);if($ıÁ=='editor'){unset($«’·¥İ['my_group']);unset($«’·¥İ['group']);unset($«’·¥İ['public']);if($GLOBALS['is_root']==0x001){$İåÙ=$this->path(_DIR(WEB_ROOT),$³â’¦‹,!0);$ˆòúú=array_merge($İåÙ['folderlist'],$İåÙ['filelist']);$«’·¥İ['webroot']=array('name' =>"webroot",'menuType' =>"menuTreeRoot",'ext' =>"folder",'children' =>$ˆòúú,'path' =>WEB_ROOT,'type' =>'folder','open' =>!0,'isParent' =>!0);}}else{unset($«’·¥İ['webroot']);}$¬=array();Ò«­ˆõÎãßÚ;foreach($«’·¥İ as $²£=>$åÓè){if(count($åÓè['children'])<0x001&& in_array($²£,array('my_group','group'))){continue;}$¬[]=$åÓè;}show_json($¬);}private function _group_tree($Ïú){$Ø=system_group::load_data();Š€æ±ºİÌÃ;$œ¨³ö=$Ø->get(array('parent_id',$Ïú));—Íîî Ñé«ªØ±şç¼€Îí;$ŠË=$this->_make_node_list($œ¨³ö);ˆõÓşÄ»šÜ‰‰İ÷©°âÕÛ;$‡Ú¤=array();±ùııåËíÂğí‡­ˆã¶’Â¯»ò’’ÎÏ™©óÜ…çşæä³«ÓõÁüÊÊáÜ¤±™—Ä«æ”Ä‘ˆ¢–ğ²–Ø¿úŒ;if($Ïú!='1'){$Ï‚ˆ’€=system_member::get_user_at_group($Ïú);foreach($Ï‚ˆ’€ as $ÜáÔ¹=>$†){$Êş†='user';if($†['user_id']==$this->user['user_id']){$Êş†='userSelf';}$‡Ú¤[]=array('name' =>$†['name'],'menuType' =>"menuTreeUser",'ext' =>$Êş†,'path' =>KOD_USER_SHARE.':'.$†['user_id'].'/','type' =>'folder','open' =>!1,'isParent' =>!1);}}$Ã—èæ=array_merge($ŠË,$‡Ú¤);return $Ã—èæ;³ÙÀ¿ÄÂÍ£Â¡€¥öº¬;}private function _group_self(){$ËÉŒÑ=array();foreach($this->user['group_info'] as $é’¸˜=>$ÑÜ «){if($é’¸˜=='1')continue;$ğ®£¾=system_group::get_info($é’¸˜);ÒŒ×¸Ö›„ ¨ÖÉùÀÜ²ØÉ„¶ê°ÔË¡„îàÖÕÂ©á›¶›ñÒŸ’úõÜô·º§…¬ÇïÜœ»ı¡«ß÷¢¡ã;if($ğ®£¾){$ËÉŒÑ[]=$ğ®£¾;}}return $this->_make_node_list($ËÉŒÑ);}private function _make_node_list($ş¯«Ÿ){$§– =array();if(!is_array($ş¯«Ÿ)){return $§– ;}foreach($ş¯«Ÿ as $ÚÃŞà=>$¦ĞÍÃ){$ä¹¬=KOD_GROUP_PATH;$»ÏşŸ=system_member::user_auth_group($¦ĞÍÃ['group_id']);if($»ÏşŸ==!1){$ä¹¬=KOD_GROUP_SHARE;$½…='groupGuest';}else if($»ÏşŸ=='read'){$½…='groupSelf';}else{$½…='groupSelfOwner';}$¬Õ=!0;$È¤=system_member::get_user_at_group($¦ĞÍÃ['group_id']);Ş;if(count($È¤)==0&& $¦ĞÍÃ['children']==''){$¬Õ=!1;}$§– []=array('name' =>$¦ĞÍÃ['name'],'type' =>'folder','path' =>$ä¹¬.':'.$¦ĞÍÃ['group_id'].'/','ext' =>$½…,'tree_icon' =>$½…,'menuType' =>"menuTreeGroup",'isParent' =>$¬Õ);}return $§– ;Ëï½˜ÔöÄ²²”²Ò¢‹òà;}public function pathDelete(){$²=json_decode($this->in['list'],!0);…†®ƒ“;if(!is_dir(USER_RECYCLE)){mk_dir(USER_RECYCLE);}$á‘Ş=$this->config['user']['recycle_open'];if(!path_writeable(USER_RECYCLE)){$á‘Ş='0';}$Ü=0;$Ïô¤Ç=0;foreach($² as $úÏŠÎ){$–ÁÓ§ô=_DIR($úÏŠÎ['path']);if($á‘Ş!="1" || $GLOBALS['path_type']==KOD_GROUP_SHARE|| $GLOBALS['path_type']==KOD_GROUP_PATH|| $GLOBALS['path_type']==KOD_USER_RECYCLE){if($úÏŠÎ['type']=='folder'){if(del_dir($–ÁÓ§ô))$Ü++;else $Ïô¤Ç++;ë­¿€à¡‘À³î„ä´Ì ŒÈğ——ã­Ù¸ÔÏïºÎ¬¦üë§İ¸Â¨®Æã”®ï;}else{if(del_file($–ÁÓ§ô))$Ü++;else $Ïô¤Ç++;ôƒµ;}space_size_use_reset();Ÿ¬ÆîÙ;}else{$ëÆ•ÊÕ=USER_RECYCLE.get_path_this($–ÁÓ§ô);ö™ß…üó³íÑÓõÇ×«—”·;$ëÆ•ÊÕ=get_filename_auto($ëÆ•ÊÕ,date('-h:i:s'),'folder_rename');if(@rename($–ÁÓ§ô,$ëÆ•ÊÕ)){$Ü++;}else{$Ïô¤Ç++;}}}$ı§œ=$Ïô¤Ç==0?!0:!1;Ş¹ÏÈÑÆá±Ìß¦Í÷ÔÄ¿­;$×Â¨„=$Ü.' success,'.$Ïô¤Ç.' error';if($Ïô¤Ç==0){$×Â¨„=$this->L['remove_success'];}show_json($×Â¨„,$ı§œ);}private function clearTemp(){$¡“Ê=USER_TEMP;$ª=@filemtime($¡“Ê);if(time()-$ª>0x0258){del_dir($¡“Ê);mk_dir($¡“Ê);}}public function pathDeleteRecycle(){if(!isset($this->in['list'])){if(!del_dir(USER_RECYCLE)){show_json($this->L['remove_fali'],!1);}else{mkdir(USER_RECYCLE);$this->clearTemp();space_size_use_reset();show_json($this->L['recycle_clear_success'],!0);}}$ò¬Õ=json_decode($this->in['list'],!0);èúƒàÏÇ¡ı¸øÀá‰Å‰ÀæœŒì±¶«—ª¼Ã€€½µè¸¹Ê‰ì‡ºå;$ï=0;$ôÃ=0;foreach($ò¬Õ as $ôôŒ){$ËĞ=_DIR($ôôŒ['path']);if($ôôŒ['type']=='folder'){if(del_dir($ËĞ))$ï++;else $ôÃ++;µÆÏíÖËÔŸèÄ­;}else{if(del_file($ËĞ))$ï++;else $ôÃ++;}}space_size_use_reset();´…Èª”ÕÉß¦é­µ¿ãûÎäËŞÓ£«©;if(count($ò¬Õ)==0x001){if($ï)show_json($this->L['remove_success']);else show_json($this->L['remove_fali'],!1);ï¤ä“÷š˜ÁÄ¬—¾øºó¸ğ‡;}else{$½=$ôÃ==0?!0:!1;“‚¤§ğ”ÌÖ¨ÅñÀ‡¶íŸÆûŞ¿·ÒøÖÃÛè´âû·‡¤¨œñ€Ä·ñ†¾©ôŞïñ½°ª‘©Õ;show_json($this->L['remove_success'].$ï.'success,'.$ôÃ.'error',$½);}}public function pathCopy(){session_start();“º‘ÊÂµóŞ§ó¤ß;$«¡=json_decode($this->in['list'],!0);»°¾ÌÚÀ¢†ù›±µ¬û÷;$_SESSION['path_copy']=json_encode($«¡);‹äüêÊ¨ŠÚÊˆÚİÄ‹‘åİ´ìû¯ˆ®äµ«İ˜œµ¤²ÌÛš¨¦¢ƒ…ç¢øô€®áüİé¬Ã ×¡¸ô×;$_SESSION['path_copy_type']='copy';ìÃæˆëªï’;show_json($this->L['copy_success'],ture,$_SESSION);}public function pathCute(){session_start();ó¶»Õ³;$Àà=json_decode($this->in['list'],!0);€š®×÷¥âåéÊíÖ×™Æê¬Å¡¹¹×ôŒĞìí²¦îÌÔÇÅ;foreach($Àà as $««äõ™=>&$Î²ƒ){$Î²ƒ['path']=rawurldecode($Î²ƒ['path']);_DIR($Î²ƒ['path']);™„³”¿Ÿå­™Óüå©Ä«¤ğ×ŠçñÇ¶¥Ëğ…•Ì™­®ÁÌ•îÚ®ÂØ•;}$_SESSION['path_copy']=json_encode($Àà);‘™œö‹ã®°¯Ÿ¶ÅìÔß;$_SESSION['path_copy_type']='cute';°Ğ;show_json($this->L['cute_success']);}public function pathCuteDrag(){$¬Ó=json_decode($this->in['list'],!0);Î£ªà²ÄıªĞáØ;$’=$this->path;å¸Ô‘Ç…áë¤À‡“©Ö·Ô¸ê™¶•é™íë¬ç¤…Í²½£;$†¨¥=$GLOBALS['path_type'];³ÕÈÜ¬€²åêÌœ€·¶î¤âÖÈè¥û¦È¿­ñ;$ ÀšÓ=$GLOBALS['path_id'];if(!path_writeable($this->path))show_json($this->L['no_permission_write'],!1);$±Ãâä=0;$±ÆÎè=0;à•ÖÉ»Ò;$„“öø=array();foreach($¬Ó as $””Í){$Å‘Ú«»=_DIR($””Í['path']);$‚øÆ€=get_path_this($Å‘Ú«»);$àÍ««=get_filename_auto($’.$‚øÆ€,'',$this->config['user']['file_repeat']);if($ ÀšÓ!=$GLOBALS['path_id']){space_size_use_check();}if(move_path($Å‘Ú«»,$àÍ««,'',$this->config['user']['file_repeat'])){$±Ãâä++;if($ ÀšÓ!=$GLOBALS['path_id']){space_size_use_change($àÍ««);space_size_use_change($àÍ««,!1,$†¨¥,$ ÀšÓ);}$„“öø[]=_DIR_OUT(iconv_app($àÍ««));}else{$±ÆÎè++;’»…Œ;}}$½¡‹™=$±ÆÎè==0?!0:!1;‚ÙŸŞÜ˜¦ÜĞú¾Ÿ§ê©¦ˆ·¹Ä½ÆÀúçĞ‡¨;$õª=$±Ãâä.' success,'.$±ÆÎè.' error';Û®°;if($±ÆÎè==0){$õª=$this->L['success'];}show_json($õª,$½¡‹™,$„“öø);}public function pathCopyDrag(){$€¬÷=json_decode($this->in['list'],!0);$ãÈúë=$this->path;$±¾û=$GLOBALS['path_type'];ÃÁåëçÛ–æñ¡Ã Ñü ıõÀÒÙŠÍÆ‹ƒ÷Êşê†â®ÇÈ›°¥²——;$Û¸¦Ù=$GLOBALS['path_id'];›÷ª¥Æñ°ÉêûÈÕ‚¬…Êô¡ú›Ó“³;space_size_use_check();if(!path_writeable($this->path))show_json($this->L['no_permission_write'],!1);$ëÎÈÆô=0;$íÄ‡´=0;$ı¡´=array();óüéû…ò¸›ş¥êÈëàáÍÎ¦Ô„Ü‚şÁÊö÷¾ôù©“õ®‡†ç;foreach($€¬÷ as $…){$Í=_DIR($…['path']);È½ÖÁ´¬Ä´í¬æÎ¡á÷µ×§¼ŞŞäì³˜Ûãáš»;$Û=get_path_this($Í);¥›°Òƒşóä÷©½;$æ=get_filename_auto($ãÈúë.$Û,'',$this->config['user']['file_repeat']);if($this->in['filename_auto']==0x001&& trim($æ,'/')==trim($Í,'/')){$æ=get_filename_auto($ãÈúë.$Û,'','folder_rename');}if(copy_dir($Í,$æ)){$ëÎÈÆô++;space_size_use_change($Û);$ı¡´[]=_DIR_OUT(iconv_app($æ));}else{$íÄ‡´++;}}$‚Í´=$íÄ‡´==0?!0:!1;$›É«Ö=$ëÎÈÆô.' success,'.$íÄ‡´.' error';ö©î“ÙÁ—Ùµ;if($íÄ‡´==0){$›É«Ö=$this->L['success'];}show_json($›É«Ö,$‚Í´,$ı¡´);}public function clipboard(){$Òß»ñÇ=json_decode($_SESSION['path_copy'],!0);ÛğÂ’;if(!$Òß»ñÇ){$Òß»ñÇ=array();}show_json($Òß»ñÇ,!0,$_SESSION['path_copy_type']);}public function pathPast(){if(!isset($_SESSION['path_copy'])){show_json($this->L['clipboard_null'],!1,array());}$Ó­¢ş=$this->path;session_start();$‡Îä°½='';;$¶¸—=array();¡Íìü¾¯—ƒ¾¹ƒÄ§Š“Œ»Ñ„ÆÑ”¬‰¡ä é;$Œİë‰œ=json_decode($_SESSION['path_copy'],!0);$´ =$_SESSION['path_copy_type'];–®²¢é„¦°Ö»ÜßÜÂ€ÇÒ€Ó±ëİÎ‰;$ƒ©ÒñÍ=$GLOBALS['path_type'];£«å¨Ò—şôßë·à³‹à;$¼=$GLOBALS['path_id'];Öß²‚Î£;if(!path_writeable($Ó­¢ş))show_json($this->L['no_permission_write'],!1,$¶¸—);$GLOBALS['path_from_auth_check']=!0;$Çµ±=count($Œİë‰œ);ï—¾Ğ„ö±·‚“;if($Çµ±==0){show_json($this->L['clipboard_null'],!1,$¶¸—);}for($¿à§=0;$¿à§<$Çµ±;$¿à§++){$¸‡Û=_DIR($Œİë‰œ[$¿à§]['path']);_DIR($this->in['path']);$ˆİèÓ=get_path_this($¸‡Û);$†—=iconv_app($ˆİèÓ);if(!file_exists($¸‡Û)){$‡Îä°½.= "<li>{$†—}".$this->L['copy_not_exists']."</li>";continue;ØÃ†‹û‰;}if($Œİë‰œ[$¿à§]['type']=='folder'){if($¸‡Û==substr($Ó­¢ş,0,strlen($¸‡Û))){$‡Îä°½.="<em style='color:#fff;'>{$†—}".$this->L['current_has_parent']."</em>";continue;}}$€ä•=get_filename_auto($Ó­¢ş.$ˆİèÓ,'',$this->config['user']['file_repeat']);$ˆİèÓ=get_path_this($€ä•);¦Ïú„¸Ïª×ÖÂ€§Ê¿¶£„½®€ÆÍ½Í¢¦†˜øµçôº¡Ååøœ¨øÄò¹ú—½¸Æ¾€”û‘âŸ·è®Ğâä¹ØŸÚ…Ô»­Í€¡ˆû¸Åµş…;if($´ =='copy'){space_size_use_check();copy_dir($¸‡Û,$€ä•);space_size_use_change($ˆİèÓ);}else{if($¼!=$GLOBALS['path_id']){space_size_use_check();}move_path($¸‡Û,$€ä•,'',$this->config['user']['file_repeat']);if($¼!=$GLOBALS['path_id']){space_size_use_change($ˆİèÓ);space_size_use_change($ˆİèÓ,!1,$ƒ©ÒñÍ,$¼);}}$¶¸—[]=_DIR_OUT(iconv_app($€ä•));}if($´ =='copy'){$‚=$this->L['past_success'].$‡Îä°½;}else{$_SESSION['path_copy']=json_encode(array());$_SESSION['path_copy_type']='';$‚=$this->L['cute_past_success'].$‡Îä°½;}$ö¡ş=($‡Îä°½==''?!0:!1);show_json($‚,$ö¡ş,$¶¸—);Ãµ‹Õå»Úº÷‰‰÷ª’ôâ×ªâİàöß¨í‚¨ÎÓø’Š„°ßêëº¦äÄ°;}public function fileDownload(){file_put_out($this->path,!0);ÒÒ›üµøİ¬Ù†›Û¯é°¨üº­­š™šÕ¿ş›ïÜŠ²¯İÎ¬“Ç‹À¡’ÛıÁÅ¯ê;}public function fileDownloadRemove(){$é™ğ=rawurldecode(_DIR_CLEAR($this->in['path']));$é™ğ=USER_TEMP.iconv_system($é™ğ);space_size_use_change($é™ğ,!1);file_put_out($é™ğ,!0);öâæ‚––ßä;del_file($é™ğ);Ï´ÏáÍ¤Öıšç¨‹íÚ–ÉÍ Á±‡ÃÇ£¬â–Ú²Ê;}public function zipDownload(){if(!file_exists(USER_TEMP)){mkdir(USER_TEMP);}else{$•Û=path_list(USER_TEMP,!0,!1);$¹²öÉÍ=0x0e10*0x0000018;if($•Û['filelist']>=0x001){for($òØÍÎ=0;$òØÍÎ<count($•Û['filelist']);$òØÍÎ++){$˜œÙÍ=$•Û['filelist'][$òØÍÎ]['mtime'];if(time()-$˜œÙÍ>$¹²öÉÍ){del_file($•Û['filelist'][$òØÍÎ]['path'].$•Û['filelist'][$òØÍÎ]['name']);}}}}$=$this->zip(USER_TEMP);show_json($this->L['zip_success'],!0,get_path_this($));}public function zip($Ã™×=''){load_class('pclzip');ini_set('memory_limit','2028M');áşÁ›²¸å€˜ØØå§ÈşÃØØ’ğ;$¨¨·ëÂ=json_decode($this->in['list'],!0);$=count($¨¨·ëÂ);for($ğ²•=0;$ğ²•<$;$ğ²•++){$¨¨·ëÂ[$ğ²•]['path']=rtrim(_DIR($¨¨·ëÂ[$ğ²•]['path']),'/');åæÌ¿Íó‰Ì¸â¦ËÓœóüÓà¿ãëÎ–ÀÀÉÕÎ¯¤Â–ŒÕÚƒß¨¼ÂÎˆ—ëü”ÀİÓ¤Ê£º‹ä„á´´;}$ö=$Ã™×;¡î;if($Ã™×==''){$ö=get_path_father($¨¨·ëÂ[0]['path']);}if(!is_writeable($ö)){show_json($this->L['no_permission_write'],!1);}if($==0x001){$=get_path_this($¨¨·ëÂ[0]['path']);}else{$=get_path_this(get_path_father($¨¨·ëÂ[0]['path']));}$Ç=$ö.$.'.zip';$Ç=get_filename_auto($Ç,'',$this->config['user']['file_repeat']);ÚÓÌï”«Ä¸õçò‚Í÷ã‚¬êùöş™îŒš‡ÔŞí¤ºÂñªÖî”×ƒ–¥úú¨¨æ¢ æ;space_size_use_check();$Õ±Ô=array();Ì«í™;for($ğ²•=0;$ğ²•<$;$ğ²•++){if(file_exists($¨¨·ëÂ[$ğ²•]['path'])){$Õ±Ô[]=$¨¨·ëÂ[$ğ²•]['path'];}}if(count($Õ±Ô)==0){show_json($this->L['not_exists'],!1);}$ºˆôÏ=new PclZip($Ç);foreach($Õ±Ô as $÷æ†ó=>$®œÉÑ){$±öö=_DIR_CLEAR(get_path_father($®œÉÑ));if($÷æ†ó==0){$Ëå=$ºˆôÏ->create($®œÉÑ,PCLZIP_OPT_REMOVE_PATH,$±öö,PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name');continue;}$Ëå=$ºˆôÏ->add($®œÉÑ,PCLZIP_OPT_REMOVE_PATH,$±öö,PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name');}space_size_use_change($Ç);if($Ëå==0){show_json("Create error!",!1);}$íÁ÷‡=$this->L['zip_success'].$this->L['size'].":".size_format(filesize($Ç));if($Ã™×==''){show_json($íÁ÷‡,!0,_DIR_OUT(iconv_app($Ç)));}else{return iconv_app($Ç);}}public function unzip(){ini_set('memory_limit','2028M');$œƒ=$this->path;ö‰Ë¦¥–øâÇïÙÏ™¦µÈ¦è£•ª;$œÑ=get_path_this($œƒ);Ñ„»–ˆ½³Ÿ·–ç§ğ¸Á—îŠ¾×­Ó‚ÉğÓ™Âë½Ç§ÔÔ;$œÑ=substr($œÑ,0,strrpos($œÑ,'.'));$ˆ=get_path_ext($œƒ);¸ñğ³¨ß¾æ·ì»º¶¬;$ËÑ¼Š=get_path_father($œƒ).$œÑ;if(isset($this->in['to_this'])){$ËÑ¼Š=get_path_father($œƒ);}if(isset($this->in['path_to'])){$ËÑ¼Š=_DIR($this->in['path_to']);}if(!is_writeable(get_path_father($œƒ))){show_json($this->L['no_permission_write'],!1);}space_size_use_check();load_class('pclzip');–ñ÷æ¼—Ÿ¯¨‘ãĞñ¢¸ªôäÆ¡ó—íÆÓ÷à¹×ĞÏÊÈ¶‡àÖ¶‰è›ÚÚ½”†Í‰ê”«ß¬™¦’‡ºê×Šµ¡Á½‚;$æ=new PclZip($œƒ);â›…Î°°®ÜÊÔİÜÜ˜Çµ£ıÖä»Ùü°æşÀÎÜÊ¿«ÏÛ€½¸Ê“—¨ï¯ğ¥Óîü¸«×¶Ü¾µ’­×Ò;$¨á´¨=$æ->extract(PCLZIP_OPT_PATH,$ËÑ¼Š,PCLZIP_OPT_SET_CHMOD,0777,PCLZIP_CB_PRE_FILE_NAME,'unzip_pre_name',PCLZIP_CB_PRE_EXTRACT,"check_ext_unzip",PCLZIP_OPT_REPLACE_NEWER);if($¨á´¨==0){show_json("Error : ".$æ->errorInfo(!0),fasle);}else{space_size_use_change($œƒ);show_json($this->L['unzip_success']);}}public function imageRotate(){load_class('imageThumb');…£µÉ‰ıÇÁ©Ÿ÷‡Ş®¤ëÁÒÄ•«ìöà–—Î‹ÊÓ¨îŠ¶¸“;$ÕŞ=new imageThumb($this->path,'file');$å€ı‹=$ÕŞ->imgRotate($this->path,intval($this->in['rotate']));±ÔŠŸÌê¶ä¹Á°éŸ™¡Ø­ÖÙ„¶úÒúĞ©ç‘ˆšå’¹³ıï˜¸²;if($å€ı‹){show_json($this->L['success']);}else{show_json($this->L['error'],!1);}}public function image(){if(filesize($this->path)<=0x00000400*0x014|| !function_exists('imagecolorallocate')){file_put_out($this->path);return;}if(!is_dir(DATA_THUMB)){mk_dir(DATA_THUMB);}load_class('imageThumb');$Æœè=$this->path;•œ’Ë˜åé”¶“ûÈ›–®­Ğá«ÁúãóÃ«‘­Œ;$ï›å=@md5_file($Æœè);if(strlen($ï›å)<0x05){$ï›å=md5($Æœè);}$¥”=DATA_THUMB.$ï›å.'.png';if(!file_exists($¥”)){if(get_path_father($Æœè)==DATA_THUMB){$¥”=$this->path;}else{$¹Ë=new imageThumb($Æœè,'file');$¹Ë->prorate($¥”,0x0fa,0x0fa);}}if(!file_exists($¥”)|| filesize($¥”)<0x064){$¥”=$this->path;}file_put_out($¥”);}public function serverDownload(){set_time_limit(0);$”ÊÍ='download_'.$this->in['uuid'];¦¥à¡ŠÕå¶ç“Ã¸ƒŞ‘Ñ¶¡îğí;if($this->in['type']=='percent'){if(isset($_SESSION[$”ÊÍ])){$‚é=$_SESSION[$”ÊÍ];$Åã”ëŠ=array('uuid' =>$this->in['uuid'],'length' =>(int)$‚é['length'],'name' =>$‚é['name'],'size' =>(int)@filesize(iconv_system($‚é['path'])),'time' =>mtime());show_json($Åã”ëŠ);}else{show_json('',!1);}}else if($this->in['type']=='remove'){del_file($_SESSION[$”ÊÍ]['path']);unset($_SESSION[$”ÊÍ]);show_json('',!1);}$”ËóÊ=_DIR($this->in['save_path']);if(!is_writeable($”ËóÊ)){show_json($this->L['no_permission_write'],!1);}$ˆë=rawurldecode($this->in['url']);$í=url_header($ˆë);if(!$í){show_json($this->L['download_error_exists'],!1);}$”ËóÊ=$”ËóÊ.$í['name'];if(!checkExt($”ËóÊ)){$”ËóÊ=_DIR($this->in['save_path']).date('-h:i:s').'.txt';}space_size_use_check();$”ËóÊ=get_filename_auto(iconv_system($”ËóÊ),'',$this->config['user']['file_repeat']);$ÜÔËÅ=$”ËóÊ.'.downloading';session_start();ÕãÔ¹øÀÃîÎØ»;$_SESSION[$”ÊÍ]=array('length'=> $í['length'],'path' =>$ÜÔËÅ,'name' =>get_path_this($”ËóÊ));Ë²Û× æôÄÉ»‘ÇûşÕÒã«ÜëÑÌ»ª‰€Î÷;session_write_close();£¢»™¿âú;if(file_download_this($ˆë,$ÜÔËÅ,$í['length'])){session_start();unset($_SESSION[$”ÊÍ]);session_write_close();if(@rename($ÜÔËÅ,$”ËóÊ)){$ò=get_path_this(iconv_app($”ËóÊ));space_size_use_change($”ËóÊ);show_json($this->L['download_success'],!0,_DIR_OUT(iconv_app($”ËóÊ)));}else{show_json($this->L['download_error_create'],!1);}}else{session_start();šáÖÅî³²ÀîëŠîºƒº¼×İ;unset($_SESSION[$”ÊÍ]);Ÿ•Ú›§ÎŞ·Áøš˜¾‰ÌğÊÍß·ØÎñ;session_write_close();´èÈà®Ş;show_json($this->L['download_error_create'],!1);}}public function officeView(){if(!file_exists($this->path)){show_tips($this->L['not_exists']);}$†‹©=get_path_ext($this->path);$Ì¢Ø=_make_file_proxy($this->path);²Ó®´åÚ„×·‡ëö–µØÄ”•› ¸ÙíÛ²Ó½•‡‘Ã‰ÆªãÊƒ›ØŠˆĞ¡½©æÒ¿õíß¯ÇÎ‹ú¢É‘;if(defined("OFFICE_KOD_SERVER")){$ÛÕ=APPHOST.'index.php?explorer/fileProxy&path='.$this->in['path'];$¢€—='&appMode=edit&access_token='.session_id();if(OFFICE_KOD_ACTION=='read'){$¢€—='&appMode=view';$ÛÕ=_make_file_proxy($this->path);}$ƒ³Æ»=$_SESSION['kod_user'];$¯=rand_string(0x0a);Ì‚ºá¼ƒ±ÈşÔ;$=OFFICE_KOD_SERVER.rawurlencode($ÛÕ).'&lang='.LANGUAGE_TYPE.'&appType=desktop'.$¢€—.'&file_time='.@filemtime($this->path).'&user_id='.$ƒ³Æ»['user_id'].'&user_name='.$ƒ³Æ»['name'].'&app_id='.OFFICE_KOD_APP_ID.'&app_s='.$¯.'&app_v='.md5($¯.OFFICE_KOD_APP_KEY);²‘åÊşèıÅöºİ§´ ½£Ë¼…‰¿·Ñ¿ŒäÏ‹Ó¶¾åŠå†‰«ıÃŠ¦÷«äøÎ°µÔ¹õŒŒµ˜ğ†¤Å¼ã¬Ùí’àö¾ßº;header("location:".$);ôê¬Äœâ;exit;}if(file_exists(PLUGIN_DIR.'officeView')){if(isset($_GET['is_edit'])|| !isset($this->config['settings']['office_server_doc2pdf'])){include(PLUGIN_DIR.'officeView/index.php');}else{include(PLUGIN_DIR.'officeView/flexpapper.php');}exit;}$Ù¦â=$_SERVER['HTTP_HOST'];ä›ÓÈÇ®·Ú®šïé;if(strpos(OFFICE_SERVER,'view.officeapps.live.com')===-0x001|| strstr($Ù¦â,'10.10.')|| strstr($Ù¦â,'192.168.')|| strstr($Ù¦â,'127.0.')|| !strstr($Ù¦â,'.')){$öÙâ=$this->L['unknow_file_office'];show_tips($öÙâ);}else{$=OFFICE_SERVER.rawurlencode($Ì¢Ø);header("location:".$);}}public function officeSave(){$€®=_DIR($this->in['path']);if(isset($this->in['from_activex'])){if($_FILES["file"]["error"]>0){echo "Return Code: ".$_FILES["file"]["error"];}else{move_uploaded_file($_FILES["file"]["tmp_name"],$this->path);echo 'succeed';}exit;}if(!is_writeable($€®)){$this->json_putout(array('error'=>'no_permission_write'));}if(($ˆß¹˜=file_get_contents('php://input'))===!1){$this->json_putout(array('error'=>'Bad Request'));}$®=json_decode($ˆß¹˜,!0);if($®===NULL){$this->json_putout(array('error'=>'Bad Response'));}$Î=array(0=>'NotFound',0x001=>'Editing',0x0002=>'MustSave',0x00003=>'Corrupted',0x000004=>'Closed');$±†ÍÁµ=array('error'=>0,'action'=>$Î[$®["status"]]);Ë©½¦ˆÄ·ıã¿;switch($Î[$®["status"]]){case "MustSave":case "Corrupted":$±†ÍÁµ["c"]="saved";ş¬ˆ„Ö‹ÒÉ¼Ù˜ı€°®ÌÚìòçõ;$±†ÍÁµ['status']='0';if(file_download_this($®["url"],$€®)){$±†ÍÁµ['status']='success';}break;default:break;Øí•öÆ”£Ï™úÚëÄ˜ÆÜ—Õİ;}$this->json_putout($±†ÍÁµ);£ñ‹è;}private function json_putout($–Ú){@header('Content-Type: application/json; charset==utf-8');@header('X-Robots-Tag: noindex');@header('X-Content-Type-Options: nosniff');õœĞğö½¶…”§Úñïà”Ó¼ ¼”¡Ó£üØÆÏ;echo json_encode($–Ú);exit;Ğ·¹îÉ”ƒñïõâĞ•ö¥Ñ˜áæºµŠ·Ñ‡´ÑÍõ£;}public function fileProxy(){$°=isset($this->in['download']);file_put_out($this->path,$°);øí·ïĞ‰…È®×à‘¿œÆÊÓÕÛŠîª“±±Å§­ ›Å‘ìÏ—µşï—¯³Öúˆ­˜ä·ˆ¸;}public function fileUpload(){$Àê=_DIR($this->in['upload_to']);ï‰´¶›¡†²×…£î–Ò£ìÎ;if(!is_writeable($Àê))show_json($this->in['upload_to'],!1);if($Àê=='')show_json($this->L['upload_error_big'],!1);if(strlen($this->in['fullPath'])>0x001){$šæ=_DIR_CLEAR(rawurldecode($this->in['fullPath']));$šæ=get_path_father($šæ);$šæ=iconv_system($šæ);if(mk_dir($Àê.$šæ)){$Àê=$Àê.$šæ;}}$Ò=$this->config['user']['file_repeat'];‹áöì;$ÜÓ=USER_TEMP;æš¢¾ Å®¶™Ñ¤çü¿Ï’¿®Ë;mk_dir($ÜÓ);if(!is_writeable($ÜÓ))show_json($this->L['no_permission_write'],!1);upload_chunk('file',$Àê,$ÜÓ,$Ò);}private function path_share(&$Ú§–){$íª=explode(',',$GLOBALS['path_id']);$ÄÁ”å=system_member::user_share_list($íª[0]);$œ¢•=$GLOBALS['path_id_user_share'];Û¡;foreach($ÄÁ”å as $›=>$²æáÉ){$¼ğ=_DIR(KOD_USER_SHARE.':'.$íª[0].'/'.$²æáÉ['name']);$²æáÉ['path']=$²æáÉ['name'];Œ´¦ÎÉ×©ù£ê†¶ëá×€ı¨²åŠû‡Çí¾´Ì À‚ÇÌÔçÙşâıéè´ÖËŒÖÊµ‰±À…¸‰òö;$²æáÉ['atime']='';$²æáÉ['ctime']='';Ã;$²æáÉ['mode']='';´÷ê;$²æáÉ['is_readable']=0x001;$²æáÉ['is_writable']=0x001;Äô‘ªËÛàÕ¢ÚÆ«Î½êÕêÓ;$²æáÉ['exists']=intval(file_exists($¼ğ));$²æáÉ['meta_info']='path_self_share';óÏŸÏ¹½”Ö³¦‚€ƒãÕ†±Ö²€•‘ëˆä¢„É÷š­ÇÓëÜ«Ÿ„®Ÿ‡’ô—˜¦îË§…è¸ğñ“öè¡î„Î·×»•;$²æáÉ['menuType']="menuSharePath";if(get_path_ext($²æáÉ['name'])=='oexe'){$™²ú¡=json_decode(@file_get_contents($¼ğ),!0);if(is_array($™²ú¡))$²æáÉ=array_merge($²æáÉ,$™²ú¡);}if($²æáÉ['type']=='folder'){$²æáÉ['ext']='folder';$Ú§–['folderlist'][]=$²æáÉ;}else{$Ú§–['filelist'][]=$²æáÉ;}}$Ú§–['path_read_write']='readable';Ş—¨ª¿®”ø ‡—´ıÕí…¥¦İà»á¼Õ•·öÚ¨°ºÀÙä‰ùù©;$GLOBALS['path_id_user_share']=$œ¢•;if($íª[0]==$this->user['user_id']){$Ú§–['share_list']=$ÄÁ”å;}return $Ú§–;}private function path_fav(&$ş“´í){$õ=new fileCache(USER.'data/fav.php');$Øù§í=$õ->get();$GLOBALS['path_from_auth_check']=!0;foreach($Øù§í as $ÚÏ„=>$ªé){$³ã=_DIR($ªé['path']);$åª¼ä=path_haschildren($³ã,$ñÒÖ);Š¸¦„ß”¶şŞ‘Îâ®ùÍÌ®²åŒ˜ÈıÎºÑ¦ˆ¹ó’ñš–Ñ®ÍĞß ğ›¿ÛÉñÁÖ;if(!isset($ªé['type'])){$ªé['type']='folder';}if($ªé['type']=='folder' && $ªé['ext']!='treeFav'){$åª¼ä=!0;}$ˆ¡=array('name' =>$ªé['name'],'ext' =>$ªé['ext'],'menuType' =>"menuFavPath",'atime' =>'','ctime' =>'','mode' =>'','is_readable' =>0x001,'is_writeable' =>0x001,'exists' =>intval(file_exists($³ã)),'meta_info' =>'treeFav','path' =>$ªé['path'],'type' =>$ªé['type'],'open' =>!1,'isParent' =>!1);if(strstr($ªé['path'],KOD_USER_SHARE)|| strstr($ªé['path'],KOD_USER_FAV)|| strstr($ªé['path'],KOD_GROUP_ROOT_SELF)|| strstr($ªé['path'],KOD_GROUP_ROOT_ALL)){$ˆ¡['exists']=0x001;}if(get_path_ext($ªé['name'])=='oexe'){$ÙÇã“=json_decode(@file_get_contents($³ã),!0);if(is_array($ÙÇã“))$ªé=array_merge($ªé,$ÙÇã“);}if($ªé['type']=='folder'){$ş“´í['folderlist'][]=$ˆ¡;}else{$ş“´í['filelist'][]=$ˆ¡;}}$GLOBALS['path_from_auth_check']=!1;$GLOBALS['path_type']=KOD_USER_FAV;×†Û©”»Ê†Ê;$ş“´í['path_read_write']='writeable';¯·ç‡Âº§ÊÜƒ¥¥æ¹áŞ¿¹;return $ş“´í;ÉÂÓ…ÙĞóŸö¤×ß«;}private function path_group(&$›Ò,$øÕŒŸ½){if($øÕŒŸ½==KOD_GROUP_ROOT_SELF){$‚œ‡=$this->_group_self();}else{$‚œ‡=$this->_group_tree('1');}$GLOBALS['path_from_auth_check']=!0;foreach($‚œ‡ as $ŠŸú=>$âÎÙï){$ªã=array('name' =>$âÎÙï['name'],'menuType' =>"menuGroupRoot",'atime' =>'','ctime' =>'','mode' =>'','is_readable' =>0x001,'is_writeable' =>0x001,'exists' =>0x001,'path' =>$âÎÙï['path'],'ext' =>$âÎÙï['ext'],'type' =>'folder','open' =>!1,'isParent' =>!1);¡ƒ´;if($âÎÙï['type']=='folder'){$›Ò['folderlist'][]=$ªã;}else{$›Ò['filelist'][]=$ªã;}}$GLOBALS['path_from_auth_check']=!1;$GLOBALS['path_type']=$øÕŒŸ½;$›Ò['path_read_write']='writeable';return $›Ò;}private function path($·š,$¹·şôÁ=true,$ï–=false){$¿=explode(',',$this->config['setting_system']['path_hidden']);›Ö²½ßÔÀ•’ßœ¶÷øæ°”ŞéÌŞßüĞ¥€•òù±Ê¬î«°À”‘ÜÊŠÖ±ºë‘¥¸ï†ÇíÖìíçƒàá´«¤Ö‘Õ—¥æôïñ;$¢­¸=_DIR_OUT(iconv_app($·š));if($GLOBALS['path_type']==KOD_USER_SHARE&& strpos(trim($·š,'/'),'/')===!1){$¢­¸=$·š;}$ğ¤Ù¸=array('folderlist' =>array(),'filelist' =>array(),'info' =>array(),'path_read_write' =>'not_exists','this_path' =>$¢­¸);if(!file_exists($·š)){$ğ¤Ù¸['path_read_write']="not_exists";}else if(path_writeable($·š)){$ğ¤Ù¸['path_read_write']='writeable';}else if(path_writeable($·š)){$ğ¤Ù¸['path_read_write']='readable';}else{$ğ¤Ù¸['path_read_write']='not_readable';}if($·š===!1){return $ğ¤Ù¸;}else if($GLOBALS['path_type']==KOD_USER_SHARE&& !strstr(trim($this->in['path'],'/'),'/')){$ğ¤Ù¸=$this->path_share($ğ¤Ù¸);}else if($GLOBALS['path_type']==KOD_USER_FAV){$ğ¤Ù¸=$this->path_fav($ğ¤Ù¸);}else if($GLOBALS['path_type']==KOD_GROUP_ROOT_SELF){$ğ¤Ù¸=$this->path_group($ğ¤Ù¸,$GLOBALS['path_type']);}else if($GLOBALS['path_type']==KOD_GROUP_ROOT_ALL){$ğ¤Ù¸=$this->path_group($ğ¤Ù¸,$GLOBALS['path_type']);}else{$¹·şôÁ=path_list($·š,$¹·şôÁ,!0);$ğ¤Ù¸['folderlist']=$¹·şôÁ['folderlist'];$ğ¤Ù¸['filelist']=$¹·şôÁ['filelist'];}$±=array();$‚™=array();foreach($ğ¤Ù¸['filelist'] as $ûİ‹=>$×ş){if(in_array($×ş['name'],$¿))continue;$×ş['ext']=get_path_ext($×ş['name']);³±ÁÕßùŠ³ê¯¤Â¾ÊÄØô¨ÕÒ¸áÕ ş­ŸÂí•õ ÖÌ€ĞÖ³¼†ÁáÉ­Ú¢·°;if($×ş['ext']=='oexe' && !isset($×ş['content'])){$ï’Ê‘’=iconv_system($×ş['path']);$±ÔæÆË=json_decode(@file_get_contents($ï’Ê‘’),!0);if(is_array($±ÔæÆË))$×ş=array_merge($×ş,$±ÔæÆË);}$±[]=$×ş;}foreach($ğ¤Ù¸['folderlist'] as $ûİ‹=>$×ş){if(in_array($×ş['name'],$¿))continue;$‚™[]=$×ş;}$ğ¤Ù¸['filelist']=$±;$ğ¤Ù¸['folderlist']=$‚™;$ğ¤Ù¸=_DIR_OUT($ğ¤Ù¸);¬öşÀ€»ÏÚİ‡ŒÓ÷ŸŸŠ±™»†‚Ò‰ ê‘ÚÎ»ÑÍÊ“Î†âªäê¶;$this->_role_check_info($ğ¤Ù¸);return $ğ¤Ù¸;íˆñ©ò¬áûÌÍÜ¨İ™ú«äùêñ¥ĞİÛŠÂ²ã°ºÕÚÉÉˆ¬ÆÕùÔ²¢³ÌŞ±;}private function _role_check_info(&$Ù){if(!$GLOBALS['path_type']){$Ù['info']=array("path_type"=>'',"role"=>'',"id"=>'','name'=>'');return;}$Ù['info']=array("path_type" =>$GLOBALS['path_type'],"role" =>$GLOBALS['is_root']?'owner':'guest',"id" =>$GLOBALS['path_id'],'name' =>'',);if($GLOBALS['path_type']==KOD_USER_SHARE){$GLOBALS['path_id']=explode(':',$GLOBALS['path_id']);$GLOBALS['path_id']=$GLOBALS['path_id'][0];$Ù['info']['id']=$GLOBALS['path_id'];$şî=system_member::get_info($GLOBALS['path_id']);$Ù['info']['name']=$şî['name'];if($GLOBALS['is_root']){$Ù['info']['admin_real_path']=USER_PATH.$şî['path'].'/home/';}}if($GLOBALS['path_type']==KOD_GROUP_PATH|| $GLOBALS['path_type']==KOD_GROUP_SHARE){$ÛøÁÜ=system_group::get_info($GLOBALS['path_id']);$Ù['info']['name']=$ÛøÁÜ['name'];$É³Í”ü=system_member::user_auth_group($GLOBALS['path_id']);if($É³Í”ü=='write' || $GLOBALS['is_root']){$Ù['info']['role']='owner';$Ù['group_space_use']=$ÛøÁÜ['config'];}if($GLOBALS['is_root']){$Ù['info']['admin_real_path']=GROUP_PATH.$ÛøÁÜ['path'].'/home/';}}}}
+<?php
+/*
+* @link http://www.kalcaddle.com/
+* @author warlee | e-mail:kalcaddle@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kalcaddle.com/tools/licenses/license.txt
+*/
+
+class explorer extends Controller{
+	public $path;
+	public $user;
+	public function __construct(){
+		parent::__construct();
+		$this->tpl = TEMPLATE.'explorer/';
+		$this->user = $_SESSION['kod_user'];
+		if (isset($this->in['path'])) {
+			$this->path = _DIR($this->in['path']);
+			$this->check_system_path();
+		}
+	}
+	public function index(){
+		$dir = '';
+		if(isset($this->in['path']) && $this->in['path'] !=''){
+			$dir = _DIR_CLEAR($_GET['path']);
+			$dir = rtrim($dir,'/').'/';
+		}
+		$this->assign('dir',$dir);
+		if ($this->config['forceWap']) {
+			$this->display('index_wap.php');
+		}else{
+			$this->display('index.php');
+		}
+	}
+
+	//system virtual folder;
+	private function check_system_path(){
+		if(!in_array(ACT,array('mkfile','mkdir','search','pathCuteDrag','pathCopyDrag','pathPast','fileDownload'))){
+			return;
+		}
+		if( $GLOBALS['path_type'] == KOD_USER_SHARE && 
+			!strstr(trim($this->in['path'],'/'),'/')){//åˆ†äº«æ ¹ç›®å½•
+			show_json($this->L['error'],false);
+		}
+		if(in_array($GLOBALS['path_type'],array(
+				KOD_USER_FAV,
+				KOD_GROUP_ROOT_ALL,
+				KOD_GROUP_ROOT_SELF
+				)
+			)){
+			show_json($this->L['system_path_not_change'],false);
+		}
+	}
+
+	public function pathInfo(){
+		$info_list = json_decode($this->in['list'],true);
+		if(!$info_list){
+			show_json($this->L['error'],false);
+		}
+		foreach ($info_list as &$val) {
+			$val['path'] = _DIR($val['path']);
+		}
+		$data = path_info_muti($info_list,$this->L['time_type_info']);
+		if(!$data){
+			show_json($this->L['not_exists'],false);
+		}
+
+		//å±æ€§æŸ¥çœ‹ï¼Œå•ä¸ªæ–‡ä»¶åˆ™ç”Ÿæˆä¸´æ—¶ä¸‹è½½åœ°å€ã€‚æ²¡æœ‰æƒé™åˆ™ä¸æ˜¾ç¤º
+		if (count($info_list)==1 && $info_list[0]['type']!='folder') {//å•ä¸ªæ–‡ä»¶
+			$file = $info_list[0]['path'];
+			if($GLOBALS['is_root'] || $GLOBALS['auth']['explorer:fileDownload']==1){
+				$data['download_path'] = _make_file_proxy($file);
+			}
+			if($data['size'] < 100*1024|| isset($this->in['get_md5'])){//100kb
+				$data['file_md5'] = @md5_file($file);
+			}else{
+				$data['file_md5'] = "...";
+			}
+
+			//è·å–å›¾ç‰‡å°ºå¯¸
+			$ext = get_path_ext($file);
+			if(in_array($ext,array('jpg','gif','png','jpeg','bmp')) ){
+				load_class('imageThumb');
+				$size = imageThumb::imageSize($file);
+				if($size){
+					$data['image_size'] = $size;
+				}
+			}
+		}
+		$data['path'] = _DIR_OUT($data['path']);
+		show_json($data);
+	}
+
+	public function pathChmod(){
+		$info_list = json_decode($this->in['list'],true);
+		if(!$info_list){
+			show_json($this->L['error'],false);
+		}
+		$mod = octdec('0'.$this->in['mod']);
+		$success=0;$error=0;
+		foreach ($info_list as $val) {
+			$path = _DIR($val['path']);
+			if(chmod_path($path,$mod)){
+				$success++;
+			}else{
+				$error++;
+			}
+		}
+		$state = $error==0?true:false;
+		$info = $success.' success,'.$error.' error';
+		if (count($info_list) == 1 && $error==0) {
+			$info = $this->L['success'];
+		}
+		show_json($info,$state);
+	}
+
+	public function mkfile(){
+		$tpl_path = BASIC_PATH.'static/others/newfile-tpl/';
+		space_size_use_check();
+		$repeat_type = 'skip';
+		if(isset($this->in['repeat_type'])){
+			$repeat_type = $this->in['repeat_type'];
+		}
+		$new= rtrim($this->path,'/');
+		$new = get_filename_auto($new,'',$repeat_type);//å·²å­˜åœ¨å¤„ç† åˆ›å»ºå‰¯æœ¬
+		if(@touch($new)){
+			chmod_path($new,0777);
+			if (isset($this->in['content'])) {
+				file_put_contents($new,$this->in['content']);
+			}else{
+				$ext = get_path_ext($new);
+				$tpl_file = $tpl_path.'newfile.'.$ext;
+				if(file_exists($tpl_file)){
+					$content = file_get_contents($tpl_file);
+					file_put_contents($new,$content);
+				}
+			}
+			space_size_use_change($new);
+			show_json($this->L['create_success'],true,_DIR_OUT(iconv_app($new)) );
+		}else{
+			show_json($this->L['create_error'],false);
+		}
+	}
+	public function mkdir(){
+		space_size_use_check();
+		$repeat_type = 'skip';
+		if(isset($this->in['repeat_type'])){
+			$repeat_type = $this->in['repeat_type'];
+		}
+		$new = rtrim($this->path,'/');
+		$new = get_filename_auto($new,'',$repeat_type);//å·²å­˜åœ¨å¤„ç† åˆ›å»ºå‰¯æœ¬
+		if(mk_dir($new,0777)){
+			chmod_path($new,0777);
+			show_json($this->L['create_success'],true,_DIR_OUT(iconv_app($new)) );
+		}else{
+			show_json($this->L['create_error'],false);
+		}
+	}
+
+	public function pathRname(){
+		$rname_to=_DIR($this->in['rname_to']);
+		if (file_exist_case($rname_to)) {
+			show_json($this->L['name_isexists'],false);
+		}
+		if(@rename($this->path,$rname_to)){
+			show_json($this->L['rname_success'],true,_DIR_OUT(iconv_app($rname_to)) );
+		}else{
+			show_json($this->L['no_permission_write_all'],false);
+		}
+	}
+
+	public function search(){
+		if (!isset($this->in['search'])) show_json($this->L['please_inpute_search_words'],false);
+
+		$is_content = intval($this->in['is_content']);
+		$is_case = intval($this->in['is_case']);
+		$ext= trim($this->in['ext']);
+		//å…±äº«æ ¹ç›®å½•ä¸æ”¯æŒæœç´¢
+		if( $GLOBALS['path_type'] == KOD_USER_SHARE &&
+			strstr($this->path,KOD_USER_SHARE)){
+			show_json($this->L['path_cannot_search'],false);
+		}
+		$list = path_search(
+			$this->path,
+			iconv_system(rawurldecode($this->in['search'])),
+			$is_content,$ext,$is_case);
+		show_json(_DIR_OUT($list));
+	}
+
+	public function pathList(){
+		$user_path = $this->in['path'];
+		if ($user_path=="")  $user_path='/';
+		$list=$this->path($this->path);
+
+		//è‡ªå·±çš„æ ¹ç›®å½•
+		if($this->path== MYHOME || $this->path==HOME){
+			$this->_self_root_load($list['folderlist']);
+		}
+
+		//ç¾¤ç»„æ ¹ç›®å½•
+		if( $list['info']['path_type'] == KOD_GROUP_PATH &&
+			!strstr(trim(_DIR_CLEAR($this->in['path']),'/'),'/')
+		   ){//è‡ªå·±çš„æ ¹ç›®å½•
+			$this->_self_group_load($list['folderlist']);
+		}
+		$list['user_space'] = $this->user['config'];
+		show_json($list);
+	}
+
+	public function treeList(){//æ ‘ç»“æ„
+		$app = $this->in['app'];//æ˜¯å¦è·å–æ–‡ä»¶ ä¼ folder|file
+		if (isset($this->in['type']) && $this->in['type']=='init'){
+			$this->_tree_init($app);
+		}
+		//æ ¹æ ‘ç›®å½•è¯·æ±‚
+		switch(trim(rawurldecode($this->in['path']))){
+			case KOD_USER_FAV:
+				show_json($this->_tree_fav(),true);
+				break;
+			case KOD_GROUP_ROOT_SELF:
+				show_json($this->_group_self(),true);
+				break;
+			case KOD_GROUP_ROOT_ALL:
+				show_json($this->_group_tree('1'),true);
+				break;
+			default:break;
+		}
+
+		//æ ‘ç›®å½•ç»„å¤„ç†
+		if ( (isset($this->in['tree_icon']) && $this->in['tree_icon']!='groupPublic') &&  //å…¬å…±ç›®å½•åˆ·æ–°æ’é™¤
+			!strstr(trim(rawurldecode($this->in['path']),'/'),'/') &&
+			($GLOBALS['path_type'] == KOD_GROUP_PATH||
+			$GLOBALS['path_type'] == KOD_GROUP_SHARE)) {
+			$list = $this->_group_tree($GLOBALS['path_id']);
+			show_json($list,true);
+			return;
+		}
+
+		//æ­£å¸¸ç›®å½•
+		$path=_DIR($this->in['path']);
+		if (!path_readable($path)) show_json($this->L['no_permission_read'],false);
+		$list_file = ($app == 'editor'?true:false);//ç¼–è¾‘å™¨å†…åˆ—å‡ºæ–‡ä»¶
+		$list=$this->path($path,$list_file,true);
+		function sort_by_key($a, $b){
+			if ($a['name'] == $b['name']) return 0;
+			return ($a['name'] > $b['name']) ? 1 : -1;
+		}
+		usort($list['folderlist'], "sort_by_key");
+		usort($list['filelist'], "sort_by_key");
+		if($path == MYHOME || $path==HOME){//è‡ªå·±çš„æ ¹ç›®å½•
+			// $this->_self_root_load($list['folderlist']);
+		}
+		if ($app == 'editor') {
+			$res = array_merge($list['folderlist'],$list['filelist']);
+			show_json($res,true);
+		}else{
+			show_json($list['folderlist'],true);
+		}
+	}
+
+	//ç”¨æˆ·æ ¹ç›®å½•
+	private function _self_group_load(&$root){
+		foreach ($root as $key => $value) {
+			if($value['name'] == 'share'){
+				$root[$key] = array(
+					'name'		=> $this->L['group_share'],
+					'menuType'  => "menufolder folderBox",
+					'ext' 		=> "folder_share",
+					'isParent'	=> true,
+					'is_readable'	=> true,
+					'is_writeable'	=> true,
+
+					'path' 		=> KOD_GROUP_PATH.':'.$GLOBALS['path_id'].'/share/',
+					'type'      => 'folder',
+					'open'      => false,
+					'isParent'  => false
+				);
+				break;
+			}
+		}
+		$root = array_values($root);
+	}
+
+	//ç”¨æˆ·æ ¹ç›®å½•
+	private function _self_root_load(&$root){
+		foreach ($root as $key => $value) {
+			if($value['name'] == 'share'){
+				$root[$key] = array(
+					'name'		=> $this->L['my_share'],
+					'menuType'  => "menuTreeUser",
+					'ext' 		=> "folder_share",
+					'isParent'	=> true,
+					'is_readable'	=> true,
+					'is_writeable'	=> true,
+
+					'path' 		=> KOD_USER_SHARE.':'.$this->user["user_id"].'/',
+					'type'      => 'folder',
+					'open'      => false,
+					'isParent'  => false
+				);
+				break;
+			}
+		}
+		$root = array_values($root);
+		//ä¸å¼€å¯å›æ”¶ç«™åˆ™ä¸æ˜¾ç¤ºå›æ”¶ç«™
+		if($this->config['user']['recycle_open']=="1"){
+			// $root[] = array(
+			// 	'name'=>$this->L['recycle'],
+			// 	'menuType'  =>"menuRecycleButton",
+			// 	'ext' 		=>"recycle",
+			// 	'isParent'	=> true,
+			// 	'is_readable'	=> true,
+			// 	'is_writeable'	=> true,
+
+			// 	'path' 		=> KOD_USER_RECYCLE,
+			// 	'type'      => 'folder',
+			// 	'open'      => true,
+			// 	'isParent'  => false
+			// );
+		}
+	}
+
+
+	private function _tree_fav(){
+		$check_file = ($this->in['app'] == 'editor'?true:false);
+		$favData=new fileCache(USER.'data/fav.php');
+		$fav_list = $favData->get();
+		$fav = array();
+		$GLOBALS['path_from_auth_check'] = true;//ç»„æƒé™å‘ç”Ÿå˜æ›´ã€‚å¯¼è‡´è®¿é—®group_path æ— æƒé™é€€å‡ºé—®é¢˜
+		foreach($fav_list as $key => $val){
+			$has_children = path_haschildren(_DIR($val['path']),$check_file);
+			if( !isset($val['type'])){
+				$val['type'] = 'folder';
+			}
+			if( in_array($val['type'],array('group'))){
+				$has_children = true;
+			}
+			$the_fav = array(
+				'name'      => $val['name'],
+				'ext' 		=> $val['ext'],
+				'menuType'  => "menuTreeFav",
+
+				'path' 		=> $val['path'],
+				'type'      => $val['type'],
+				'open'      => false,
+				'isParent'  => $has_children
+			);
+			if(isset($val['type']) && $val['type']!='folder'){//iconä¼˜åŒ–
+				$the_fav['ext'] = $val['type'];
+			}
+			$fav[] = $the_fav;
+		}
+		$GLOBALS['path_from_auth_check'] = false;
+		return $fav;
+	}
+
+	private function _tree_init($app){
+		if ($app == 'editor' && isset($this->in['project'])) {
+			$list_project = $this->path(_DIR($this->in['project']),true,true);
+			$project = array_merge($list_project['folderlist'],$list_project['filelist']);
+			$tree_data = array(
+				array('name'=> get_path_this($this->in['project']),
+					'children'	=>$project,
+					'menuType'  => "menuTreeRoot",
+					'ext' 		=> "folder",
+
+					'path' 		=> $this->in['project'],
+					'type'      => 'folder',
+					'open'      => true,
+					'isParent'  => count($project)>0?true:false)
+			);
+			show_json($tree_data);
+			return;
+		}
+		$check_file = ($app == 'editor'?true:false);
+		$fav = $this->_tree_fav($app);
+
+		$public_path = KOD_GROUP_PATH.':1/';
+		if(system_member::user_auth_group(1) == false){
+			$public_path = KOD_GROUP_SHARE.':1/';//ä¸åœ¨å…¬å…±ç»„åˆ™åªèƒ½è¯»å–å…¬å…±ç»„å…±äº«ç›®å½•
+		}
+		$list_public = $this->path(_DIR($public_path),$check_file,true);
+		$list_root  = $this->path(_DIR(MYHOME),$check_file,true);
+		if ($check_file) {//ç¼–è¾‘å™¨
+			$root = array_merge($list_root['folderlist'],$list_root['filelist']);
+			$public = array_merge($list_public['folderlist'],$list_public['filelist']);
+		}else{//æ–‡ä»¶ç®¡ç†å™¨
+			$root  = $list_root['folderlist'];
+			$public = $list_public['folderlist'];
+			//$this->_self_root_load($root);//è‡ªå·±çš„æ ¹ç›®å½• å«æœ‰æˆ‘çš„å…±äº«å’Œå›æ”¶ç«™
+		}
+
+		$root_isparent = count($root)>0?true:false;
+		$public_isparent = count($public)>0?true:false;
+		$tree_data = array(
+			'fav'=>array(
+				'name'      => $this->L['fav'],
+				'ext' 		=> "treeFav",
+				'menuType'  => "menuTreeFavRoot",
+				'children'  => $fav,
+
+				'path' 		=> KOD_USER_FAV,
+				'type'      => 'folder',
+				'open'      => true,
+				'isParent'  => count($fav)>0?true:false
+			),
+			'my_home'=>array(
+				'name'		=> $this->L['root_path'],
+				'menuType'  => "menuTreeRoot",
+				'ext' 		=> "treeSelf",
+				'children'  => $root,
+
+				'path' 		=> MYHOME,
+				'type'      => 'folder',
+				'open'      => true,
+				'isParent'  => $root_isparent
+			),
+
+			'public'=>array(
+				'name'		=> $this->L['public_path'],
+				'menuType'  => "menuTreeGroupRoot",
+				'ext' 		=> "groupPublic",
+				'children'  => $public,
+
+				'path' 		=> $public_path,
+				'type'      => 'folder',
+				'open'      => true,
+				'isParent'  => $public_isparent
+			),
+			'my_group'=>array(
+				'name'		=> $this->L['my_kod_group'],//TODO
+				'menuType'  => "menuTreeGroupRoot",
+				'ext' 		=> "groupSelfRoot",
+				'children'  => $this->_group_self(),
+
+				'path' 		=> KOD_GROUP_ROOT_SELF,
+				'type'      => 'folder',
+				'open'      => true,
+				'isParent'  => true
+			),
+			'group'=>array(
+				'name'		=> $this->L['kod_group'],
+				'menuType'  => "menuTreeGroupRoot",
+				'ext' 		=> "groupRoot",
+				'children'  => $this->_group_tree('1'),
+
+				'path' 		=> KOD_GROUP_ROOT_ALL,
+				'type'      => 'folder',
+				'open'      => true,
+				'isParent'  => true
+			),
+		);
+
+		//ç¼–è¾‘å™¨ç®€åŒ–æ ‘ç›®å½•
+		if($app == 'editor'){
+			unset($tree_data['my_group']);
+			unset($tree_data['group']);
+			unset($tree_data['public']);
+			//ç®¡ç†å‘˜ï¼Œä¼˜åŒ–ç¼–è¾‘å™¨æ ‘ç›®å½•
+			if($GLOBALS['is_root']==1){
+				$list_web  = $this->path(_DIR(WEB_ROOT),$check_file,true);
+				$web = array_merge($list_web['folderlist'],$list_web['filelist']);
+				$tree_data['webroot'] = array(
+					'name'      => "webroot",
+					'menuType'  => "menuTreeRoot",
+					'ext' 		=> "folder",
+					'children'  => $web,
+
+					'path' 		=> WEB_ROOT,
+					'type'      => 'folder',
+					'open'      => true,
+					'isParent'  => true
+				);
+			}
+		}
+
+		$result = array();
+		foreach ($tree_data as $key => $value) { //ä¸ºç©ºåˆ™ä¸å±•ç¤º
+			if( count($value['children'])<1 && 
+				in_array($key,array('my_group','group')) ){//'fav'
+				continue;
+				//$value['isParent'] = false;
+			}
+			$result[] = $value;
+		}
+		show_json($result);
+	}
+
+	//sessionè®°å½•ç”¨æˆ·å¯ä»¥ç®¡ç†çš„ç»„ç»‡ï¼›ç»§æ‰¿å…³ç³»
+	private function _group_tree($node_id){//è·å–ç»„ç»‡æ¶æ„çš„ç”¨æˆ·å’Œå­ç»„ç»‡ï¼›ä¸ºç©ºåˆ™è·å–æ ¹ç›®å½•
+		$group_sql = system_group::load_data();
+		$groups = $group_sql->get(array('parent_id',$node_id));
+		$group_list = $this->_make_node_list($groups);
+
+		//user
+		$user_list = array();
+		if($node_id !='1'){//æ ¹ç»„ä¸æ˜¾ç¤ºç”¨æˆ·
+			$user = system_member::get_user_at_group($node_id);
+			foreach($user as $key => $val){
+				$tree_icon = 'user';
+				if ($val['user_id'] == $this->user['user_id']) {
+					$tree_icon = 'userSelf';
+				}
+				$user_list[] = array(
+					'name'      => $val['name'],
+					'menuType'  => "menuTreeUser",
+					'ext' 		=> $tree_icon,
+
+					'path' 		=> KOD_USER_SHARE.':'.$val['user_id'].'/',
+					'type'      => 'folder',
+					'open'      => false,
+					'isParent'  => false
+				);
+			}
+		}
+		$arr = array_merge($group_list,$user_list);
+		return $arr;
+	}
+	//sessionè®°å½•ç”¨æˆ·å¯ä»¥ç®¡ç†çš„ç»„ç»‡ï¼›ç»§æ‰¿å…³ç³»
+	private function _group_self(){//è·å–ç»„ç»‡æ¶æ„çš„ç”¨æˆ·å’Œå­ç»„ç»‡ï¼›ä¸ºç©ºåˆ™è·å–æ ¹ç›®å½•
+		$groups = array();
+		foreach ($this->user['group_info'] as $group_id=>$val){
+			if($group_id=='1') continue;
+			$item = system_group::get_info($group_id);
+			if($item){
+				$groups[] = $item;
+			}
+		}
+		return $this->_make_node_list($groups);
+	}
+	private function _make_node_list($list){
+		$group_list = array();
+		if(!is_array($list)){
+			return $group_list;
+		}
+		foreach($list as $key => $val){
+			$group_path = KOD_GROUP_PATH;
+			$auth = system_member::user_auth_group($val['group_id']);
+			if($auth==false){//æ˜¯å¦ä¸ºè¯¥ç»„å†…éƒ¨æˆå‘˜
+				$group_path = KOD_GROUP_SHARE;
+				$tree_icon = 'groupGuest';
+			}else if($auth=='read'){
+				$tree_icon = 'groupSelf';
+			}else{
+				$tree_icon = 'groupSelfOwner';
+			}
+			$has_children = true;
+			$user_list = system_member::get_user_at_group($val['group_id']);
+
+			if(count($user_list)==0 && $val['children']==''){
+				$has_children = false;
+			}
+			$group_list[] = array(
+				'name'      => $val['name'],
+				'type'      => 'folder',
+				'path' 		=> $group_path.':'.$val['group_id'].'/',
+				'ext' 		=> $tree_icon,
+				'tree_icon'	=> $tree_icon,//request
+
+				'menuType'  => "menuTreeGroup",
+				'isParent'  => $has_children
+			);
+		}
+		return $group_list;
+	}
+	public function pathDelete(){
+		$list = json_decode($this->in['list'],true);
+		$user_recycle = iconv_system(USER_RECYCLE);
+		if (!is_dir($user_recycle)){
+			mk_dir($user_recycle);
+		}
+
+		$remove_to_recycle = $this->config['user']['recycle_open'];
+		if(!path_writeable($user_recycle)){//å›æ”¶ç«™ä¸å¯å†™åˆ™ç›´æ¥åˆ é™¤ï¼›æŒ‚è½½
+			//show_json($this->L['no_permission_write'],false);
+			$remove_to_recycle = '0';
+		}
+		$success=0;$error=0;
+		foreach ($list as $val) {
+			$path_this = _DIR($val['path']);
+			//ä¸æ˜¯è‡ªå·±ç›®å½•çš„åˆ†äº«åˆ—è¡¨ï¼Œä¸æ”¯æŒåˆ é™¤
+			if( $GLOBALS['path_type'] == KOD_USER_SHARE &&
+				$GLOBALS['path_id']   != $_SESSION['kod_user']['user_id'] &&
+				substr_count(trim($val['path'],'/'),'/') <= 1){ //åˆ†äº«æ ¹é¡¹ç›®
+				show_json($this->L['no_permission_write'],false);
+			}
+
+			// ç¾¤ç»„æ–‡ä»¶åˆ é™¤ï¼Œç§»åŠ¨åˆ°ä¸ªäººå›æ”¶ç«™ã€‚
+			// $GLOBALS['path_type'] == KOD_GROUP_SHARE ||
+			// $GLOBALS['path_type'] == KOD_GROUP_PATH  ||
+			if( $remove_to_recycle !="1"  ||
+				$GLOBALS['path_type'] == KOD_USER_RECYCLE ){//å›æ”¶ç«™åˆ é™¤ or å…±äº«åˆ é™¤ç­‰ç›´æ¥åˆ é™¤
+				if ($val['type'] == 'folder') {
+					if(del_dir($path_this)) $success ++;
+					else $error++;
+				}else{
+					if(del_file($path_this)) $success++;
+					else $error++;
+				}
+				space_size_use_reset();//ä½¿ç”¨ç©ºé—´é‡ç½®
+
+			}else{
+				$filename = $user_recycle.get_path_this($path_this);
+				$filename = get_filename_auto($filename,date('_H-i-s'),'folder_rename');//å·²å­˜åœ¨åˆ™è¿½åŠ æ—¶é—´
+				if (move_path($path_this,$filename,'',$this->config['user']['file_repeat'])) {
+					$success++;
+				}else{
+					$error++;
+				}
+			}
+		}
+		$state = $error==0?true:false;
+		$info = $success.' success,'.$error.' error';
+		if ($error==0) {
+			$info = $this->L['remove_success'];
+		}
+		show_json($info,$state);
+	}
+
+	private function clearTemp(){
+		$path = iconv_system(USER_TEMP);
+		$time = @filemtime($path);
+		if(time() - $time > 600){//10min without updload
+			del_dir($path);
+			mk_dir($path);
+		}
+	}
+
+	public function pathDeleteRecycle(){
+		$user_recycle = iconv_system(USER_RECYCLE);
+		if(!isset($this->in['list'])){
+			if (!del_dir($user_recycle)) {
+				show_json($this->L['remove_fali'],false);
+			}else{
+				mkdir($user_recycle);
+				$this->clearTemp();
+				space_size_use_reset();//ä½¿ç”¨ç©ºé—´é‡ç½®
+				show_json($this->L['recycle_clear_success'],true);
+			}
+		}
+		$list = json_decode($this->in['list'],true);
+		$success = 0;$error   = 0;
+		foreach ($list as $val) {
+			$path_full = _DIR($val['path']);
+			if ($val['type'] == 'folder') {
+				if(del_dir($path_full)) $success ++;
+				else $error++;
+			}else{
+				if(del_file($path_full)) $success++;
+				else $error++;
+			}
+		}
+		space_size_use_reset();//ä½¿ç”¨ç©ºé—´é‡ç½®
+		if (count($list) == 1) {
+			if ($success) show_json($this->L['remove_success']);
+			else show_json($this->L['remove_fali'],false);
+		}else{
+			$code = $error==0?true:false;
+			show_json($this->L['remove_success'].$success.'success,'.$error.'error',$code);
+		}
+	}
+
+	public function pathCopy(){
+		session_start();//re start
+		$the_list = json_decode($this->in['list'],true);
+		$_SESSION['path_copy']= json_encode($the_list);
+		$_SESSION['path_copy_type']='copy';
+		show_json($this->L['copy_success'],ture,$_SESSION);
+	}
+	public function pathCute(){
+		session_start();//re start
+		$the_list = json_decode($this->in['list'],true);
+		foreach ($the_list as $key => &$value) {
+			$value['path'] = rawurldecode($value['path']);
+			_DIR($value['path']);
+		}
+		$_SESSION['path_copy']= json_encode($the_list);
+		$_SESSION['path_copy_type']='cute';
+		show_json($this->L['cute_success']);
+	}
+	public function pathCuteDrag(){
+		$clipboard = json_decode($this->in['list'],true);
+		$path_past=$this->path;
+		$before_path_type = $GLOBALS['path_type'];
+		$before_path_id = $GLOBALS['path_id'];
+
+		if (!path_writeable($this->path)) show_json($this->L['no_permission_write'],false);
+		$success=0;$error=0;$data = array();
+		foreach ($clipboard as $val) {
+			$path_copy = _DIR($val['path']);
+			$filename  = get_path_this($path_copy);
+			$auto_path = get_filename_auto($path_past.$filename,'',$this->config['user']['file_repeat']);//å·²å­˜åœ¨å¤„ç† åˆ›å»ºå‰¯æœ¬
+
+			//è·¨ç©ºé—´æ£€æµ‹
+			if($before_path_id != $GLOBALS['path_id']){
+				space_size_use_check();
+			}
+			if (move_path($path_copy,$auto_path,'',$this->config['user']['file_repeat'])) {
+				$success++;
+				//è·¨ç©ºé—´æ“ä½œ  ç”¨æˆ·â€”â€”ç»„â€”â€”å…¶ä»–ç»„ ä»»æ„ä¸¤è€…è§å¤„ç†ï¼›ç§»åŠ¨åˆ°æ­¤å¤„ï¼›ä¹‹å‰çš„ç©ºé—´ä½¿ç”¨é‡å‡å°‘ï¼Œç›®å‰çš„å¢åŠ 
+				if($before_path_id != $GLOBALS['path_id']){
+					space_size_use_change($auto_path);
+					space_size_use_change($auto_path,false,$before_path_type,$before_path_id);
+				}
+				$data[] = _DIR_OUT(iconv_app($auto_path));
+			}else{
+				$error++;
+			}
+		}
+		$state = $error==0?true:false;
+		$msg = $success.' success,'.$error.' error';
+		if($error == 0){
+			$msg = $this->L['success'];
+		}
+		show_json($msg,$state,$data);
+	}
+
+	public function pathCopyDrag(){
+		$clipboard = json_decode($this->in['list'],true);
+		$path_past=$this->path;
+		$before_path_type = $GLOBALS['path_type'];
+		$before_path_id = $GLOBALS['path_id'];
+		space_size_use_check();
+		
+		if (!path_writeable($this->path)) show_json($this->L['no_permission_write'],false);
+		$success=0;$error=0;$data = array();
+		foreach ($clipboard as $val) {
+			$path_copy = _DIR($val['path']);
+			$filename = get_path_this($path_copy);
+			$auto_path = get_filename_auto($path_past.$filename,'',$this->config['user']['file_repeat']);
+
+			if ($this->in['filename_auto']==1 &&
+				trim($auto_path,'/') == trim($path_copy,'/')) {
+				$auto_path = get_filename_auto($path_past.$filename,'','folder_rename');				
+			}
+			if(copy_dir($path_copy,$auto_path)){
+				$success++;
+				space_size_use_change($filename);//ç©ºé—´ä½¿ç”¨å¢åŠ 
+				$data[] = _DIR_OUT(iconv_app($auto_path));
+			}else{
+				$error++;
+			}
+		}
+		$state = $error==0?true:false;
+		$msg = $success.' success,'.$error.' error';
+		if($error == 0){
+			$msg = $this->L['success'];
+		}
+		show_json($msg,$state,$data);
+	}
+
+	public function clipboard(){
+		$clipboard = json_decode($_SESSION['path_copy'],true);
+		if(!$clipboard){
+			$clipboard = array();
+		}
+		show_json($clipboard,true,$_SESSION['path_copy_type']);
+	}
+	public function pathPast(){
+		if (!isset($_SESSION['path_copy'])){
+			show_json($this->L['clipboard_null'],false,array());
+		}
+
+		$path_past=$this->path;//ä¹‹å‰å°±è‡ªåŠ¨å¤„ç†æƒé™åˆ¤æ–­ï¼›
+		session_start();//re start
+		$error = '';
+		$data = array();
+		$clipboard = json_decode($_SESSION['path_copy'],true);
+		$copy_type = $_SESSION['path_copy_type'];
+		$before_path_type = $GLOBALS['path_type'];
+		$before_path_id = $GLOBALS['path_id'];
+		if (!path_writeable($path_past)) show_json($this->L['no_permission_write'],false,$data);
+
+		if ($copy_type == 'copy') {
+		}else{
+			$_SESSION['path_copy'] = json_encode(array());
+			$_SESSION['path_copy_type'] = '';
+		}
+		session_write_close();
+
+		$GLOBALS['path_from_auth_check'] = true;//ç²˜è´´æ¥æºæ£€æµ‹æƒé™ï¼›å’Œç²˜è´´åˆ°ç›®æ ‡ä½ç½®å†²çª
+		$list_num = count($clipboard);
+		if ($list_num == 0) {
+			show_json($this->L['clipboard_null'],false,$data);
+		}
+		for ($i=0; $i < $list_num; $i++) {
+			$path_copy = _DIR($clipboard[$i]['path']);
+			_DIR($this->in['path']);//é‡ç½®path_typeç­‰æ•°æ®
+			$filename  = get_path_this($path_copy);
+			$filename_out  = iconv_app($filename);
+			if (!file_exists($path_copy)){
+				$error .= "<li>{$filename_out}".$this->L['copy_not_exists']."</li>";
+				continue;
+			}
+			if ($clipboard[$i]['type'] == 'folder'){
+				if ($path_copy == substr($path_past,0,strlen($path_copy))){
+					$error .="<em style='color:#fff;'>{$filename_out}".$this->L['current_has_parent']."</em>";
+					continue;
+				}
+			}
+			$auto_path = get_filename_auto($path_past.$filename,'',$this->config['user']['file_repeat']);
+			$filename = get_path_this($auto_path);
+			if ($copy_type == 'copy') {
+				space_size_use_check();
+				copy_dir($path_copy,$auto_path);
+				space_size_use_change($filename);
+			}else{
+				if($before_path_id != $GLOBALS['path_id']){
+					space_size_use_check();
+				}
+				move_path($path_copy,$auto_path,'',$this->config['user']['file_repeat']);
+				//è·¨ç©ºé—´æ“ä½œ  ç”¨æˆ·â€”â€”ç»„â€”â€”å…¶ä»–ç»„ ä»»æ„ä¸¤è€…è§å¤„ç†ï¼›ç§»åŠ¨åˆ°æ­¤å¤„ï¼›ä¹‹å‰çš„ç©ºé—´ä½¿ç”¨é‡å‡å°‘ï¼Œç›®å‰çš„å¢åŠ 
+				if($before_path_id != $GLOBALS['path_id']){
+					space_size_use_change($filename);
+					space_size_use_change($filename,false,$before_path_type,$before_path_id);
+				}
+			}
+			$data[] = _DIR_OUT(iconv_app($auto_path));
+		}
+		if ($copy_type == 'copy') {
+			$msg=$this->L['past_success'].$error;
+		}else{
+			$msg=$this->L['cute_past_success'].$error;
+		}
+		$state = ($error ==''?true:false);
+		show_json($msg,$state,$data);
+	}
+	public function fileDownload(){
+		file_put_out($this->path,true);
+	}
+	//æ–‡ä»¶ä¸‹è½½ååˆ é™¤,ç”¨äºæ–‡ä»¶å¤¹ä¸‹è½½
+	public function fileDownloadRemove(){
+		$path = rawurldecode(_DIR_CLEAR($this->in['path']));
+		$path = iconv_system(USER_TEMP.$path);
+		space_size_use_change($path,false);//ä½¿ç”¨ç©ºé—´å›æ”¶
+		file_put_out($path,true);
+		del_file($path);
+	}
+	public function zipDownload(){
+		$user_temp = iconv_system(USER_TEMP);
+		if(!file_exists($user_temp)){
+			mkdir($user_temp);
+		}else{//æ¸…é™¤æœªåˆ é™¤çš„ä¸´æ—¶æ–‡ä»¶ï¼Œä¸€å¤©å‰
+			$list = path_list($user_temp,true,false);
+			$max_time = 3600*24;//è‡ªåŠ¨æ¸…ç©ºä¸€å¤©å‰çš„ç¼“å­˜
+			if ($list['filelist']>=1) {
+				for ($i=0; $i < count($list['filelist']); $i++) {
+					$create_time = $list['filelist'][$i]['mtime'];//æœ€åä¿®æ”¹æ—¶é—´
+					if(time() - $create_time >$max_time){
+						del_file($list['filelist'][$i]['path'].$list['filelist'][$i]['name']);
+					}
+				}
+			}
+		}
+		$zip_file = $this->zip($user_temp);
+		show_json($this->L['zip_success'],true,get_path_this($zip_file));
+	}
+	public function zip($zip_path=''){
+		load_class('pclzip');
+		ini_set('memory_limit', '2028M');//2G;
+
+		$zip_list = json_decode($this->in['list'],true);
+		$list_num = count($zip_list);
+		$files = array();
+		for ($i=0; $i < $list_num; $i++) {
+			$item = rtrim(_DIR($zip_list[$i]['path']),'/');//å¤„ç†æˆç³»ç»Ÿ æ–‡ä»¶ç¼–ç 
+			if(file_exists($item)){
+				$files[] = $item;
+			}
+		}
+		if(count($files)==0){
+			show_json($this->L['not_exists'],false);
+		}
+
+		//æŒ‡å®šç›®å½•
+		$basic_path = $zip_path;
+		if ($zip_path==''){
+			$basic_path =get_path_father($files[0]);
+		}
+		if (!path_writeable($basic_path)) {
+			show_json($this->L['no_permission_write'],false);
+		}
+
+		if (count($files) == 1){
+			$path_this_name=get_path_this($files[0]);
+		}else{
+			$path_this_name=get_path_this(get_path_father($files[0]));
+		}
+		$zipname = $basic_path.$path_this_name.'.zip';
+		$zipname = get_filename_auto($zipname,'',$this->config['user']['file_repeat']);
+		space_size_use_check();
+		
+
+		$archive = new PclZip($zipname);
+		foreach ($files as $key =>$val) {
+			$remove_path_pre = _DIR_CLEAR(get_path_father($val));
+			if($key ==0){
+				$v_list = $archive->create($val,
+					PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
+					PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
+				);
+				continue;
+			}
+			$v_list = $archive->add($val,
+				PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
+				PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
+			);
+		}
+		space_size_use_change($zipname);//ä½¿ç”¨çš„ç©ºé—´å¢åŠ 
+		if ($v_list == 0) {
+			show_json("Create error!",false);
+		}
+		$info = $this->L['zip_success'].$this->L['size'].":".size_format(filesize($zipname));
+		if ($zip_path=='') {
+			show_json($info,true,_DIR_OUT(iconv_app($zipname)) );
+		}else{
+			return iconv_app($zipname);
+		}
+	}
+	public function unzip(){
+		ini_set('memory_limit', '2028M');//2G;
+		$path=$this->path;
+		$name = get_path_this($path);
+		$name = substr($name,0,strrpos($name,'.'));
+		$ext  = get_path_ext($path);
+		$unzip_to=get_path_father($path).$name;//è§£å‹åœ¨è¯¥æ–‡ä»¶å¤¹å†…ï¼š
+		if(isset($this->in['to_this'])){//ç›´æ¥è§£å‹
+			$unzip_to=get_path_father($path);
+		}
+
+		//$unzip_to=get_path_father($path);//è§£å‹åˆ°å½“å‰
+		if (isset($this->in['path_to'])) {//è§£å‹åˆ°æŒ‡å®šä½ç½®
+			$unzip_to = _DIR($this->in['path_to']);
+		}
+		//æ‰€åœ¨ç›®å½•ä¸å¯å†™
+		if (!path_writeable(get_path_father($path))){
+			show_json($this->L['no_permission_write'],false);
+		}
+		space_size_use_check();
+		load_class('pclzip');
+		$zip = new PclZip($path);
+		unzip_charset_get($zip->listContent());
+		$result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,
+								PCLZIP_OPT_SET_CHMOD,0777,
+								PCLZIP_CB_PRE_FILE_NAME,'unzip_pre_name',
+								PCLZIP_CB_PRE_EXTRACT,"check_ext_unzip",
+								PCLZIP_OPT_REPLACE_NEWER);//è§£å‹åˆ°æŸä¸ªåœ°æ–¹,è¦†ç›–æ–¹å¼
+		if ($result == 0) {
+			show_json("Error : ".$zip->errorInfo(true),fasle);
+		}else{
+			space_size_use_change($path);//ä½¿ç”¨çš„ç©ºé—´å¢åŠ  è¿‘ä¼¼ä½¿ç”¨å‹ç¼©æ–‡ä»¶å¤§å°ï¼›
+			show_json($this->L['unzip_success']);
+		}
+	}
+
+	public function imageRotate(){
+		load_class('imageThumb');
+		$cm=new imageThumb($this->path,'file');
+		$result = $cm->imgRotate($this->path,intval($this->in['rotate']));
+		if($result){
+			show_json($this->L['success']);
+		}else{
+			show_json($this->L['error'],false);
+		}
+	}
+
+	//ç¼©ç•¥å›¾
+	public function image(){
+		if (filesize($this->path) <= 1024*20 ||
+			!function_exists('imagecolorallocate') ) {//å°äº20kæˆ–è€…ä¸æ”¯æŒgdåº“ ä¸å†ç”Ÿæˆç¼©ç•¥å›¾
+			file_put_out($this->path);
+			return;
+		}
+		if (!is_dir(DATA_THUMB)){
+			mk_dir(DATA_THUMB);
+		}
+		
+		load_class('imageThumb');
+		$image = $this->path;
+		$image_md5  = @md5_file($image);//æ–‡ä»¶md5
+
+		if (strlen($image_md5)<5) {
+			$image_md5 = md5($image);
+		}
+		$image_thum = DATA_THUMB.$image_md5.'.png';
+		if (!file_exists($image_thum)){//å¦‚æœæ‹¼è£…æˆçš„urlä¸å­˜åœ¨åˆ™æ²¡æœ‰ç”Ÿæˆè¿‡
+			if (get_path_father($image)==DATA_THUMB){//å½“å‰ç›®å½•åˆ™ä¸ç”Ÿæˆç¼©ç•¥å›¾
+				$image_thum=$this->path;
+			}else {
+				$cm=new imageThumb($image,'file');
+				$cm->prorate($image_thum,250,250);//ç”Ÿæˆç­‰æ¯”ä¾‹ç¼©ç•¥å›¾
+			}
+		}
+		if (!file_exists($image_thum) || 
+			filesize($image_thum)<100){//ç¼©ç•¥å›¾ç”Ÿæˆå¤±è´¥åˆ™ä½¿ç”¨åŸå›¾
+			$image_thum=$this->path;
+		}
+		file_put_out($image_thum);
+	}
+
+	// è¿œç¨‹ä¸‹è½½
+	public function serverDownload() {
+		$uuid = 'download_'.$this->in['uuid'];
+		if ($this->in['type'] == 'percent') {//è·å–ä¸‹è½½è¿›åº¦
+			if (isset($_SESSION[$uuid])){
+				$info = $_SESSION[$uuid];
+				$result = array(
+					'uuid'      => $this->in['uuid'],
+					'length'    => (int)$info['length'],
+					'name'		=> $info['name'],
+					'size'      => (int)@filesize(iconv_system($info['path'])),
+					'time'      => mtime()
+				);
+				show_json($result);
+			}else{
+				show_json('',false);
+			}
+		}else if($this->in['type'] == 'remove'){//å–æ¶ˆä¸‹è½½;æ–‡ä»¶è¢«åˆ æ‰åˆ™è‡ªåŠ¨åœæ­¢
+			del_file($_SESSION[$uuid]['path']);
+			unset($_SESSION[$uuid]);
+			show_json('',false);
+		}
+		//ä¸‹è½½
+		$save_path = _DIR($this->in['save_path']);
+		if (!path_writeable($save_path)){
+		   show_json($this->L['no_permission_write'],false);
+		}
+		$url = rawurldecode($this->in['url']);
+		$header = url_header($url);
+		if (!$header){
+			show_json($this->L['download_error_exists'],false);
+		}
+		$save_path = $save_path.$header['name'];
+		if (!checkExt($save_path)){//ä¸å…è®¸çš„æ‰©å±•å
+			$save_path = _DIR($this->in['save_path']).date('-h:i:s').'.txt';
+		}
+		space_size_use_check();
+		$save_path = get_filename_auto(iconv_system($save_path),'',$this->config['user']['file_repeat']);
+		$save_path_temp = $save_path.'.downloading';
+		session_start();
+		$_SESSION[$uuid] = array(
+			'length'=> $header['length'],
+			'path'	=> $save_path_temp,
+			'name'	=> get_path_this($save_path)
+		);
+		session_write_close();
+		if (file_download_this($url,$save_path_temp,$header['length'])){
+			session_start();unset($_SESSION[$uuid]);session_write_close();
+			if (move_path($save_path_temp,$save_path)) {//ä¸‹è½½å®Œåé‡å‘½å
+				$name = get_path_this(iconv_app($save_path));
+				space_size_use_change($save_path);//ä½¿ç”¨çš„ç©ºé—´å¢åŠ 
+				show_json($this->L['download_success'],true,_DIR_OUT(iconv_app($save_path)) );
+			}else{
+				show_json($this->L['download_error_create'],false);
+			}
+		}else{
+			session_start();unset($_SESSION[$uuid]);session_write_close();
+			show_json($this->L['download_error_create'],false);
+		}
+	}
+
+	//ç”Ÿæˆä¸´æ—¶æ–‡ä»¶key
+	public function officeView(){
+		if (!file_exists($this->path)) {
+			show_tips($this->L['not_exists']);
+		}
+		$file_ext = get_path_ext($this->path);
+		$file_url = _make_file_proxy($this->path);
+
+		//kodoffice  é¢„è§ˆ
+		if(defined("OFFICE_KOD_SERVER")){
+			$file_link = APPHOST.'index.php?explorer/fileProxy&path='.$this->in['path'];
+			$view_type = '&appMode=edit&access_token='.session_id();
+			if(OFFICE_KOD_ACTION == 'read'){//åªè¯»
+				$view_type = '&appMode=view';
+				$file_link = _make_file_proxy($this->path);
+			}
+			$user_info = $_SESSION['kod_user'];
+			$app_r = rand_string(10);
+			$office_url = OFFICE_KOD_SERVER.rawurlencode($file_link)
+						.'&lang='.LANGUAGE_TYPE.'&appType=desktop'.$view_type
+						.'&file_time='.@filemtime($this->path).'&user_id='.$user_info['user_id'].'&user_name='.$user_info['name']
+						.'&app_id='.OFFICE_KOD_APP_ID.'&app_s='.$app_r.'&app_v='.md5($app_r.OFFICE_KOD_APP_KEY);
+			header("location:".$office_url);
+			exit;
+		}
+
+		//æ’ä»¶æ”¯æŒï¼šflashè½¬æ¢ or åœ¨çº¿ç¼–è¾‘
+		if (file_exists(PLUGIN_DIR.'officeView')) {
+			if(isset($_GET['is_edit']) || !isset($this->config['settings']['office_server_doc2pdf'])){
+				include(PLUGIN_DIR.'officeView/index.php');
+			}else{
+				include(PLUGIN_DIR.'officeView/flexpapper.php');
+			}
+			exit;
+		}
+
+		//office live æµè§ˆ
+		$host = $_SERVER['HTTP_HOST'];
+		if (strpos(OFFICE_SERVER,'view.officeapps.live.com') === -1 ||
+			strstr($host,'10.10.') ||
+			strstr($host,'192.168.')||
+			strstr($host,'127.0.') ||
+			!strstr($host,'.')) {
+			$local_tips = $this->L['unknow_file_office'];
+			show_tips($local_tips);
+		}else{
+			$office_url = OFFICE_SERVER.rawurlencode($file_url);
+			header("location:".$office_url);
+		}
+	}
+	public function officeSave(){
+		$save_path = _DIR($this->in['path']);
+		//from activex
+		if(isset($this->in['from_activex'])){
+			if ($_FILES["file"]["error"] > 0){
+				echo "Return Code: ".$_FILES["file"]["error"];
+			}else{
+				move_uploaded_file($_FILES["file"]["tmp_name"],$this->path);
+				echo 'succeed';
+			}
+			exit;
+		}
+
+		if (!path_writeable($save_path)){
+		   $this->json_putout(array('error'=>'no_permission_write'));
+		}
+		if (($body_stream = file_get_contents('php://input'))===FALSE){
+			$this->json_putout(array('error'=>'Bad Request'));
+		}
+		$data = json_decode($body_stream,true);
+		if ($data === NULL){
+			$this->json_putout(array('error'=>'Bad Response'));
+		}
+		$_trackerStatus = array(
+			0 => 'NotFound',
+			1 => 'Editing',
+			2 => 'MustSave',
+			3 => 'Corrupted',
+			4 => 'Closed'
+		);
+		$result = array('error'=>0,'action'=>$_trackerStatus[$data["status"]]);
+		switch ($_trackerStatus[$data["status"]]){
+			case "MustSave":
+			case "Corrupted":
+				$result["c"] = "saved";
+				$result['status'] = '0';
+				if (file_download_this($data["url"],$save_path)){
+					$result['status'] = 'success';
+				}
+				break;
+			default:break;
+		}
+		$this->json_putout($result);
+	}
+	private function json_putout($info){
+		@header( 'Content-Type: application/json; charset==utf-8');
+		@header( 'X-Robots-Tag: noindex' );
+		@header( 'X-Content-Type-Options: nosniff' );
+		echo json_encode($info);
+		exit;
+	}
+
+	//ä»£ç†è¾“å‡º
+	public function fileProxy(){
+		$download = isset($this->in['download']);
+		file_put_out($this->path,$download);
+	}
+	/**
+	 * ä¸Šä¼ ,html5æ‹–æ‹½  flash å¤šæ–‡ä»¶
+	 */
+	public function fileUpload(){
+		$save_path = _DIR($this->in['upload_to']);
+		if (!path_writeable($save_path)) show_json($this->in['upload_to'],false);
+		if ($save_path == '') show_json($this->L['upload_error_big'],false);
+		if (strlen($this->in['fullPath']) > 1) {//folder drag upload
+			$full_path = _DIR_CLEAR(rawurldecode($this->in['fullPath']));
+			$full_path = get_path_father($full_path);
+			$full_path = iconv_system($full_path);
+			if (mk_dir($save_path.$full_path)) {
+				$save_path = $save_path.$full_path;
+			}
+		}
+		$repeat_action = $this->config['user']['file_repeat'];
+		//åˆ†ç‰‡ä¸Šä¼ 
+		$temp_dir = iconv_system(USER_TEMP);
+		mk_dir($temp_dir);
+		if (!path_writeable($temp_dir)) show_json($this->L['no_permission_write'],false);
+		upload_chunk('file',$save_path,$temp_dir,$repeat_action);
+	}
+
+	//åˆ†äº«æ ¹ç›®å½•
+	private function path_share(&$list){
+		$arr = explode(',',$GLOBALS['path_id']);
+		$share_list = system_member::user_share_list($arr[0]);
+		$before_share_id = $GLOBALS['path_id_user_share'];
+		foreach ($share_list as $key => $value) {
+			$the_path = _DIR(KOD_USER_SHARE.':'.$arr[0].'/'.$value['name']);
+			$value['path'] = $value['name'];
+			$value['atime']='';$value['ctime']='';
+			$value['mode']='';$value['is_readable'] = 1;$value['is_writable'] = 1;
+			$value['exists'] = intval(file_exists($the_path));
+			$value['meta_info'] = 'path_self_share';
+			$value['menuType']  = "menuSharePath";
+
+			//åˆ†äº«åˆ—è¡¨oexe
+			if(get_path_ext($value['name']) == 'oexe'){
+				$json = json_decode(@file_get_contents($the_path),true);
+				if(is_array($json)) $value = array_merge($value,$json);
+			}
+			if ($value['type']=='folder') {
+				$value['ext'] = 'folder';
+				$list['folderlist'][] = $value;
+			}else{
+				$list['filelist'][] = $value;
+			}
+		}
+		$list['path_read_write'] = 'readable';
+		$GLOBALS['path_id_user_share'] = $before_share_id;
+		if($arr[0] == $this->user['user_id']){//è‡ªå·±åˆ†äº«åˆ—è¡¨
+			$list['share_list'] = $share_list;
+		}
+		return $list;
+	}
+
+	//æˆ‘çš„æ”¶è—æ ¹ç›®å½•
+	private function path_fav(&$list){
+		$favData=new fileCache(USER.'data/fav.php');
+		$fav_list = $favData->get();
+		$GLOBALS['path_from_auth_check'] = true;//ç»„æƒé™å‘ç”Ÿå˜æ›´ã€‚å¯¼è‡´è®¿é—®group_path æ— æƒé™é€€å‡ºé—®é¢˜
+		foreach($fav_list as $key => $val){
+			$the_path = _DIR($val['path']);
+			$has_children = path_haschildren($the_path,$check_file);
+			if( !isset($val['type'])){
+				$val['type'] = 'folder';
+			}
+			if( $val['type'] == 'folder' && $val['ext'] != 'treeFav'){
+				$has_children = true;
+			}
+			$cell = array(
+				'name'      => $val['name'],
+				'ext' 		=> $val['ext'],
+				'menuType'  => "menuFavPath",
+				'atime'		=> '',
+				'ctime'		=> '',
+				'mode'		=> '',
+				'is_readable'	=> 1,
+				'is_writeable'	=> 1,
+				'exists'	=> intval(file_exists($the_path)),
+				'meta_info' => 'treeFav',
+
+				'path' 		=> $val['path'],
+				'type'		=> $val['type'],
+				'open'      => false,
+				'isParent'  => false//$has_children
+			);
+			if( strstr($val['path'],KOD_USER_SHARE)||
+				strstr($val['path'],KOD_USER_FAV) ||
+				strstr($val['path'],KOD_GROUP_ROOT_SELF) ||
+				strstr($val['path'],KOD_GROUP_ROOT_ALL)
+				){
+				$cell['exists'] = 1;
+			}
+
+			//åˆ†äº«åˆ—è¡¨oexe
+			if(get_path_ext($val['name']) == 'oexe'){
+				$json = json_decode(@file_get_contents($the_path),true);
+				if(is_array($json)) $val = array_merge($val,$json);
+			}
+			if ($val['type']=='folder') {
+				$list['folderlist'][] = $cell;
+			}else{
+				$list['filelist'][] = $cell;
+			}
+		}
+		$GLOBALS['path_from_auth_check'] = false;
+		$GLOBALS['path_type'] = KOD_USER_FAV;
+		$list['path_read_write'] = 'readable';
+		return $list;
+	}
+
+	//ç”¨æˆ·ç»„åˆ—è¡¨
+	private function path_group(&$list,$group_root_type){
+		if($group_root_type == KOD_GROUP_ROOT_SELF){
+			$data_list = $this->_group_self();
+		}else{
+			$data_list = $this->_group_tree('1');
+		}
+		$GLOBALS['path_from_auth_check'] = true;//ç»„æƒé™å‘ç”Ÿå˜æ›´ã€‚å¯¼è‡´è®¿é—®group_path æ— æƒé™é€€å‡ºé—®é¢˜
+		foreach($data_list as $key => $val){
+			$cell = array(
+				'name'      => $val['name'],
+				'menuType'  => "menuGroupRoot",
+				'atime'		=> '',
+				'ctime'		=> '',
+				'mode'		=> '',
+				'is_readable'	=> 1,
+				'is_writeable'	=> 1,
+				'exists'	=> 1,
+
+				'path' 		=> $val['path'],
+				'ext'		=> $val['ext'],
+				'type'		=> 'folder',
+				'open'      => false,
+				'isParent'  => false//$val['isParent']
+			);
+			if ($val['type']=='folder') {
+				$list['folderlist'][] = $cell;
+			}else{
+				$list['filelist'][] = $cell;
+			}
+		}
+		$GLOBALS['path_from_auth_check'] = false;
+		$GLOBALS['path_type'] = $group_root_type;
+		$list['path_read_write'] = 'readable';
+		return $list;
+	}
+
+	//è·å–æ–‡ä»¶åˆ—è¡¨&å“¦exeæ–‡ä»¶jsonè§£æ
+	private function path($dir,$list_file=true,$check_children=false){
+		$ex_name = explode(',',$this->config['setting_system']['path_hidden']);
+		//å½“å‰ç›®å½•
+		$this_path = _DIR_OUT(iconv_app($dir));
+		if($GLOBALS['path_type'] == KOD_USER_SHARE && strpos(trim($dir,'/'),'/')===false ) {
+			$this_path = $dir;
+		}
+		$list = array(
+			'folderlist'		=> array(),
+			'filelist'			=> array(),
+			'info'				=> array(),
+			'path_read_write'	=>'not_exists',
+			'this_path' 		=> $this_path
+		);
+		//çœŸå®ç›®å½•è¯»å†™æƒé™åˆ¤æ–­
+		if (!file_exists($dir)) {
+			$list['path_read_write'] = "not_exists";
+		}else if (path_writeable($dir)) {
+			$list['path_read_write'] = 'writeable';
+		}else if (path_writeable($dir)) {
+			$list['path_read_write'] = 'readable';
+		}else{
+			$list['path_read_write'] = 'not_readable';
+		}
+
+		//å¤„ç†
+		if ($dir===false){
+			return $list;
+		}else if ($GLOBALS['path_type'] == KOD_USER_SHARE &&
+			!strstr(trim($this->in['path'],'/'),'/')) {//åˆ†äº«æ ¹ç›®å½• {user_share}:1/ {user_share}:1/test/
+			$list = $this->path_share($list);
+		}else if ($GLOBALS['path_type'] == KOD_USER_FAV) {//æ”¶è—æ ¹ç›®å½• {user_fav}
+			$list = $this->path_fav($list);
+		}else if ($GLOBALS['path_type'] == KOD_GROUP_ROOT_SELF) {//è‡ªå·±ç”¨æˆ·ç»„ç›®å½•ï¼›KOD_GROUP_ROOT_SELF
+			$list = $this->path_group($list,$GLOBALS['path_type']);
+		}else if ($GLOBALS['path_type'] == KOD_GROUP_ROOT_ALL) {//å…¨éƒ¨ç”¨æˆ·ç»„ç›®å½•ï¼›KOD_GROUP_ROOT_ALL
+			$list = $this->path_group($list,$GLOBALS['path_type']);
+		}else{
+			$list_file = path_list($dir,$list_file,true);//$check_children
+			$list['folderlist'] = $list_file['folderlist'];
+			$list['filelist'] = $list_file['filelist'];
+		}
+		$filelist_new = array();
+		$folderlist_new = array();
+		foreach ($list['filelist'] as $key => $val) {
+			if (in_array($val['name'],$ex_name)) continue;
+			$val['ext'] = get_path_ext($val['name']);
+			if ($val['ext'] == 'oexe' && !isset($val['content'])){
+				$path = iconv_system($val['path']);
+				$json = json_decode(@file_get_contents($path),true);
+				if(is_array($json)) $val = array_merge($val,$json);
+			}
+			$filelist_new[] = $val;
+		}
+		foreach ($list['folderlist'] as $key => $val) {
+			if (in_array($val['name'],$ex_name)) continue;
+			$folderlist_new[] = $val;
+		}
+		$list['filelist'] = $filelist_new;
+		$list['folderlist'] = $folderlist_new;
+		//show_json($list);
+
+		$list = _DIR_OUT($list);
+		$this->_role_check_info($list);
+		return $list;
+	}
+	private function _role_check_info(&$list){
+		if(!$GLOBALS['path_type']){
+			$list['info'] = array("path_type"=>'',"role"=>'',"id"=>'','name'=>'');
+			return;
+		}
+		$list['info']= array(
+			"path_type" => $GLOBALS['path_type'],
+			"role"      => $GLOBALS['is_root']?'owner':'guest',
+			"id"        => $GLOBALS['path_id'],
+			'name'      => '',
+		);
+
+		if ($GLOBALS['path_type'] == KOD_USER_SHARE) {
+			$GLOBALS['path_id'] = explode(':',$GLOBALS['path_id']);
+			$GLOBALS['path_id'] = $GLOBALS['path_id'][0];//id ä¸ºå‰é¢
+			$list['info']['id'] = $GLOBALS['path_id'];
+			$user = system_member::get_info($GLOBALS['path_id']);
+			$list['info']['name'] = $user['name'];
+			if($GLOBALS['is_root']){
+				$list['info']['admin_real_path'] = USER_PATH.$user['path'].'/home/';
+			}
+		}
+		//è‡ªå·±ç®¡ç†çš„ç›®å½•
+		if ($GLOBALS['path_type']==KOD_GROUP_PATH ||
+			$GLOBALS['path_type']==KOD_GROUP_SHARE) {
+			$group = system_group::get_info($GLOBALS['path_id']);
+			$list['info']['name'] = $group['name'];
+			$auth = system_member::user_auth_group($GLOBALS['path_id']);
+			if ($auth=='write' || $GLOBALS['is_root']) {
+				$list['info']['role'] = 'owner';
+				$list['group_space_use'] = $group['config'];//è‡ªå·±
+			}
+			if($GLOBALS['is_root']){
+				$list['info']['admin_real_path'] = GROUP_PATH.$group['path'].'/home/';
+			}
+		}
+	}
+}

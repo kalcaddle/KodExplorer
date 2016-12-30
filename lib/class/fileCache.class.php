@@ -162,9 +162,13 @@ class fileCache{
 	* 加载数据；并解析成程序数据
 	*/
 	public static function load($file){//10000次需要4s 数据量差异不大。
-		if (!file_exists($file)) touch($file);
-		$str = file_get_contents($file);
+		if (!$file) return false;
+		$file = iconv_system($file);
+		if (!file_exists($file)){
+			@touch($file);
+		}
 
+		$str = file_get_contents($file);
 		$str = substr($str, strlen(CONFIG_EXIT));
 		$data= json_decode($str,true);
 		if (is_null($data)) $data = array();
@@ -175,13 +179,18 @@ class fileCache{
 	*/
 	public static function save($file,$data){//10000次需要6s 
 		if (!$file) return false;
+		$file = iconv_system($file);
 		if (!file_exists($file)){
 			@touch($file);
 		}
-
+		
 		chmod_path($file,0777);
 		if (!path_writeable($file)) {
-			show_tips('"data/" can not write!');
+			if(isset($GLOBALS['L'])){
+				show_tips(BASIC_PATH."<br/>".$GLOBALS['L']['path_can_not_write_data']);
+			}else{
+				show_tips('"data/" can not write!');
+			}
 		}
 		$json_str = json_encode($data);
 		if(is_null($json_str)){//含有二进制或非utf8字符串对应检测

@@ -1,1 +1,283 @@
-<?php class system_group extends Controller{public static $static_sql=null;private $sql;function __construct(){parent::__construct();$this->sql=self::load_data();Êó†ŞŒË¯¦Œ˜ışı×ôÀ¨±œşÆ–úÎˆ÷ªÒùØØ«¤‰ºË•ÓÉ•Ò¡Š“Ê©¤ûÅ¤ÂÛ ’ã˜½·“Ü‘ëˆµôÃ;$this->_init();}public static function load_data(){if(is_null(self::$static_sql)){self::$static_sql=system_group_data();}return self::$static_sql;}public static function get_info($˜){$ êì=self::load_data();return $ êì->get($˜);£´šÇööçŠÚÇ“”¤¤­ÚõğÜŠ¨¢ô–ÌôÎ¡˜ƒ;}public static function space_change($àú³,$…Ê=false){$¢ßğÆ=self::load_data();×ıÙš§û½;$…ë=$¢ßğÆ->get($àú³);if(!is_array($…ë)){show_json($this->L["data_not_full"],!1);}if($…Ê===!1){$¨=_path_info_more(GROUP_PATH.$…ë['path'].'/');$ŒÛÈ‘ê=$¨['size'];if(isset($…ë['home_path'])&& file_exists(iconv_app($…ë['home_path']))){$¨=_path_info_more(iconv_app($…ë['home_path']));$ŒÛÈ‘ê+= $¨['size'];}}else{$ŒÛÈ‘ê=floatval($…ë['config']['size_use'])+floatval($…Ê);}$…ë['config']['size_use']=$ŒÛÈ‘ê<0?0:$ŒÛÈ‘ê;ĞÓÖîõ¯€ô‰›œ†«ÚĞ°ç¼;$¢ßğÆ->set($àú³,$…ë);Î†Á˜—¬­öº¢Çù·…©¸ù³Ó—ºşñ‹°ÚÈ€Ó®ÏÙïèñ–é×¹±æ³éëÜ¢å‘õıËõïÖ§Ê §ŸÎ÷ù¿àìÜöÖµ±‰œåòˆ;}public static function space_check($–îÔ){$ì=self::load_data();$İ=$ì->get($–îÔ);˜ÒÈçÊÂ¨«°…£‡»;if(!is_array($İ)){show_json($this->L["data_not_full"],!1);}$×»„=floatval($İ['config']['size_use']);$şšÏÓ=floatval($İ['config']['size_max']);if($şšÏÓ!=0&& $şšÏÓ*0x0000040000000<$×»„){show_json($GLOBALS['L']['space_is_full'],!1);}}private function _init(){if(count($this->sql->get())>0)return;$ó«›=array('1' =>array('group_id' =>'1','name' =>'root','parent_id' =>'','children' =>'','config' =>array('size_max' =>floatval(1.5),'size_use' =>floatval(0x00000400*0x00000400)),'path' =>hash_path(),'create_time'=> time(),));…©íóÑ– ‚œÄ‰×šš°ÖŸ‘Õ¹à©áŸ»‹ã‘€‚à–¢;$this->sql->reset($ó«›);ìŒ‚ˆ¼Ø§Í¯á¯ØÄÎ÷Ñ‹ƒ¶Œ•Ã›•Åû¬èßßĞÌëÓÔ¨­ü;}public static function _filter_list($ÜŞ¦¶£,$®õ²¬='path'){if($GLOBALS['is_root'])return $ÜŞ¦¶£;foreach($ÜŞ¦¶£ as $Ç=>&$©İ·¦Š){unset($©İ·¦Š[$®õ²¬]);}return $ÜŞ¦¶£;}public function get(){$ğÓÖÅ©=self::_filter_list($this->sql->get());show_json($ğÓÖÅ©,!0);Ï††ª”µ –çÍ¤°¿Íöó˜—ùƒ‰ÍÙÏ÷ÙÂÑ“¥ï™;}public function add(){if(!isset($this->in['name'])|| !isset($this->in['parent_id'])|| !isset($this->in['size_max']))show_json($this->L["data_not_full"],!1);$„Ïïš=$this->sql->get_max_id().'';$¾èı=array('group_id' =>$„Ïïš,'name' =>rawurldecode($this->in['name']),'parent_id' =>$this->in['parent_id'],'children' =>'','config' =>array('size_max' =>floatval($this->in['size_max']),'size_use' =>floatval(0x00000400*0x00000400)),'path' =>hash_path($this->in['name']),'create_time'=> time(),);if(isset($this->in['home_path'])){$¾èı['home_path']=_DIR(rawurldecode($this->in['home_path']));if(!file_exists($¾èı['home_path'])){show_json($this->L['not_exists'],!1);}$¾èı['home_path']=iconv_app($¾èı['home_path']);}else{unset($¾èı['home_path']);‘;}$this->_parent_child_change($¾èı,!0);ÊïæÂÊ;if($this->sql->set($„Ïïš,$¾èı)){$this->_initDir($¾èı['path']);show_json($this->L['success']);}show_json($this->L['error'],!1);}public function edit(){if(!$this->in['group_id'])show_json($this->L["data_not_full"],!1);$áœ=$this->sql->get($this->in['group_id']);if(!is_array($áœ)){show_json($this->L['not_exists'],!1);}if(isset($this->in['name'])){$áœ['name']=rawurldecode($this->in['name']);}if(isset($this->in['size_max'])){$áœ['config']['size_max']=floatval($this->in['size_max']);}if(isset($this->in['parent_id'])&& $áœ['parent_id']!='' && $this->in['parent_id']!=$áœ['parent_id']){$Œ=explode(',',$áœ['children']);if(in_array($this->in['parent_id'],$Œ)){show_json($this->L['current_has_parent'],!1);}self::space_change($this->in['group_id']);$this->_parent_child_change($áœ,!1);§Ç¬ß‡ëÉ…ùÂú;$áœ['parent_id']=$this->in['parent_id'];÷é¡ÂÙˆ;$this->_parent_child_change($áœ,!0);}if(isset($this->in['home_path'])){$áœ['home_path']=_DIR(rawurldecode($this->in['home_path']));if(!file_exists($áœ['home_path'])){show_json($this->L['not_exists'],!1);}$áœ['home_path']=iconv_app($áœ['home_path']);}else{unset($áœ['home_path']);}if($áœ!=$this->sql->get($this->in['group_id'])){$this->sql->set($this->in['group_id'],$áœ);}show_json($this->L['success']);}public function del(){if(!isset($this->in['group_id']))show_json($this->L["data_not_full"],!1);if(strlen($this->in['group_id'])<=0x001)show_json($this->L['default_user_can_not_do'],!1);$çÁğ=$this->sql->get($this->in['group_id']);ÆàïĞ–ù›œóİ—ï²¡çÂ«÷Ë±şšßïŠ®¹Ñ©àúö;$this->_parent_child_change($çÁğ,!1);$this->sql->set(array('parent_id',$çÁğ["group_id"]),array('parent_id','1'));system_member::group_remove_user_update($çÁğ["group_id"]);$this->sql->remove($this->in['group_id']);if(strlen($çÁğ['path'])!=0){del_dir(GROUP_PATH.$çÁğ['path'].'/');show_json($this->L['success']);}show_json($this->L['error'],!1);}private function _parent_child_change($«ı§Ìæ,$’½){if(!is_array($«ı§Ìæ)){show_json($this->L['not_exists'],!1);}if($«ı§Ìæ['parent_id']==0x001){return;}$ÄÛÚŞ=$«ı§Ìæ['group_id'];$Ëéê=explode(',',$«ı§Ìæ['children']);if($Ëéê[0]==''){unset($Ëéê[0]);}$Ëéê[]=$«ı§Ìæ['group_id'];while(strlen($«ı§Ìæ['group_id'])>0x0002){$«ı§Ìæ=$this->sql->get($«ı§Ìæ['parent_id']);if(!is_array($«ı§Ìæ)){show_json($this->L['not_exists'],!1);}$¯œš«”=explode(',',$«ı§Ìæ['children']);if($¯œš«”[0]==''){unset($¯œš«”[0]);}if($’½){foreach($Ëéê as $Á§Á=>$ÓÀŞ){$¯œš«”[]=$ÓÀŞ;}}else{foreach($¯œš«” as $Á§Á=>$ÓÀŞ){if(in_array($ÓÀŞ,$Ëéê))unset($¯œš«”[$Á§Á]);}}$§¤=implode(',',$¯œš«”);if($§¤!=$«ı§Ìæ['children']){$«ı§Ìæ['children']=$§¤;$this->sql->set($«ı§Ìæ['group_id'],$«ı§Ìæ);}}}private function _initDir($âŒ€){$çßù=array('home','data');$åº…=$this->config['setting_system']['new_group_folder'];û–¶¯×Şñ²²íÒÚ“„–õ‘–µùõ°®;$–éÅ=explode(',',$åº…);óêŸ¤Âş–Ñ±ÉÀ…¥ÓŠ»Ê›Ò€•È±Ä‰Ç®ÏÀƒ¸´íØÙ±×ï„ŠºÄß™šœãµîäË·–ÁŞ¿;$âŒ€=GROUP_PATH.$âŒ€.'/';mk_dir($âŒ€);foreach($çßù as $ÊÔ±){mk_dir($âŒ€.$ÊÔ±);}foreach($–éÅ as $ÊÔ±){mk_dir($âŒ€.'home/'.iconv_system($ÊÔ±));}}}
+<?php
+/*
+* @link http://www.kalcaddle.com/
+* @author warlee | e-mail:kalcaddle@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kalcaddle.com/tools/licenses/license.txt
+*/
+
+//ç¾¤ç»„ç®¡ç†ã€ç®¡ç†å‘˜è°ƒç”¨ï¼Œorç»„ç©ºé—´å¤§å°å˜æ›´ã€‘
+//æ ¹ç›®å½•idä¸º1==ã€‹å…±äº«ç©ºé—´
+class system_group extends Controller{
+	public static $static_sql = null;
+	private $sql;
+	function __construct()    {
+		parent::__construct();
+		$this->sql= self::load_data();
+		$this->_init();
+	}
+
+	//ä¿è¯åªåŠ è½½ä¸€æ¬¡æ–‡ä»¶
+	public static function load_data(){
+		if(is_null(self::$static_sql)){
+			self::$static_sql = system_group_data();
+		}
+		return self::$static_sql;
+	}
+	public static function get_info($the_id){
+		$sql = self::load_data();
+		return $sql->get($the_id);
+	}
+
+	/**
+	 * ç©ºé—´ä½¿ç”¨å˜æ›´
+	 * @param  [type] $the_id   [user_id or group_id]
+	 * @param  [type] $use_size_add [å˜æ›´çš„å¤§å°  size_max Gä¸ºå•ä½   size_use Byteä¸ºå•ä½]
+	 */
+	public static function space_change($the_id,$use_size_add=false){
+		$sql = self::load_data();
+		$info = $sql->get($the_id);
+		if(!is_array($info)){
+			show_json($this->L["data_not_full"],false);
+		}
+		if($use_size_add===false){//é‡ç½®ç”¨æˆ·ç©ºé—´ï¼›é¿å…è¦†ç›–ã€è§£å‹ç­‰å¯¼è‡´çš„é—®é¢˜
+			$pathinfo = _path_info_more(GROUP_PATH.$info['path'].'/');
+			$current_use  = $pathinfo['size'];
+			if(isset($info['home_path']) && file_exists(iconv_system($info['home_path']))){
+				$pathinfo = _path_info_more(iconv_system($info['home_path']));
+				$current_use  += $pathinfo['size'];
+			}
+		}else{
+			$current_use = floatval($info['config']['size_use'])+floatval($use_size_add);
+		}
+		$info['config']['size_use'] = $current_use<0?0:$current_use;
+		$sql->set($the_id,$info);
+	}
+
+	/**
+	 * ç©ºé—´å‰©ä½™æ£€æµ‹
+	 * 1073741824 â€”â€” 1G
+	 */
+	public static function space_check($the_id){
+		$sql = self::load_data();
+		$info = $sql->get($the_id);
+		if(!is_array($info)){
+			show_json($this->L["data_not_full"],false);
+		}
+		$size_use = floatval($info['config']['size_use']);
+		$size_max = floatval($info['config']['size_max']);
+		if($size_max!=0 && $size_max*1073741824<$size_use){
+			show_json($GLOBALS['L']['space_is_full'],false);
+		}
+	}
+
+	//ç®¡ç†å‘˜è°ƒç”¨
+	//===================
+	private function _init(){
+		if(count($this->sql->get()) > 0) return;
+		$default = array(
+			'1' =>array(
+				'group_id'  =>  '1',
+				'name'      =>  'root',
+				'parent_id' =>  '',
+				'children'  =>  '',
+				'config'    =>  array('size_max' => floatval(1.5),
+									  'size_use' => floatval(1024*1024)),//æ€»å¤§å°ï¼Œç›®å‰ä½¿ç”¨å¤§å°
+				'path'      =>  'root',
+				'create_time'=> time(),
+			)
+		);
+		$this->sql->reset($default);
+		$this->_initDir($default[0]['path']);
+	}
+	//åˆ é™¤ path id
+	public static function _filter_list($list,$filter_key = 'path'){
+		if($GLOBALS['is_root']) return $list;
+		foreach ($list as $key => &$val) {
+			unset($val[$filter_key]);
+		}
+		return $list;
+	}
+
+	public function get() {
+		$items = self::_filter_list($this->sql->get());
+		show_json($items,true);
+	}
+
+	/**
+	 * ç¾¤ç»„æ·»åŠ 
+	 * system_group/add&name=t1&parent_id=101&size_max=0
+	 */
+	public function add(){
+		if (!isset($this->in['name']) || //å¿…å¡«é¡¹
+			!isset($this->in['parent_id']) ||
+			!isset($this->in['size_max'])
+			) show_json($this->L["data_not_full"],false);
+
+		//åç§°å¯ä»¥é‡å¤
+		$group_id = $this->sql->get_max_id().'';
+		$group_name = rawurldecode($this->in['name']);
+		$group_info = array(
+			'group_id'  =>  $group_id,
+			'name'      =>  $group_name,
+			'parent_id' =>  $this->in['parent_id'],
+			'children'  =>  '',
+			'config'    =>  array('size_max' => floatval($this->in['size_max']),//G
+								  'size_use' => floatval(1024*1024)),//æ€»å¤§å°ï¼Œç›®å‰ä½¿ç”¨å¤§å°
+			'path'      =>  make_path($group_name),
+			'create_time'=> time(),
+		);
+		if(file_exists(iconv_system(GROUP_PATH.$group_info['path'])) ){
+			$group_info['path'] = make_path($group_info['path'].'_'.$group_info['group_id']);
+		}
+
+		//ç”¨æˆ·ç»„ç›®å½•
+		if( isset($this->in['home_path'])){
+			$group_info['home_path'] = _DIR(rawurldecode($this->in['home_path']));
+			if(!file_exists($group_info['home_path'])){
+				show_json($this->L['not_exists'],false);
+			}
+			$group_info['home_path'] = iconv_app($group_info['home_path']);
+		}else{
+			unset($group_info['home_path']);
+		}
+		$this->_parent_child_change($group_info,true);//æ›´æ–°çˆ¶èŠ‚ç‚¹
+		if ($this->sql->set($group_id,$group_info)) {
+			$this->_initDir($group_info['path']);
+			show_json($this->L['success']);
+		}
+		show_json($this->L['error'],false);
+	}
+
+	/**
+	 * ç¼–è¾‘ system_group/edit&group_id=101&name=warlee&size_max=0&parent_id
+	 */
+	public function edit() {
+		if (!$this->in['group_id']) show_json($this->L["data_not_full"],false);
+		$group_info = $this->sql->get($this->in['group_id']);
+		if(!is_array($group_info)){//ç”¨æˆ·ä¸å­˜åœ¨
+			show_json($this->L['not_exists'],false);
+		}
+
+		//name size_max parent_id
+		if(isset($this->in['name'])){
+			$group_info['name'] = rawurldecode($this->in['name']);
+		}
+		if(isset($this->in['size_max'])){
+			$group_info['config']['size_max'] = floatval($this->in['size_max']);
+		}
+		if( isset($this->in['parent_id']) &&
+			$group_info['parent_id']!= '' && //æ ¹ç›®å½•ä¸èƒ½ä¿®æ”¹çˆ¶èŠ‚ç‚¹
+			$this->in['parent_id']!=$group_info['parent_id']){//çˆ¶èŠ‚ç‚¹å˜æ›´
+
+			$child_change = explode(',',$group_info['children']);
+			if(in_array($this->in['parent_id'],$child_change)){//ä¸èƒ½ç§»åŠ¨åˆ°å­èŠ‚ç‚¹ï¼›æ­»å¾ªç¯
+				show_json($this->L['current_has_parent'],false);
+			}
+			self::space_change($this->in['group_id']);//é‡ç½®ç”¨æˆ·ä½¿ç”¨ç©ºé—´
+			$this->_parent_child_change($group_info,false);//å‘æ‰€æœ‰çˆ¶èŠ‚ç‚¹ï¼Œåˆ é™¤åŒ…å«æ­¤èŠ‚ç‚¹çš„children
+			$group_info['parent_id'] = $this->in['parent_id'];
+			$this->_parent_child_change($group_info,true);//å‘æ‰€æœ‰æ–°çš„çˆ¶èŠ‚ç‚¹ï¼Œæ·»åŠ åŒ…å«æ­¤èŠ‚ç‚¹çš„children
+		}
+
+		//ç”¨æˆ·ç»„ç›®å½•
+		if( isset($this->in['home_path'])){
+			$group_info['home_path'] = _DIR(rawurldecode($this->in['home_path']));
+			if(!file_exists($group_info['home_path'])){
+				show_json($this->L['not_exists'],false);
+			}
+			$group_info['home_path'] = iconv_app($group_info['home_path']);
+		}else{
+			unset($group_info['home_path']);
+		}
+		if($group_info != $this->sql->get($this->in['group_id'])){
+			$this->sql->set($this->in['group_id'],$group_info);
+		}
+		show_json($this->L['success']);
+	}
+
+	/**
+	 * åˆ é™¤ ?system_member/del&user_id=102
+	 */
+	public function del() {
+		if (!isset($this->in['group_id'])) show_json($this->L["data_not_full"],false);
+		if (strlen($this->in['group_id']) <= 1) show_json($this->L['default_user_can_not_do'],false);
+		$group_info = $this->sql->get($this->in['group_id']);
+		$this->_parent_child_change($group_info,false);//å‘æ‰€æœ‰çˆ¶èŠ‚ç‚¹ï¼Œåˆ é™¤åŒ…å«æ­¤èŠ‚ç‚¹çš„children
+		$this->sql->set(//å°†è¯¥èŠ‚ç‚¹çš„å­èŠ‚ç‚¹çš„çˆ¶èŠ‚ç‚¹è®¾ç½®ä¸ºæ ¹ç›®å½•
+				array('parent_id',$group_info["group_id"]),
+				array('parent_id','1')
+				);
+		system_member::group_remove_user_update($group_info["group_id"]);//ç”¨æˆ·æ‰€åœ¨ç»„å˜æ›´
+		$this->sql->remove($this->in['group_id']);
+
+		if( strlen($group_info['path'])!=0){
+			del_dir(iconv_system(GROUP_PATH.$group_info['path'].'/'));
+			show_json($this->L['success']);
+		}
+		show_json($this->L['error'],false);
+	}
+
+
+	//============å†…éƒ¨å¤„ç†å‡½æ•°=============
+	//å›æº¯æ›´æ”¹èŠ‚ç‚¹çš„children
+	private function _parent_child_change($group_info,$is_add){
+		if(!is_array($group_info)){
+			show_json($this->L['not_exists'],false);
+		}
+		if($group_info['parent_id'] == 1){
+			return;
+		}
+		$first_id = $group_info['group_id'];
+		$child_change = explode(',',$group_info['children']);
+		if($child_change[0]==''){
+			unset($child_change[0]);
+		}
+		$child_change[] = $group_info['group_id'];//åŒ…å«å½“å‰
+		while(strlen($group_info['group_id'])>2){//èŠ‚ç‚¹idä»100å¼€å§‹
+			$group_info = $this->sql->get($group_info['parent_id']);
+			if(!is_array($group_info)){
+				show_json($this->L['not_exists'],false);
+			}
+			$children_new = explode(',',$group_info['children']);
+			if($children_new[0]==''){
+				unset($children_new[0]);
+			}
+			if($is_add){//æ·»åŠ 
+				foreach ($child_change as $key=>$val) {
+					$children_new[] = $val;
+				}
+			}else{//åˆ é™¤
+				foreach ($children_new as $key=>$val) {
+					if(in_array($val,$child_change))
+					unset($children_new[$key]);
+				}
+			}
+			$child_str = implode(',',$children_new);
+			if($child_str != $group_info['children']){//æœ‰å˜æ›´
+				$group_info['children'] = $child_str;
+				$this->sql->set($group_info['group_id'],$group_info);
+			}
+		}
+	}
+
+	//
+	/**
+	 *åˆå§‹åŒ–ç”¨æˆ·æ•°æ®å’Œé…ç½®ã€‚
+	 */
+	private function _initDir($path){
+		$root = array('home','data');//recycle
+		$new_group_folder = $this->config['setting_system']['new_group_folder'];
+		if(!is_array($new_group_folder)){
+			$new_group_folder = $this->config['setting_system_default']['new_group_folder'];
+		}
+		$home = explode(',',$new_group_folder);
+		$path = GROUP_PATH.$path.'/';
+		foreach ($root as $dir) {
+			mk_dir(iconv_system($path.$dir));
+		}
+		foreach ($home as $dir) {
+			mk_dir(iconv_system($path.'home/'.$dir));
+		}
+	}
+}

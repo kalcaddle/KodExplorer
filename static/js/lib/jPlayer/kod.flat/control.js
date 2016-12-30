@@ -2,7 +2,7 @@ var jPlayerConfigInit = function($player,config){
 	var playerConfig = {
 		supplied: "flv,webma,webmv,oga,ogv,m4v,mp3,wav,rtmpa,rtmpv",
 		solution: "html,flash",
-		wmode:"window",
+		wmode:"transparent",
 		volume:0.8,
 		autoBlur: true,
 		autohide:{
@@ -103,6 +103,7 @@ var jPlayerConfigInit = function($player,config){
 			}
 		}
 	};
+
 	$.extend(playerConfig,config);
 	return playerConfig;
 }

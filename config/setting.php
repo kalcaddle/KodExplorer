@@ -10,6 +10,8 @@
 $config['settings'] = array(
 	'download_url_time'	=> 0,			//下载地址生效时间，按秒计算，0代表不限制，默认不限制
 	'api_login_tonken'	=> '',			//设定则认为开启服务端api通信登陆，同时作为加密密匙
+	'update_chunk_size' => 1024*1024,	//分片上传大小设定；不设定则用post_max_size;有时会受nginx的post_size限制
+	'param_rewrite'		=> true
 );
 
 //初始化系统配置
@@ -25,7 +27,7 @@ $config['setting_system_default'] = array(
 	
 	'new_user_app'		=> "365日历,pptv直播,ps,qq音乐,搜狐影视,时钟,天气,水果忍者,计算器,豆瓣电台,音悦台,icloud",
 	'new_user_folder'	=> "document,desktop,pictures,music",
-	'new_group_folder'	=> "share,doc"	//新建分组默认建立文件夹
+	'new_group_folder'	=> "share,doc,pictures"	//新建分组默认建立文件夹
 );
 
 
@@ -37,6 +39,7 @@ $config['setting_default'] = array(
 	'file_repeat'		=> "replace",	// replace|rename|skip
 	'file_icon_size'	=> "80",		// 图标大小
 	'animate_open'		=> "1",			// dialog动画
+	'sound_open'		=> "0",			// 操作音效
 	'theme'				=> "win10",		// app theme [mac,win7,win10,metro,metro_green,alpha]
 	'wall'				=> "2",			// wall picture
 	"file_repeat"		=> "rename",	// rename,replace

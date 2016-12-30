@@ -38,7 +38,7 @@ class share extends Controller{
 		$member = system_member::load_data();
 		$user = $member->get($this->in['user']);
 		$share_data = USER_PATH.$user['path'].'/data/share.php';
-		if (!file_exists($share_data)) {
+		if (!file_exists(iconv_system($share_data))) {
 			$this->error($this->L['share_error_user']);
 		}
 		$this->sql=new fileCache($share_data);
@@ -194,6 +194,7 @@ class share extends Controller{
 		$out = ob_get_clean();
 		$the_config = array(
 			'lang'          => LANGUAGE_TYPE,
+			'system_os'		=> $this->config['system_os'],
 			'is_root'       => 0,
 			'web_root'      => '',
 			'web_host'      => HOST,
@@ -203,6 +204,7 @@ class share extends Controller{
 			'version_desc'  => isset($this->config['settings']['version_desc'])?$this->config['settings']['version_desc']:"",
 
 			'upload_max'	=> file_upload_size(),
+			'param_rewrite' => $this->config['settings']['param_rewrite'],
 			'json_data'     => "",
 			'share_page'    => 'share'
 		);
@@ -235,7 +237,25 @@ class share extends Controller{
 
 		//属性查看，单个文件则生成临时下载地址。没有权限则不显示
 		if (count($info_list)==1 && $info_list[0]['type']!='folder') {//单个文件
-			$data['file_md5'] = @md5_file($info_list[0]['path']);
+			$file = $info_list[0]['path'];
+			if($this->share_info['not_download']!='1'){
+				$data['download_path'] = _make_file_proxy($file);
+			}
+			if($data['size'] < 100*1024|| isset($this->in['get_md5'])){
+				$data['file_md5'] = @md5_file($file);
+			}else{
+				$data['file_md5'] = "...";
+			}
+
+			//获取图片尺寸
+			$ext = get_path_ext($file);
+			if(in_array($ext,array('jpg','gif','png','jpeg','bmp')) ){
+				load_class('imageThumb');
+				$size = imageThumb::imageSize($file);
+				if($size){
+					$data['image_size'] = $size;
+				}
+			}
 		}
 		show_json($data);
 	}
@@ -380,7 +400,7 @@ class share extends Controller{
 			show_json($this->L['no_permission_ext'],false);
 		}
 		$save_path = $this->share_path.$this->_clear($this->in['upload_to']);
-		if (!is_writeable($save_path)) show_json($this->L['no_permission_write'],false);
+		if (!path_writeable($save_path)) show_json($this->L['no_permission_write'],false);
 
 		if ($save_path == '') show_json($this->L['upload_error_big'],false);
 		if (strlen($this->in['fullPath']) > 1) {//folder drag upload
@@ -393,9 +413,9 @@ class share extends Controller{
 		}
 
 		//分片上传
-		$temp_dir = USER_TEMP;
+		$temp_dir = iconv_system(USER_TEMP);
 		mk_dir($temp_dir);
-		if (!is_writeable($temp_dir)) show_json($this->L['no_permission_write'],false);
+		if (!path_writeable($temp_dir)) show_json($this->L['no_permission_write'],false);
 		upload_chunk('file',$save_path,$temp_dir,'rename');
 	}
 	
@@ -426,16 +446,17 @@ class share extends Controller{
 			show_json($this->L['share_not_download_tips'],false);
 		}
 		$path = _DIR_CLEAR($this->in['path']);
-		$path = USER_TEMP.iconv_system($path);
+		$path = iconv_system(USER_TEMP.$path);
 		file_put_out($path,true);
 		del_file($path);
 	}
 	public function zipDownload(){
 		$this->share_download_add();
-		if(!file_exists(USER_TEMP)){
-			mkdir(USER_TEMP);
+		$user_temp = iconv_system(USER_TEMP);
+		if(!file_exists($user_temp)){
+			mkdir($user_temp);
 		}else{//清除未删除的临时文件，一天前
-			$list = path_list(USER_TEMP,true,false);
+			$list = path_list($user_temp,true,false);
 			$max_time = 3600*24;
 			if ($list['filelist']>=1) {
 				for ($i=0; $i < count($list['filelist']); $i++) { 
@@ -446,7 +467,7 @@ class share extends Controller{
 				}
 			}
 		}
-		$zip_file = $this->zip(USER_TEMP);
+		$zip_file = $this->zip($user_temp);
 		show_json($this->L['zip_success'],true,get_path_this($zip_file));
 	}
 	private function zip($zip_path){
@@ -455,25 +476,29 @@ class share extends Controller{
 		}
 		load_class('pclzip');
 		ini_set('memory_limit', '2028M');//2G;
+
 		$zip_list = json_decode($this->in['list'],true);
 		$list_num = count($zip_list);
-		for ($i=0; $i<$list_num; $i++) { 
-			$zip_list[$i]['path'] = _DIR_CLEAR($this->path.$this->_clear($zip_list[$i]['path']));
-		}
-		
-		//指定目录
-		if ($list_num == 1) {
-			$path_this_name=get_path_this($zip_list[0]['path']);
-		}else{
-			$path_this_name=get_path_this(get_path_father($zip_list[0]['path']));
-		}
-		$zipname = $zip_path.$path_this_name.'.zip';
-		$zipname = get_filename_auto($zipname,date(' h.i.s'));
 		$files = array();
 		for ($i=0; $i < $list_num; $i++) {
-			$files[] = $zip_list[$i]['path'];
+			$item = _DIR_CLEAR($this->path.$this->_clear($zip_list[$i]['path']));
+			if(file_exists($item)){
+				$files[] = $item;
+			}
+		}
+		if(count($files)==0){
+			show_json($this->L['not_exists'],false);
 		}
 
+		
+		//指定目录
+		if (count($files) == 1) {
+			$path_this_name=get_path_this($files[0]);
+		}else{
+			$path_this_name=get_path_this(get_path_father($files[0]));
+		}
+		$zipname = $zip_path.$path_this_name.'.zip';
+		$zipname = get_filename_auto($zipname,date('_H-i-s'));
 		$archive = new PclZip($zipname);
 		foreach ($files as $key =>$val) {
 			$remove_path_pre = _DIR_CLEAR(get_path_father($val));
@@ -482,6 +507,7 @@ class share extends Controller{
 					PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
 					PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
 				);
+				continue;
 			}
 			$v_list = $archive->add($val,
 				PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
@@ -499,7 +525,7 @@ class share extends Controller{
 		if (!file_exists($filename)){
 			show_json($this->L['not_exists'],false);
 		}
-		if (!is_readable($filename)){
+		if (!path_readable($filename)){
 			show_json($this->L['no_permission_read'],false);
 		}
 		if (filesize($filename) >= 1024*1024*20){

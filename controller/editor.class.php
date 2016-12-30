@@ -28,7 +28,7 @@ class editor extends Controller{
 		//获取编辑器配置数据
 		$editor_config = $this->config['editor_default'];
 		$config_file = USER.'data/editor_config.php';
-		if (!file_exists($config_file)) {//不存在则创建
+		if (!file_exists(iconv_system($config_file))) {//不存在则创建
 			$sql=fileCache::save($config_file,$editor_config);
 		}else{
 			$editor_config=fileCache::load($config_file);
@@ -49,7 +49,7 @@ class editor extends Controller{
 		if (!file_exists($filename)){
 			show_json($this->L['not_exists'],false);
 		}
-		if (!is_readable($filename)){
+		if (!path_readable($filename)){
 			show_json($this->L['no_permission_read_all'],false);
 		}
 		if (filesize($filename) >= 1024*1024*40) show_json($this->L['edit_too_big'],false);
@@ -107,7 +107,7 @@ class editor extends Controller{
 	*/
 	public function setConfig(){
 		$file = USER.'data/editor_config.php';
-		if (!is_writeable($file)) {//配置不可写
+		if (!path_writeable(iconv_system($file))) {//配置不可写
 			show_json($this->L['no_permission_write_file'],false);
 		}
 		$key= $this->in['k'];

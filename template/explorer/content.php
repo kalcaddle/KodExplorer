@@ -42,7 +42,7 @@
 					<button class="btn btn-default btn-right-radius" id='goto_father' title='<?php echo $L['go_up'];?>' type="button">
 						<i class="font-icon icon-circle-arrow-up"></i>
 					</button>
-					<div class="path_tips" title="<?php echo $L['only_read_desc'];?>"><i class="icon-warning-sign"></i><span></span></div>
+					<div class="path_tips" title="<?php echo $L['only_read_desc'];?>" title-timeout="0"><i class="icon-warning-sign"></i><span></span></div>
 				</div><!-- /header-middle end-->		
 				<div class='header-right'>
 					<input type="text" name="seach" class="btn-left-radius"/>

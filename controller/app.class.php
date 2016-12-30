@@ -27,21 +27,21 @@ class app extends Controller{
 		foreach ($default as $key) {
 			$info[$key] = $list[$key];
 		}
-		$desktop = USER_PATH.$user_info['path'].'/home/desktop/';
+		$desktop = iconv_system(user_home_path($user_info).'desktop/');
 		mk_dir($desktop);
-		if(!is_writeable($desktop)){
+		if(!path_writeable($desktop)){
 			return;
 		}
 		foreach ($info as $key => $data) {
 			if (!is_array($data)) {
 				continue;
 			}
-			$path = iconv_system($desktop.$key.'.oexe');
+			$path = $desktop.iconv_system($key).'.oexe';
 			unset($data['name']);
 			unset($data['desc']);
 			unset($data['group']);
 			file_put_contents($path, json_encode($data));
-		}        
+		}
 	}
 
 	/**

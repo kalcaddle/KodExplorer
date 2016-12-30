@@ -393,6 +393,7 @@ div.btn-group-sm > .btn {padding:6px 10px;}
 	animation-name:scaleOpen;
 }
 .dialogClose{
+	opacity: 0;
 	-webkit-animation-duration:0.3s;
 	animation-duration:0.3s;
 	-webkit-animation-name: zoomOut;

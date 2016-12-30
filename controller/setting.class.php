@@ -87,7 +87,7 @@ class setting extends Controller{
 	 */
 	public function set(){
 		$file = USER.'data/config.php';
-		if (!is_writeable($file)) {//配置不可写
+		if (!path_writeable(iconv_system($file))) {//配置不可写
 			show_json($this->L['no_permission_write_file'],false);
 		}
 		$key   = $this->in['k'];

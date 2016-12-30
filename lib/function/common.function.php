@@ -311,14 +311,17 @@ function array_get_index($arr,$index){
 }
 
 function show_tips($message,$url= '', $time = 3){
+	header('Content-Type: text/html; charset=utf-8');
 	$goto = "content='$time;url=$url'";
 	$info = "Auto jump after {$time}s, <a href='$url'>Click Here</a>";
 	if ($url == "") {
 		$goto = "";
 		$info = "";
 	} //是否自动跳转
-
-	$message = nl2br(htmlentities($message));
+	$message = nl2br(htmlentities($message,ENT_COMPAT,"utf-8"));
+	$message = str_replace(
+		array("&lt;br/&gt;","&lt;br&gt;","&lt;b&gt;","&lt;/b&gt;"), 
+		array("<br/>","<br/>","<b>","</b>"), $message);
 	echo<<<END
 <html>
 	<meta http-equiv='refresh' $goto charset="utf-8">
@@ -341,8 +344,6 @@ function show_tips($message,$url= '', $time = 3){
 END;
 	exit;
 }
-
-
 function get_caller_info() {
 	$trace = debug_backtrace();
 	foreach($trace as $i=>$call){
@@ -388,7 +389,7 @@ function show_json($data,$code = true,$info=''){
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($result);
 	exit;
-} 
+}
 
 /**
  * 简单模版转换，用于根据配置获取列表：

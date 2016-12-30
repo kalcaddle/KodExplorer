@@ -16,7 +16,7 @@ if(GLOBAL_DEBUG){
 	define('STATIC_JS','_dev');  //_dev||app
 	define('STATIC_LESS','less');//less||css
 	@ini_set("display_errors","on");
-	@error_reporting(E_ERROR|E_PARSE|E_WARNING);
+	@error_reporting(E_ERROR|E_PARSE|E_WARNING);//E_ALL
 }else{
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
@@ -58,9 +58,11 @@ define('OFFICE_SERVER',"https://owa-box.vips100.com/op/view.aspx?src=");
 // https://docview.mingdao.com/op/view.aspx?src=
 // https://view.officeapps.live.com/op/view.aspx?src=
 
+
+include_once(FUNCTION_DIR.'common.function.php');
+$config['app_startTime'] = mtime();
 include_once(FUNCTION_DIR.'web.function.php');
 include_once(FUNCTION_DIR.'file.function.php');
-include_once(FUNCTION_DIR.'common.function.php');
 include_once(CORER_DIR.'Application.class.php');
 include_once(CORER_DIR.'Controller.class.php');
 include_once(CORER_DIR.'Model.class.php');
@@ -76,20 +78,21 @@ include_once(BASIC_PATH.'config/version.php');
 define('WEB_ROOT',get_webroot(BASIC_PATH));
 define('HOST',get_host().'/');
 define('APPHOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
-
 //数据地址定义。
 $config['pic_thumb']	= BASIC_PATH.'data/thumb/';		// 缩略图生成存放地址
 $config['cache_dir']	= BASIC_PATH.'data/cache/';		// 缓存文件地址
-$config['app_startTime'] = mtime();         			//起始时间
+
 $config['app_charset']	 = 'utf-8';			            //该程序整体统一编码
 $config['settings']['static_path'] = "./static/";     //静态文件目录
-$config['check_charset'] = 'ansii,utf-8,gbk,gb2312,utf-16,ucs-2,euc-kr,euc-jp,shift-jis,eucjp-win,sjis-win,jis,latin1'; //文件打开自动检测编码
-
+$config['check_charset'] = 'ASCII,UTF-8,GBK,GB2312,UTF-16,UCS-2,EUC-KR,EUC-JP,SHIFT-JIS,EUCJP-WIN,SJIS-WIN,JIS,LATIN1';//文件打开自动检测编码
 
 //when edit a file ;check charset and auto converto utf-8;
 if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['system_os']='windows';
 	$config['system_charset']='gbk';// EUC-JP/Shift-JIS/BIG5  //user set your server system charset
+	if(version_compare(phpversion(), '7.1.0', '>=')){//7.1 has auto apply the charset
+	    $config['system_charset']='utf-8';
+	}
 } else {
 	$config['system_os']='linux';
 	$config['system_charset']='utf-8';

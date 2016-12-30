@@ -1,0 +1,21 @@
+.ptips-skin{
+	line-height: 1.5em;
+	max-width: 300px;
+	/*min-width: 30px;*/
+	opacity:0.95;
+	z-index:999900;
+	text-align:left;
+	word-wrap: break-word;
+	padding:8px 12px;
+	pointer-events: none;
+
+	-webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+	color:#333;
+	/*border: 1px solid #bbb;background:#fefefe;*/
+	border: 1px solid #ccbd39;background: #fffacb;
+}
+.ptips-skin .qtip-icon{border-color: #222;}
+.ptips-skin .qtip-titlebar .ui-state-hover{border-color: #303030;}

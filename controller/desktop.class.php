@@ -18,9 +18,15 @@ class desktop extends Controller{
 		}else{
 			$this->assign('wall',STATIC_PATH.'images/wall_page/'.$wall.'.jpg');
 		}
-		if (!is_dir(MYHOME.'desktop/') && path_writeable(MYHOME)) {
-			mkdir(MYHOME.'desktop/');
+
+		$desktop = iconv_system(HOME.'desktop/');
+		if ($GLOBALS['is_root']) {
+			$desktop = iconv_system(MYHOME.'desktop/');
 		}
+		if (!file_exists($desktop)) {
+			@mkdir($desktop);
+		}
+		echo $desktop;exit;
 		$this->display('index.php');
 	}
 }
