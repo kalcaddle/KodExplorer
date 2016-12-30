@@ -26,7 +26,6 @@ class desktop extends Controller{
 		if (!file_exists($desktop)) {
 			@mkdir($desktop);
 		}
-		echo $desktop;exit;
 		$this->display('index.php');
 	}
 }
