@@ -248,7 +248,7 @@ class user extends Controller{
 	 */
 	public function login($msg = ''){
 		if (!file_exists(USER_SYSTEM.'install.lock')) {
-			chmod_path(BASIC_PATH,0777);
+			chmod_path(BASIC_PATH,DEFAULT_PERRMISSIONS);
 			$this->display('install.html');
 			exit;
 		}
@@ -299,6 +299,7 @@ class user extends Controller{
 	 * api登陆:index.php?user/loginSubmit&login_token=ZGVtbw==|da9926fdab0c7c32ab2c329255046793
 	 */
 	public function loginSubmit(){
+		$api_login_check = false;
 		if(isset($this->in['login_token'])){
 			$api_token = $this->config['settings']['api_login_tonken'];
 			$param = explode('|',$this->in['login_token']);
@@ -481,6 +482,7 @@ class user extends Controller{
 			header('location:http://qr.liantu.com/api.php?text='.$this->in['url']);
 			exit;
 		}
+		ob_get_clean();
 		include CLASS_DIR.'phpqrcode.php';
 		QRcode::png(rawurldecode($this->in['url']));
 	}

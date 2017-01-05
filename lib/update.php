@@ -9,26 +9,59 @@ if(UPDATE_DEV){
 	define('THE_DATA_PATH',DATA_PATH);
 }
 
-function update_check($self_file){
-	//version <3.3 to 3.36
-	if( file_exists(THE_DATA_PATH.'system/member.php')){
-		new updateToV330($self_file);
-		header('location:./index.php?user/logout');
-		exit;
+function update_check(){
+	//from <=3.23 to last
+	if( file_exists(THE_DATA_PATH.'system/member.php') && 
+		!file_exists(THE_DATA_PATH.'system/system_member.php')){
+		new updateToV330();
+		update_clear();
 	}
-	$system  = THE_DATA_PATH.'system/system_setting.php';
-	$data = fileCache::load($file_in);
-	if( file_exists($system) && 
-		(is_array($data) && !isset($data['current_version']) )
-		){//不是3.30~3.36
-		return;
+
+	//from [3.30~3.35] to last
+	$system_file = THE_DATA_PATH.'system/system_setting.php';
+	$system_data = fileCache::load($system_file);
+	if( file_exists($system_file) && 
+		(is_array($system_data) && !isset($system_data['current_version']) )
+		){
+		update330To336();
+		update_clear();
 	}
-	//3.3x ~ 3.36;
-	update330To336($self_file);
+
+	//from 3.36 to last
+	update_clear();
 }
 
-// 还原用户目录
-function update330To336($self_file){
+
+function update_clear(){
+	//更新版本号
+	$file  = THE_DATA_PATH.'system/system_setting.php';
+	if(file_exists($file)){
+		updateToV330::init_system();
+	}	
+
+	del_file(THE_DATA_PATH.'system/group.php');
+	del_file(THE_DATA_PATH.'system/member.php');
+	del_file(BASIC_PATH.'readme.txt');
+	del_file(THE_DATA_PATH.'2.0-3.23.zip');
+	del_file(THE_DATA_PATH.'2.0-3.34.zip');
+	del_file(THE_DATA_PATH.'2.0-3.35.zip');
+	del_file(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
+	del_file(THE_DATA_PATH.'system/update.lock');
+	
+	del_dir(THE_DATA_PATH.'i18n');
+	del_dir(THE_DATA_PATH.'thumb');
+	del_dir(BASIC_PATH.'__MACOSX');
+	del_dir(THE_DATA_PATH.'session');
+	mk_dir(THE_DATA_PATH.'session');
+	mk_dir(THE_DATA_PATH.'temp/thumb');
+	
+	del_file(__FILE__);
+	header('location:./index.php?user/logout');
+	exit;
+}
+
+// 还原用户目录 3.30~3.35之间
+function update330To336(){
 	//change user path
 	$the_file = THE_DATA_PATH.'system/system_member.php';
 	$the_data = fileCache::load($the_file);
@@ -72,15 +105,13 @@ function update330To336($self_file){
 	}
 	fileCache::save($the_file,$the_data);
 	updateToV330::init_system();
-	del_file($self_file);
-	del_file(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
 }
 
 
 class updateToV330{
 	private $user_array;
 	private $role_array;
-	function __construct($self_file) {
+	function __construct() {
 		$update_lock = THE_DATA_PATH.'system/update.lock';
 		if(file_exists($update_lock)){
 			show_tips("正在升级中,请稍后（Updating...）");
@@ -94,13 +125,9 @@ class updateToV330{
 		$this->user_array = array();
 		$this->role_array = array();
 		$this->init_role();
-		$result = $this->init_user();
+		$this->init_user();
 		$this->init_group();
 		$this->init_system();
-		if($result){
-			$this->clear_path();
-			del_file($self_file);
-		}
 	}
 	private function init_role(){
 		$file_in = THE_DATA_PATH.'system/group.php';
@@ -199,8 +226,10 @@ class updateToV330{
 		fileCache::save($file_in,$data);
 	}
 	private function init_user(){
-		$file_in = THE_DATA_PATH.'system/member.php';
+		$file_in = THE_DATA_PATH.'system/member_old.php';
 		$file_out = THE_DATA_PATH.'system/system_member.php';
+		@rename(THE_DATA_PATH.'system/member.php',$file_in);//backup
+
 		$data = fileCache::load($file_in);
 		$data_new = array();
 		$default =array(
@@ -247,7 +276,7 @@ class updateToV330{
 			$this->reset_user_config($value);
 			$data_new[$id] = $value;
 		}
-		return fileCache::save($file_out,$data_new);
+		fileCache::save($file_out,$data_new);
 	}
 	static function init_system(){
 		$file_in  = THE_DATA_PATH.'system/system_setting.php';
@@ -261,25 +290,7 @@ class updateToV330{
 				$data[$key] = $value;
 			}
 		}
-		$data['need_check_code'] = '0';
 		$data['current_version'] = KOD_VERSION;
 		fileCache::save($file_out,$data);
-	}
-	private function clear_path(){
-		@rename(THE_DATA_PATH.'system/member.php',THE_DATA_PATH.'system/member_old.php');//backup
-		del_file(THE_DATA_PATH.'system/group.php');
-		del_file(BASIC_PATH.'readme.txt');
-		//del_file(BASIC_PATH.'README.md');
-		del_file(THE_DATA_PATH.'2.0-3.34.zip');
-		del_file(THE_DATA_PATH.'2.0-3.35.zip');
-		del_file(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
-		del_file(THE_DATA_PATH.'system/update.lock');
-		
-		del_dir(THE_DATA_PATH.'i18n');
-		del_dir(THE_DATA_PATH.'thumb');
-		del_dir(BASIC_PATH.'__MACOSX');
-		del_dir(THE_DATA_PATH.'session');
-		mk_dir(THE_DATA_PATH.'session');
-		mk_dir(THE_DATA_PATH.'temp/thumb');
 	}
 }

@@ -32,12 +32,23 @@ a.button:active { color: #000; border-color: #444;}
 a.button:focus { outline: none;}
 
 
+.init_loading{position:fixed;left:50%;margin-left:-80px;top:40%;font-size:1.25em;z-index:999999;width:auto;}
+.init_loading div{padding:20px;background:#000;opacity:0.6;margin:0 auto;color:#FFF;
+	border-radius:6px;text-align:center;line-height:30px;}
+.init_loading img{border-radius:10px;}
+
+
 .fileList_list {width: 100%; z-index: 0;cursor: pointer;}
 .fileList_list .app_link { height: 14px; width: 14px; margin-left: 10px; margin-top: 5px; position: absolute; font-size: 12px; color: #666;}
 .fileList_list .app_link::before { font-family: FontAwesome; content: "\f064"; color: #fff; text-shadow: 0 0 5px #333;}
-.fileList_list .file { color: #225;width: 100%;height:50px;border-bottom: 1px solid #ddd;}
+.fileList_list .file { 
+	color: #225;width: 100%;height:50px;border-bottom: 1px solid #ddd;
+	border-bottom: solid 1px #f6f6f6;position: relative;
+}
+
 /*.fileList_list .file2 { background: #fff3d9;}*/
-.fileList_list .file {border-bottom: solid 1px #f6f6f6;position: relative;}
+/*.fileList_list .file:hover{background:#def;border-bottom-color:#def;}*/
+
 
 .fileList_list .file .filename,.fileList_list .file .filesize,.fileList_list .file .filetime 
 {line-height: 25px; height: 25px; font-size: 12px;padding-left:50px;color:#bbb;}
@@ -382,6 +393,13 @@ body{overflow-x: hidden;}
 .menu-open .frame-main{left:210px;overflow: hidden;}
 .menu-open .panel-menu{left:0px;}
 .menu-open{overflow: hidden;}
+
+.frame-main .panel-mask{display:none;}
+.menu-open .frame-main .panel-mask{
+	display: block;z-index: 9999;
+	position:absolute;left:0;right:0;top:0;bottom:0;
+	background:#000;opacity:0.1;filter: alpha(opacity=10);
+}
 
 .file-action{position: absolute;right: 0px;margin-top: -40px;font-size: 14px;color:#aaa;padding: 10px 15px;}
 .file_action_menu{    

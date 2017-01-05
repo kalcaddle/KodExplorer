@@ -78,6 +78,12 @@ var quoteEncode = function(str){
 var canvasSupport = function() {
     return !!document.createElement('canvas').getContext;
 }
+var isWap = function(){
+	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
+		return true;
+	}
+	return false;
+}
 
 //var obj1 = $.extend({}, obj);//浅拷贝
 //var obj2 = $.extend(true, {}, obj);//深拷贝

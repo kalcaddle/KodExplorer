@@ -475,7 +475,7 @@ class share extends Controller{
 			show_json($this->L['share_not_download_tips'],false);
 		}
 		load_class('pclzip');
-		ini_set('memory_limit', '2028M');//2G;
+		ignore_timeout();
 
 		$zip_list = json_decode($this->in['list'],true);
 		$list_num = count($zip_list);

@@ -10,9 +10,10 @@
 	<link href="<?php echo STATIC_PATH;?>style/wap/app_explorer.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 </head>
 <body>
+	<div class="init_loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
 	<div class="panel-menu">
 		<div class="panel-hd">
-			<span class="my-avator"> <img src="./static/images/common/pic.jpg"> </span>
+			<span class="my-avator"> <img src="<?php echo STATIC_PATH;?>images/common/pic.jpg"> </span>
 			<div><h3 class="name"><?php echo $_SESSION['kod_user']['name'];?></h3></div>
 		</div>
 		<ul>
@@ -30,10 +31,10 @@
 		</ul>
 	</div>
 	<div class="frame-main">
+		<div class="panel-mask"></div>
 		<div class="frame-header">
 			<div class="tool left_tool"><i class="font-icon icon-list"></i></div>
 			<div class="title"><?php echo $L['kod_name'];?></div>
-
 			<div class="menu_group">
 				<div class="tool right_tool"><i class="font-icon icon-ellipsis-vertical"></i></div>
 				<ul class="dropdown-menu menu-right_tool pull-right animated menuShow" role="menu">				

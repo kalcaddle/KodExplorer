@@ -123,7 +123,7 @@ class explorer extends Controller{
 		$new= rtrim($this->path,'/');
 		$new = get_filename_auto($new,'',$repeat_type);//已存在处理 创建副本
 		if(@touch($new)){
-			chmod_path($new,0777);
+			chmod_path($new,DEFAULT_PERRMISSIONS);
 			if (isset($this->in['content'])) {
 				file_put_contents($new,$this->in['content']);
 			}else{
@@ -148,8 +148,8 @@ class explorer extends Controller{
 		}
 		$new = rtrim($this->path,'/');
 		$new = get_filename_auto($new,'',$repeat_type);//已存在处理 创建副本
-		if(mk_dir($new,0777)){
-			chmod_path($new,0777);
+		if(mk_dir($new,DEFAULT_PERRMISSIONS)){
+			chmod_path($new,DEFAULT_PERRMISSIONS);
 			show_json($this->L['create_success'],true,_DIR_OUT(iconv_app($new)) );
 		}else{
 			show_json($this->L['create_error'],false);
@@ -336,7 +336,7 @@ class explorer extends Controller{
 			}
 			$the_fav = array(
 				'name'      => $val['name'],
-				'ext' 		=> $val['ext'],
+				'ext' 		=> isset($val['ext'])?$val['ext']:"",
 				'menuType'  => "menuTreeFav",
 
 				'path' 		=> $val['path'],
@@ -375,6 +375,13 @@ class explorer extends Controller{
 		$fav = $this->_tree_fav($app);
 
 		$public_path = KOD_GROUP_PATH.':1/';
+
+		$group_root  = system_group::get_info(1);
+		$group_root_name = $this->L['public_path'];
+		if($group_root && $group_root['name'] != 'public'){
+			$group_root_name = $group_root['name'];
+		}
+
 		if(system_member::user_auth_group(1) == false){
 			$public_path = KOD_GROUP_SHARE.':1/';//不在公共组则只能读取公共组共享目录
 		}
@@ -416,7 +423,7 @@ class explorer extends Controller{
 			),
 
 			'public'=>array(
-				'name'		=> $this->L['public_path'],
+				'name'		=> $group_root_name,
 				'menuType'  => "menuTreeGroupRoot",
 				'ext' 		=> "groupPublic",
 				'children'  => $public,
@@ -856,7 +863,7 @@ class explorer extends Controller{
 	}
 	public function zip($zip_path=''){
 		load_class('pclzip');
-		ini_set('memory_limit', '2028M');//2G;
+		ignore_timeout();
 
 		$zip_list = json_decode($this->in['list'],true);
 		$list_num = count($zip_list);
@@ -917,7 +924,9 @@ class explorer extends Controller{
 		}
 	}
 	public function unzip(){
-		ini_set('memory_limit', '2028M');//2G;
+		load_class('pclzip');
+		ignore_timeout();
+
 		$path=$this->path;
 		$name = get_path_this($path);
 		$name = substr($name,0,strrpos($name,'.'));
@@ -936,11 +945,10 @@ class explorer extends Controller{
 			show_json($this->L['no_permission_write'],false);
 		}
 		space_size_use_check();
-		load_class('pclzip');
 		$zip = new PclZip($path);
 		unzip_charset_get($zip->listContent());
 		$result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,
-								PCLZIP_OPT_SET_CHMOD,0777,
+								PCLZIP_OPT_SET_CHMOD,DEFAULT_PERRMISSIONS,
 								PCLZIP_CB_PRE_FILE_NAME,'unzip_pre_name',
 								PCLZIP_CB_PRE_EXTRACT,"check_ext_unzip",
 								PCLZIP_OPT_REPLACE_NEWER);//解压到某个地方,覆盖方式

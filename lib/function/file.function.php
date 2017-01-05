@@ -32,13 +32,18 @@
 
 // 传入参数为程序编码时，有传出，则用程序编码，
 // 传入参数没有和输出无关时，则传入时处理成系统编码。
+
+
+if(!defined("DEFAULT_PERRMISSIONS")){
+	define("DEFAULT_PERRMISSIONS",0755);
+}
 function iconv_app($str){
 	if (!function_exists('iconv')){
 		return $str;
 	}
 	global $config;
-	$result = iconv($config['system_charset'], $config['app_charset'], $str);
-	if (strlen($result)==0) {//转换失败
+	$result = @iconv($config['system_charset'], $config['app_charset'], $str);
+	if (!$result || strlen($result)==0) {//转换失败
 		$result = $str;
 	}
 	return $result;
@@ -48,8 +53,8 @@ function iconv_system($str){
 		return $str;
 	}
 	global $config;
-	$result = iconv($config['app_charset'], $config['system_charset'], $str);
-	if (strlen($result)==0) {//转换失败
+	$result = @iconv($config['app_charset'], $config['system_charset'], $str);
+	if (!$result || strlen($result)==0) {//转换失败
 		$result = $str;
 	}
 	return $result;
@@ -140,7 +145,7 @@ function path_readable($path){
 	$mode = get_mode($path);
 	if( $mode && 
 		strlen($mode) == 18 &&
-		substr($mode,-9,1) == 'r'){// -rwx rwx rwx(0777)
+		substr($mode,-9,1) == 'r'){// drwx rwx r-x(0775)
 		return true;
 	}
 	return false;
@@ -153,7 +158,7 @@ function path_writeable($path){
 	$mode = get_mode($path);
 	if( $mode && 
 		strlen($mode) == 18 &&
-		substr($mode,-8,1) == 'w'){// -rwx rwx rwx (0777)
+		substr($mode,-8,1) == 'w'){// drwx rwx r-x(0775)
 		return true;
 	}
 	return false;
@@ -415,7 +420,7 @@ function path_haschildren($dir,$check_file=false){
  */
 function del_file($fullpath){
 	if (!@unlink($fullpath)) { // 删除不了，尝试修改文件权限
-		@chmod($fullpath, 0777);
+		@chmod($fullpath, DEFAULT_PERRMISSIONS);
 		if (!@unlink($fullpath)) {
 			return false;
 		}
@@ -430,20 +435,20 @@ function del_file($fullpath){
 function del_dir($dir){
 	if(!file_exists($dir) || !is_dir($dir)) return true;
 	if (!$dh = opendir($dir)) return false;
-	@set_time_limit(0);
+	ignore_timeout();
 	while (($file = readdir($dh)) !== false) {
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir . '/' . $file;
 			if (!is_dir($fullpath)) {
 				if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
-					chmod($fullpath, 0777);
+					chmod($fullpath, DEFAULT_PERRMISSIONS);
 					if (!unlink($fullpath)) {
 						return false;
 					}
 				}
 			} else {
 				if (!del_dir($fullpath)) {
-					chmod($fullpath, 0777);
+					chmod($fullpath, DEFAULT_PERRMISSIONS);
 					if (!del_dir($fullpath)) return false;
 				}
 			}
@@ -472,7 +477,7 @@ function copy_dir($source, $dest){
 	if (!$dest) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
 
-	@set_time_limit(0);
+	ignore_timeout();
 	$result = true;
 	if (is_file($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
@@ -481,13 +486,13 @@ function copy_dir($source, $dest){
 			$__dest = $dest;
 		}
 		$result = @copy($source, $__dest);
-		@chmod($__dest, 0777);
+		@chmod($__dest, DEFAULT_PERRMISSIONS);
 	}else if(is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
 			$dest = $dest . basename($source);
 		}
 		if (!is_dir($dest)) {
-			@mkdir($dest,0777);
+			@mkdir($dest,DEFAULT_PERRMISSIONS);
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
@@ -507,7 +512,7 @@ function copy_dir($source, $dest){
 function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
 	if (!$dest) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
-	@set_time_limit(0);
+	ignore_timeout();
 	if (is_file($source)) {
     	return move_file($source,$dest,$repeat_add,$repeat_type);
 	}else if(is_dir($source)) {
@@ -515,7 +520,7 @@ function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
 			$dest = $dest . basename($source);
 		}
 		if (!file_exists($dest)) {
-			@mkdir($dest,0777);
+			@mkdir($dest,DEFAULT_PERRMISSIONS);
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
@@ -540,7 +545,7 @@ function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
     if (!$dest || !file_exists($source)) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
 
-	@set_time_limit(0);
+	ignore_timeout();
 	if(is_file($source)){
 	    return move_file($source,$dest,$repeat_add,$repeat_type);
 	}
@@ -576,7 +581,7 @@ function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
  * @param int $mode
  * @return bool
  */
-function mk_dir($dir, $mode = 0777){
+function mk_dir($dir, $mode = DEFAULT_PERRMISSIONS){
 	if (is_dir($dir) || @mkdir($dir, $mode)){
 		return true;
 	}
@@ -750,7 +755,7 @@ function file_search($path,$search,$is_case){
  * @return :string
  */
 function chmod_path($path,$mod){
-	if (!isset($mod)) $mod = 0777;
+	if (!isset($mod)) $mod = DEFAULT_PERRMISSIONS;
 	if (!file_exists($path)) return;
 	if (is_file($path)) return @chmod($path,$mod);
 	if (!$dh = @opendir($path)) return false;
@@ -863,7 +868,7 @@ function file_put_out($file,$download=false){
 		$filename = iconv_app(get_path_this($file));
 	}
 
-	@set_time_limit(0);
+	ignore_timeout();
 	ob_end_clean();
 	$mime = get_file_mime(get_path_ext($file));
 	$time = gmdate('D, d M Y H:i:s', filemtime($file));
@@ -940,7 +945,7 @@ function file_put_out($file,$download=false){
  * 支持fopen的打开都可以；支持本地、url
  */
 function file_download_this($from, $file_name,$header_size=0){
-	@set_time_limit(0);
+	ignore_timeout();
 	if ($fp = @fopen ($from, "rb")){
 		if(!$download_fp = @fopen($file_name, "wb")){
 			return false;

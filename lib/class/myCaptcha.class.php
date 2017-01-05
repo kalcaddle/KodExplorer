@@ -203,10 +203,9 @@ class myCaptcha{
 		}
 	}
 	private function show_img(&$img){
+		ob_get_clean();
 		$out = ob_get_clean();//清除之前所有输出缓冲 TODO
-		if($out != ''){
-			die($out);
-		}
+		
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		header('Cache-Control: no-store, no-cache, must-revalidate');
 		header('Cache-Control: post-check=0, pre-check=0', FALSE);

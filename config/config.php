@@ -25,7 +25,7 @@ if(GLOBAL_DEBUG){
 }
 
 header("Content-type: text/html; charset=utf-8");
-header('HTTP/1.1 200 Ok');//兼容部分lightHttp服务器环境
+//header('HTTP/1.1 200 Ok');//兼容部分lightHttp服务器环境; php5.1以下会输出异常；暂屏蔽
 define('BASIC_PATH',str_replace('\\','/',dirname(dirname(__FILE__))).'/');
 define('TEMPLATE',      BASIC_PATH .'template/');   //模版文件路径
 define('CONTROLLER_DIR',BASIC_PATH .'controller/'); //控制器目录
@@ -35,6 +35,7 @@ define('PLUGIN_DIR',    LIB_DIR .'plugins/');       //插件目录
 define('FUNCTION_DIR',	LIB_DIR .'function/');		//函数库目录
 define('CLASS_DIR',		LIB_DIR .'class/');			//内目录
 define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
+define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限，777 部分虚拟主机限制了777
 
 /*
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;

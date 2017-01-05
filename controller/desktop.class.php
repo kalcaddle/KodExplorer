@@ -12,6 +12,12 @@ class desktop extends Controller{
 		$this->tpl = TEMPLATE.'desktop/';
 	}
 	public function index() {
+		$wap = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
+		if($wap){
+			header("location:./index.php?explorer");
+			exit;
+		}
+
 		$wall = $this->config['user']['wall'];
 		if(strlen($wall)>3){
 			$this->assign('wall',$wall);

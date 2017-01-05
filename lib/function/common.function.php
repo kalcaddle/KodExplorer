@@ -109,7 +109,20 @@ function clear_html($HTML, $br = true){
 	} else {
 		return str_replace("\n", '', $HTML);
 	} 
-} 
+}
+
+/**
+ * 过滤js、css等 
+ */
+function filter_html($html){
+	$find = array(
+		"/<(\/?)(script|i?frame|style|html|body|title|link|meta|\?|\%)([^>]*?)>/isU",
+		"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",
+		"/javascript\s*:/isU",
+	);
+	$replace = array("＜\\1\\2\\3＞","\\1\\2","");
+	return preg_replace($find,$replace,$html);
+}
 
 /**
  * 将obj深度转化成array
@@ -129,7 +142,13 @@ function obj2array($obj){
 	} else {
 		return $obj;
 	} 
-} 
+}
+
+function ignore_timeout(){
+	@ignore_user_abort(true);
+	@set_time_limit(24 * 60 * 60);//set_time_limit(0)  1day
+	@ini_set('memory_limit', '2028M');//2G;
+}
 
 /**
  * 计算时间差
@@ -310,7 +329,41 @@ function array_get_index($arr,$index){
    }
 }
 
+//set_error_handler('errorHandler',E_ERROR|E_PARSE|E_CORE_ERROR|E_COMPILE_ERROR|E_USER_ERROR);
+register_shutdown_function('fatalErrorHandler');
+function errorHandler($err_type,$errstr,$errfile,$errline){
+	if (($err_type & E_WARNING) === 0 && ($err_type & E_NOTICE) === 0) {
+		return false;
+	}
+	$arr = array(
+		$err_type,
+		$errstr,
+		//" in [".$errfile.']',
+		" in [".get_path_this(get_path_father($errfile)).'/'.get_path_this($errfile).']',
+		'line:'.$errline,
+	);
+	$str = implode("  ",$arr)."<br/>";
+	show_tips($str);
+}
+
+//捕获fatalError
+function fatalErrorHandler(){
+	$e = error_get_last();
+	switch($e['type']){
+		case E_ERROR:
+		case E_PARSE:
+		case E_CORE_ERROR:
+		case E_COMPILE_ERROR:
+		case E_USER_ERROR:
+			errorHandler($e['type'],$e['message'],$e['file'],$e['line']);
+			break;
+		case E_NOTICE:break;
+		default:break;
+	}
+}
+
 function show_tips($message,$url= '', $time = 3){
+	ob_get_clean();
 	header('Content-Type: text/html; charset=utf-8');
 	$goto = "content='$time;url=$url'";
 	$info = "Auto jump after {$time}s, <a href='$url'>Click Here</a>";
@@ -318,10 +371,7 @@ function show_tips($message,$url= '', $time = 3){
 		$goto = "";
 		$info = "";
 	} //是否自动跳转
-	$message = nl2br(htmlentities($message,ENT_COMPAT,"utf-8"));
-	$message = str_replace(
-		array("&lt;br/&gt;","&lt;br&gt;","&lt;b&gt;","&lt;/b&gt;"), 
-		array("<br/>","<br/>","<b>","</b>"), $message);
+	$message = filter_html(nl2br($message));
 	echo<<<END
 <html>
 	<meta http-equiv='refresh' $goto charset="utf-8">
@@ -332,6 +382,7 @@ function show_tips($message,$url= '', $time = 3){
 	#msgbox #info{margin-top: 10px;color:#aaa;font-size: 12px;}
 	#msgbox #title{color: #888;border-bottom: 1px solid #ddd;padding: 10px 0;margin: 0 0 15px;font-size:18px;}
 	#msgbox #info a{color: #64b8fb;text-decoration: none;padding: 2px 0px;border-bottom: 1px solid;}
+	#msgbox a{text-decoration:none;color:#2196F3;}#msgbox a:hover{color:#f60;border-bottom:1px solid}
 	</style>
 	<body>
 	<div id="msgbox">
@@ -384,7 +435,7 @@ function show_json($data,$code = true,$info=''){
 	if ($info != '') {
 		$result['info'] = $info;
 	}
-	ob_end_clean();	
+	ob_end_clean();
 	header("X-Powered-By: kodExplorer.");
 	header('Content-Type: application/json; charset=utf-8');
 	echo json_encode($result);
@@ -421,7 +472,7 @@ function getTplList($cute1, $cute2, $arraylist, $tpl,$current,$current_str=''){
 		$html .= $temp;
 	} 
 	return $html;
-} 
+}
 
 /**
  * 去掉HTML代码中的HTML标签，返回纯文本

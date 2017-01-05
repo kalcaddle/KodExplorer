@@ -11,7 +11,7 @@ $config['settings'] = array(
 	'download_url_time'	=> 0,			//下载地址生效时间，按秒计算，0代表不限制，默认不限制
 	'api_login_tonken'	=> '',			//设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'update_chunk_size' => 1024*1024,	//分片上传大小设定；不设定则用post_max_size;有时会受nginx的post_size限制
-	'param_rewrite'		=> true
+	'param_rewrite'		=> false,
 );
 
 //初始化系统配置
@@ -42,7 +42,7 @@ $config['setting_default'] = array(
 	'sound_open'		=> "0",			// 操作音效
 	'theme'				=> "win10",		// app theme [mac,win7,win10,metro,metro_green,alpha]
 	'wall'				=> "2",			// wall picture
-	"file_repeat"		=> "rename",	// rename,replace
+	"file_repeat"		=> "replace",	// rename,replace,skip
 	"recycle_open"		=> "1",			// 1 | 0 代表是否开启
 	'resize_config'		=> 
 		'{"filename":250,"filetype":80,"filesize":80,"filetime":215,"editor_left_tree_width":200,"explorer_left_tree_width":200}'

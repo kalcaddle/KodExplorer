@@ -208,6 +208,7 @@ class imageThumb {
 
 	// 输出图片，link---只输出，不保存文件。file--保存为文件
 	function echoImage($img, $toFile){
+		ob_get_clean();
 		$result = false;
 		switch ($this->echoType) {
 			case 'link':$result = imagePNG($img);break;				
