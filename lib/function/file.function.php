@@ -505,35 +505,8 @@ function copy_dir($source, $dest){
 	return $result;
 }
 
-/**
- * 移动文件&文件夹；（同名文件夹则特殊处理）
- * 问题：win下，挂载磁盘移动到系统盘时rmdir导致遍历不完全；
- */
-function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
-	if (!$dest) return false;
-	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
-	ignore_timeout();
-	if (is_file($source)) {
-    	return move_file($source,$dest,$repeat_add,$repeat_type);
-	}else if(is_dir($source)) {
-		if ($dest[strlen($dest)-1] == '/') {
-			$dest = $dest . basename($source);
-		}
-		if (!file_exists($dest)) {
-			@mkdir($dest,DEFAULT_PERRMISSIONS);
-		}
-		if (!$dh = opendir($source)) return false;
-		while (($file = readdir($dh)) !== false) {
-		    if ($file =='.' || $file =='..') continue;
-			move_path($source."/".$file, $dest."/".$file,$repeat_add,$repeat_type);
-		}
-		closedir($dh);
-		return @rmdir($source);
-	}
-}
-
 function move_file($source,$dest,$repeat_add,$repeat_type){
-    if ($dest[strlen($dest)-1] == '/') {
+	if ($dest[strlen($dest)-1] == '/') {
 		$dest = $dest . "/" . basename($source);
 	}
 	if(file_exists($dest)){
@@ -541,35 +514,57 @@ function move_file($source,$dest,$repeat_add,$repeat_type){
 	}
 	return intval(@rename($source,$dest));
 }
+
+/**
+ * [move_path description]
+ * @param  [type] $source      [源文件]
+ * @param  [type] $dest        [目标路径]
+ * @param  string $repeat_add  [文件重复则追加]
+ * @param  string $repeat_type [重复处理方式]
+ * @return [type]              [bool]
+ * 
+ * rename:先用rename
+ * 1.文件,rename可以在不同盘符之间移动.
+ * 2.空文件夹：也可以在不同盘符之间移动.但是目标文件夹的父目录必须存在
+ * 3.对于非空文件夹，只能在同一盘符下移动.
+ */
 function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
-    if (!$dest || !file_exists($source)) return false;
+	if (!$dest || !file_exists($source)) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
+	if(is_file($source)){
+		return move_file($source,$dest,$repeat_add,$repeat_type);
+	}else if(is_dir($source)){
+		//尝试直接重命名
+		$the_dest = $dest;
+		if(file_exists($the_dest)){
+			$the_dest = get_filename_auto($dest,$repeat_add,$repeat_type);
+		}
+		if( @rename(rtrim($source,'/'),rtrim($the_dest,'/')) ){
+			return true;
+		}
+	}
 
 	ignore_timeout();
-	if(is_file($source)){
-	    return move_file($source,$dest,$repeat_add,$repeat_type);
-	}
 	recursion_dir($source,$dirs,$files,-1,0);
-
 	@mkdir($dest);
 	foreach($dirs as $f){
-	    $path = $dest.'/'.substr($f,strlen($source));
-	    if(!file_exists($path)){
-	        mk_dir($path);
-	    }
+		$path = $dest.'/'.substr($f,strlen($source));
+		if(!file_exists($path)){
+			mk_dir($path);
+		}
 	}
 	$file_success = 0;
 	foreach($files as $f){
-	    $path = $dest.'/'.substr($f,strlen($source));
-	    $file_success += move_file($f,$path,$repeat_add,$repeat_type);
+		$path = $dest.'/'.substr($f,strlen($source));
+		$file_success += move_file($f,$path,$repeat_add,$repeat_type);
 	}
 	foreach($dirs as $f){
-	    rmdir($f);
+		rmdir($f);
 	}
 	@rmdir($source);
 	if($file_success == count($files)){
-	    del_dir($source);
-	    return true;
+		del_dir($source);
+		return true;
 	}
 	return false;
 }

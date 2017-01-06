@@ -37,7 +37,7 @@ function update_clear(){
 	$file  = THE_DATA_PATH.'system/system_setting.php';
 	if(file_exists($file)){
 		updateToV330::init_system();
-	}	
+	}
 
 	del_file(THE_DATA_PATH.'system/group.php');
 	del_file(THE_DATA_PATH.'system/member.php');
@@ -46,7 +46,6 @@ function update_clear(){
 	del_file(THE_DATA_PATH.'2.0-3.34.zip');
 	del_file(THE_DATA_PATH.'2.0-3.35.zip');
 	del_file(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
-	del_file(THE_DATA_PATH.'system/update.lock');
 	
 	del_dir(THE_DATA_PATH.'i18n');
 	del_dir(THE_DATA_PATH.'thumb');
@@ -112,25 +111,18 @@ class updateToV330{
 	private $user_array;
 	private $role_array;
 	function __construct() {
-		$update_lock = THE_DATA_PATH.'system/update.lock';
-		if(file_exists($update_lock)){
-			show_tips("正在升级中,请稍后（Updating...）");
-		}else{
-			@touch($update_lock);
-			if(!file_exists($update_lock)){
-				show_tips("data path can't writable!");
-			}
-		}
-
 		$this->user_array = array();
 		$this->role_array = array();
 		$this->init_role();
 		$this->init_user();
-		$this->init_group();
 		$this->init_system();
+		$this->init_group();//移动文件夹；耗时操作
 	}
 	private function init_role(){
 		$file_in = THE_DATA_PATH.'system/group.php';
+		if(!file_exists($file_in)){
+			return;
+		}
 		$file_out = THE_DATA_PATH.'system/system_role.php';
 		$data = fileCache::load($file_in);
 		$data_new = array();
@@ -176,6 +168,7 @@ class updateToV330{
 			$data_new[$id] = $value;
 		}
 		fileCache::save($file_out,$data_new);
+		del_file(THE_DATA_PATH.'system/group.php');
 	}
 	private function init_group(){//新建
 		$file_out = THE_DATA_PATH.'system/system_group.php';
@@ -198,18 +191,20 @@ class updateToV330{
 		mk_dir($group_path);
 		touch($group_path.'index.html');
 
-		$public = THE_DATA_PATH.'public/';
-		$item_path = $group_path.$arr['path'].'/';
-		mk_dir($item_path.'home/share');
-		mk_dir($item_path.'home/document');
+		$public = THE_DATA_PATH.'public';
+		$item_path = iconv_system($group_path.$arr['path'].'/');
 		mk_dir($item_path.'data');
 		mk_dir($item_path.'recycle');
 		if(file_exists($public)){
-			move_path($public,$item_path.'home');
+			if(! @rename($public,$item_path.'home')){
+				move_path($public,$item_path.'home');
+			}
 		}
+		mk_dir($item_path.'home/share');
+		mk_dir($item_path.'home/document');
 	}
 	private function reset_user_config(&$user){
-		$user_path = THE_DATA_PATH.'User/'.$user['name'].'/';
+		$user_path = iconv_system(THE_DATA_PATH.'User/'.$user['name'].'/');
 		$file_in = $user_path.'data/config.php';
 		$data = fileCache::load($file_in);
 
