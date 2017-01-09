@@ -1,6 +1,8 @@
 <?php
 
+define('UPDATE_VERSION','');
 define('UPDATE_DEV',false);
+
 if(UPDATE_DEV){
 	define('THE_DATA_PATH',WEB_ROOT.'self/kod/3.23/data/');
 	del_dir(THE_DATA_PATH);
@@ -10,6 +12,8 @@ if(UPDATE_DEV){
 }
 
 function update_check(){
+	unzip_repeat();//再次解压，避免windows部分主机解压失败问题
+
 	//from <=3.23 to last
 	if( file_exists(THE_DATA_PATH.'system/member.php') && 
 		!file_exists(THE_DATA_PATH.'system/system_member.php')){
@@ -31,6 +35,18 @@ function update_check(){
 	update_clear();
 }
 
+function unzip_repeat(){
+	$zip_file = THE_DATA_PATH.'2.0-'.UPDATE_VERSION.'.zip';
+	if(!file_exists($zip_file)){
+		return;
+	}
+	$unzip_to = BASIC_PATH;
+	load_class('pclzip');
+	$zip = new PclZip($zip_file);
+	$result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,
+							PCLZIP_OPT_REPLACE_NEWER);
+}
+
 
 function update_clear(){
 	//更新版本号
@@ -38,14 +54,16 @@ function update_clear(){
 	if(file_exists($file)){
 		updateToV330::init_system();
 	}
-
 	del_file(THE_DATA_PATH.'system/group.php');
 	del_file(THE_DATA_PATH.'system/member.php');
-	del_file(BASIC_PATH.'readme.txt');
 	del_file(THE_DATA_PATH.'2.0-3.23.zip');
 	del_file(THE_DATA_PATH.'2.0-3.34.zip');
 	del_file(THE_DATA_PATH.'2.0-3.35.zip');
-	del_file(THE_DATA_PATH.'2.0-'.KOD_VERSION.'.zip');
+	del_file(THE_DATA_PATH.'2.0-'.UPDATE_VERSION.'.zip');
+
+	del_file(BASIC_PATH.'readme.txt');
+	del_file(BASIC_PATH.'controller/group.class.php');
+	del_file(BASIC_PATH.'controller/member.class.php');
 	
 	del_dir(THE_DATA_PATH.'i18n');
 	del_dir(THE_DATA_PATH.'thumb');
@@ -195,7 +213,7 @@ class updateToV330{
 		$item_path = iconv_system($group_path.$arr['path'].'/');
 		mk_dir($item_path.'data');
 		mk_dir($item_path.'recycle');
-		if(file_exists($public)){
+		if(file_exists($public)){//移动文件耗时操作；放最后；
 			if(! @rename($public,$item_path.'home')){
 				move_path($public,$item_path.'home');
 			}

@@ -81,7 +81,7 @@ class user extends Controller{
 	private function login_success($user){
 		$this->user = $user;
 		if(!$user['path']){//服务器管理后立即生效
-			$this->login($this->L['kod_version_error']);
+			$this->login("Your 'path' is empty,please install again！");
 		}else if($user['status'] == 0){
 			$this->login($this->L['login_error_user_not_use']);
 		}else if($user['role']==''){
@@ -275,7 +275,7 @@ class user extends Controller{
 			$user = $sql->get($root);
 			$user['password'] = md5($this->in['password']);
 			$sql->set($root,$user);
-			if( $user['path'] == '' && $user['create_time'] == ''){
+			if($user['create_time'] == ''){
 				$member = new system_member();
 				$member->init_install();
 			}

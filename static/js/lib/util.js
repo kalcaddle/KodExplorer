@@ -431,7 +431,7 @@ function download(data, strFileName, strMimeType) {
 		}else{			
 			return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
 				navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
-				saver(payload) ; // everyone else can save dataURLs un-processed
+				saveToData(payload) ; // everyone else can save dataURLs un-processed
 		}
 	}//end if dataURL passed?
 
@@ -451,7 +451,7 @@ function download(data, strFileName, strMimeType) {
 		return new myBlob([uiArr], {type: type});
 	 }
 
-	function saver(url, winMode){
+	function saveToData(url, winMode){
 		if ('download' in anchor) { //html5 A[download]
 			anchor.href = url;
 			anchor.setAttribute("download", fileName);
@@ -485,18 +485,15 @@ function download(data, strFileName, strMimeType) {
 		return navigator.msSaveBlob(blob, fileName);
 	}
 	if(self.URL){
-		saver(self.URL.createObjectURL(blob), true);
+		saveToData(self.URL.createObjectURL(blob), true);
 	}else{
-		if(typeof blob === "string" || blob.constructor===toString ){
-			try{
-				return saver( "data:" +  mimeType   + ";base64,"  +  self.btoa(blob)  );
-			}catch(y){
-				return saver( "data:" +  mimeType   + "," + encodeURIComponent(blob)  );
-			}
+		if( typeof(blob) === "string" || 
+			blob.constructor===toString ){
+			return saveToData("data:"+mimeType+";base64,"+window.btoa(blob));
 		}
 		reader=new FileReader();
 		reader.onload=function(e){
-			saver(this.result);
+			saveToData(this.result);
 		};
 		reader.readAsDataURL(blob);
 	}

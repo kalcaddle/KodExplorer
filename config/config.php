@@ -60,28 +60,25 @@ define('OFFICE_SERVER',"https://owa-box.vips100.com/op/view.aspx?src=");
 // https://view.officeapps.live.com/op/view.aspx?src=
 
 
-include_once(FUNCTION_DIR.'common.function.php');
+include(FUNCTION_DIR.'common.function.php');
 $config['app_startTime'] = mtime();
-include_once(FUNCTION_DIR.'web.function.php');
-include_once(FUNCTION_DIR.'file.function.php');
-include_once(CORER_DIR.'Application.class.php');
-include_once(CORER_DIR.'Controller.class.php');
-include_once(CORER_DIR.'Model.class.php');
-include_once(CLASS_DIR.'fileCache.class.php');
-include_once(CLASS_DIR.'mcrypt.class.php');
-include_once(CONTROLLER_DIR.'system_member.class.php');
-include_once(CONTROLLER_DIR.'system_group.class.php');
-include_once(CONTROLLER_DIR.'system_role.class.php');
-include_once(CONTROLLER_DIR.'util.php');
-include_once(BASIC_PATH.'config/setting.php');
-include_once(BASIC_PATH.'config/version.php');
+include(FUNCTION_DIR.'web.function.php');
+include(FUNCTION_DIR.'file.function.php');
+include(CORER_DIR.'Application.class.php');
+include(CORER_DIR.'Controller.class.php');
+include(CORER_DIR.'Model.class.php');
+include(CLASS_DIR.'fileCache.class.php');
+include(CLASS_DIR.'mcrypt.class.php');
+include(CONTROLLER_DIR.'system_member.class.php');
+include(CONTROLLER_DIR.'system_group.class.php');
+include(CONTROLLER_DIR.'system_role.class.php');
+include(CONTROLLER_DIR.'util.php');
+include(BASIC_PATH.'config/setting.php');
+include(BASIC_PATH.'config/version.php');
 
 define('WEB_ROOT',get_webroot(BASIC_PATH));
 define('HOST',get_host().'/');
 define('APPHOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
-//数据地址定义。
-$config['pic_thumb']	= BASIC_PATH.'data/thumb/';		// 缩略图生成存放地址
-$config['cache_dir']	= BASIC_PATH.'data/cache/';		// 缓存文件地址
 
 $config['app_charset']	 = 'utf-8';			            //该程序整体统一编码
 $config['settings']['static_path'] = "./static/";     //静态文件目录

@@ -11,13 +11,13 @@
  */
 function _autoload($className){
 	if (file_exists(CLASS_DIR . strtolower($className) . '.class.php')) {
-		require_once(CLASS_DIR . strtolower($className) . '.class.php');
+		include(CLASS_DIR . strtolower($className) . '.class.php');
 	} else if (file_exists(CONTROLLER_DIR . strtolower($className) . '.class.php')) {
-		require_once(CONTROLLER_DIR . strtolower($className) . '.class.php');
+		include(CONTROLLER_DIR . strtolower($className) . '.class.php');
 	} else if (file_exists(MODEl_DIR . strtolower($className) . '.class.php')) {
-		require_once(MODEl_DIR . strtolower($className) . '.class.php');
+		include(MODEl_DIR . strtolower($className) . '.class.php');
 	} else {
-		// error code;
+		show_tips($className.' is not exist');
 	} 
 }
 
@@ -27,7 +27,7 @@ function _autoload($className){
 function init_model($model_name){
 	if (!class_exists($model_name.'Model')) {
 		$model_file = MODEL_DIR.$model_name.'Model.class.php';
-		require_once ($model_file);
+		include($model_file);
 		if(!is_file($model_file)){
 			return false;
 		}
@@ -46,7 +46,7 @@ function init_controller($controller_name){
 		if(!is_file($model_file)){
 			return false;
 		}
-		require_once ($model_file);
+		include($model_file);
 	}
 	$reflectionObj = new ReflectionClass($controller_name);
 	$args = func_get_args();
@@ -60,7 +60,7 @@ function init_controller($controller_name){
 function load_class($class){
 	$filename = CLASS_DIR.$class.'.class.php';
 	if (file_exists($filename)) {
-		require_once($filename);
+		include($filename);
 	}else{
 		show_tips($filename.' is not exist');
 	}
@@ -71,7 +71,7 @@ function load_class($class){
 function load_function($function){
 	$filename = FUNCTION_DIR.$function.'.function.php';
 	if (file_exists($filename)) {
-		require_once($filename);
+		include($filename);
 	}else{
 		show_tips($filename.' is not exist');
 	}

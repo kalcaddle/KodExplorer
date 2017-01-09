@@ -48,10 +48,12 @@ class Application {
 	public function appRun($class,$function){
 		$sub_dir = $this -> sub_dir ? $this -> sub_dir . '/' : '';
 		$class_file = CONTROLLER_DIR . $sub_dir.$class.'.class.php';
-		if (!is_file($class_file)) {
+		if (!file_exists($class_file)) {
 			show_tips($class.' controller not exists!');
 		}
-		require_once $class_file;
+		if (!class_exists($class)) {
+		    include($class_file);
+		}
 		if (!class_exists($class)) {
 			show_tips($class.' class not exists');
 		}
