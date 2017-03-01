@@ -32,18 +32,13 @@
 
 // 传入参数为程序编码时，有传出，则用程序编码，
 // 传入参数没有和输出无关时，则传入时处理成系统编码。
-
-
-if(!defined("DEFAULT_PERRMISSIONS")){
-	define("DEFAULT_PERRMISSIONS",0755);
-}
 function iconv_app($str){
 	if (!function_exists('iconv')){
 		return $str;
 	}
 	global $config;
-	$result = @iconv($config['system_charset'], $config['app_charset'], $str);
-	if (!$result || strlen($result)==0) {//转换失败
+	$result = iconv($config['system_charset'], $config['app_charset'], $str);
+	if (strlen($result)==0) {//转换失败
 		$result = $str;
 	}
 	return $result;
@@ -53,8 +48,8 @@ function iconv_system($str){
 		return $str;
 	}
 	global $config;
-	$result = @iconv($config['app_charset'], $config['system_charset'], $str);
-	if (!$result || strlen($result)==0) {//转换失败
+	$result = iconv($config['app_charset'], $config['system_charset'], $str);
+	if (strlen($result)==0) {//转换失败
 		$result = $str;
 	}
 	return $result;
@@ -145,7 +140,7 @@ function path_readable($path){
 	$mode = get_mode($path);
 	if( $mode && 
 		strlen($mode) == 18 &&
-		substr($mode,-9,1) == 'r'){// drwx rwx r-x(0775)
+		substr($mode,-9,1) == 'r'){// -rwx rwx rwx(0777)
 		return true;
 	}
 	return false;
@@ -158,7 +153,7 @@ function path_writeable($path){
 	$mode = get_mode($path);
 	if( $mode && 
 		strlen($mode) == 18 &&
-		substr($mode,-8,1) == 'w'){// drwx rwx r-x(0775)
+		substr($mode,-8,1) == 'w'){// -rwx rwx rwx (0777)
 		return true;
 	}
 	return false;
@@ -420,7 +415,7 @@ function path_haschildren($dir,$check_file=false){
  */
 function del_file($fullpath){
 	if (!@unlink($fullpath)) { // 删除不了，尝试修改文件权限
-		@chmod($fullpath, DEFAULT_PERRMISSIONS);
+		@chmod($fullpath, 0777);
 		if (!@unlink($fullpath)) {
 			return false;
 		}
@@ -435,20 +430,20 @@ function del_file($fullpath){
 function del_dir($dir){
 	if(!file_exists($dir) || !is_dir($dir)) return true;
 	if (!$dh = opendir($dir)) return false;
-	ignore_timeout();
+	@set_time_limit(0);
 	while (($file = readdir($dh)) !== false) {
 		if ($file != "." && $file != "..") {
 			$fullpath = $dir . '/' . $file;
 			if (!is_dir($fullpath)) {
 				if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
-					chmod($fullpath, DEFAULT_PERRMISSIONS);
+					chmod($fullpath, 0777);
 					if (!unlink($fullpath)) {
 						return false;
 					}
 				}
 			} else {
 				if (!del_dir($fullpath)) {
-					chmod($fullpath, DEFAULT_PERRMISSIONS);
+					chmod($fullpath, 0777);
 					if (!del_dir($fullpath)) return false;
 				}
 			}
@@ -477,7 +472,7 @@ function copy_dir($source, $dest){
 	if (!$dest) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
 
-	ignore_timeout();
+	@set_time_limit(0);
 	$result = true;
 	if (is_file($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
@@ -486,13 +481,13 @@ function copy_dir($source, $dest){
 			$__dest = $dest;
 		}
 		$result = @copy($source, $__dest);
-		@chmod($__dest, DEFAULT_PERRMISSIONS);
+		@chmod($__dest, 0777);
 	}else if(is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
 			$dest = $dest . basename($source);
 		}
 		if (!is_dir($dest)) {
-			@mkdir($dest,DEFAULT_PERRMISSIONS);
+			@mkdir($dest,0777);
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
@@ -505,8 +500,35 @@ function copy_dir($source, $dest){
 	return $result;
 }
 
+/**
+ * 移动文件&文件夹；（同名文件夹则特殊处理）
+ * 问题：win下，挂载磁盘移动到系统盘时rmdir导致遍历不完全；
+ */
+function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
+	if (!$dest) return false;
+	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
+	@set_time_limit(0);
+	if (is_file($source)) {
+    	return move_file($source,$dest,$repeat_add,$repeat_type);
+	}else if(is_dir($source)) {
+		if ($dest[strlen($dest)-1] == '/') {
+			$dest = $dest . basename($source);
+		}
+		if (!file_exists($dest)) {
+			@mkdir($dest,0777);
+		}
+		if (!$dh = opendir($source)) return false;
+		while (($file = readdir($dh)) !== false) {
+		    if ($file =='.' || $file =='..') continue;
+			move_path($source."/".$file, $dest."/".$file,$repeat_add,$repeat_type);
+		}
+		closedir($dh);
+		return @rmdir($source);
+	}
+}
+
 function move_file($source,$dest,$repeat_add,$repeat_type){
-	if ($dest[strlen($dest)-1] == '/') {
+    if ($dest[strlen($dest)-1] == '/') {
 		$dest = $dest . "/" . basename($source);
 	}
 	if(file_exists($dest)){
@@ -514,57 +536,35 @@ function move_file($source,$dest,$repeat_add,$repeat_type){
 	}
 	return intval(@rename($source,$dest));
 }
-
-/**
- * [move_path description]
- * @param  [type] $source      [源文件]
- * @param  [type] $dest        [目标路径]
- * @param  string $repeat_add  [文件重复则追加]
- * @param  string $repeat_type [重复处理方式]
- * @return [type]              [bool]
- * 
- * rename:先用rename
- * 1.文件,rename可以在不同盘符之间移动.
- * 2.空文件夹：也可以在不同盘符之间移动.但是目标文件夹的父目录必须存在
- * 3.对于非空文件夹，只能在同一盘符下移动.
- */
 function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
-	if (!$dest || !file_exists($source)) return false;
+    if (!$dest || !file_exists($source)) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
-	if(is_file($source)){
-		return move_file($source,$dest,$repeat_add,$repeat_type);
-	}else if(is_dir($source)){
-		//尝试直接重命名
-		$the_dest = $dest;
-		if(file_exists($the_dest)){
-			$the_dest = get_filename_auto($dest,$repeat_add,$repeat_type);
-		}
-		if( @rename(rtrim($source,'/'),rtrim($the_dest,'/')) ){
-			return true;
-		}
-	}
 
-	ignore_timeout();
+	@set_time_limit(0);
+	if(is_file($source)){
+	    return move_file($source,$dest,$repeat_add,$repeat_type);
+	}
 	recursion_dir($source,$dirs,$files,-1,0);
+
 	@mkdir($dest);
 	foreach($dirs as $f){
-		$path = $dest.'/'.substr($f,strlen($source));
-		if(!file_exists($path)){
-			mk_dir($path);
-		}
+	    $path = $dest.'/'.substr($f,strlen($source));
+	    if(!file_exists($path)){
+	        mk_dir($path);
+	    }
 	}
 	$file_success = 0;
 	foreach($files as $f){
-		$path = $dest.'/'.substr($f,strlen($source));
-		$file_success += move_file($f,$path,$repeat_add,$repeat_type);
+	    $path = $dest.'/'.substr($f,strlen($source));
+	    $file_success += move_file($f,$path,$repeat_add,$repeat_type);
 	}
 	foreach($dirs as $f){
-		rmdir($f);
+	    rmdir($f);
 	}
 	@rmdir($source);
 	if($file_success == count($files)){
-		del_dir($source);
-		return true;
+	    del_dir($source);
+	    return true;
 	}
 	return false;
 }
@@ -576,7 +576,7 @@ function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
  * @param int $mode
  * @return bool
  */
-function mk_dir($dir, $mode = DEFAULT_PERRMISSIONS){
+function mk_dir($dir, $mode = 0777){
 	if (is_dir($dir) || @mkdir($dir, $mode)){
 		return true;
 	}
@@ -750,7 +750,7 @@ function file_search($path,$search,$is_case){
  * @return :string
  */
 function chmod_path($path,$mod){
-	if (!isset($mod)) $mod = DEFAULT_PERRMISSIONS;
+	if (!isset($mod)) $mod = 0777;
 	if (!file_exists($path)) return;
 	if (is_file($path)) return @chmod($path,$mod);
 	if (!$dh = @opendir($path)) return false;
@@ -863,7 +863,7 @@ function file_put_out($file,$download=false){
 		$filename = iconv_app(get_path_this($file));
 	}
 
-	ignore_timeout();
+	@set_time_limit(0);
 	ob_end_clean();
 	$mime = get_file_mime(get_path_ext($file));
 	$time = gmdate('D, d M Y H:i:s', filemtime($file));
@@ -940,7 +940,7 @@ function file_put_out($file,$download=false){
  * 支持fopen的打开都可以；支持本地、url
  */
 function file_download_this($from, $file_name,$header_size=0){
-	ignore_timeout();
+	@set_time_limit(0);
 	if ($fp = @fopen ($from, "rb")){
 		if(!$download_fp = @fopen($file_name, "wb")){
 			return false;
@@ -1021,22 +1021,23 @@ function get_post_max(){
 
 // 兼容move_uploaded_file 和 流的方式上传
 function kod_move_uploaded_file($from_path,$save_path){
+	$temp_path = $save_path.'.parttmp';
 	if($from_path == "php://input"){
-		$in  = @fopen("php://input", "rb");
-		$out = @fopen($save_path, "wb");
+		$in  = @fopen($from_path, "rb");
+		$out = @fopen($temp_path, "wb");
 		if(!$in || !$out) return false;
-		while ($buff = fread($in, 4096)) {
-			fwrite($out, $buff);
+		while (!feof($in)) {
+			fwrite($out, fread($in, 409600));
 		}
-		@fclose($in);
-		@fclose($out);
-		return true;
+		fclose($in);
+		fclose($out);
 	}else{
 		if (get_filesize($from_path) == 0) {
-			show_json('upload_error',false,'zero size');
+			show_json('chunk upload error!',false);
 		}
-		return move_uploaded_file($from_path,$save_path);
+		move_uploaded_file($from_path,$temp_path);
 	}
+	return rename($temp_path,$save_path);
 }
 
 /**
@@ -1060,12 +1061,12 @@ function upload_chunk($fileInput, $path = './',$temp_path,$repeat_action){
 					$arr['part_'.$index] = md5_file($chunk_file_pre.$index);
 				}
 			}
-			show_json('success',ture,$arr);
+			show_json('success',true,$arr);
 		}else{
 			show_json('not_exists',false);
 		}
 	}
-	//if(mt_rand(0, 100) < 50) die("server error");
+	//if(mt_rand(0, 100) < 50) die("server error".$chunk);
 	space_size_use_check();//空间检测
 	$file_name = "";
 	if (!empty($_FILES)) {
@@ -1088,25 +1089,35 @@ function upload_chunk($fileInput, $path = './',$temp_path,$repeat_action){
 			}
 			if (!$done){
 				show_json('upload_success',true,'chunk_'.$chunk.' success!');
-			}
-			$save_path = $path.$file_name;
-			$out = fopen($save_path, "wb");
-			if(!$out){
-				show_json('no_permission_write',false);
-			}
-			if ($done && flock($out, LOCK_EX)) {
-				for( $index = 0; $index < $chunks; $index++ ) {
-					if (!$in = @fopen($temp_file_pre.$index,"rb")) break;
-					while ($buff = fread($in, 4096)) {
-						fwrite($out, $buff);
-					}
-					fclose($in);
-					unlink($temp_file_pre.$index);
+			}else{
+				$save_path = $path.$file_name;
+				$save_path_temp = $temp_file_pre.mtime();
+				if(!$out = fopen($save_path_temp, "wb")){
+					show_json('no_permission_write',false);
 				}
-				flock($out, LOCK_UN);
-				fclose($out);
+				if (!flock($out, LOCK_EX)) {
+					show_json('lock dist move error',false);
+				}else{
+					for( $index = 0; $index < $chunks; $index++ ) {
+						$chunk_file = $temp_file_pre.$index;
+						if (!$fp_in = @fopen($chunk_file,"rb")){//并发情况下另一个访问时文件已删除
+							flock($out, LOCK_UN);
+							fclose($out);
+							unlink($save_path_temp);
+							//write_log("upload_error:".$chunk.':'.$file_name.'/'.$chunk_file,'upload');
+							show_json('open chunk error! cur='.$chunk.';index='.$index,false);
+						}
+						while (!feof($fp_in)) {
+							fwrite($out, fread($fp_in, 409600));
+						}
+						fclose($fp_in);
+						unlink($chunk_file);
+					}
+					flock($out, LOCK_UN);
+					fclose($out);
+				}
 			}
-			//wirte_log($_SESSION['kod_user']['name'].' upload file:'.$save_path,'file_upload');
+			rename($save_path_temp,$save_path);
 			space_size_use_change($save_path);//使用的空间增加
 			show_json('upload_success',true,iconv_app(_DIR_OUT($save_path)));
 		}else {

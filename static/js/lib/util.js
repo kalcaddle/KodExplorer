@@ -847,7 +847,7 @@ var loadRipple = function(search_arr,ignore_arr){
 			$ripp.animate({'opacity':0},400,function(){
 				$ripp.remove();
 			});
-		});		
+		});
 	});
 }
 

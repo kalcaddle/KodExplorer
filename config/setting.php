@@ -10,7 +10,7 @@
 $config['settings'] = array(
 	'download_url_time'	=> 0,			//下载地址生效时间，按秒计算，0代表不限制，默认不限制
 	'api_login_tonken'	=> '',			//设定则认为开启服务端api通信登陆，同时作为加密密匙
-	'update_chunk_size' => 1024*1024,	//分片上传大小设定；不设定则用post_max_size;有时会受nginx的post_size限制
+	'updload_chunk_size'=> 1024*1024,	//1M;分片上传大小设定；不设定则用post_max_size;有时会受nginx的post_size限制
 	'param_rewrite'		=> false,
 );
 
@@ -146,7 +146,7 @@ $config['role_setting'] = array(
 //只读配置；guest需要检查path的action
 $config['role_guest_check'] = array(
 	'explorer'	=> array(//排除只读：pathCopy、clipboard、pathInfo、search
-		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','pathCute',
+		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','pathCute','officeSave',
 		'pathCuteDrag','pathCopyDrag','pathPast','serverDownload','fileUpload'),
 	'app'		=> array('user_app','add','edit','del'),//
 	'editor'	=> array('fileSave'),

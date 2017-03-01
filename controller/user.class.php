@@ -22,7 +22,9 @@ class user extends Controller{
 			}
 		}
 		//不需要判断的action
-		$this->notCheck = array('loginFirst','login','logout','loginSubmit','checkCode','public_link','qrcode','sso');
+		$this->notCheck = array(
+			'loginFirst','login','logout','loginSubmit',
+			'checkCode','public_link','qrcode','sso');
 		$this->notCheckApp = array('share','debug');
 		$this->config['forceWap'] = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
 	}
@@ -232,6 +234,9 @@ class user extends Controller{
 		);
 		if(isset($this->config['setting_system']['version_hash'])){
 			$the_config['version_hash'] = $this->config['setting_system']['version_hash'];
+		}
+		if(defined('OFFICE_KOD_SERVER')){
+			$the_config['kodOffice'] = OFFICE_KOD_OPEN;
 		}
 		if (!isset($GLOBALS['auth'])) {
 			$GLOBALS['auth'] = array();

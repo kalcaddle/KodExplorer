@@ -14,6 +14,7 @@ class share extends Controller{
 	function __construct(){
 		parent::__construct();
 		$this->tpl = TEMPLATE.'share/';
+		$auth = system_role::get_info(1);
 		//不需要检查的action
 		$arr_not_check = array('common_js');
 		if (!in_array(ACT,$arr_not_check)){
@@ -215,6 +216,13 @@ class share extends Controller{
 			$user = $member->get($this->in['user']);
 			$user_config = fileCache::load(USER_PATH.$user['path'].'/'.'data/config.php');
 		}
+
+		if(isset($this->config['setting_system']['version_hash'])){
+			$the_config['version_hash'] = $this->config['setting_system']['version_hash'];
+		}
+		if(defined('OFFICE_KOD_SERVER')){
+			$the_config['kodOffice'] = OFFICE_KOD_OPEN;
+		}
 		
 		$the_config['user_config'] = $user_config;
 		$js  = 'LNG='.json_encode($GLOBALS['L']).';';
@@ -356,7 +364,7 @@ class share extends Controller{
 			$app_r = rand_string(10);
 			$office_url = OFFICE_KOD_SERVER.rawurlencode($file_url)
 						.'&lang='.LANGUAGE_TYPE.'&appType=desktp&appMode=view'
-						.'&file_time='.@filemtime($this->path)
+						.'&file_time='.@filemtime($this->path).'&key='.md5($this->path)
 						.'&app_id='.OFFICE_KOD_APP_ID.'&app_s='.$app_r.'&app_v='.md5($app_r.OFFICE_KOD_APP_KEY);
 			header("location:".$office_url);
 			exit;

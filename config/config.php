@@ -107,7 +107,10 @@ if(isset($in['access_token'])){//office edit post
 @session_save_path(KOD_SESSION);//session path
 @session_start();
 @session_write_close();//避免session锁定问题;之后要修改$_SESSION 需要先调用session_start()
+
+//write_log(json_encode($_REQUEST),'default');
 $config['autorun'] = array(
 	array('controller'=>'user','function'=>'loginCheck'),
 	array('controller'=>'user','function'=>'authCheck')
 );
+

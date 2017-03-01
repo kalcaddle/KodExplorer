@@ -295,8 +295,13 @@ Picasa.prototype = {
 	// 生成列表项
 	createItems : function() {
 		var itemStr = '';
+		// change by warlee 大于200则展示的时候再处理
 		for (var i=0; i<this.arrCount; i++){
-			itemStr += '<li number="'+i+'"><img src="'+ this.arrItems[i][0][0] +'" draggable="false"/></li>';
+			if(i>=200){
+				itemStr += '<li number="'+i+'"><img data-original="'+ this.arrItems[i][0][0] +'" draggable="false"/></li>';
+			}else{
+				itemStr += '<li number="'+i+'"><img src="'+ this.arrItems[i][0][0] +'" draggable="false"/></li>';
+			}			
 		}		
 		this.fItems.innerHTML = itemStr;
 		this.fItems.style.width = (this.arrCount*36) +'px';
@@ -496,6 +501,13 @@ Picasa.prototype = {
 		this.hint();
 		this.activeImage.src = this.arrItems[this.currentNo][0][1];
 		this.Picture.src = this.activeImage.src;
+
+		//缩略图 change by warlee
+		var $image = $('#PV_Items .current img');
+		if(!$image.attr('src')){
+			$image.attr('src',$image.attr('data-original'));
+		}
+
 		$('#PV_Picture').css('display','none').fadeIn(200);
 	},
 	loadedAction : function() {

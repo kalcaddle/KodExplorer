@@ -420,8 +420,8 @@ body{overflow-x: hidden;}
 .dropdown-menu.pull-right {top: 37px;}
 .menu-right_tool li a{line-height: 30px;color: #666;}
 .menu-right_tool li a i{padding-right: 5px;}
-.aui_state_focus{top:5% !important;}
-
+.aui_state_focus{top:10% !important;}
+.aui_state_fucus,.aui_state_lock{position: fixed !important;}
 
 
 .copyright_dialog.dialog-simple .aui_header { background: transparent; opacity: 1; filter: alpha(opacity=100);}
@@ -546,6 +546,8 @@ div.dialog-simple .resize-bottom-right { background: none !important;}
 div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
 div.dialog-simple .aui_nw,div.dialog-simple .aui_ne { height: 0px;}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
+
+
 
 .file_upload{height:360px;padding:5px;margin-right:10px;min-width:320px;overflow:hidden;}
 .file_upload .top_nav{border-bottom:1px solid #ddd;margin-top:6px;}

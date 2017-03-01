@@ -321,7 +321,7 @@ artDialog.fn = artDialog.prototype = {
 	    return span.width();
 	},
 	reset_title_length:function(){
-		if(!this.config.resize){
+		if(this.config && !this.config.resize){
 			return;
 		}
 		var DOM = this.DOM,

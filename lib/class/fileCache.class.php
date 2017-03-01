@@ -113,6 +113,7 @@ class fileCache{
 		//是否发生改变
 		$last_hash = @md5_file($this->file);
 		if($last_hash != $this->file_hash){
+			$this->file_hash = $last_hash;
 			$this->data= self::load($this->file);
 		}
 	}
@@ -167,7 +168,6 @@ class fileCache{
 		if (!file_exists($file)){
 			@touch($file);
 		}
-
 		$str = file_get_contents($file);
 		$str = substr($str, strlen(CONFIG_EXIT));
 		$data= json_decode($str,true);
@@ -177,13 +177,12 @@ class fileCache{
 	/**
 	* 保存数据；
 	*/
-	public static function save($file,$data){//10000次需要6s 
+	public static function save($file,$data){//10000次需要6s
 		if (!$file) return false;
 		$file = iconv_system($file);
 		if (!file_exists($file)){
 			@touch($file);
 		}
-		
 		chmod_path($file,0777);
 		if (!path_writeable($file)) {
 			if(isset($GLOBALS['L'])){
@@ -197,14 +196,16 @@ class fileCache{
 			show_tips('json_encode error!');
 		}
 
-		if($fp = fopen($file, "w")){
-			if (flock($fp, LOCK_EX)) {  // 进行排它型锁定
-				$str = CONFIG_EXIT.$json_str;
-				fwrite($fp, $str);
-				fflush($fp);            // flush output before releasing the lock
-				flock($fp, LOCK_UN);    // 释放锁定
-			}
+		$buffer = CONFIG_EXIT.$json_str;
+		$file_temp = $file.mtime();
+		if($fp = fopen($file_temp, "w")){
+			fwrite($fp, $buffer);
+			fflush($fp);
 			fclose($fp);
+			rename($file_temp,$file);
+		}else{
+			unlink($file_temp);
+			show_tips('[fileCache:save] open error!');
 		}
 		return true;
 	}

@@ -67,7 +67,9 @@ class explorer extends Controller{
 		//属性查看，单个文件则生成临时下载地址。没有权限则不显示
 		if (count($info_list)==1 && $info_list[0]['type']!='folder') {//单个文件
 			$file = $info_list[0]['path'];
-			if($GLOBALS['is_root'] || $GLOBALS['auth']['explorer:fileDownload']==1){
+			if( $GLOBALS['is_root'] || 
+				$GLOBALS['auth']['explorer:fileDownload']==1 ||
+				isset($this->in['viewPage'])){
 				$data['download_path'] = _make_file_proxy($file);
 			}
 			if($data['size'] < 100*1024|| isset($this->in['get_md5'])){//100kb
@@ -583,6 +585,10 @@ class explorer extends Controller{
 		}
 		$success=0;$error=0;
 		foreach ($list as $val) {
+			if(!$val['path'] || $val['path'] == '/'){
+				$error++;
+				continue;
+			}
 			$path_this = _DIR($val['path']);
 			//不是自己目录的分享列表，不支持删除
 			if( $GLOBALS['path_type'] == KOD_USER_SHARE &&
@@ -1076,7 +1082,7 @@ class explorer extends Controller{
 
 		//kodoffice  预览
 		if(defined("OFFICE_KOD_SERVER")){
-			$file_link = APPHOST.'index.php?explorer/fileProxy&path='.$this->in['path'];
+			$file_link = APPHOST.'index.php?explorer/fileProxy&path='.rawurlencode($this->in['path']);
 			$view_type = '&appMode=edit&access_token='.session_id();
 			if(OFFICE_KOD_ACTION == 'read'){//只读
 				$view_type = '&appMode=view';
@@ -1086,7 +1092,8 @@ class explorer extends Controller{
 			$app_r = rand_string(10);
 			$office_url = OFFICE_KOD_SERVER.rawurlencode($file_link)
 						.'&lang='.LANGUAGE_TYPE.'&appType=desktop'.$view_type
-						.'&file_time='.@filemtime($this->path).'&user_id='.$user_info['user_id'].'&user_name='.$user_info['name']
+						.'&file_time='.@filemtime($this->path).'&key='.md5($this->path)
+						.'&user_id='.$user_info['user_id'].'&user_name='.$user_info['name']
 						.'&app_id='.OFFICE_KOD_APP_ID.'&app_s='.$app_r.'&app_v='.md5($app_r.OFFICE_KOD_APP_KEY);
 			header("location:".$office_url);
 			exit;
@@ -1164,6 +1171,8 @@ class explorer extends Controller{
 		@header( 'Content-Type: application/json; charset==utf-8');
 		@header( 'X-Robots-Tag: noindex' );
 		@header( 'X-Content-Type-Options: nosniff' );
+		write_log(json_encode(array($this->in,$info)),'office_save');
+		
 		echo json_encode($info);
 		exit;
 	}
@@ -1173,13 +1182,15 @@ class explorer extends Controller{
 		$download = isset($this->in['download']);
 		file_put_out($this->path,$download);
 	}
+	
 	/**
 	 * 上传,html5拖拽  flash 多文件
 	 */
 	public function fileUpload(){
 		$save_path = _DIR($this->in['upload_to']);
-		if (!path_writeable($save_path)) show_json($this->in['upload_to'],false);
+		if (!path_writeable($save_path)) show_json($this->L['no_permission_write'],false);
 		if ($save_path == '') show_json($this->L['upload_error_big'],false);
+
 		if (strlen($this->in['fullPath']) > 1) {//folder drag upload
 			$full_path = _DIR_CLEAR(rawurldecode($this->in['fullPath']));
 			$full_path = get_path_father($full_path);
