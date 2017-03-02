@@ -202,7 +202,15 @@ class fileCache{
 			fwrite($fp, $buffer);
 			fflush($fp);
 			fclose($fp);
-			rename($file_temp,$file);
+			$res = rename($file_temp,$file);
+			if(!$res){
+				unlink($file);
+				$res = rename($file_temp,$file);
+				if(!$res || !file_exists($file)){
+					unlink($file_temp);
+					file_put_contents($file,$buffer);
+				}
+			}
 		}else{
 			unlink($file_temp);
 			show_tips('[fileCache:save] open error!');

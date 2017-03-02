@@ -1117,7 +1117,14 @@ function upload_chunk($fileInput, $path = './',$temp_path,$repeat_action){
 					fclose($out);
 				}
 			}
-			rename($save_path_temp,$save_path);
+			$res = rename($save_path_temp,$save_path);
+			if(!$res){
+				unlink($save_path);
+				$res = rename($save_path_temp,$save_path);
+				if(!$res){
+					show_json('move(rename) dist file error!',false);
+				}
+			}
 			space_size_use_change($save_path);//使用的空间增加
 			show_json('upload_success',true,iconv_app(_DIR_OUT($save_path)));
 		}else {

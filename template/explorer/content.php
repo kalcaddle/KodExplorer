@@ -82,7 +82,7 @@
 					<!-- 分享 tool -->
 					<div class="btn-group btn-group-sm kod_share_tool hidden fl-left">
 						<button id='refresh' class="btn btn-default" type="button">
-				        	<i class="font-icon icon-folder-close-alt"></i><?php echo $L['refresh'];?>
+				        	<i class="font-icon icon-refresh"></i><?php echo $L['refresh'];?>
 				        </button>
 					</div>
 

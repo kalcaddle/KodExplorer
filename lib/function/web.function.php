@@ -136,9 +136,8 @@ function check_url($url){
 /**
  * 获取网络url文件内容，加入ua，以解决防采集的站
  */
-function curl_get_contents($url){
+function curl_get_contents($url,$timeout=4){
 	$ch = curl_init();
-	$timeout = 4;
 	$user_agent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; SLCC1)";
 	curl_setopt ($ch, CURLOPT_URL, $url);
 	curl_setopt ($ch, CURLOPT_HEADER, 0);

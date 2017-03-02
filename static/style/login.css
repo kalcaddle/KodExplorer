@@ -15,7 +15,9 @@ input,button {font-family:"Helvetica Neue","Helvetica","Microsoft Yahei","微软
 	box-shadow: 0px 20px 60px rgba(0,0,0,0.4),0px 0px 150px rgba(0,0,0,0.4);
 	width:428px;border-radius:4px;padding-bottom: 30px;
 	background: rgba(255,255,255,0.9);background: #fff \9;
-	position:absolute;top:46%;left:50%;margin-top:-209px;margin-left: -214px;}
+	position:absolute;top:46%;left:50%;margin-top:-209px;margin-left: -214px;
+	z-index: 999;
+}
 a{text-decoration:none;color: #adf;}
 .background{
 	position:absolute;overflow: hidden;z-index: -10;
@@ -62,8 +64,10 @@ a{text-decoration:none;color: #adf;}
 	display: block;float: left;border: 1px solid #bbb;cursor: pointer;
 	margin-left: -1px;padding-left: 0;width: 114px;height:40px;
 }
-.admin_password{padding: 30px 0px 0px 0;text-align: center;}
-.admin_password input{width: 200px;padding: 4px 6px;height: 35px;text-align: center;}
+.admin_password,.admin_password_repeat{padding:20px 0px 0px 0;text-align: center;}
+.admin_password input,.admin_password_repeat input{width: 200px;padding: 4px 6px;height: 35px;text-align: center;}
+.admin_password_repeat{padding:10px 0px 0px 0;}
+
 
 .form{padding: 15px 13px 40px 13px;}
 input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}

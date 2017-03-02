@@ -21,7 +21,7 @@ if(GLOBAL_DEBUG){
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
 	@ini_set("display_errors","on");//on off
-	@error_reporting(E_ERROR|E_PARSE|E_WARNING);// 0
+	@error_reporting(E_ERROR|E_PARSE);// 0
 }
 
 header("Content-type: text/html; charset=utf-8");

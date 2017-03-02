@@ -51,9 +51,9 @@ class share extends Controller{
 		$this->share_info = $list[$this->in['sid']];
 		$share_info = $this->share_info;
 		//检查是否过期
-		if (isset($share_info['time'])&&
-			$share_info['time'].length!=0) {
-			$date = date_create_from_format('y/m/d',$share_info['time_to']);
+		if (isset($share_info['time_to'])&&
+			$share_info['time_to'].length!=0) {
+			$date = strtotime($share_info['time_to']);
 			if (time() > $date) {
 				$this->error($this->L['share_error_time']);
 			}
