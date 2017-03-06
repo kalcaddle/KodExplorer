@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Mod tastatură",
     "font_family"                    => "Fonturi",
     "code_mode"                      => "syntax highlighting",
-    "path_can_not_action"            => "Directorul nu acceptă această operațiune!",
+    "path_can_not_action"            => "Sprijină accesul numai propriile documente!",
     "wap_page_pc"                    => "Versiune pentru PC",
     "wap_page_phone"                 => "mobil",
     "image_size"                     => "dimensiuni imagine",

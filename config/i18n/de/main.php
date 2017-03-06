@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard-Modus",
     "font_family"                    => "Schriftarten",
     "code_mode"                      => "Syntax-Hervorhebung",
-    "path_can_not_action"            => "Das Verzeichnis nicht unterstützt diese Operation!",
+    "path_can_not_action"            => "Unterstützt nur Ihre eigenen Dokumente zu teilen!",
     "wap_page_pc"                    => "PC Version",
     "wap_page_phone"                 => "Mobile",
     "image_size"                     => "Bildmaße",

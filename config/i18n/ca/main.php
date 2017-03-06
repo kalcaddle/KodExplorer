@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "La manera de teclat",
     "font_family"                    => "fonts",
     "code_mode"                      => "El ressaltat de sintaxi",
-    "path_can_not_action"            => "El directori no és compatible amb aquesta operació!",
+    "path_can_not_action"            => "Només admet compartir els seus propis documents!",
     "wap_page_pc"                    => "versió PC",
     "wap_page_phone"                 => "mòbil",
     "image_size"                     => "dimensions de la imatge",

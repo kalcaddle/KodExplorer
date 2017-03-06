@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Klaviatūros režimas",
     "font_family"                    => "Šriftai",
     "code_mode"                      => "sintaksės išryškinimas",
-    "path_can_not_action"            => "Katalogas nepalaiko šią operaciją!",
+    "path_can_not_action"            => "Palaiko pasidalinti tik savo dokumentus!",
     "wap_page_pc"                    => "PC versija",
     "wap_page_phone"                 => "mobilus",
     "image_size"                     => "vaizdo matmenys",

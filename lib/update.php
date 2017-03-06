@@ -21,7 +21,7 @@ function update_check(){
 		update_clear();
 	}
 
-	//from [3.30~3.35] to last
+	//from [3.30~3.35]
 	$system_file = THE_DATA_PATH.'system/system_setting.php';
 	$system_data = fileCache::load($system_file);
 	if( file_exists($system_file) && 
@@ -59,6 +59,9 @@ function update_clear(){
 	del_file(THE_DATA_PATH.'2.0-3.23.zip');
 	del_file(THE_DATA_PATH.'2.0-3.34.zip');
 	del_file(THE_DATA_PATH.'2.0-3.35.zip');
+	del_file(THE_DATA_PATH.'2.0-3.37.zip');
+	del_file(THE_DATA_PATH.'2.0-3.38.zip');
+	del_file(THE_DATA_PATH.'2.0-3.39.zip');
 	del_file(THE_DATA_PATH.'2.0-'.UPDATE_VERSION.'.zip');
 
 	del_file(BASIC_PATH.'readme.txt');

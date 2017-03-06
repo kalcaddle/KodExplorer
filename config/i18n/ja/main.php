@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "キーボードモード",
     "font_family"                    => "フォント",
     "code_mode"                      => "構文強調表示",
-    "path_can_not_action"            => "ディレクトリには、この操作をサポートしていません！",
+    "path_can_not_action"            => "サポートする唯一の独自のドキュメントを共有！",
     "wap_page_pc"                    => "PC版",
     "wap_page_phone"                 => "モバイル",
     "image_size"                     => "画像サイズ",

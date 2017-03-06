@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard Mode",
     "font_family"                    => "Fonts",
     "code_mode"                      => "syntax highlighting",
-    "path_can_not_action"            => "Katalogen støtter ikke denne operasjonen!",
+    "path_can_not_action"            => "Støtter bare dele dine egne dokumenter!",
     "wap_page_pc"                    => "PC versjon",
     "wap_page_phone"                 => "Mobile",
     "image_size"                     => "bilde~~POS=TRUNC dimensjoner",

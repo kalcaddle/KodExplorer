@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "حالت صفحه کلید",
     "font_family"                    => "فونت",
     "code_mode"                      => "نحو برجسته",
-    "path_can_not_action"            => "دایرکتوری این عملیات را پشتیبانی نمی کند!",
+    "path_can_not_action"            => "پشتیبانی تنها اسناد خود را به اشتراک بگذارید!",
     "wap_page_pc"                    => "PC نسخه",
     "wap_page_phone"                 => "سیار",
     "image_size"                     => "ابعاد تصویر",

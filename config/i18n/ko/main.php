@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "키보드 모드",
     "font_family"                    => "글꼴",
     "code_mode"                      => "구문 강조",
-    "path_can_not_action"            => "디렉토리는이 작업을 지원하지 않습니다!",
+    "path_can_not_action"            => "단지 자신의 문서를 공유 지원합니다!",
     "wap_page_pc"                    => "PC 버전",
     "wap_page_phone"                 => "모바일",
     "image_size"                     => "이미지 크기",

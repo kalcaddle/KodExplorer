@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "tangentbordsläge",
     "font_family"                    => "typsnitt",
     "code_mode"                      => "syntaxmarkering",
-    "path_can_not_action"            => "Katalogen stöder inte den här åtgärden!",
+    "path_can_not_action"            => "Stöder bara dela dina egna dokument!",
     "wap_page_pc"                    => "PC version",
     "wap_page_phone"                 => "mobil",
     "image_size"                     => "bildens dimensioner",

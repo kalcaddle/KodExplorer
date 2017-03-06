@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "কীবোর্ড মোড",
     "font_family"                    => "ফন্ট",
     "code_mode"                      => "সিনট্যাক্স হাইলাইটিং",
-    "path_can_not_action"            => "এই অপারেশন সমর্থন করে না!",
+    "path_can_not_action"            => "শুধুমাত্র আপনার নিজের নথি ভাগ সমর্থন!",
     "wap_page_pc"                    => "পিসি সংস্করণ",
     "wap_page_phone"                 => "মোবাইল",
     "image_size"                     => "চিত্র মাত্রা",

@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Klaviatuur režiim",
     "font_family"                    => "fondid",
     "code_mode"                      => "Süntaksi esiletõstmine",
-    "path_can_not_action"            => "Kataloog ei toeta seda toimingut!",
+    "path_can_not_action"            => "Toetab ainult jagada oma dokumente!",
     "wap_page_pc"                    => "PC versiooni",
     "wap_page_phone"                 => "mobiilne",
     "image_size"                     => "Pilt mõõtmed",

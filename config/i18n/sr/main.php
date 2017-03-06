@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "тастатура режим",
     "font_family"                    => "фонтс",
     "code_mode"                      => "истицање синтаксе",
-    "path_can_not_action"            => "Директоријум не подржава ову операцију!",
+    "path_can_not_action"            => "Подржава деле само своје документе!",
     "wap_page_pc"                    => "ПЦ верзија",
     "wap_page_phone"                 => "мобиле",
     "image_size"                     => "slika димензије",

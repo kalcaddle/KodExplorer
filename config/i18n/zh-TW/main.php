@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "鍵盤模式",
     "font_family"                    => "字體",
     "code_mode"                      => "高亮語法",
-    "path_can_not_action"            => "該目錄不支持此操作!",
+    "path_can_not_action"            => "僅支持分享您自己的文檔！",
     "wap_page_pc"                    => "電腦版",
     "wap_page_phone"                 => "手機版",
     "image_size"                     => "圖片尺寸",

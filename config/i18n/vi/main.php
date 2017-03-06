@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Bàn phím Chế độ",
     "font_family"                    => "Fonts",
     "code_mode"                      => "cú pháp tô sáng",
-    "path_can_not_action"            => "Các thư mục không hỗ trợ hoạt động này!",
+    "path_can_not_action"            => "Chỉ hỗ trợ chia sẻ tài liệu của riêng bạn!",
     "wap_page_pc"                    => "PC Version",
     "wap_page_phone"                 => "di động",
     "image_size"                     => "Kích thước hình ảnh",

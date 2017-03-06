@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "وضع لوحة المفاتيح",
     "font_family"                    => "الخطوط",
     "code_mode"                      => "تسليط الضوء على تركيب",
-    "path_can_not_action"            => "الدليل لا يدعم هذه العملية!",
+    "path_can_not_action"            => "يدعم فقط مشاركة الوثائق الخاصة بك!",
     "wap_page_pc"                    => "نسخة الكمبيوتر",
     "wap_page_phone"                 => "متحرك",
     "image_size"                     => "أبعاد الصورة",

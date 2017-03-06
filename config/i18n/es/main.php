@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "El modo de teclado",
     "font_family"                    => "Fuentes",
     "code_mode"                      => "El resaltado de sintaxis",
-    "path_can_not_action"            => "El directorio no es compatible con esta operación!",
+    "path_can_not_action"            => "Sólo admite compartir sus propios documentos!",
     "wap_page_pc"                    => "Versión PC",
     "wap_page_phone"                 => "móvil",
     "image_size"                     => "dimensiones de la imagen",

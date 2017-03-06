@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "режим клавіатури",
     "font_family"                    => "шрифти",
     "code_mode"                      => "підсвічування синтаксису",
-    "path_can_not_action"            => "Каталог не підтримує цю операцію!",
+    "path_can_not_action"            => "Підтримка тільки поділитися своїми власними документами!",
     "wap_page_pc"                    => "PC Версія",
     "wap_page_phone"                 => "мобільний",
     "image_size"                     => "розміри зображення",

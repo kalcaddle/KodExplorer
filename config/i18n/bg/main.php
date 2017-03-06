@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "клавиатура Mode",
     "font_family"                    => "Fonts",
     "code_mode"                      => "Оцветяване на синтаксиса",
-    "path_can_not_action"            => "Директорията не поддържа тази операция!",
+    "path_can_not_action"            => "Поддържа споделят само собствените си документи!",
     "wap_page_pc"                    => "PC версия",
     "wap_page_phone"                 => "подвижен",
     "image_size"                     => "размери на изображението",

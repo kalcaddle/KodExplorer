@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Način tipkovnica",
     "font_family"                    => "pisave",
     "code_mode"                      => "sintakso poudarjanje",
-    "path_can_not_action"            => "Imenik ne podpira te operacije!",
+    "path_can_not_action"            => "Podpira deliti le svoje dokumente!",
     "wap_page_pc"                    => "PC različica",
     "wap_page_phone"                 => "Mobile",
     "image_size"                     => "mere slike",

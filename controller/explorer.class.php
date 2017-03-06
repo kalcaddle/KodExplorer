@@ -1018,6 +1018,7 @@ class explorer extends Controller{
 			if (isset($_SESSION[$uuid])){
 				$info = $_SESSION[$uuid];
 				$result = array(
+					'support_range' => $info['support_range'],
 					'uuid'      => $this->in['uuid'],
 					'length'    => (int)$info['length'],
 					'name'		=> $info['name'],
@@ -1026,12 +1027,14 @@ class explorer extends Controller{
 				);
 				show_json($result);
 			}else{
-				show_json('',false);
+				show_json('uuid_not_set',false);
 			}
 		}else if($this->in['type'] == 'remove'){//取消下载;文件被删掉则自动停止
-			del_file($_SESSION[$uuid]['path']);
+			$the_file = str_replace('.downloading','',$_SESSION[$uuid]['path']);
+			del_file($the_file.'.downloading');
+			del_file($the_file.'.download.cfg');
 			unset($_SESSION[$uuid]);
-			show_json('',false);
+			show_json('remove_success',false);
 		}
 		//下载
 		$save_path = _DIR($this->in['save_path']);
@@ -1045,30 +1048,29 @@ class explorer extends Controller{
 		}
 		$save_path = $save_path.$header['name'];
 		if (!checkExt($save_path)){//不允许的扩展名
-			$save_path = _DIR($this->in['save_path']).date('-h:i:s').'.txt';
+			$save_path = _DIR($this->in['save_path']).date('-h:i:s').'.dat';
 		}
 		space_size_use_check();
 		$save_path = get_filename_auto(iconv_system($save_path),'',$this->config['user']['file_repeat']);
 		$save_path_temp = $save_path.'.downloading';
 		session_start();
 		$_SESSION[$uuid] = array(
+			'support_range' => $header['support_range'],
 			'length'=> $header['length'],
 			'path'	=> $save_path_temp,
 			'name'	=> get_path_this($save_path)
 		);
 		session_write_close();
-		if (file_download_this($url,$save_path_temp,$header['length'])){
-			session_start();unset($_SESSION[$uuid]);session_write_close();
-			if (move_path($save_path_temp,$save_path)) {//下载完后重命名
-				$name = get_path_this(iconv_app($save_path));
-				space_size_use_change($save_path);//使用的空间增加
-				show_json($this->L['download_success'],true,_DIR_OUT(iconv_app($save_path)) );
-			}else{
-				show_json($this->L['download_error_create'],false);
-			}
+
+		load_class("downloader");
+		$result = downloader::start($url,$save_path);
+		session_start();unset($_SESSION[$uuid]);session_write_close();
+		if($result['code']){
+			$name = get_path_this(iconv_app($save_path));
+			space_size_use_change($save_path);//使用的空间增加
+			show_json($this->L['download_success'],true,_DIR_OUT(iconv_app($save_path)) );
 		}else{
-			session_start();unset($_SESSION[$uuid]);session_write_close();
-			show_json($this->L['download_error_create'],false);
+			show_json($result['data'],false);
 		}
 	}
 
@@ -1419,6 +1421,11 @@ class explorer extends Controller{
 			$list['info']['id'] = $GLOBALS['path_id'];
 			$user = system_member::get_info($GLOBALS['path_id']);
 			$list['info']['name'] = $user['name'];
+
+			//自己的分享子目录
+			if($GLOBALS['path_id'] == $this->user["user_id"]){
+				$list['info']['role'] = "owner";
+			}
 			if($GLOBALS['is_root']){
 				$list['info']['admin_real_path'] = USER_PATH.$user['path'].'/home/';
 			}

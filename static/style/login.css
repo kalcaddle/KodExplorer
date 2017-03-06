@@ -16,7 +16,7 @@ input,button {font-family:"Helvetica Neue","Helvetica","Microsoft Yahei","微软
 	width:428px;border-radius:4px;padding-bottom: 30px;
 	background: rgba(255,255,255,0.9);background: #fff \9;
 	position:absolute;top:46%;left:50%;margin-top:-209px;margin-left: -214px;
-	z-index: 999;
+	z-index: 100;
 }
 a{text-decoration:none;color: #adf;}
 .background{

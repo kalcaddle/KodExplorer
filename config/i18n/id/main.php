@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard Modus",
     "font_family"                    => "font",
     "code_mode"                      => "sintaks",
-    "path_can_not_action"            => "direktori tidak mendukung operasi ini!",
+    "path_can_not_action"            => "Hanya mendukung berbagi dokumen Anda sendiri!",
     "wap_page_pc"                    => "Versi PC",
     "wap_page_phone"                 => "mobil",
     "image_size"                     => "dimensi gambar",

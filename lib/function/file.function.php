@@ -941,19 +941,20 @@ function file_put_out($file,$download=false){
  */
 function file_download_this($from, $file_name,$header_size=0){
 	@set_time_limit(0);
+	$file_temp = $file_name.'.downloading';
 	if ($fp = @fopen ($from, "rb")){
-		if(!$download_fp = @fopen($file_name, "wb")){
+		if(!$download_fp = @fopen($file_temp, "wb")){
 			return false;
 		}
 		while(!feof($fp)){
-			if(!file_exists($file_name)){//删除目标文件；则终止下载
+			if(!file_exists($file_temp)){//删除目标文件；则终止下载
 				fclose($download_fp);
 				return false;
 			}
 			//对于部分fp不结束的通过文件大小判断
 			clearstatcache();
 			if( $header_size>0 &&
-				$header_size==get_filesize(iconv_system($file_name))
+				$header_size==get_filesize(iconv_system($file_temp))
 				){
 				break;
 			}
@@ -962,6 +963,10 @@ function file_download_this($from, $file_name,$header_size=0){
 		//下载完成，重命名临时文件到目标文件
 		fclose($download_fp);
 		fclose($fp);
+		if(!rename($file_temp,$file_name)){
+			unlink($file_name);
+			return rename($file_temp,$file_name);
+		}
 		return true;
 	}else{
 		return false;

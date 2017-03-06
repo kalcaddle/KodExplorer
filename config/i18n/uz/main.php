@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "klaviatura Mode",
     "font_family"                    => "Fonts",
     "code_mode"                      => "sintaksisi rang",
-    "path_can_not_action"            => "katalog, bu operatsiyani qo&#39;llab-quvvatlamaydi!",
+    "path_can_not_action"            => "faqat o'z hujjatlarni almashish qo'llab-quvvatlaydi!",
     "wap_page_pc"                    => "Kompyuter Version",
     "wap_page_phone"                 => "ko'chma",
     "image_size"                     => "Image o'lchamlari",

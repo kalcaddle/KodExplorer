@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Tryb klawiatury",
     "font_family"                    => "Czcionki",
     "code_mode"                      => "podświetlanie składni",
-    "path_can_not_action"            => "Katalog nie obsługuje tej operacji!",
+    "path_can_not_action"            => "Obsługuje dzielić tylko swoje dokumenty!",
     "wap_page_pc"                    => "Wersja PC",
     "wap_page_phone"                 => "przenośny",
     "image_size"                     => "wymiary obrazu",

@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "விசைப்பலகை முறை",
     "font_family"                    => "எழுத்துருக்கள்",
     "code_mode"                      => "தொடரியல் தனிப்படுத்தல்",
-    "path_can_not_action"            => "அடைவு இந்த அறுவை சிகிச்சை ஆதரிக்கவில்லை!",
+    "path_can_not_action"            => "உங்கள் சொந்த ஆவணங்களை பகிர்ந்து ஆதரிக்கிறது!",
     "wap_page_pc"                    => "PC பதிப்பு",
     "wap_page_phone"                 => "மொபைல்",
     "image_size"                     => "பட அளவுகள்",

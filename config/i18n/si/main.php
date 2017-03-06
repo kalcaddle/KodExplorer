@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "යතුරු පුවරුව ප්රකාරය",
     "font_family"                    => "සිංහල ෆොන්ට්",
     "code_mode"                      => "වාග් රීතිය අවධාරණය",
-    "path_can_not_action"            => "බහලුම මෙම මෙහෙයුම සඳහා පහසුකම් සපයන්නේ නැත!",
+    "path_can_not_action"            => "සහාය දක්වයි පමණක් ඔබේ ම ලිපි ලේඛන හුවමාරු කරන්න!",
     "wap_page_pc"                    => "පළාත් සභා අනුවාදය",
     "wap_page_phone"                 => "ජංගම",
     "image_size"                     => "රූප මාන",

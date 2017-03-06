@@ -36,8 +36,8 @@ function get_client_ip($b_ip = true){
 } 
 function get_host() {
 	$protocol = (!empty($_SERVER['HTTPS'])
-                 && $_SERVER['HTTPS'] !== 'off'
-                 || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
+				 && $_SERVER['HTTPS'] !== 'off'
+				 || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
 
 	if( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
 		strlen($_SERVER['HTTP_X_FORWARDED_PROTO']) > 0 ){
@@ -91,6 +91,17 @@ function url_header($url){
 			$length = $header['Content-Length'];
 		}
 	}
+
+	//301跳转
+	$file_url = $url;
+	if(isset($header['location'])){
+		if(is_string($header['location'])){
+			$file_url = $header['location'];
+		}else if(is_array($header['location'])){
+			$file_url = $header['location'][count($header['location'])-1];
+		}
+	}
+
 	if(isset($header['Content-Disposition'])){
 		if(is_array($header['Content-Disposition'])){
 			$dis = array_pop($header['Content-Disposition']);
@@ -106,18 +117,24 @@ function url_header($url){
 			}
 			$name = trim($name,'"');
 		}
-	}
+	}	
 	if(isset($header['X-OutFileName'])){
 		$name = $header['X-OutFileName'];
 	}
 	if(!$name){
-		$name = get_path_this($url);
+		$name = get_path_this($file_url);
 		if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
 		if (!$name) $name = 'index.html';
 	}
 	$name = rawurldecode($name);
 	$name = str_replace(array('/','\\'),'-',$name);//safe;
-	return array('length'=>$length,'name'=>$name);
+	$support_range = isset($header["Accept-Ranges"])?true:false;
+	return array(
+		'url' 		=> $file_url,
+		'length' 	=> $length,
+		'name' 		=> $name,
+		'support_range' =>$support_range
+	);
 } 
 
 

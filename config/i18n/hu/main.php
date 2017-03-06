@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard Mode",
     "font_family"                    => "betűtípusok",
     "code_mode"                      => "szintaxis kiemelés",
-    "path_can_not_action"            => "A könyvtár nem támogatja ezt a műveletet!",
+    "path_can_not_action"            => "Támogatja csak megoszthatja saját dokumentumait!",
     "wap_page_pc"                    => "PC verzió",
     "wap_page_phone"                 => "mozgó",
     "image_size"                     => "A kép mérete",

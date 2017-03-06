@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "klavye Modu",
     "font_family"                    => "Yazı tipleri",
     "code_mode"                      => "dizim",
-    "path_can_not_action"            => "Dizin bu işlemi desteklemiyor!",
+    "path_can_not_action"            => "Sadece kendi belgeleri paylaşmak Destekler!",
     "wap_page_pc"                    => "PC Sürümü",
     "wap_page_phone"                 => "hareketli",
     "image_size"                     => "Resim boyutları",

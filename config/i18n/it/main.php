@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard Mode",
     "font_family"                    => "Caratteri",
     "code_mode"                      => "L'evidenziazione della sintassi",
-    "path_can_not_action"            => "La directory non supporta questa operazione!",
+    "path_can_not_action"            => "Supporta solo condividere i propri documenti!",
     "wap_page_pc"                    => "Versione PC",
     "wap_page_phone"                 => "mobile",
     "image_size"                     => "dimensione immagine",

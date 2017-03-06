@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Režim klávesnice",
     "font_family"                    => "Fonty",
     "code_mode"                      => "zvýrazňování syntaxe",
-    "path_can_not_action"            => "Adresář nepodporuje tuto operaci!",
+    "path_can_not_action"            => "Podporuje sdílet pouze své vlastní dokumenty!",
     "wap_page_pc"                    => "PC verze",
     "wap_page_phone"                 => "mobilní",
     "image_size"                     => "rozměry obrázku",

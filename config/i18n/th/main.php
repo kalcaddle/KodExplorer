@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "โหมดแป้นพิมพ์",
     "font_family"                    => "แบบอักษร",
     "code_mode"                      => "เน้นไวยากรณ์",
-    "path_can_not_action"            => "ไดเรกทอรีไม่สนับสนุนการดำเนินการนี้!",
+    "path_can_not_action"            => "สนับสนุนเฉพาะแบ่งปันเอกสารของคุณเอง!",
     "wap_page_pc"                    => "เวอร์ชันพีซี",
     "wap_page_phone"                 => "โทรศัพท์มือถือ",
     "image_size"                     => "ขนาดภาพ",

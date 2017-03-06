@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "कीबोर्ड मोड",
     "font_family"                    => "फ़ॉन्ट्स",
     "code_mode"                      => "सिंटेक्स हाइलाइटिंग",
-    "path_can_not_action"            => "निर्देशिका इस आपरेशन का समर्थन नहीं करता है!",
+    "path_can_not_action"            => "केवल अपने खुद के दस्तावेजों का हिस्सा समर्थन करता है!",
     "wap_page_pc"                    => "पीसी संस्करण",
     "wap_page_phone"                 => "मोबाइल",
     "image_size"                     => "छवि आयाम",

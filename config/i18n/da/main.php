@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "Keyboard-tilstand",
     "font_family"                    => "Fonts",
     "code_mode"                      => "Syntaks fremhævning",
-    "path_can_not_action"            => "Mappen understøtter ikke denne handling!",
+    "path_can_not_action"            => "Understøtter kun dele dine egne dokumenter!",
     "wap_page_pc"                    => "PC version",
     "wap_page_phone"                 => "Mobil",
     "image_size"                     => "Billede dimensioner",

@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "keyboard Mode",
     "font_family"                    => "fonts",
     "code_mode"                      => "syntax highlighting",
-    "path_can_not_action"            => "De map biedt geen ondersteuning voor deze operatie!",
+    "path_can_not_action"            => "Ondersteunt alleen je eigen documenten te delen!",
     "wap_page_pc"                    => "PC Version",
     "wap_page_phone"                 => "mobiel",
     "image_size"                     => "afbeelding afmetingen",

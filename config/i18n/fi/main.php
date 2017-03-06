@@ -44,7 +44,7 @@ return array(
     "keyboard_type"                  => "näppäimistötilaan",
     "font_family"                    => "Fontti",
     "code_mode"                      => "syntaksin korostus",
-    "path_can_not_action"            => "Hakemistoa ei tue tätä toimintaa!",
+    "path_can_not_action"            => "Tukee vain jakaa omia asiakirjoja!",
     "wap_page_pc"                    => "PC versio",
     "wap_page_phone"                 => "mobile",
     "image_size"                     => "kuvan mitat",

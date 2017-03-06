@@ -8,9 +8,9 @@
 
 //配置数据,可在setting_user.php中更改覆盖
 $config['settings'] = array(
-	'download_url_time'	=> 0,			//下载地址生效时间，按秒计算，0代表不限制，默认不限制
-	'api_login_tonken'	=> '',			//设定则认为开启服务端api通信登陆，同时作为加密密匙
-	'updload_chunk_size'=> 1024*1024,	//1M;分片上传大小设定；不设定则用post_max_size;有时会受nginx的post_size限制
+	'download_url_time'	=> 0,			 //下载地址生效时间，按秒计算，0代表不限制，默认不限制
+	'api_login_tonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
+	'updload_chunk_size'=> 1024*1024*0.8,//0.8M;分片上传大小设定
 	'param_rewrite'		=> false,
 );
 
