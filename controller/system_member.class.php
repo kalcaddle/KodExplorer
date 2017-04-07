@@ -209,8 +209,7 @@ class system_member extends Controller{
 			show_json($this->L['error_repeat'],false);
 		}
 
-
-		//非系统管理员，不能将别人设置为系统管理员
+		//非系统管理员，不能添加系统管理员
 		if(!$GLOBALS['is_root'] && $this->in['role']=='1'){
 			show_json($this->L['group_role_error'],false);
 		}
@@ -253,11 +252,6 @@ class system_member extends Controller{
 			if(file_exists(iconv_system(USER_PATH.$user_info['path'])) ){
 				$user_info['path'] = $user_info['path'].'_'.$user_info['user_id'];
 			}
-
-			if(!$GLOBALS['is_root']){
-				show_json($this->L['no_permission'],false);
-			}
-
 			//用户组目录
     		if( isset($this->in['home_path'])){
     			$user_info['home_path'] = _DIR(rawurldecode($this->in['home_path']));
@@ -337,10 +331,6 @@ class system_member extends Controller{
 			}
 		}
 
-		if(!$GLOBALS['is_root']){
-			show_json($this->L['no_permission'],false);
-		}
-
 		//用户组目录
 		if( isset($this->in['home_path'])){
 			$user_info['home_path'] = _DIR(rawurldecode($this->in['home_path']));
@@ -378,7 +368,7 @@ class system_member extends Controller{
 		if(!is_array($user_arr)){
 			show_json($this->L['error'],false);
 		}
-		if (in_array('1', $user_arr)){//批量处理，不处理系统管理员
+		if (in_array('1', $user_arr)){//批量处理，不处理系统管理员admin
 			show_json($this->L['default_user_can_not_do'],false);
 		}
 		foreach ($user_arr as $user_id) {
@@ -392,7 +382,7 @@ class system_member extends Controller{
 				case 'status_set'://禁用&启用
 					$status = intval($this->in['param']);
 					$this->sql->set(array('user_id',$user_id),array('status',$status)); 
-					break;              
+					break;
 				case 'role_set'://设置权限组
 					$role = $this->in['param'];
 					//非系统管理员，不能将别人设置为系统管理员
@@ -462,7 +452,7 @@ class system_member extends Controller{
 	 *初始化用户数据和配置。
 	 */    
 	private function _initDir($path){
-		$user_folder = array('home','recycle','data');
+		$user_folder = array('home','recycle_kod','data');
 		$home_folders = explode(',',$this->config['setting_system']['new_user_folder']);
 		$root_path = USER_PATH.$path.'/';
 		foreach ($user_folder as $dir) {

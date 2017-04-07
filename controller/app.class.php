@@ -27,7 +27,11 @@ class app extends Controller{
 		foreach ($default as $key) {
 			$info[$key] = $list[$key];
 		}
-		$desktop = iconv_system(user_home_path($user_info).'desktop/');
+
+		$desktop = iconv_system(HOME.DESKTOP_FOLDER.'/');
+		if($GLOBALS['is_root'] == 1){
+			$desktop = iconv_system(MYHOME.DESKTOP_FOLDER.'/');
+		}
 		mk_dir($desktop);
 		if(!path_writeable($desktop)){
 			return;

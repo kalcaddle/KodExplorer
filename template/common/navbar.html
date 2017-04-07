@@ -3,7 +3,15 @@
 <div class="topbar">
 	<div class="content">
 		<div class="top_left">
-			<a href="./" class="topbar_menu title"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></a>
+			<a href="./" class="topbar_menu title">
+			<?php
+				if(substr($L['kod_name'],0,4) == '<img'){
+					echo $L['kod_name'];
+				}else{
+					echo '<i class="icon-cloud"></i>'.$L['kod_name'];
+				}
+			?>
+			</a>
 		<?php 
 			foreach ($config['setting_system']['menu'] as $key=>$value) {
 				if ($value['use']!='1') continue;

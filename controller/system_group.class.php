@@ -266,7 +266,7 @@ class system_group extends Controller{
 	 *初始化用户数据和配置。
 	 */
 	private function _initDir($path){
-		$root = array('home','data');//recycle
+		$root = array('home','data');
 		$new_group_folder = $this->config['setting_system']['new_group_folder'];
 		if(!is_array($new_group_folder)){
 			$new_group_folder = $this->config['setting_system_default']['new_group_folder'];

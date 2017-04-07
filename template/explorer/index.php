@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" scroll="no">
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
-	<title><?php echo $L['ui_explorer'].' - '.$L['kod_name'].$L['kod_power_by'];?></title>
+	<meta name="keywords" content="<?php echo $L['kod_meta_keywords'];?>" />
+	<meta name="generator" content="<?php echo $L['kod_meta_name'].' '.KOD_VERSION;?>"/>
+	<meta name="author" content="<?php echo $L['kod_meta_name'];?>" />
+	<meta name="copyright" content="<?php echo $L['kod_meta_copyright'];?>" />
+	
+	<title><?php echo $L['ui_explorer'].' - '.strip_tags($L['kod_name']).$L['kod_power_by'];?></title>
 	<link href="<?php echo STATIC_PATH;?>images/common/favicon.ico" rel="Shortcut Icon">
 	<link href="<?php echo STATIC_PATH;?>js/lib/picasa/style/style.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 	<link href="<?php echo STATIC_PATH;?>style/common.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>

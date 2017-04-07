@@ -41,7 +41,7 @@ function unzip_repeat(){
 		return;
 	}
 	$unzip_to = BASIC_PATH;
-	load_class('pclzip');
+	require(CLASS_DIR.'archiveLib/pclzip.class.php');
 	$zip = new PclZip($zip_file);
 	$result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,
 							PCLZIP_OPT_REPLACE_NEWER);

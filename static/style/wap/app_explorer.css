@@ -40,7 +40,7 @@ a.button:focus { outline: none;}
 
 .fileList_list {width: 100%; z-index: 0;cursor: pointer;}
 .fileList_list .app_link { height: 14px; width: 14px; margin-left: 10px; margin-top: 5px; position: absolute; font-size: 12px; color: #666;}
-.fileList_list .app_link::before { font-family: FontAwesome; content: "\f064"; color: #fff; text-shadow: 0 0 5px #333;}
+/*.fileList_list .app_link::before { font-family: FontAwesome; content: "\f064"; color: #fff; text-shadow: 0 0 5px #333;}*/
 .fileList_list .file { 
 	color: #225;width: 100%;height:50px;border-bottom: 1px solid #ddd;
 	border-bottom: solid 1px #f6f6f6;position: relative;
@@ -418,7 +418,8 @@ body{overflow-x: hidden;}
 .file_action_menu .menu_close{text-align: center;background: #f0f8ff;}
 .prompt_input input{width: 130px;}
 .dropdown-menu.pull-right {top: 37px;}
-.menu-right_tool li a{line-height: 30px;color: #666;}
+.menu-right_tool li a{line-height:25px;color: #666;}
+.menu-right_tool li a:hover,.menu-right_tool li a:active{background:#def;}
 .menu-right_tool li a i{padding-right: 5px;}
 .aui_state_focus{top:10% !important;}
 .aui_state_fucus,.aui_state_lock{position: fixed !important;}
@@ -547,9 +548,13 @@ div.dialog-simple .aui_header { opacity: 0.01; filter: alpha(opacity=1);}
 div.dialog-simple .aui_nw,div.dialog-simple .aui_ne { height: 0px;}
 div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opacity=100);}
 
+div.dialog-simple .aui_header{ opacity: 1; filter: alpha(opacity=100);}
+div.dialog-simple.movie_player_dialog .aui_titleBar {margin-top:-25px;}
+div.dialog-simple .jPlayer-music .top-banner{padding: 15px 15px 55px 15px;}
 
 
-.file_upload{height:360px;padding:5px;margin-right:10px;min-width:320px;overflow:hidden;}
+
+.file_upload{height:360px;padding:5px;margin-right:10px;min-width:280px;overflow:hidden;}
 .file_upload .top_nav{border-bottom:1px solid #ddd;margin-top:6px;}
 .file_upload .menu{display:block;text-decoration:none;float:left;padding:0px 15px;height:26px;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');background:#eee;background-image:-webkit-linear-gradient(top,#fff,#eee);background-image:-moz-linear-gradient(top,#fff,#eee);background-image:-o-linear-gradient(top,#fff,#eee);background-image:-ms-linear-gradient(top,#fff,#eee);background-image:linear-gradient(top,#fff,#eee);-pie-background:linear-gradient(to top,#fff,#eee);font-size:1em;border:1px solid #ccc;text-align:center;line-height:24px;margin-right:5px;margin-bottom:-1px;color:#444;border-radius:4px 4px 0 0;}
 .file_upload .menu.this{background:#fff;border-bottom:1px solid #fff;}
@@ -591,16 +596,17 @@ div.dialog-simple .dialog_mouse_in .aui_header { opacity: 1; filter: alpha(opaci
 .file_upload .uploader-list .item,.file_upload .download_list .item{padding:0px;height:35px;overflow:hidden;border-bottom:1px solid #ccc;background:#fefefe;}
 .file_upload .uploader-list .item .info,.file_upload .download_list .item .info{color:#224;line-height:35px;padding:0 5px;z-index:100;position:relative;font-size:1em;}
 .file_upload .uploader-list .item .info span,.file_upload .uploader-list .item .info a,.file_upload .download_list .item .info span,.file_upload .download_list .item .info a{display:block;float:left;text-overflow:ellipsis;height:30px;}
-.file_upload .uploader-list .item .info .title,.file_upload .download_list .item .info .title{color:#3A87AD;width:160px;overflow:hidden;font-weight:800;}
+.file_upload .uploader-list .item .info .title,.file_upload .download_list .item .info .title{color:#3A87AD;width:120px;overflow:hidden;font-weight:800;}
 .file_upload .uploader-list .item .info .size,.file_upload .download_list .item .info .size{width:50px;text-align:center;color:#3A87AD;}
-.file_upload .uploader-list .item .info .state,.file_upload .download_list .item .info .state{width:95px;text-align:right;}
-.file_upload .uploader-list .item .info .font-icon,.file_upload .download_list .item .info .font-icon{margin-left:12px;font-size:20px;width:20px;line-height:35px;cursor:pointer;color:#bbb;}
+.file_upload .uploader-list .item .info .state,.file_upload .download_list .item .info .state{width:70px;text-align:right;}
+.file_upload .uploader-list .item .info .font-icon,.file_upload .download_list .item .info .font-icon{margin-left:12px;font-size:14px;width:14px;line-height:35px;cursor:pointer;color:#bbb;}
 .file_upload .uploader-list .item .info .font-icon:hover,.file_upload .download_list .item .info .font-icon:hover{text-decoration:none;color:#f60;}
 .file_upload .uploader-list .item .info .icon-ok,.file_upload .download_list .item .info .icon-ok{color:#40AA53;}
 .file_upload .uploader-list .item .info .error,.file_upload .download_list .item .info .error{color:#f30;overflow:hidden;}
 .file_upload .uploader-list .item .progress,.file_upload .download_list .item .progress{height:38px;margin:0px;width:100%;float:left;margin-top:-30px;border-radius:0;box-shadow:none;}
 .file_upload .uploader-list .item .progress-bar,.file_upload .download_list .item .progress-bar{background-color:#abd7fb;background-image:linear-gradient(45deg,rgba(255,255,255,0.35) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.35) 50%,rgba(255,255,255,0.35) 75%,transparent 75%,transparent);}
 .file_upload .uploader-list .success:hover,.file_upload .download_list .success:hover{cursor:pointer;background:#def;border-bottom:1px solid #3A87AD;}
+.aui_outer .x-item-file{width: 28px;height: 15px;margin-top: 7px;}
 
 
 table th, table td, table thead:first-child tr:first-child th {padding:0;border:0px solid #ddd;}

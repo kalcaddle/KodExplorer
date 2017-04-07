@@ -1,9 +1,14 @@
 <!--user login-->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" scroll="no">
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title><?php echo $L['kod_name'].$L['kod_power_by'];?></title>
+	<meta name="keywords" content="<?php echo $L['kod_meta_keywords'];?>" />
+	<meta name="generator" content="<?php echo $L['kod_meta_name'].' '.KOD_VERSION;?>"/>
+	<meta name="author" content="<?php echo $L['kod_meta_name'];?>" />
+	<meta name="copyright" content="<?php echo $L['kod_meta_copyright'];?>" />
+	
+	<title><?php echo strip_tags($L['kod_name']).$L['kod_power_by'];?></title>
 	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 	<link href="<?php echo STATIC_PATH;?>images/common/favicon.ico" rel="Shortcut Icon" >
 	<link href="<?php echo STATIC_PATH;?>style/common.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
@@ -14,7 +19,9 @@
 <body>
 	<div class="loginbox login-wap" >
 		<div class="title">
-			<div class="logo"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></div>
+			<div class="logo">
+				<i class="icon-cloud"></i><?php echo strip_tags($L['kod_name']);?>
+			</div>
 			<div class='info'><?php echo $L['kod_name_desc'];?></div>
 		</div>
 		<div class="form">
@@ -34,7 +41,7 @@
 				</div>
 				<div class="actions">
 					<input type="submit" id="submit" value="<?php echo $L['login'];?>" />
-					<input type="checkbox" class="checkbox" name="rember_password" id='rm' checked='checked' />
+					<input type="checkbox" class="checkbox" name="rember_password" id='rm'/>
 					<label for='rm'><?php echo $L['login_rember_password'];?></label>
 				</div>
 				<div class="msg"><?php echo $msg;?></div>

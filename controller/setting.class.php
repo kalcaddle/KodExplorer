@@ -80,6 +80,43 @@ class setting extends Controller{
 		show_json($this->L['success']);
 	}
 
+	public function system_tools(){
+		$action = $this->in['action'];
+		switch($action){
+			case 'clear_cache':$this->clear_cache();break;
+			case 'clear_session':$this->clear_session();break;
+			case 'clear_user_recycle':$this->clear_user_recycle();break;
+			default:break;
+		}
+		show_json($this->L['success'],true);
+	}
+	private function clear_session(){
+		del_dir(KOD_SESSION);
+	}
+	private function clear_cache(){
+		del_dir(TEMP_PATH);
+		mk_dir(TEMP_PATH.'log');
+		mk_dir(TEMP_PATH.'thumb');
+		mk_dir(TEMP_PATH.'others');
+	}
+	private function clear_user_recycle(){
+		$sql = system_member::load_data();
+		$user_arr = $sql->get();
+		foreach ($user_arr as $key => $user) {
+			$user_path = USER_PATH.$user['path']."/";
+			$path_arr = array(
+				$user_path.'data/temp',
+				$user_path.'data/share_temp',
+				$user_path.'recycle_kod'
+			);
+			foreach ($path_arr as $value) {
+				del_dir($value);
+				mk_dir($value);
+			}
+		}
+	}
+
+
 	/**
 	 * 参数设置
 	 * 可以同时修改多个：key=a,b,c&value=1,2,3

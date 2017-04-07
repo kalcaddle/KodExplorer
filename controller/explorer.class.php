@@ -14,7 +14,16 @@ class explorer extends Controller{
 		$this->tpl = TEMPLATE.'explorer/';
 		$this->user = $_SESSION['kod_user'];
 		if (isset($this->in['path'])) {
+			//游客访问别人zip，解压到**目录；入口不检测权限
+			$path_from_not_check = array('explorer:unzip');
+			$path_from_not_check_flag = in_array(ST.':'.ACT,$path_from_not_check);
+			if($path_from_not_check_flag){
+				$GLOBALS['path_from_auth_check'] = true;
+			}
 			$this->path = _DIR($this->in['path']);
+			if($path_from_not_check_flag){
+				$GLOBALS['path_from_auth_check'] = false;
+			}
 			$this->check_system_path();
 		}
 	}
@@ -34,7 +43,8 @@ class explorer extends Controller{
 
 	//system virtual folder;
 	private function check_system_path(){
-		if(!in_array(ACT,array('mkfile','mkdir','search','pathCuteDrag','pathCopyDrag','pathPast','fileDownload'))){
+		if(!in_array(ACT,array('mkfile','mkdir','search',
+			'pathCuteDrag','pathCopyDrag','pathPast','fileDownload'))){
 			return;
 		}
 		if( $GLOBALS['path_type'] == KOD_USER_SHARE && 
@@ -52,7 +62,7 @@ class explorer extends Controller{
 	}
 
 	public function pathInfo(){
-		$info_list = json_decode($this->in['list'],true);
+		$info_list = json_decode($this->in['data_arr'],true);
 		if(!$info_list){
 			show_json($this->L['error'],false);
 		}
@@ -93,7 +103,7 @@ class explorer extends Controller{
 	}
 
 	public function pathChmod(){
-		$info_list = json_decode($this->in['list'],true);
+		$info_list = json_decode($this->in['data_arr'],true);
 		if(!$info_list){
 			show_json($this->L['error'],false);
 		}
@@ -572,15 +582,16 @@ class explorer extends Controller{
 		return $group_list;
 	}
 	public function pathDelete(){
-		$list = json_decode($this->in['list'],true);
+		$list = json_decode($this->in['data_arr'],true);
 		$user_recycle = iconv_system(USER_RECYCLE);
 		if (!is_dir($user_recycle)){
 			mk_dir($user_recycle);
 		}
 
 		$remove_to_recycle = $this->config['user']['recycle_open'];
-		if(!path_writeable($user_recycle)){//回收站不可写则直接删除；挂载
-			//show_json($this->L['no_permission_write'],false);
+		if(!path_writeable($user_recycle) ||
+			isset($this->in['shiftDelete'])
+			){//回收站不可写则直接删除；传入直接删除参数
 			$remove_to_recycle = '0';
 		}
 		$success=0;$error=0;
@@ -629,7 +640,7 @@ class explorer extends Controller{
 		show_json($info,$state);
 	}
 
-	private function clearTemp(){
+	private function _clear_temp(){
 		$path = iconv_system(USER_TEMP);
 		$time = @filemtime($path);
 		if(time() - $time > 600){//10min without updload
@@ -640,17 +651,17 @@ class explorer extends Controller{
 
 	public function pathDeleteRecycle(){
 		$user_recycle = iconv_system(USER_RECYCLE);
-		if(!isset($this->in['list'])){
+		if(!isset($this->in['data_arr'])){
 			if (!del_dir($user_recycle)) {
 				show_json($this->L['remove_fali'],false);
 			}else{
 				mkdir($user_recycle);
-				$this->clearTemp();
+				$this->_clear_temp();
 				space_size_use_reset();//使用空间重置
 				show_json($this->L['recycle_clear_success'],true);
 			}
 		}
-		$list = json_decode($this->in['list'],true);
+		$list = json_decode($this->in['data_arr'],true);
 		$success = 0;$error   = 0;
 		foreach ($list as $val) {
 			$path_full = _DIR($val['path']);
@@ -674,14 +685,14 @@ class explorer extends Controller{
 
 	public function pathCopy(){
 		session_start();//re start
-		$the_list = json_decode($this->in['list'],true);
+		$the_list = json_decode($this->in['data_arr'],true);
 		$_SESSION['path_copy']= json_encode($the_list);
 		$_SESSION['path_copy_type']='copy';
 		show_json($this->L['copy_success'],ture,$_SESSION);
 	}
 	public function pathCute(){
 		session_start();//re start
-		$the_list = json_decode($this->in['list'],true);
+		$the_list = json_decode($this->in['data_arr'],true);
 		foreach ($the_list as $key => &$value) {
 			$value['path'] = rawurldecode($value['path']);
 			_DIR($value['path']);
@@ -691,7 +702,7 @@ class explorer extends Controller{
 		show_json($this->L['cute_success']);
 	}
 	public function pathCuteDrag(){
-		$clipboard = json_decode($this->in['list'],true);
+		$clipboard = json_decode($this->in['data_arr'],true);
 		$path_past=$this->path;
 		$before_path_type = $GLOBALS['path_type'];
 		$before_path_id = $GLOBALS['path_id'];
@@ -728,7 +739,7 @@ class explorer extends Controller{
 	}
 
 	public function pathCopyDrag(){
-		$clipboard = json_decode($this->in['list'],true);
+		$clipboard = json_decode($this->in['data_arr'],true);
 		$path_past=$this->path;
 		$before_path_type = $GLOBALS['path_type'];
 		$before_path_id = $GLOBALS['path_id'];
@@ -868,10 +879,8 @@ class explorer extends Controller{
 		show_json($this->L['zip_success'],true,get_path_this($zip_file));
 	}
 	public function zip($zip_path=''){
-		load_class('pclzip');
 		ignore_timeout();
-
-		$zip_list = json_decode($this->in['list'],true);
+		$zip_list = json_decode($this->in['data_arr'],true);
 		$list_num = count($zip_list);
 		$files = array();
 		for ($i=0; $i < $list_num; $i++) {
@@ -882,6 +891,12 @@ class explorer extends Controller{
 		}
 		if(count($files)==0){
 			show_json($this->L['not_exists'],false);
+		}
+
+		//to type
+		$file_type = 'zip';
+		if(isset($this->in['fileType'])){
+			$file_type = $this->in['fileType'];
 		}
 
 		//指定目录
@@ -898,28 +913,14 @@ class explorer extends Controller{
 		}else{
 			$path_this_name=get_path_this(get_path_father($files[0]));
 		}
-		$zipname = $basic_path.$path_this_name.'.zip';
+		$zipname = $basic_path.$path_this_name.'.'.$file_type;
 		$zipname = get_filename_auto($zipname,'',$this->config['user']['file_repeat']);
 		space_size_use_check();
 		
-
-		$archive = new PclZip($zipname);
-		foreach ($files as $key =>$val) {
-			$remove_path_pre = _DIR_CLEAR(get_path_father($val));
-			if($key ==0){
-				$v_list = $archive->create($val,
-					PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
-					PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
-				);
-				continue;
-			}
-			$v_list = $archive->add($val,
-				PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
-				PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
-			);
-		}
+		load_class('kodArchive');
+		$result = kodArchive::create($zipname,$files);
 		space_size_use_change($zipname);//使用的空间增加
-		if ($v_list == 0) {
+		if ($result == 0) {
 			show_json("Create error!",false);
 		}
 		$info = $this->L['zip_success'].$this->L['size'].":".size_format(filesize($zipname));
@@ -930,39 +931,50 @@ class explorer extends Controller{
 		}
 	}
 	public function unzip(){
-		load_class('pclzip');
+		load_class('kodArchive');
 		ignore_timeout();
-
 		$path=$this->path;
 		$name = get_path_this($path);
 		$name = substr($name,0,strrpos($name,'.'));
 		$ext  = get_path_ext($path);
-		$unzip_to=get_path_father($path).$name;//解压在该文件夹内：
+		
+		$unzip_to_add = '';
+		$unzip_to = get_path_father($path);
 		if(isset($this->in['to_this'])){//直接解压
-			$unzip_to=get_path_father($path);
-		}
-
-		//$unzip_to=get_path_father($path);//解压到当前
-		if (isset($this->in['path_to'])) {//解压到指定位置
+		}else if (isset($this->in['path_to'])) {//解压到指定位置
 			$unzip_to = _DIR($this->in['path_to']);
-		}
+		}else{
+			$unzip_to_add = $name;
+		}		
 		//所在目录不可写
-		if (!path_writeable(get_path_father($path))){
+		if (!path_writeable($unzip_to)){
 			show_json($this->L['no_permission_write'],false);
 		}
+		$unzip_to = $unzip_to.$unzip_to_add;
 		space_size_use_check();
-		$zip = new PclZip($path);
-		unzip_charset_get($zip->listContent());
-		$result = $zip->extract(PCLZIP_OPT_PATH,$unzip_to,
-								PCLZIP_OPT_SET_CHMOD,DEFAULT_PERRMISSIONS,
-								PCLZIP_CB_PRE_FILE_NAME,'unzip_pre_name',
-								PCLZIP_CB_PRE_EXTRACT,"check_ext_unzip",
-								PCLZIP_OPT_REPLACE_NEWER);//解压到某个地方,覆盖方式
-		if ($result == 0) {
-			show_json("Error : ".$zip->errorInfo(true),fasle);
+
+		//解压缩
+		$unzip_part = '-1';
+		if(isset($this->in['unzip_part'])){
+			$unzip_part = $this->in['unzip_part'];
+		}
+		$result = kodArchive::extract($path,$unzip_to,$unzip_part);
+		if (!$result['code']) {
+			show_json("Error : ".$result['data'],fasle);
 		}else{
 			space_size_use_change($path);//使用的空间增加 近似使用压缩文件大小；
 			show_json($this->L['unzip_success']);
+		}
+	}
+
+	public function unzipList(){
+		load_class('kodArchive');
+		if(isset($this->in['index'])){
+			$download = isset($this->in['download'])?true:false;
+			kodArchive::filePreview($this->path,$this->in['index'],$download);
+		}else{
+			$result = kodArchive::listContent($this->path);
+			show_json($result['data'],$result['code']);
 		}
 	}
 
@@ -979,8 +991,8 @@ class explorer extends Controller{
 
 	//缩略图
 	public function image(){
-		if (filesize($this->path) <= 1024*20 ||
-			!function_exists('imagecolorallocate') ) {//小于20k或者不支持gd库 不再生成缩略图
+		if (filesize($this->path) <= 1024*50 ||
+			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
 			file_put_out($this->path);
 			return;
 		}
@@ -1063,7 +1075,7 @@ class explorer extends Controller{
 		session_write_close();
 
 		load_class("downloader");
-		$result = downloader::start($url,$save_path);
+		$result = downloader::start($header,$save_path);
 		session_start();unset($_SESSION[$uuid]);session_write_close();
 		if($result['code']){
 			$name = get_path_this(iconv_app($save_path));
@@ -1076,19 +1088,30 @@ class explorer extends Controller{
 
 	//生成临时文件key
 	public function officeView(){
-		if (!file_exists($this->path)) {
-			show_tips($this->L['not_exists']);
+		if(substr($this->in['path'],0,4) == 'http'){//url
+			$file_name = get_path_this($this->in['path']);
+			$file_url = $this->in['path'].'&access_token='.access_token_get().'&name=/'.$file_name;
+			$file_is_url = ture;
+		}else{
+			if (!file_exists($this->path)) {
+				show_tips($this->L['not_exists']);
+			}
+			$file_url = _make_file_proxy($this->path);
+			$file_is_url = false;
 		}
-		$file_ext = get_path_ext($this->path);
-		$file_url = _make_file_proxy($this->path);
 
 		//kodoffice  预览
 		if(defined("OFFICE_KOD_SERVER")){
 			$file_link = APPHOST.'index.php?explorer/fileProxy&path='.rawurlencode($this->in['path']);
-			$view_type = '&appMode=edit&access_token='.session_id();
+			$view_type = '&appMode=edit&access_token='.access_token_get();
 			if(OFFICE_KOD_ACTION == 'read'){//只读
 				$view_type = '&appMode=view';
 				$file_link = _make_file_proxy($this->path);
+			}
+
+			if($file_is_url){
+				$view_type = '&appMode=view';
+				$file_link = $file_url;
 			}
 			$user_info = $_SESSION['kod_user'];
 			$app_r = rand_string(10);
@@ -1173,8 +1196,10 @@ class explorer extends Controller{
 		@header( 'Content-Type: application/json; charset==utf-8');
 		@header( 'X-Robots-Tag: noindex' );
 		@header( 'X-Content-Type-Options: nosniff' );
-		write_log(json_encode(array($this->in,$info)),'office_save');
 		
+		if(GLOBAL_DEBUG){
+			write_log(json_encode(array($this->in,$info)),'office_save');
+		}
 		echo json_encode($info);
 		exit;
 	}
@@ -1201,8 +1226,8 @@ class explorer extends Controller{
 				$save_path = $save_path.$full_path;
 			}
 		}
-		$repeat_action = $this->config['user']['file_repeat'];
 		//分片上传
+		$repeat_action = $this->config['user']['file_repeat'];
 		$temp_dir = iconv_system(USER_TEMP);
 		mk_dir($temp_dir);
 		if (!path_writeable($temp_dir)) show_json($this->L['no_permission_write'],false);

@@ -76,7 +76,7 @@ var quoteEncode = function(str){
 	return str;
 }
 var canvasSupport = function() {
-    return !!document.createElement('canvas').getContext;
+	return !!document.createElement('canvas').getContext;
 }
 var isWap = function(){
 	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
@@ -680,7 +680,8 @@ var Tips =  (function(){
 	};
 	var tips = function(msg,code){
 		if (msg && typeof(msg) == 'object'){
-			code=msg.code;msg = msg.data;
+			code = msg.code;
+			msg  = msg.data;
 		}
 		var self = _init(false,msg,code);
 		self.stop(true,true)
@@ -694,9 +695,10 @@ var Tips =  (function(){
 	};
 	var loading = function(msg,code){
 		if (typeof(msg) == 'object'){
-			code=msg.code;msg = msg.data;
+			code=msg.code;
+			msg = msg.data;
 		}
-		if (msg == undefined) msg = 'loading...'
+		if (msg == undefined) msg = 'loading...';
 		msg+= "&nbsp;&nbsp; <img src='"+staticPath+"images/common/loading_circle.gif'/>";
 
 		var self = _init(true,msg,code);
@@ -708,6 +710,9 @@ var Tips =  (function(){
 		if (typeof(msg) == 'object'){
 			try{
 				code=msg.code;msg = msg.data;
+				if(code && typeof(msg) != 'string'){
+					msg = "Success!";
+				}
 			}catch(e){
 				code=0;msg ='';
 			};
@@ -1173,11 +1178,42 @@ var MaskView =  (function(){
 
 
 (function($){
-	$.getUrlParam = function(name){
-		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if (r!=null) return unescape(r[2]); return undefined;
+	$.getUrlParam = function(name,url){
+		if(!url) url = window.location.href;
+		var urlParam = $.parseUrl(url);
+		return urlParam.params[name];//unescape
 	};
+	$.parseUrl = function(url){
+		var a = document.createElement('a');
+		a.href = url;
+		return {
+			source: url,
+			protocol: a.protocol.replace(':', ''),
+			host: a.hostname,
+			port: a.port,
+			query: a.search,
+			params: (function() {
+				var ret = {},
+					seg = a.search.replace(/^\?/, '').split('&'),
+					len = seg.length,
+					i = 0,
+					s;
+				for (; i < len; i++) {
+					if (!seg[i]) {
+						continue;
+					}
+					s = seg[i].split('=');
+					ret[s[0]] = s[1];
+				}
+				return ret;
+			})(),
+			file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ''])[1],
+			hash: a.hash.replace('#', ''),
+			path: a.pathname.replace(/^([^\/])/, '/$1'),
+			relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
+			segments: a.pathname.replace(/^\//, '').split('/')
+		};
+	}
 
 	//选择器，目标含有特殊字符的预处理
 	//http://stackoverflow.com/questions/2786538/need-to-escape-a-special-character-in-a-jquery-selector-string
@@ -1229,7 +1265,7 @@ var MaskView =  (function(){
 			var tab = window.open("","print-preview");
 			doc.open();
 			var doc = tab.document;
-			var paWindow = tab;			
+			var paWindow = tab;
 		}else{
 			var $iframe = $("<iframe />");
 			$iframe.css({ position: "absolute",width:"0px",height:"0px",left:"-2000px",top:"-2000px" });
@@ -2015,7 +2051,10 @@ var htmlDecode=function(str){
 	temp = null;
 	return output;
 }
-
+//去掉所有的html标记  
+var htmlRemoveTags=function(str){
+	return str.replace(/<[^>]+>/g,"");
+}
 
 //http://codepen.io/anon/pen/wWaMQZ?editors=1011
 //对应php处理

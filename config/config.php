@@ -21,7 +21,7 @@ if(GLOBAL_DEBUG){
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
 	@ini_set("display_errors","on");//on off
-	@error_reporting(E_ERROR|E_PARSE|E_WARNING);// 0
+	@error_reporting(E_ERROR|E_PARSE);// 0
 }
 
 header("Content-type: text/html; charset=utf-8");
@@ -42,6 +42,7 @@ define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限�
  * 1. 需要先将data文件夹移到别的地方 例如将data文件夹拷贝到D:/
  * 2. 修改配置 define('DATA_PATH','D:/data/');
  */
+
 define('DATA_PATH',     BASIC_PATH .'data/');       //用户数据目录
 define('USER_PATH',     DATA_PATH .'User/');        //用户目录
 define('GROUP_PATH',    DATA_PATH .'Group/');       //群组目录
@@ -82,31 +83,21 @@ define('APPHOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));//程序根目录
 
 $config['app_charset']	 = 'utf-8';			            //该程序整体统一编码
 $config['settings']['static_path'] = "./static/";     //静态文件目录
-$config['check_charset'] = 'ASCII,UTF-8,GBK,GB2312,UTF-16,UCS-2,EUC-KR,EUC-JP,SHIFT-JIS,EUCJP-WIN,SJIS-WIN,JIS,LATIN1';//文件打开自动检测编码
+$config['check_charset'] = 'ASCII,UTF-8,GB2312,GBK,BIG5,UTF-16,UCS-2,Unicode,EUC-KR,EUC-JP,SHIFT-JIS,EUCJP-WIN,SJIS-WIN,JIS,LATIN1';//文件打开自动检测编码
 
 //when edit a file ;check charset and auto converto utf-8;
 if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['system_os']='windows';
 	$config['system_charset']='gbk';// EUC-JP/Shift-JIS/BIG5  //user set your server system charset
 	if(version_compare(phpversion(), '7.1.0', '>=')){//7.1 has auto apply the charset
-	    $config['system_charset']='utf-8';
+		$config['system_charset']='utf-8';
 	}
 } else {
 	$config['system_os']='linux';
 	$config['system_charset']='utf-8';
-}  
+}
 
 init_common();
-if(isset($in[SESSION_ID])){//office edit post
-	session_id($in[SESSION_ID]);
-}
-if(isset($in['access_token'])){//office edit post
-	session_id($in['access_token']);
-}
-@session_name(SESSION_ID);
-@session_save_path(KOD_SESSION);//session path
-@session_start();
-@session_write_close();//避免session锁定问题;之后要修改$_SESSION 需要先调用session_start()
 
 //write_log(json_encode($_REQUEST),'default');
 $config['autorun'] = array(

@@ -1,14 +1,18 @@
 <!--user login-->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" scroll="no">
+<html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<meta name="renderer" content="webkit">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="keywords" content="<?php echo $L['kod_meta_keywords'];?>" />
+	<meta name="generator" content="<?php echo $L['kod_meta_name'].' '.KOD_VERSION;?>"/>
+	<meta name="author" content="<?php echo $L['kod_meta_name'];?>" />
+	<meta name="copyright" content="<?php echo $L['kod_meta_copyright'];?>" />
 	
-	<title><?php echo $L['kod_name'].$L['kod_power_by'];?></title>
+	<title><?php echo strip_tags($L['kod_name']).$L['kod_power_by'];?></title>
 	<link href="<?php echo STATIC_PATH;?>images/common/favicon.ico" rel="Shortcut Icon">
 	<link href="<?php echo STATIC_PATH;?>style/common.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
 	<link href="./static/style/font-awesome/css/font-awesome.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet">
@@ -29,7 +33,7 @@
 	<div class="init_loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
 	<div class="loginbox animated-500 fadeInDown" >
 		<div class="title">
-			<div class="logo"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></div>
+			<div class="logo"><i class="icon-cloud"></i><?php echo strip_tags($L['kod_name']);?></div>
 			<div class='info'>——<?php echo $L['kod_name_desc'];?></div>
 			<div class="menu_group">
 				<a id='footer_language' data-toggle="dropdown" href="javascript:void(0);" class="topbar_menu">
@@ -69,7 +73,7 @@
 
 				<div class="actions">
 					<input type="submit" id="submit" value="<?php echo $L['login'];?>" />
-					<input type="checkbox" class="checkbox" name="rember_password" id='rm' checked='checked' />
+					<input type="checkbox" class="checkbox" name="rember_password" id='rm'/>
 					<label for='rm'><?php echo $L['login_rember_password'];?></label>
 				</div>
 				<a href="javascript:void(0);" class="forget_password"><?php echo $L['forget_password'];?></a>
@@ -89,10 +93,12 @@
 <script type="text/javascript" src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
 <script type="text/javascript" >
 	setTimeout(function(){
-		if(typeof(seajs) == 'undefined'){
-			alert('js文件不完整，请检查文件是否被修改(或服务器提供商压缩js导致文件丢失)');
+		if( typeof(seajs) == 'undefined' ||
+			typeof(LNG) == 'undefined'
+			){
+			alert('[js load error!]js文件不完整，\n请检查文件是否被修改(或咨询主机商压缩js导致文件损坏);');
 		}
-	},1500);
+	},1000);
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: ["lib/jquery-1.8.0.min"],

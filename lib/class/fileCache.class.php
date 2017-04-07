@@ -165,10 +165,16 @@ class fileCache{
 	public static function load($file){//10000次需要4s 数据量差异不大。
 		if (!$file) return false;
 		$file = iconv_system($file);
-		if (!file_exists($file)){
-			@touch($file);
+		if ((!file_exists($file) || filesize($file) == 0 ) && 
+			 !file_exists($file.'.lock') ){//并发下；正在写或删除
+			@file_put_contents($file,CONFIG_EXIT);
 		}
-		$str = file_get_contents($file);
+
+		$str = file_read_safe($file,0.4);
+		if($str === false || strlen($str) == 0){
+			show_tips('[Error Code:1010] fileCache load error!'.$file);
+		}
+
 		$str = substr($str, strlen(CONFIG_EXIT));
 		$data= json_decode($str,true);
 		if (is_null($data)) $data = array();
@@ -195,26 +201,7 @@ class fileCache{
 		if(is_null($json_str)){//含有二进制或非utf8字符串对应检测
 			show_tips('json_encode error!');
 		}
-
 		$buffer = CONFIG_EXIT.$json_str;
-		$file_temp = $file.mtime();
-		if($fp = fopen($file_temp, "w")){
-			fwrite($fp, $buffer);
-			fflush($fp);
-			fclose($fp);
-			$res = rename($file_temp,$file);
-			if(!$res){
-				unlink($file);
-				$res = rename($file_temp,$file);
-				if(!$res || !file_exists($file)){
-					unlink($file_temp);
-					file_put_contents($file,$buffer);
-				}
-			}
-		}else{
-			unlink($file_temp);
-			show_tips('[fileCache:save] open error!');
-		}
-		return true;
+		return file_wirte_safe($file,$buffer,0.3);
 	}
 }

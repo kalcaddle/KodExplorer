@@ -383,10 +383,12 @@ function show_tips($message,$url= '', $time = 3){
 	#msgbox #title{color: #888;border-bottom: 1px solid #ddd;padding: 10px 0;margin: 0 0 15px;font-size:18px;}
 	#msgbox #info a{color: #64b8fb;text-decoration: none;padding: 2px 0px;border-bottom: 1px solid;}
 	#msgbox a{text-decoration:none;color:#2196F3;}#msgbox a:hover{color:#f60;border-bottom:1px solid}
+	#msgbox pre{word-break: break-all;word-wrap: break-word;white-space: pre-wrap;
+		background: #002b36;padding:1em;color: #839496;border-left: 6px solid #8e8e8e;border-radius: 3px;}
 	</style>
 	<body>
 	<div id="msgbox">
-		<div id="title">Warning!</div>
+		<div id="title">警告 (Warning!)</div>
 		<div id="message">$message</div>
 		<div id="info">$info</div>
 	</div>
@@ -438,69 +440,86 @@ function show_json($data,$code = true,$info=''){
 	ob_end_clean();
 	header("X-Powered-By: kodExplorer.");
 	header('Content-Type: application/json; charset=utf-8');
-	$json = json_encode($result);
+	$json = json_encode($result,true);
 	if($json === false){
-	    $json = __json_encode($result);
+		$json = __json_encode($result);
 	}
 	echo $json;
 	exit;
 }
 
-function __json_encode( $data ) {            
-    if( is_array($data) || is_object($data) ) { 
-        $islist = is_array($data) && ( empty($data) || array_keys($data) === range(0,count($data)-1) ); 
-        
-        if( $islist ) { 
-            $json = '[' . implode(',', array_map('__json_encode', $data) ) . ']'; 
-        } else { 
-            $items = Array(); 
-            foreach( $data as $key => $value ) { 
-                $items[] = __json_encode("$key") . ':' . __json_encode($value); 
-            } 
-            $json = '{' . implode(',', $items) . '}'; 
-        } 
-    } else if( is_string($data) ) { 
-        $string = '"' . addcslashes($data, "\\\"\n\r\t/" . chr(8) . chr(12)) . '"'; 
-        $json    = ''; 
-        $len    = strlen($string); 
-        # Convert UTF-8 to Hexadecimal Codepoints. 
-        for( $i = 0; $i < $len; $i++ ) { 
-            $char = $string[$i]; 
-            $c1 = ord($char); 
-            
-            # Single byte; 
-            if( $c1 <128 ) { 
-                $json .= ($c1 > 31) ? $char : sprintf("\\u%04x", $c1); 
-                continue; 
-            } 
-            
-            # Double byte 
-            $c2 = ord($string[++$i]); 
-            if ( ($c1 & 32) === 0 ) { 
-                $json .= sprintf("\\u%04x", ($c1 - 192) * 64 + $c2 - 128); 
-                continue; 
-            } 
-            
-            # Triple 
-            $c3 = ord($string[++$i]); 
-            if( ($c1 & 16) === 0 ) { 
-                $json .= sprintf("\\u%04x", (($c1 - 224) <<12) + (($c2 - 128) << 6) + ($c3 - 128)); 
-                continue; 
-            } 
-                
-            # Quadruple 
-            $c4 = ord($string[++$i]); 
-            if( ($c1 & 8 ) === 0 ) { 
-                $u = (($c1 & 15) << 2) + (($c2>>4) & 3) - 1;
-                $w1 = (54<<10) + ($u<<6) + (($c2 & 15) << 2) + (($c3>>4) & 3); 
-                $w2 = (55<<10) + (($c3 & 15)<<6) + ($c4-128); 
-                $json .= sprintf("\\u%04x\\u%04x", $w1, $w2); 
-            } 
-        } 
-    } else { 
-        $json = strtolower(var_export( $data, true )); 
-    } 
-    return $json; 
+
+function str2hex($string){
+	$hex='';
+	for ($i=0; $i < strlen($string); $i++){
+		$hex .= dechex(ord($string[$i]));
+	}
+	return $hex;
+}
+
+function hex2str($hex){
+	$string='';
+	for ($i=0; $i < strlen($hex)-1; $i+=2){
+		$string .= chr(hexdec($hex[$i].$hex[$i+1]));
+	}
+	return $string;
+}
+
+function __json_encode( $data ) {
+	if( is_array($data) || is_object($data) ) { 
+		$islist = is_array($data) && ( empty($data) || array_keys($data) === range(0,count($data)-1) ); 
+		if( $islist ) { 
+			$json = '[' . implode(',', array_map('__json_encode', $data) ) . ']'; 
+		} else { 
+			$items = Array(); 
+			foreach( $data as $key => $value ) { 
+				$items[] = __json_encode("$key") . ':' . __json_encode($value); 
+			}
+			$json = '{' . implode(',', $items) . '}'; 
+		} 
+	} else if( is_string($data) ) { 
+		$string = addcslashes($data, "\\\"\n\r\t/" . chr(8) . chr(12));
+		$json    = ''; 
+		$len    = strlen($string); 
+		# Convert UTF-8 to Hexadecimal Codepoints. 
+		for( $i = 0; $i < $len; $i++ ) { 
+			$char = $string[$i]; 
+			$c1 = ord($char); 
+			
+			# Single byte; 
+			if( $c1 <128 ) { 
+				$json .= ($c1 > 31) ? $char : sprintf("\\u%04x", $c1); 
+				continue; 
+			}
+			
+			# Double byte 
+			$c2 = ord($string[++$i]); 
+			if ( ($c1 & 32) === 0 ) { 
+				$json .= sprintf("\\u%04x", ($c1 - 192) * 64 + $c2 - 128); 
+				continue; 
+			}
+			
+			# Triple 
+			$c3 = ord($string[++$i]); 
+			if( ($c1 & 16) === 0 ) { 
+				$json .= sprintf("\\u%04x", (($c1 - 224) <<12) + (($c2 - 128) << 6) + ($c3 - 128)); 
+				continue; 
+			}
+				
+			# Quadruple 
+			$c4 = ord($string[++$i]); 
+			if( ($c1 & 8 ) === 0 ) { 
+				$u = (($c1 & 15) << 2) + (($c2>>4) & 3) - 1;
+				$w1 = (54<<10) + ($u<<6) + (($c2 & 15) << 2) + (($c3>>4) & 3); 
+				$w2 = (55<<10) + (($c3 & 15)<<6) + ($c4-128); 
+				$json .= sprintf("\\u%04x\\u%04x", $w1, $w2); 
+			}
+		} 
+		$json = '"'.addcslashes($data, "\"").'"';
+	} else { 
+		$json = strtolower(var_export( $data, true )); 
+	} 
+	return $json; 
 }
 
 /**

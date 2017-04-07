@@ -139,6 +139,8 @@ artDialog.fn = artDialog.prototype = {
 		//没有title
 		if(!config.title){
 			//DOM.wrap.find('.dialogShow').removeClass('dialogShow');
+		}else{
+			config.title = urlDecode(config.title);//正常会多一次,暂忽略此bug
 		}
 		//是否可以调节大小 对应样式处理
 		if (config.simple && config.title != false) {
@@ -228,6 +230,7 @@ artDialog.fn = artDialog.prototype = {
 			$content.html(msg)
 			$frame = $content.find('iframe');
 			if($frame.length>0){
+				//$frame.get(0).src = "http://baidu.com";
 				$content.append('<div class="aui_loading"><span>loading..</span></div>');
 				$frame.css('display','none');
 				$frame.load(function(){
@@ -326,33 +329,36 @@ artDialog.fn = artDialog.prototype = {
 		}
 		var DOM = this.DOM,
 			title = DOM.title,
-			font_size = parseInt(title.css("font-size")),
-			title_str = title.data('data-title'),
-			default_width = 200,	//其他占用
-			max_width = title.width();
-		var str_width = this.string_width(title_str,font_size);
-		if( str_width<max_width-default_width || str_width< 150){
-			title.html(title_str);
+			fontSize = parseInt(title.css("font-size")),
+			titleBefore = title.data('data-title'),
+			titleStr = titleBefore,
+			defaultWidth = 200,	//其他占用
+			maxWidth = title.width();
+		var strWidth = this.string_width(titleStr,fontSize);
+		if( strWidth< maxWidth - defaultWidth || strWidth< 150){
+			title.html(titleStr);
 			return;
 		}
 
 		//截取title头部iocn
-		var str_pre='';
-		if(title_str.substr(0,1)=="<"){// <img src=""/>  <i class="..."></i>
-			var point = title_str.lastIndexOf('>')+1;
-			str_pre = title_str.substr(0,point);
-			title_str = title_str.substr(point)
+		var strPre='';
+		if(titleStr.substr(0,1)=="<"){// <img src=""/>  <i class="..."></i>
+			var point = titleStr.lastIndexOf('>')+1;
+			strPre = titleStr.substr(0,point);
+			titleStr = titleStr.substr(point)
 		}
-		while(this.string_width(title_str,font_size)>max_width-default_width){
-			title_str= title_str.substr(1);
-			if(title_str.length<10){
+
+		while(this.string_width(titleStr,fontSize)> maxWidth - defaultWidth){
+			titleStr= titleStr.substr(1);
+			if(titleStr.length<10){
 				break;
 			}
 		}
-		if($(title).text() == title_str){
+		if(htmlRemoveTags(titleBefore) == titleStr){
+			title.html(titleBefore);
 			return;
 		}
-		title.html(str_pre+"..."+title_str);
+		title.html(strPre+"..."+titleStr);
 	},
 
 	/**
@@ -1023,8 +1029,8 @@ artDialog.fn = artDialog.prototype = {
 				header_height = $wrap.find('.aui_header').height()
 			}
 			$main.css({
-				'height':(_$window.height()-header_height-5)  + 'px'
-			});
+				'height':(_$window.height()-header_height-0)  + 'px'
+			});// -5
 		}
 		that.reset_title_length();
 	},

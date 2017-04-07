@@ -33,7 +33,20 @@ function get_client_ip($b_ip = true){
 		$client_ip = substr($client_ip,$pos+1);
 	}
 	return $client_ip;
-} 
+}
+
+function get_url_link($url){
+	if(!$url) return "";
+	$res = parse_url($url);
+	$port = (empty($res["port"]) || $res["port"] == '80')?'':':'.$res["port"];
+	return $res['scheme']."://".$res["host"].$port.$res['path'];
+}
+function get_url_domain($url){
+	if(!$url) return "";
+	$res = parse_url($url);
+	return $res["host"];
+}
+
 function get_host() {
 	$protocol = (!empty($_SERVER['HTTPS'])
 				 && $_SERVER['HTTPS'] !== 'off'
@@ -79,11 +92,64 @@ function is_wap(){
 	return false;
 }
 
+function get_headers_curl($url,$timeout=30,$depth=0,&$headers=array()){
+	if ($depth >= 10) return false;
+	$ch = curl_init(); 
+	curl_setopt($ch, CURLOPT_URL,$url);
+	curl_setopt($ch, CURLOPT_REFERER,get_url_link($url));
+	curl_setopt($ch, CURLOPT_HEADER,true); 
+	curl_setopt($ch, CURLOPT_NOBODY,true); 
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+	curl_setopt($ch, CURLOPT_TIMEOUT,$timeout); 
+	$res = curl_exec($ch);
+	$res = split("\r\n", $res);
+
+	$location = false;
+	foreach ($res as $line) {
+		list($key, $val) = explode(": ", $line, 2);
+		$the_key = trim($key);
+		if($the_key == 'Location' || $the_key == 'location'){
+			$the_key = 'Location';
+			$location = trim($val);
+		}
+		if( strlen($the_key) == 0 &&
+			strlen(trim($val)) == 0  ){
+			continue;
+		}
+		if( substr($the_key,0,4) == 'HTTP' &&
+			strlen(trim($val)) == 0  ){
+			$headers[] = $the_key;
+			continue;
+		}
+
+		if(!isset($headers[$the_key])){
+			$headers[$the_key] = trim($val);
+		}else{
+			if(is_string($headers[$the_key])){
+				$temp = $headers[$the_key];
+				$headers[$the_key] = array($temp);
+			}
+			$headers[$the_key][] = trim($val);
+		}
+	}
+	if($location !== false){
+		$depth++;
+		get_headers_curl($location,$timeout,$depth,$headers);
+	}
+	return count($headers)==0?false:$headers;
+} 
+
 // url header data
 function url_header($url){
 	$name = '';$length=0;
-	$header = @get_headers($url,true);
-	if (!$header) return false;
+	$header = get_headers_curl($url);//curl优先
+	if(is_array($header)){
+		$header['ACTION_BY'] = 'get_headers_curl';
+	}else{
+		$header = @get_headers($url,true);
+	}
+
+	if (!$header) return false; 
 	if(isset($header['Content-Length'])){
 		if(is_array($header['Content-Length'])){
 			$length = array_pop($header['Content-Length']);
@@ -94,11 +160,16 @@ function url_header($url){
 
 	//301跳转
 	$file_url = $url;
-	if(isset($header['location'])){
-		if(is_string($header['location'])){
-			$file_url = $header['location'];
-		}else if(is_array($header['location'])){
-			$file_url = $header['location'][count($header['location'])-1];
+	$location = 'Location';
+	if(!isset($header['Location']) && 
+		isset($header['location'])){
+		$location = 'location';
+	}
+	if(isset($header[$location])){
+		if(is_string($header[$location])){
+			$file_url = $header[$location];
+		}else if(is_array($header[$location])  && count($header[$location])>0 ){
+			$file_url = $header[$location][count($header[$location])-1];
 		}
 	}
 
@@ -125,17 +196,24 @@ function url_header($url){
 		$name = get_path_this($file_url);
 		if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
 		if (!$name) $name = 'index.html';
+
+		$first_name = get_path_this($url);
+		if( get_path_ext($first_name) == get_path_ext($name) ){
+			$name = $first_name;
+		}
 	}
 	$name = rawurldecode($name);
 	$name = str_replace(array('/','\\'),'-',$name);//safe;
 	$support_range = isset($header["Accept-Ranges"])?true:false;
-	return array(
+	$result = array(
 		'url' 		=> $file_url,
 		'length' 	=> $length,
 		'name' 		=> $name,
-		'support_range' =>$support_range
+		'support_range' =>$support_range && ($length!=0)
 	);
-} 
+	//debug_out($url,$header,$result);
+	return $result;
+}
 
 
 // check url if can use

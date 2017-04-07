@@ -1,57 +1,173 @@
-﻿KodExplorer(http://kalcaddle.com/)
-========
-  KodExplorer是一款开源的基于Web的在线文件管理、代码编辑器。它提供了类windows经典用户界面，一整套在线文件管理、文件预览、编辑、上传下载、在线解压缩、音乐播放功能。让你直接在浏览器端实现web开发、源码文件预览、网站部署。同时拥有与本地操作一样方便、快捷、安全的体验。
- `商业版授权请联系：kalcaddle#qq.com`
+﻿# KodExplorer
+
+[![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kalcaddle.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kalcaddle.com) [![Download](http://kalcaddle.com/tools/version/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
+
+> KodExplorer is a file manager for web. It is also a web IDE / browser based code editor, which allows you to develop websites directly within the web browser.You can run KodExplorer either online or locally,on Linux, Windows or Mac based platforms. The only requirement is to have PHP 5 available.
+
+![](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/common2.png)
+![](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/common3.png)
 
 
- https://www.paypal.me/kalcaddle
- 
-####  1.是什么：
- - kodExplorer为千帆网络工作室开发的一款服务器文件管理程序。
- - 完美取代FTP管理：可用于服务器文件管理,zip解压缩、备份还原
- - 支持常见文件的预览：支持图片、音乐、视频预览、office、pdf等格式在线预览。
- - 上传：文件分片上传；保证整体的体验与大文件上传的问题。文件夹拖拽上传……。
- - 方便的下载:可以文件夹直接下载，框选后直接下载
- - 分享：你可以将你的文档或文件夹直接分享出来，供其他人浏览或下载
- - 在线编程：支持几乎所有编程语言的在线编辑(高亮,多光标编辑.堪比本地的sublime);自动展示函数列表
- - 极佳的操作体验：及其便捷的快捷键支持,让你拥有本地化的体验
- - 中文等多语言支持：中文编码全面兼容,文件编辑自动适配。
- - 超快的速度：全面采用Ajax+Json进行数据通信,毫秒级的响应速度；
- - 全平台兼容性：Win Linux Mac (Apache、Nginx、IIS)
+### [Demo](http://demo.kalcaddle.com/) [user: demo/demo]
+-----
+- [Change log](./ChangeLog.md)
+- [English Document](http://kalcaddle.com#lang=en)
+- [中文文档](http://kalcaddle.com/#lang=zh_CN)
+- [Donate](https://www.paypal.me/kalcaddle)
 
-#### 2.使用场景：
- - 取代FTP,服务端、客户端软件等复杂的安装配置。kod可以一键安装随处使用.
- - 你可以用它来管理你的服务器(备份,在线解压缩,版本发布....)
- - 你可以把他当做管理linux的一个操作系统界面
- - 可以用来作为私有云存储系统,存储你的文件...
- - 当然你也可以用来分享文件
- - Web IDE
- - 更多场景等你来挖掘！……
+# Features
+- Use experience like operating system, Rich context menu and toolbar, drag and drop, shortcut keys......
+- Available in more than 40 languages.
+- File Manage
+    - All operations with files and folders on a remote server(copy,cute,paste,move,remove,upload,create folder/file,rename,etc.)
+    - Multi-User support,custom role group.
+    - Flexible configuration of access rights,file types restriction, user - interface and other
+    - Clipboard: copy, cut, paste, clear
+    - Selectable files & folders support (mouse click & Ctrl & Shift & words & Keyboard shortcuts)
+    - Keyboard shortcuts: delete deletion, ctrl+A select, ctrl+C replication, ctrl+X splicing, up/down/left/right/home/end etc.
+    - Multiple actions support for selected files & folders:   move,copy,cute,remove,rename,open,archive,delete,download etc.
+    - Double or single click setup to open files & folders
+    - Filetree: allow to open and display multiple subfolders at a time
+    - Implemented natural sorting on the client-side
+    - List,Icons and Split view;
+    - Move/Copy/Clone/Delete files with Drag & Drop
+    - Share files or folder to others.
+    - Add folder to your favorites
+    - Calculate directory sizes
+    - Thumbnails for image files
+    - Normalizer:UTF-8 Normalizer of file-name and file-path etc.
+    - Muti Charset support, in a variety of circumstances garbled solution;Sanitizer of file-name and file-path etc.
+    - Multiple & chunked uploads support,
+    - Background file upload with Drag & Drop HTML5 support;Folder upload with Chrome, Firefox and Edge
+    - Upload form URL (or list)
+    - Direct extraction to the current working directory (you do not want - to create a folder)
+    - Search: search by filename & file contents
+    - File exclusion based on name
+    - Copy direct file URL
+    - Archives create/extract/preview (zip, rar, 7z, tar, gzip, tgz)
+    - Quicklook, preview for common file types; image file,text file,pdf,swf,document file etc.
+    - Video and audio player relying on web browser capabilities
+- Editor
+    - Syntax highlighting for over 120 languages
+    - Multiple label, Drag & Drop the label.
+    - Over 15 themes,Choose your favorite programming style
+    - Web development: HTML/JS/CSS editor with Emmet integrated
+    - Automatic indent and outdent;Line wrapping;Code folding
+    - Multiple cursors and selections;(Middle key select;Ctrl+Command+G)
+    - Autocomplete.
+    - Fully customizable key bindings including vim and Emacs modes
+    - Search and replace with regular expressions;Highlight matching parentheses
+    - Toggle between soft tabs and real tabs
+    - Displays hidden characters
+    - Drag and drop text using the mouse
+    - Live syntax checker (JavaScript/CoffeeScript/CSS/XQuery/HTML/PHP etc.)
+    - Cut, copy, and paste functionality
+    - Markdown support.(live preview;convert to html etc.)
+    - Format: JavaScript/CSS/HTML/JSON/PHP etc.
+    - Cross-platform, even on mobile devices
+    - Easy to integrate with other systems
+    - Developed by kod itself, this is a nice try.
 
-#### 3.使用说明
-    默认加入了三个用户（分别对应不同的用户组）
-    管理员：  admin/admin
-    普通用户：demo/demo
-    游客用户：guest/guest
 
-    [如何使用] 下载程序,解压上传到你的服务器路径下,data目录设置777权限。访问体验超便捷的服务吧！
-    (为确保数据安全，最好配置服务器不允许列目录)
-    [关于"系统错误"] 请配置php错误提示级别error_reporting; 配置php.ini或者允许error_reporting函数
-    [关于兼容性] 建议使用chrome firefox ie9+  体验更完整。ie8以下基本上不做兼容处理。chrome支持文件夹拖拽上传。
-    [文件打开] office文件在线预览功能,服务器必须在公网(外部能访问该服务器);
-        内部或局域网需要使用请参考qq群共享“web office搭建”,然后配置kod程序config/config.php OFFICE_SERVER
-    [安全提示] 为确保数据安全，请设置http服务器不允许列目录。[详情：http://955.cc/R2vw]
-    [文件拖拽上传] 除了ie8以下的大部分浏览器支持；建议使用chrome、360、猎豹、uc等
-    [文件夹拖拽上传] 除了ie10以下、firefox大部分浏览器都支持，建议使用chrome、360、猎豹、uc等
+# Install
 
-![](https://cloud.githubusercontent.com/assets/3761968/2583304/764f562a-b9cf-11e3-8e59-afdbdffc20eb.png)
+**1. Install from source**
+```
+git clone https://github.com/kalcaddle/KODExplorer.git
+chmod -Rf 777 ./KODExplorer/*
+```
 
-## editor
-![](https://cloud.githubusercontent.com/assets/3761968/2583309/7fd52f8a-b9cf-11e3-8052-b4f908fd5209.png)
+**2. Install via download**
+```
+wget https://github.com/kalcaddle/KODExplorer/archive/master.zip
+unzip master.zip
+chmod -Rf 777 ./*
+```
 
 
-## player
-![](https://cloud.githubusercontent.com/assets/3761968/2583312/84462bf0-b9cf-11e3-8b00-96fb3fc1610e.png)
 
-## desktop
-![](https://cloud.githubusercontent.com/assets/3761968/2583348/1b260572-b9d0-11e3-8f3e-3004dbbc63c9.png)
+# FAQs
+
+* Forget password
+    > Login page: see the "Forget password".
+
+* Upload with Drag & Drop
+    > Browser compatibility: Chrome, Firefox and Edge
+
+* How to make the system more secure?
+    > Make sure the administrator password is more complex.
+    > Open login verification code.
+    > Set the http server to not allow list the directory; 
+    > PHP Security:Set the path for open_basedir.
+
+# Screenshot
+### file manage:
+- Overview
+![Overview](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file.png)
+- File list Type (icon,list,split)
+![File list Type](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-resize.png)
+- Archives create/extract/preview (zip, rar, 7z, tar, gzip, tgz)
+![Archives create/extract/preview](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-unzip.png)
+- Drag upload
+![Drag upload](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-upload-drag.png)
+- Player
+![Player](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-player.png)
+
+### Editor:
+- Overview
+![Overview](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/editor.png)
+- Live preview
+![Live preview](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/editor-preview.png)
+- Search folder
+![Search folder](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/editor-search.png)
+- Markdown
+![Markdown](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-markdown.png)
+- Code style
+![Code style](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/editor-theme.png)
+
+
+### Others:
+- System role
+![System role](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/system-role.png)
+- Colorful Theme
+![Colorful Theme](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/system-theme.png)
+- Custom Theme 
+![Custom Theme](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/common-alpha.png)
+- Language
+![Language](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/language.png)
+
+
+
+
+# Software requirements
+- Server:
+    - Windows,Linux,Mac ...
+    - PHP 5.0+
+    - Database: File system driver;sqlite;mysql;...
+- Browser compatibility: 
+    - Chrome 
+    - Firefox
+    - Opera
+    - IE8+
+> Tips: It can also run on a router, or your home NAS
+
+
+# Credits
+kod is made possible by the following open source projects.
+
+* [seajs](https://github.com/seajs/seajs) 
+* [jQuery](https://github.com/jquery/jquery)
+* [ace](https://github.com/ajaxorg/ace)
+* [zTree](https://github.com/zTree/zTree_v3) 
+* [webuploader](https://github.com/fex-team/webuploader) 
+* [artTemplate](http://aui.github.com/artTemplate/)
+* [artDialog](https://github.com/aui/artDialog)
+* [jQuery-contextMenu](http://medialize.github.com/jQuery-contextMenu/) 
+* ...
+
+
+
+# License
+kodexplorer is issued under GPLv3.   license.[License](http://kalcaddle.com/tools/licenses/license.txt)  
+Contact: kalcaddle#qq.com  
+Copyright (C) 2013 kalcaddle.com  

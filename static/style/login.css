@@ -129,7 +129,7 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 }
 .footer_language li {
 	float: left;
-	width: 125px;
+	width: 120px;
 }
 .dropdown-menu>li>a {
 	padding: 3px 10px;

@@ -1,11 +1,19 @@
 <div class="full_background"></div>
 <div class="init_loading"><div>
-<img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
+	<img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
 </div>
 <div class="topbar">
 	<div class="content">
 		<div class="top_left">
-			<a href="./" class="topbar_menu title"><i class="icon-cloud"></i><?php echo $L['kod_name'];?></a>
+			<a href="./" class="topbar_menu title">
+			<?php
+				if(substr($L['kod_name'],0,4) == '<img'){
+					echo $L['kod_name'];
+				}else{
+					echo '<i class="icon-cloud"></i>'.$L['kod_name'];
+				}
+			?>
+			</a>
 			<div class="share_info">
 				<span class="share_title">
 					<b class="share_title_info">

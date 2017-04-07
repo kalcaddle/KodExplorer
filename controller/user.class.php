@@ -33,6 +33,12 @@ class user extends Controller{
 	 * 登录状态检测;并初始化数据状态
 	 */
 	public function loginCheck(){
+		// CSRF-TOKEN更新后同步
+		if( ACT == 'common_js' && 
+			isset($_SESSION['X-CSRF-TOKEN'])){
+			setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
+		}
+
 		if(in_array(ST,$this->notCheckApp)) return;//不需要判断的控制器
 		if(in_array(ACT,$this->notCheck))   return;//不需要判断的action
 		if(isset($_SESSION['kod_login']) && $_SESSION['kod_login']===true){
@@ -48,11 +54,10 @@ class user extends Controller{
 				@session_start();//re start
 				$_SESSION['kod_login'] = true;
 				$_SESSION['kod_user']= $user;
-				$_SESSION['CSRF-TOKEN'] = rand_string(20);
-				setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'], time()+3600*24*100);
+				$_SESSION['X-CSRF-TOKEN'] = rand_string(20);
+				setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
 				setcookie('kod_user_id', $_COOKIE['kod_user_id'], time()+3600*24*100);
 				setcookie('kod_token',$_COOKIE['kod_token'],time()+3600*24*100);
-				//$this->login_success($user);
 
 				//check if session work
 				@session_write_close();
@@ -82,7 +87,9 @@ class user extends Controller{
 	}
 	private function login_success($user){
 		$this->user = $user;
-		if(!$user['path']){//服务器管理后立即生效
+		if(!$user){//false
+			show_tips('[Error Code:1001] user data error!');
+		}else if(!$user['path']){//服务器管理后立即生效
 			$this->login("Your 'path' is empty,please install again！");
 		}else if($user['status'] == 0){
 			$this->login($this->L['login_error_user_not_use']);
@@ -91,11 +98,10 @@ class user extends Controller{
 		}
 		define('USER',USER_PATH.$this->user['path'].'/');//utf-8
 		define('USER_TEMP',USER.'data/temp/');
-		define('USER_RECYCLE',USER.'recycle/');
+		define('USER_RECYCLE',USER.'recycle_kod/');
 		if (!file_exists(iconv_system(USER))) {
 			$this->login( "User/".get_path_this(USER)." ".$this->L['not_exists']);
 		}
-
 		$user_home = user_home_path($this->user);//utf-8
 		if ($this->user['role'] == '1') {
 			define('MYHOME',$user_home);
@@ -108,6 +114,8 @@ class user extends Controller{
 			$GLOBALS['web_root'] = '';//从服务器开始到用户目录
 			$GLOBALS['is_root'] = 0;
 		}
+
+		define('DESKTOP_FOLDER',$this->config['setting_system_default']['desktop_folder']);
 		$this->config['user']  = fileCache::load(USER.'data/config.php');
 		if( !isset($this->config['user']['file_repeat']) ||
 			!isset($this->config['user']['resize_config'])){
@@ -216,12 +224,14 @@ class user extends Controller{
 			'group_path'    => $group_path,
 			
 			'myhome'        => MYHOME,
+			'my_desktop'	=> MYHOME.DESKTOP_FOLDER.'/',
 			'upload_max'	=> file_upload_size(),
 			'param_rewrite' => $this->config['settings']['param_rewrite'],
 			'version'       => KOD_VERSION,
 			'json_data'     => "",
 			'self_share'	=> system_member::user_share_list($this->user['user_id']),
 			'user_config' 	=> $this->config['user'],
+			'access_token'	=> access_token_get(),
 
 			//虚拟目录
 			'KOD_GROUP_PATH'		=>	KOD_GROUP_PATH,
@@ -280,7 +290,7 @@ class user extends Controller{
 			$user = $sql->get($root);
 			$user['password'] = md5($this->in['password']);
 			$sql->set($root,$user);
-			if($user['create_time'] == ''){
+			if(!$user['create_time'] || !$user['path']){
 				$member = new system_member();
 				$member->init_install();
 			}
@@ -340,17 +350,20 @@ class user extends Controller{
 		}else if($user['role']==''){
 			$this->login_display($this->L['login_error_role'],false);
 		}
+
 		//首次登陆，初始化app 没有最后登录时间
+		$this->login_success($user);//登陆成功
 		if($user['last_login'] == ''){
 			$app = init_controller('app');
 			$app->init_app($user);
 		}
 		$user['last_login'] = time();//记录最后登录时间
 		$member->set($user['user_id'],$user);
+		
 		$_SESSION['kod_login'] = true;
 		$_SESSION['kod_user']= $user;
-		$_SESSION['CSRF-TOKEN'] = rand_string(20);
-		setcookie('CSRF-TOKEN',$_SESSION['CSRF-TOKEN'], time()+3600*24*100);
+		$_SESSION['X-CSRF-TOKEN'] = rand_string(20);
+		setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
 		setcookie('kod_user_id', $user['user_id'], time()+3600*24*100);
 		if ($this->in['rember_password'] == '1') {
 			setcookie('kod_token',$this->make_login_token($user),time()+3600*24*100);
@@ -401,13 +414,20 @@ class user extends Controller{
 	}
 
 	//CSRF 防护；cookie设置：CSRF-TOKEN；header:提交X-CSRF-TOKEN
-	//explorer/fileProxy
+	//referer检测
 	private function checkCSRF(){
-		return;
-		//if(GLOBAL_DEBUG) return;//调试不开启
+		$not_check = array('user:common_js');
+		if( !$this->config['settings']['csrf_protect'] ||
+			isset($this->in['access_token']) ||
+			in_array(ST.':'.ACT, $not_check) 
+			){
+			return;
+		}
+
 		if( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])||
-			$_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['CSRF-TOKEN']){
-			show_json('xtoken_error',false);
+			$_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['X-CSRF-TOKEN']
+		){
+			show_json('token_error',false);
 		}
 	}
 
@@ -434,6 +454,8 @@ class user extends Controller{
 		}
 		//默认扩展功能 等价权限
 		$auth['user:common_js'] = 1;//权限数据配置后输出到前端
+		
+
 		$auth['explorer:pathDeleteRecycle'] = $auth['explorer:pathDelete'];
 		$auth['explorer:pathCopyDrag']      = $auth['explorer:pathCuteDrag'];
 
@@ -441,16 +463,19 @@ class user extends Controller{
 		$auth['explorer:imageRotate']       = $auth['editor:fileSave'];
 		$auth['explorer:fileDownloadRemove']= $auth['explorer:fileDownload'];
 		$auth['explorer:zipDownload']       = $auth['explorer:fileDownload'];
+		$auth['explorer:unzipList']         = $auth['explorer:unzip'];
 
 		//彻底禁止下载；文件获取
 		//$auth['explorer:fileProxy']         = $auth['explorer:fileDownload'];
 		//$auth['editor:fileGet']             = $auth['explorer:fileDownload'];
 		//$auth['explorer:officeView']        = $auth['explorer:fileDownload'];
-		$auth['explorer:fileProxy']         = true;
-		$auth['editor:fileGet']             = true;
-		$auth['explorer:officeView']        = true;
+		$auth['editor:fileGet']     = 1;
+		$auth['explorer:fileProxy'] = 1;
+		$auth['explorer:officeView']= 1;
+		$auth['explorer:pathList']  = 1;
+		$auth['explorer:treeList']  = 1;
 		if(!$auth['explorer:fileDownload']){
-			$auth['explorer:zip'] = false;
+			$auth['explorer:zip'] = 0;
 		}
 
 		$auth['userShare:del']              = $auth['userShare:set'];

@@ -58,7 +58,7 @@
 					<!-- 文件功能 -->
 					<div class="btn-group btn-group-sm kod_path_tool">
 						<button id='selectAll' class="btn btn-default" type="button">
-							<i class="font-icon icon-refresh"></i><?php echo $L['selectAll'];?>
+							<i class="font-icon icon-check"></i><?php echo $L['selectAll'];?>
 						</button>
 						<button id='upload' class="btn btn-default" type="button">
 							<i class="font-icon icon-cloud-upload"></i><?php echo $L['upload'];?>
@@ -98,29 +98,10 @@
 				        	<i class="font-icon icon-cloud-upload"></i><?php echo $L['upload'];?>
 				        </button>
 
-				        <div class="btn-group btn-group-sm ">
-					    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-					      <i class="font-icon icon-ellipsis-horizontal"></i><?php echo $L['button_more'];?>&nbsp;<span class="caret"></span>	      
+				        <div class="btn-group btn-group-sm">
+					    <button type="button" class="btn btn-default btn-sm toolPathMore">
+					      <i class="font-icon icon-ellipsis-horizontal"></i><?php echo $L['button_more'];?>&nbsp;<span class="caret"></span>
 					    </button>
-					    <ul class="dropdown-menu pull-right drop-menu-action animated menuShow">
-							<li id="open"><a href='javascript:;'><i class="font-icon icon-folder-open-alt"></i><?php echo $L['open'];?></a></li>
-						    <li id="share"><a href='javascript:;'><i class="font-icon icon-share-sign"></i><?php echo $L['share'];?></a></li>
-						    <li id="download"><a href='javascript:;'><i class="font-icon icon-download"></i><?php echo $L['download'];?></a></li>
-						    <li id="zip"><a href='javascript:;'><i class="font-icon icon-folder-close"></i><?php echo $L['zip'];?></a></li>
-						    <li class="divider"></li>
-						    <li id="copy"><a href='javascript:;'><i class="font-icon icon-copy"></i><?php echo $L['copy'];?></a></li>							    
-						    <li id="cute"><a href='javascript:;'><i class="font-icon icon-cut"></i><?php echo $L['cute'];?></a></li>
-						    <li id="past"><a href='javascript:;'><i class="font-icon icon-paste"></i><?php echo $L['past'];?></a></li>
-						    <li id="rname"><a href='javascript:;'><i class="font-icon icon-pencil"></i><?php echo $L['rename'];?></a></li>
-						    <li id="remove"><a href='javascript:;'><i class="font-icon icon-trash"></i><?php echo $L['remove'];?></a></li>
-							<li class="divider"></li>
-							<li id="clone"><a href='javascript:;'><i class="font-icon icon-external-link"></i><?php echo $L['clone'];?></a></li>
-							<li id="add_to_fav"><a href='javascript:;'><i class="font-icon icon-star"></i><?php echo $L['add_to_fav'];?></a></li>
-						    <li id="createLink"><a href='javascript:;'><i class="font-icon icon-share-alt"></i><?php echo $L['createLink'];?></a></li>
-						    <li class="divider"></li>
-						    <li id="info"><a href='javascript:;'><i class="font-icon icon-info"></i><?php echo $L['info'];?></a></li>
-					    </ul>
-					  </div>
 					</div>
 					<div class="group_space_use fl-left hidden"></div>
 					<div class="admin_real_path hidden fl-left ml-10">

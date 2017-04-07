@@ -11,7 +11,8 @@ $config['settings'] = array(
 	'download_url_time'	=> 0,			 //下载地址生效时间，按秒计算，0代表不限制，默认不限制
 	'api_login_tonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'updload_chunk_size'=> 1024*1024*0.8,//0.8M;分片上传大小设定
-	'param_rewrite'		=> false,
+	'param_rewrite'		=> false,		 //开启url 去除? 直接跟参数
+	'csrf_protect'		=> true, 		 //开启csrf保护
 );
 
 //初始化系统配置
@@ -25,6 +26,7 @@ $config['setting_system_default'] = array(
 	'first_in'			=> "explorer",	// 登录后默认进入[explorer desktop,editor]
 	'version_type'		=> "A",
 	
+	'desktop_folder'	=> 'desktop',	//桌面文件夹别名
 	'new_user_app'		=> "365日历,pptv直播,ps,qq音乐,搜狐影视,时钟,天气,水果忍者,计算器,豆瓣电台,音悦台,icloud",
 	'new_user_folder'	=> "document,desktop,pictures,music",
 	'new_group_folder'	=> "share,doc,pictures"	//新建分组默认建立文件夹
@@ -41,7 +43,7 @@ $config['setting_default'] = array(
 	'animate_open'		=> "1",			// dialog动画
 	'sound_open'		=> "0",			// 操作音效
 	'theme'				=> "win10",		// app theme [mac,win7,win10,metro,metro_green,alpha]
-	'wall'				=> "2",			// wall picture
+	'wall'				=> "8",			// wall picture
 	"file_repeat"		=> "replace",	// rename,replace,skip
 	"recycle_open"		=> "1",			// 1 | 0 代表是否开启
 	'resize_config'		=> 
@@ -127,18 +129,19 @@ $config['setting_menu_default'] = array(
 //需要权限认证的Action;root组无视权限
 $config['role_setting'] = array(
 	'explorer'	=> array(
-		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','pathCopy','pathChmod',
-		'pathCute','pathCuteDrag','pathCopyDrag','clipboard','pathPast','pathInfo',
+		'pathInfo','pathList','treeList','pathChmod',
+		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','unzipList',
+		'pathCopy','pathCute','pathCuteDrag','pathCopyDrag','clipboard','pathPast',
 		'serverDownload','fileUpload','search','pathDeleteRecycle',
 		'fileDownload','zipDownload','fileDownloadRemove','fileProxy','officeView','officeSave'),
 	'app'		=> array('user_app','init_app','add','edit','del'),//
 	'user'		=> array('changePassword','common_js'),//可以设立公用账户
 	'editor'	=> array('fileGet','fileSave'),
 	'userShare' => array('set','del'),
-	'setting'	=> array('set','system_setting','php_info'),
+	'setting'	=> array('set','system_setting','php_info','system_tools'),
 	'fav'		=> array('add','del','edit'),
 
-	'system_member'	=> array('get','add','do_action','edit'),
+	'system_member'	=> array('get','add','edit','do_action'),
 	'system_group'	=> array('get','add','del','edit'),
 	'system_role'	=> array('add','del','edit'),//不开放此功能设置【避免扩展名修改，导致系统安全问题】
 );

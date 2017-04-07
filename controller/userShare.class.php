@@ -98,7 +98,7 @@ class userShare extends Controller{
 	 * 删除
 	 */
 	public function del() {
-		$list = json_decode($this->in['list'],true);
+		$list = json_decode($this->in['data_arr'],true);
 		foreach ($list as $val) {
 			$this->sql->remove($val['path']);
 		}

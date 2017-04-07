@@ -25,13 +25,11 @@ class desktop extends Controller{
 			$this->assign('wall',STATIC_PATH.'images/wall_page/'.$wall.'.jpg');
 		}
 
-		$desktop = iconv_system(HOME.'desktop/');
-		if ($GLOBALS['is_root']) {
-			$desktop = iconv_system(MYHOME.'desktop/');
+		$desktop = iconv_system(HOME.DESKTOP_FOLDER.'/');
+		if($GLOBALS['is_root'] == 1){
+			$desktop = iconv_system(MYHOME.DESKTOP_FOLDER.'/');
 		}
-		if (!file_exists($desktop)) {
-			@mkdir($desktop);
-		}
+		mk_dir($desktop);
 		$this->display('index.php');
 	}
 }

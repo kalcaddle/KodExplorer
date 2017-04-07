@@ -47,6 +47,14 @@ function iconv_system($str){
 	if (!function_exists('iconv')){
 		return $str;
 	}
+
+	//去除中文空格UTF8; windows下展示异常;过滤文件上传、新建文件等时的文件名
+	//文件名已存在含有该字符时，没有办法操作.
+	$char_empty = "\xc2\xa0";
+	if(strpos($str,$char_empty) !== false){
+		$str = str_replace($char_empty," ",$str);
+	}
+
 	global $config;
 	$result = iconv($config['app_charset'], $config['system_charset'], $str);
 	if (strlen($result)==0) {//转换失败
@@ -205,7 +213,11 @@ function folder_info($path){
  */
 function get_path_this($path){
 	$path = str_replace('\\','/', rtrim(trim($path),'/'));
-	return substr($path,strrpos($path,'/')+1);
+	$pos = strrpos($path,'/');
+	if($pos === false){
+		return $path;
+	}
+	return substr($path,$pos+1);
 }
 /**
  * 获取一个路径(文件夹&文件) 父目录
@@ -213,7 +225,11 @@ function get_path_this($path){
  */
 function get_path_father($path){
 	$path = str_replace('\\','/', rtrim(trim($path),'/'));
-	return substr($path, 0, strrpos($path,'/')+1);
+	$pos = strrpos($path,'/');
+	if($pos === false){
+		return $path;
+	}
+	return substr($path, 0,$pos+1);
 }
 /**
  * 获取扩展名
@@ -611,6 +627,59 @@ function recursion_dir($path,&$dir,&$file,$deepest=-1,$deep=0){
 	closedir($dh);
 	return true;
 }
+
+
+// 安全读取文件，避免并发下读取数据为空
+function file_read_safe($file,$timeout = 0.1){
+	if(!$file || !file_exists($file)) return false;
+
+	$start_time = microtime(true);
+	$index = 0;
+	do{
+	    $index++;
+	    clearstatcache();
+		$file_size = filesize($file);
+		$result = @file_get_contents($file);
+		if( $result === false ||
+			!file_exists($file) ||
+			strlen($result) !== $file_size){
+			usleep(round(rand(0,1000)*50));//0.01~10ms
+		}else{
+			return $result;
+		}
+	}while($index<=100 && (microtime(true)-$start_time) < $timeout );
+	return false;
+}
+
+// 安全读取文件，避免并发下读取数据为空
+function file_wirte_safe($file,$buffer,$timeout=0.1){
+	$file_temp = $file.mtime().rand_string(4);
+	if(!$fp = fopen($file_temp, "w")){
+		@unlink($file_temp);
+		return false;
+	}
+	fwrite($fp, $buffer);
+	fclose($fp);
+	
+	$file_lock = $file.'.lock';
+	$start_time = microtime(true);
+	$index = 0;
+	do{
+	    $index++;
+	    if(!file_exists($file_lock)){
+	    	@rename($file,$file_lock);
+	    }
+		$result = @rename($file_temp,$file);
+		if( $result === false || file_exists($file_temp)){
+			usleep(round(rand(0,1000)*10));//0.01~10ms
+		}else{
+			@unlink($file_lock);
+			return true;
+		}
+	}while($index<=100 && (microtime(true)-$start_time)<$timeout );
+	return false;
+}
+
 /*
  * $search 为包含的字符串
  * is_content 表示是否搜索文件内容;默认不搜索
@@ -751,14 +820,14 @@ function file_search($path,$search,$is_case){
  */
 function chmod_path($path,$mod){
 	if (!isset($mod)) $mod = 0777;
-	if (!file_exists($path)) return;
+	if (!file_exists($path)) return false;
 	if (is_file($path)) return @chmod($path,$mod);
 	if (!$dh = @opendir($path)) return false;
 	while (($file = readdir($dh)) !== false){
 		if ($file != "." && $file != "..") {
 			$fullpath = $path . '/' . $file;
-			@chmod($fullpath,$mod);
 			chmod_path($fullpath,$mod);
+			@chmod($fullpath,$mod);
 		}
 	}
 	closedir($dh);
@@ -843,41 +912,45 @@ function is_text_file($ext){
  * 输出、文件下载，断点续传支持
  * 默认以附件方式下载；$download为false时则为输出文件
  * 视频播放拖拽：流媒体服务器
- * http://bbs.cenfun.com/thread-17246-1-1.html
- * http://stackoverflow.com/questions/1779006/seeking-in-remote-flv-files-using-php
  * 文件缓存：http://blog.csdn.net/eroswang/article/details/8302191
  */
-function file_put_out($file,$download=false){
-	if (!is_file($file)) show_json('not a file!');
-	if (!file_exists($file)) show_json('file not exists',false);
-	if (!path_readable($file)) show_json('file not readable',false);
+function file_put_out($file,$download=false,$download_filename=false){
+	$error = false;
+	if (!file_exists($file)){
+		$error = 'file not exists';
+	}else if (!path_readable($file)){
+		$error = 'file not readable';
+	}else if (!$fp = @fopen($file, "rb")){
+		$error = 'file open error!';
+	} 
 	
-	//system-charset
-	$ua = $_SERVER['HTTP_USER_AGENT'];
-	if( preg_match('/MSIE/',$ua) || preg_match('/Trident/',$ua) ){
-		$filename = get_path_this($file);
-	}else if( stripos($ua,"firefox") ){// space cute bug
-		$filename = iconv_app(get_path_this($file));
-		$filename = str_replace(" ","_", $filename);
-	}else{//utf-8
-		$filename = iconv_app(get_path_this($file));
+	if($error !== false){
+		if($download_filename === false){
+			return;
+		}else{
+			show_json($error,false);
+		}
 	}
 
+	$start= 0;
+	$file_size = get_filesize($file);
+	$end  = $file_size - 1;
+	@ob_end_clean();
 	@set_time_limit(0);
-	ob_end_clean();
-	$mime = get_file_mime(get_path_ext($file));
-	$time = gmdate('D, d M Y H:i:s', filemtime($file));
-	if ($download ||
-		(strstr($mime,'application/') && $mime!='application/x-shockwave-flash')  ) {//下载或者application则设置下载头
-		if( preg_match('/MSIE/',$_SERVER['HTTP_USER_AGENT']) ||
-			preg_match('/Trident/',$_SERVER['HTTP_USER_AGENT'])){
-			if($GLOBALS['config']['system_os']!='windows'){//linux主机 ie浏览器；中文文件下载urlencode问题
-				$filename = str_replace('+','%20',urlencode($filename));
-			}
-		}
+
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	$time = gmdate('D, d M Y H:i:s',filemtime($file));
+	$filename = get_path_this($file);
+	if($download_filename !== false){
+		$filename = $download_filename;
+	}
+
+	$mime = get_file_mime(get_path_ext($filename));
+	$filename_output = rawurlencode(iconv_app($filename));
+	if ($download || (strstr($mime,'application/') && $mime!='application/x-shockwave-flash')  ) {
 		header("Content-Type: application/octet-stream");
 		header("Content-Transfer-Encoding: binary");
-		header("Content-Disposition: attachment;filename=".$filename);
+		header("Content-Disposition: attachment;filename=".$filename_output.";filename*=UTF-8''".$filename_output);
 	}else{
 		//缓存文件
 		header('Expires: '.gmdate('D, d M Y H:i:s',time()+3600*24*20).' GMT');
@@ -895,18 +968,17 @@ function file_put_out($file,$download=false){
 		header('Etag: '.$etag);
 		header('Last-Modified: '.$time.' GMT');
 	}
-	header("X-OutFileName: ".$filename);
+	header("X-OutFileName: ".$filename_output);
 	header("X-Powered-By: kodExplorer.");
 	header("Content-Type: ".$mime);
-	header("Accept-Ranges: bytes");
-	//header("X-Sendfile: $file");exit;
-
-	if(!$fp = @fopen($file, "rb")){
-		header ("HTTP/1.1 505 Internal server error");exit;
+	
+	//远程路径不支持断点续传；打开zip内部文件
+	if(!file_exists($file)){
+		header('HTTP/1.1 200 OK');
+		header('Content-Length:'.($end+1));
+		return;
 	}
-	$size = get_filesize($file);
-	$start= 0;
-	$end  = $size - 1;
+	header("Accept-Ranges: bytes");
 	if (isset($_SERVER['HTTP_RANGE'])){
 		if (preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $_SERVER['HTTP_RANGE'], $matches)){
 			$start	= intval($matches[1]);
@@ -918,13 +990,15 @@ function file_put_out($file,$download=false){
 	}else{
 		header('HTTP/1.1 200 OK');
 	}
-	if(isset($_GET['start'])){
+	if(isset($_GET['start'])){//flash video
 		$start = intval($_GET['start']);
 	}
 	header('Content-Length:' . (($end - $start) + 1));
 	if (isset($_SERVER['HTTP_RANGE']) || isset($_GET['start'])){
-		header("Content-Range: bytes $start-$end/$size");
+		header("Content-Range: bytes $start-$end/".$file_size);
 	}
+
+	//输出文件
 	$cur = $start;
 	fseek($fp, $start,0);
 	while(!feof($fp) && $cur <= $end){ // && (connection_status() == 0)
@@ -963,7 +1037,7 @@ function file_download_this($from, $file_name,$header_size=0){
 		//下载完成，重命名临时文件到目标文件
 		fclose($download_fp);
 		fclose($fp);
-		if(!rename($file_temp,$file_name)){
+		if(!@rename($file_temp,$file_name)){
 			unlink($file_name);
 			return rename($file_temp,$file_name);
 		}
@@ -1042,6 +1116,7 @@ function kod_move_uploaded_file($from_path,$save_path){
 		}
 		move_uploaded_file($from_path,$temp_path);
 	}
+	chmod_path($temp_path,DEFAULT_PERRMISSIONS);
 	return rename($temp_path,$save_path);
 }
 
@@ -1077,6 +1152,9 @@ function upload_chunk($fileInput, $path = './',$temp_path,$repeat_action){
 	if (!empty($_FILES)) {
 		$file_name = iconv_system($_FILES[$fileInput]["name"]);
 		$upload_file = $_FILES[$fileInput]["tmp_name"];
+		if($file_name == "image.jpg" && is_wap()){//拍照上传
+			$file_name = date('Ymd H:i:s',time()).'.jpg';
+		}
 	}else if (isset($in["name"])) {
 		$file_name = iconv_system($in["name"]);
 		$upload_file = "php://input";

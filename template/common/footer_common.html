@@ -1,0 +1,16 @@
+<?php
+	$settings = $GLOBALS['config']['settings'];
+	$setting_system = $GLOBALS['config']['setting_system'];
+	if(isset($settings['global_js'])){
+		echo "\n".'<script type="text/javascript" id="settings_global_js">'.$settings['global_js'].'</script>';
+	}
+	if(isset($settings['global_css'])){
+		echo "\n".'<style type="text/css" id="settings_global_css">'.$settings['global_css'].'</style>';
+	}
+	if(isset($setting_system['global_css'])){
+		echo "\n".'<style type="text/css" id="setting_system_global_css">'.$setting_system['global_css'].'</style>';
+	}
+	if(isset($setting_system['global_html'])){
+		echo "\n".$setting_system['global_html']."\n";
+	}
+?>

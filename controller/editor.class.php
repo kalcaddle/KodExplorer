@@ -45,17 +45,25 @@ class editor extends Controller{
 
 	// 获取文件数据
 	public function fileGet(){
-		$filename=_DIR($this->in['filename']);
-		if (!file_exists($filename)){
-			show_json($this->L['not_exists'],false);
+		if(isset($this->in['file_url'])){
+			$display_name = $this->in['name'];
+			$filepath = $this->in['file_url'].'&access_token='.access_token_get();
+		}else{
+			$display_name = rawurldecode($this->in['filename']);
+			$filepath =_DIR($this->in['filename']);
+			if (!file_exists($filepath)){
+				show_json($this->L['not_exists'],false);
+			}
+			if (!path_readable($filepath)){
+				show_json($this->L['no_permission_read_all'],false);
+			}
+			if (filesize($filepath) >= 1024*1024*20){
+				show_json($this->L['edit_too_big'],false);
+			}
 		}
-		if (!path_readable($filename)){
-			show_json($this->L['no_permission_read_all'],false);
-		}
-		if (filesize($filename) >= 1024*1024*40) show_json($this->L['edit_too_big'],false);
-		$filecontents=file_get_contents($filename);//文件内容
+		
+		$filecontents=file_get_contents($filepath);//文件内容
 		$charset=get_charset($filecontents);
-
 		if ($charset!='' &&
 			$charset!='utf-8' &&
 			function_exists("mb_convert_encoding")
@@ -63,9 +71,9 @@ class editor extends Controller{
 			$filecontents=@mb_convert_encoding($filecontents,'utf-8',$charset);
 		}
 		$data = array(
-			'ext'		=> get_path_ext($filename),
-			'name'      => iconv_app(get_path_this($filename)),
-			'filename'	=> rawurldecode($this->in['filename']),
+			'ext'		=> get_path_ext($display_name),
+			'name'      => iconv_app(get_path_this($display_name)),
+			'filename'	=> $display_name,
 			'charset'	=> $charset,
 			'base64'	=> false,
 			'content'	=> $filecontents

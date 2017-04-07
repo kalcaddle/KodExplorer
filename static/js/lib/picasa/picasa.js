@@ -483,7 +483,7 @@ Picasa.prototype = {
 	
 	// 加载图片
 	loadImage : function() {
-		$("#PV_Number").html(this.currentNo + "/" +this.arrCount);
+		$("#PV_Number").html((parseInt(this.currentNo)+1) + "/" +this.arrCount);
 		$('#PV_Items .current').removeClass('current');
 		$('#PV_Items [number='+this.currentNo+']').addClass('current');
 

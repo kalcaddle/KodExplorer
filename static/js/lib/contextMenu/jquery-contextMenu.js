@@ -137,9 +137,9 @@ var // currently active contextMenu trigger
             }
             
             //change by warlee;
-            //+8 避免按下hover菜单弹起后响应菜单动作
+            //+10 避免按下hover菜单弹起后响应菜单动作
             if (offset.left + width > right) {
-                offset.left -= width+8;
+                offset.left -= width+10;
             }
             opt.$menu.css(offset);
         },
@@ -151,7 +151,7 @@ var // currently active contextMenu trigger
                 // http://www.runoob.com/jqueryui/api-position.html
                 $menu.css('display', 'block').position({
                     my: "left top",
-                    at: "right top-9",//change by warlee; -9 避免点不到问题
+                    at: "right-2 top-9",//change by warlee; -10 避免点不到问题
                     of: this,
                     collision: "flipfit fit"
                 }).css('display', '');
@@ -162,8 +162,6 @@ var // currently active contextMenu trigger
                     left: this.outerWidth()
                 };
                 offset.top += offset.top-10;
-                console.log(offset);
-
                 $menu.css(offset);
             }
         },

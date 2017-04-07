@@ -1,29 +1,20 @@
 <div class="common_footer">
 	<?php 
+		$settings = $GLOBALS['config']['settings'];
+		$setting_system = $GLOBALS['config']['setting_system'];
 		if(is_wap()){
 			echo '<span class="pr-10"><a href="javascript:void(0);" forceWap="1">'.$L['wap_page_phone'].'</a> | '.
 				 '<a href="javascript:void(0);" forceWap="0">'.$L['wap_page_pc'].'</a></span> ';
 		}
-		if(isset($GLOBALS['config']['settings']['copyright'])){
-			echo $GLOBALS['config']['settings']['copyright'];
+		if(isset($settings['copyright'])){
+			echo $settings['copyright'];
 		}else{
 			echo $L['copyright_pre'].' v'.KOD_VERSION.' | '.$L['copyright_info'];
 		}
-		echo '    <a href="javascript:core.copyright();" class="icon-info-sign copyright_bottom"></a>';
+		echo '  <a href="javascript:core.copyright();" class="icon-info-sign copyright_bottom"></a>';
+		if(isset($setting_system['global_icp'])){
+			echo "&nbsp;&nbsp;  ".$setting_system['global_icp'];
+		}
 	?>
 </div>
-
-
-<script type="text/javascript">
-<?php 
-echo isset($GLOBALS['config']['settings']['global_js'])?$GLOBALS['config']['settings']['global_js']:"";
-?>
-</script>
-
-<style type="text/css">
-<?php 
-echo isset($GLOBALS['config']['settings']['global_css'])?$GLOBALS['config']['settings']['global_css']:"";
-?>
-</style>
-
-<!-- <script type="text/javascript" src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>  -->
+<?php include(TEMPLATE.'common/footer_common.html');?>

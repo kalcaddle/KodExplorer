@@ -14,7 +14,7 @@ class share extends Controller{
 	function __construct(){
 		parent::__construct();
 		$this->tpl = TEMPLATE.'share/';
-		$auth = system_role::get_info(1);
+		$auth = system_role::get_info(1);//经过role检测
 		//不需要检查的action
 		$arr_not_check = array('common_js');
 		if (!in_array(ACT,$arr_not_check)){
@@ -236,7 +236,7 @@ class share extends Controller{
 
 	//========ajax function============
 	public function pathInfo(){
-		$info_list = json_decode($this->in['list'],true);
+		$info_list = json_decode($this->in['data_arr'],true);
 		foreach ($info_list as &$val) {          
 			$val['path'] = $this->share_path.$this->_clear($val['path']);
 		}
@@ -291,6 +291,18 @@ class share extends Controller{
 		$this->assign('code_theme_black',$set_class);//获取编辑器配置信息
 		$this->display('edit.php');
 	}
+
+	// public function unzipList(){
+	// 	load_class('kodArchive');
+	// 	if(isset($this->in['index'])){
+	// 		$download = isset($this->in['download'])?true:false;
+	// 		kodArchive::filePreview($this->path,$this->in['index'],$download);
+	// 	}else{
+	// 		$result = kodArchive::listContent($this->path);
+	// 		show_json($result['data'],$result['code']);
+	// 	}
+	// }
+	
 	public function pathList(){
 		$list=$this->path($this->path);
 		show_json($list);
@@ -333,12 +345,9 @@ class share extends Controller{
 	}
 	public function search(){
 		if (!isset($this->in['search'])) show_json($this->L['please_inpute_search_words'],false);
-		$is_content = false;
-		$is_case    = false;
-		$ext        = '';
-		if (isset($this->in['is_content'])) $is_content = true;
-		if (isset($this->in['is_case'])) $is_case = true;
-		if (isset($this->in['ext'])) $ext= str_replace(' ','',$this->in['ext']);
+		$is_content = intval($this->in['is_content']);
+		$is_case = intval($this->in['is_case']);
+		$ext= trim($this->in['ext']);
 		$list = path_search(
 			$this->path,
 			iconv_system(rawurldecode($this->in['search'])),
@@ -349,14 +358,16 @@ class share extends Controller{
 
 	//生成临时文件key
 	public function officeView(){
-		if (!file_exists($this->path)) {
-			show_tips($this->L['not_exists']);
-		}
-		$file_ext = get_path_ext($this->path);
-		$file_url = _make_file_proxy($this->path);
-		if($file_ext=='pdf'){
-			header('location:./lib/plugins/pdfjs/web/viewer.html?file='.rawurlencode($file_url));
-			return;
+		if(substr($this->in['path'],0,4) == 'http'){//url
+			$file_name = get_path_this($this->in['path']);
+			$file_url = $this->in['path'].'&access_token='.access_token_get().'&name=/'.$file_name;
+			$file_is_url = ture;
+		}else{
+			if (!file_exists($this->path)) {
+				show_tips($this->L['not_exists']);
+			}
+			$file_url = _make_file_proxy($this->path);
+			$file_is_url = false;
 		}
 
         //kodoffice 预览
@@ -482,10 +493,9 @@ class share extends Controller{
 		if (!isset($zip_path)) {
 			show_json($this->L['share_not_download_tips'],false);
 		}
-		load_class('pclzip');
 		ignore_timeout();
 
-		$zip_list = json_decode($this->in['list'],true);
+		$zip_list = json_decode($this->in['data_arr'],true);
 		$list_num = count($zip_list);
 		$files = array();
 		for ($i=0; $i < $list_num; $i++) {
@@ -507,39 +517,32 @@ class share extends Controller{
 		}
 		$zipname = $zip_path.$path_this_name.'.zip';
 		$zipname = get_filename_auto($zipname,date('_H-i-s'));
-		$archive = new PclZip($zipname);
-		foreach ($files as $key =>$val) {
-			$remove_path_pre = _DIR_CLEAR(get_path_father($val));
-			if($key ==0){
-				$v_list = $archive->create($val,
-					PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
-					PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
-				);
-				continue;
-			}
-			$v_list = $archive->add($val,
-				PCLZIP_OPT_REMOVE_PATH,$remove_path_pre,
-				PCLZIP_CB_PRE_FILE_NAME,'zip_pre_name'
-			);
-		}
+
+		load_class('kodArchive');
+		kodArchive::create($zipname,$files);
 		return iconv_app($zipname);
 	}
 
 
 	// 获取文件数据
 	public function fileGet(){
-		$name = $this->_clear($this->in['filename']);
-		$filename= $this->share_path.$name;
-		if (!file_exists($filename)){
-			show_json($this->L['not_exists'],false);
+		if(isset($this->in['file_url'])){
+			$display_name = $this->in['name'];
+			$filepath = $this->in['file_url'];
+		}else{
+			$display_name = _DIR_CLEAR(rawurldecode($this->in['filename']));
+			$filepath= $this->share_path.iconv_system($display_name);
+			if (!file_exists($filepath)){
+				show_json($this->L['not_exists'],false);
+			}
+			if (!path_readable($filepath)){
+				show_json($this->L['no_permission_read'],false);
+			}
+			if (filesize($filepath) >= 1024*1024*20){
+				show_json($this->L['edit_too_big'],false);
+			}
 		}
-		if (!path_readable($filename)){
-			show_json($this->L['no_permission_read'],false);
-		}
-		if (filesize($filename) >= 1024*1024*20){
-			show_json($this->L['edit_too_big'],false);
-		}
-		$filecontents=file_get_contents($filename);//文件内容
+		$filecontents=file_get_contents($filepath);//文件内容
 		$charset=get_charset($filecontents);
 		if ($charset!='' && 
 			$charset!='utf-8' &&
@@ -548,9 +551,9 @@ class share extends Controller{
 			$filecontents=@mb_convert_encoding($filecontents,'utf-8',$charset);
 		}
 		$data = array(
-			'ext'		=> get_path_ext($filename),
-			'name'      => iconv_app(get_path_this($filename)),
-			'filename'	=> rawurldecode($this->in['filename']),
+			'ext'		=> get_path_ext($display_name),
+			'name'      => iconv_app(get_path_this($display_name)),
+			'filename'	=> $display_name,
 			'charset'	=> $charset,
 			'base64'	=> false,
 			'content'	=> $filecontents
@@ -563,8 +566,8 @@ class share extends Controller{
 	}
 	
 	public function image(){
-		if (filesize($this->path) <= 1024*20 ||
-			!function_exists('imagecolorallocate') ) {//小于20k或者不支持gd库 不再生成缩略图
+		if (filesize($this->path) <= 1024*50 ||
+			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
 			file_put_out($this->path);
 			return;
 		}
