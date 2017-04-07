@@ -1,4 +1,4 @@
-﻿# KodExplorer
+# KodExplorer
 
 [![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kalcaddle.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kalcaddle.com) [![Download](http://kalcaddle.com/tools/version/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
 
@@ -112,6 +112,9 @@ chmod -Rf 777 ./*
 ![Drag upload](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-upload-drag.png)
 - Player
 ![Player](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-player.png)
+- Online Office view & Editor
+![Online Office](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-open-pptx.png)
+
 
 ### Editor:
 - Overview
