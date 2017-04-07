@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "maksimal ruxsat etilgan",
     "upload_size_info"               => "Agar ko'proq modernizatsiya qilish uchun bo'lsangiz, php.ini maksimal ruxsat upload o'zgartirish iltimos. Agar tanlash, bu konfiguratsion kattaroq bir fayl avtomatik ravishda filtri bo'ladi.",
     "upload_error"                   => "Yuklab bo'lmadi",
+    "upload_error_http"              => "Yuklab olish tarmoq yoki xavfsizlik devorining tufayli muvaffaqiyatsiz tugadi!",
     "upload_muti"                    => "Bir nechta fayl yuklash",
     "upload_drag"                    => "Drag va tomchi yuklash",
     "upload_drag_tips"               => "upload azobga kiritinglar!",

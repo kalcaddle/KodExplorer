@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "izin verilen maksimum",
     "upload_size_info"               => "Daha fazla yapılandırmak istiyorsanız, php.ini izin verilen maksimum yükleme değiştirin lütfen. seçtiğinizde Bu yapılandırmada daha büyük bir dosya otomatik olarak süzer.",
     "upload_error"                   => "yükleme başarısız oldu",
+    "upload_error_http"              => "Yükleme ağ veya güvenlik duvarı nedeniyle başarısız oldu!",
     "upload_muti"                    => "Çoklu dosya yükleme",
     "upload_drag"                    => "Sürükle ve bırak yükleme",
     "upload_drag_tips"               => "yüklemek için gevşetin!",

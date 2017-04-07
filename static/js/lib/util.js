@@ -690,7 +690,7 @@ var Tips =  (function(){
 			.animate({opacity:1,top:0},in_time,0)
 			.delay(delay)
 			.animate({opacity:0,top:-self.height()},in_time,0,function(){
-				$(this).remove();
+				self.remove();
 			});
 	};
 	var loading = function(msg,code){
@@ -721,11 +721,12 @@ var Tips =  (function(){
 		self.delay(delay)
 			.show()
 			.animate({
-				opacity:0,
-				top:-self.height()},
+					opacity:0,
+					top:-self.height()
+				},
 				in_time,0,function(){
-					$(this).remove();
-			});
+					self.remove();
+				});
 	};
 	return{
 		tips:tips,

@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Maksimum yang diijinkan",
     "upload_size_info"               => "Jika Anda ingin mengkonfigurasi lebih lanjut, silakan memodifikasi php.ini maksimum yang diperbolehkan upload. Bila Anda memilih file yang lebih besar dari konfigurasi ini secara otomatis akan menyaring.",
     "upload_error"                   => "Upload gagal",
+    "upload_error_http"              => "Upload gagal karena jaringan atau firewall!",
     "upload_muti"                    => "Upload multi-file",
     "upload_drag"                    => "Drag dan drop meng-upload",
     "upload_drag_tips"               => "Kendurkan untuk meng-upload!",

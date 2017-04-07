@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Den maksimalt tilladte",
     "upload_size_info"               => "Hvis du vil konfigurere mere, kan du ændre php.ini maksimalt tilladte upload. Når du vælger en fil større end denne konfiguration vil automatisk filtrere.",
     "upload_error"                   => "Upload mislykkedes",
+    "upload_error_http"              => "Upload mislykkedes på grund af netværk eller firewall!",
     "upload_muti"                    => "Multi-upload",
     "upload_drag"                    => "Træk og slip upload",
     "upload_drag_tips"               => "Løsn at uploade!",

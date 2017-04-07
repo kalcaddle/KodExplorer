@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "maxim admisibil",
     "upload_size_info"               => "Dacă doriți ca să configurați mai multe, vă rugăm să modificați de încărcare php.ini maximă permisă. Atunci când selectați un fișier mai mare decât această configurație se va filtra automat.",
     "upload_error"                   => "Încărcare eșuată",
+    "upload_error_http"              => "Încărcarea a eșuat din cauza rețelei sau un firewall!",
     "upload_muti"                    => "Încărcați mai multe fișiere",
     "upload_drag"                    => "Drag and drop de încărcare",
     "upload_drag_tips"               => "Slăbiți pentru a încărca!",

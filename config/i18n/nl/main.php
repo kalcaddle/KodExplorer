@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "De maximaal toegestane",
     "upload_size_info"               => "Als u meer wilt configureren, pas aub php.ini maximaal toegestane upload. Wanneer u een bestand groter is dan deze configuratie automatisch filteren.",
     "upload_error"                   => "Upload mislukt",
+    "upload_error_http"              => "Upload mislukt als gevolg van netwerkproblemen of firewall!",
     "upload_muti"                    => "Multi-bestand uploaden",
     "upload_drag"                    => "Slepen en neerzetten upload",
     "upload_drag_tips"               => "Draai om te uploaden!",

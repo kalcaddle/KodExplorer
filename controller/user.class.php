@@ -33,10 +33,9 @@ class user extends Controller{
 	 * 登录状态检测;并初始化数据状态
 	 */
 	public function loginCheck(){
-		// CSRF-TOKEN更新后同步
-		if( ACT == 'common_js' && 
-			isset($_SESSION['X-CSRF-TOKEN'])){
-			setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
+		// CSRF-TOKEN更新后同步;关闭X-CSRF-TOKEN的httpOnly
+		if( ACT == 'common_js' && isset($_SESSION['X-CSRF-TOKEN'])){
+			$this->_setCsrfToken();
 		}
 
 		if(in_array(ST,$this->notCheckApp)) return;//不需要判断的控制器
@@ -55,7 +54,7 @@ class user extends Controller{
 				$_SESSION['kod_login'] = true;
 				$_SESSION['kod_user']= $user;
 				$_SESSION['X-CSRF-TOKEN'] = rand_string(20);
-				setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
+				$this->_setCsrfToken();
 				setcookie('kod_user_id', $_COOKIE['kod_user_id'], time()+3600*24*100);
 				setcookie('kod_token',$_COOKIE['kod_token'],time()+3600*24*100);
 
@@ -187,6 +186,10 @@ class user extends Controller{
 			exit;
 		}
 		$this->login($error);
+	}
+
+	private function _setCsrfToken(){
+		setcookie_header('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
 	}
 
 	//临时文件访问
@@ -363,7 +366,7 @@ class user extends Controller{
 		$_SESSION['kod_login'] = true;
 		$_SESSION['kod_user']= $user;
 		$_SESSION['X-CSRF-TOKEN'] = rand_string(20);
-		setcookie('X-CSRF-TOKEN',$_SESSION['X-CSRF-TOKEN'], time()+3600*24*100);
+		$this->_setCsrfToken();
 		setcookie('kod_user_id', $user['user_id'], time()+3600*24*100);
 		if ($this->in['rember_password'] == '1') {
 			setcookie('kod_token',$this->make_login_token($user),time()+3600*24*100);

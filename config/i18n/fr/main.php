@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Le maximum admissible",
     "upload_size_info"               => "Si vous souhaitez configurer plus, s'il vous plaît modifier php.ini maximale autorisée téléchargement. Lorsque vous sélectionnez un fichier plus grand que cette configuration sera automatiquement filtrer.",
     "upload_error"                   => "Échec de l'envoi",
+    "upload_error_http"              => "Téléchargement a échoué en raison de réseau ou pare-feu!",
     "upload_muti"                    => "Multi-chargement de fichier",
     "upload_drag"                    => "Drag and drop télécharger",
     "upload_drag_tips"               => "Desserrez à télécharger!",

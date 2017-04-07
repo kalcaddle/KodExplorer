@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "La massima ammissibile",
     "upload_size_info"               => "Se si desidera configurare più, si prega di modificare massimo php.ini di upload consentita. Quando si seleziona un file più grande di questa configurazione verrà automaticamente filtrare.",
     "upload_error"                   => "caricamento fallito",
+    "upload_error_http"              => "Caricamento fallito a causa della rete o un firewall!",
     "upload_muti"                    => "Carica di più file",
     "upload_drag"                    => "Drag and drop di upload",
     "upload_drag_tips"               => "Allentare caricare!",

@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "最大允許",
     "upload_size_info"               => "如果想設定更大，請修改php.ini中允許上傳的最大值。選擇檔時,大於該設定的將自動過濾掉。",
     "upload_error"                   => "上傳失敗",
+    "upload_error_http"              => "網絡或防火牆導致上傳失敗!",
     "upload_muti"                    => "多檔上傳",
     "upload_drag"                    => "拖拽上傳",
     "upload_drag_tips"               => "鬆開即可上傳!",

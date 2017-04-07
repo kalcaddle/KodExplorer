@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Maksymalna dopuszczalna",
     "upload_size_info"               => "Jeśli chcesz skonfigurować więcej, proszę zmodyfikować php.ini maksymalną dozwoloną przesyłanie. Po wybraniu pliku większy niż tej konfiguracji automatycznie odfiltrować.",
     "upload_error"                   => "przesyłanie nie powiodło się",
+    "upload_error_http"              => "Przesyłanie nie powiodło się ze względu na sieć lub firewall!",
     "upload_muti"                    => "przesyłanie wielu plików",
     "upload_drag"                    => "Przeciągnij i upuść przesyłanie",
     "upload_drag_tips"               => "Odkręć załadować!",

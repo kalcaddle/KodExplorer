@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "A legnagyobb megengedhető",
     "upload_size_info"               => "Ha szeretne konfigurálni több, kérjük, módosítsa a php.ini maximális megengedett feltöltési. Ha kiválaszt egy fájlt ennél nagyobb konfiguráció automatikusan kiszűrni.",
     "upload_error"                   => "sikertelen feltöltés",
+    "upload_error_http"              => "Sikertelen feltöltés miatt a hálózati tűzfal vagy!",
     "upload_muti"                    => "Multi-fájl feltöltése",
     "upload_drag"                    => "Drag and drop feltöltési",
     "upload_drag_tips"               => "Lazítsa feltölteni!",

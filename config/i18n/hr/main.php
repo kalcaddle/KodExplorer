@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Najveća dopuštena",
     "upload_size_info"               => "Ako želite konfigurirati više, mijenjati php.ini maksimalno dopušten prijenos. Kada odaberete datoteke veće od ovih konfiguracija će se automatski filtrirati.",
     "upload_error"                   => "Prijenos nije uspio",
+    "upload_error_http"              => "Prijenos nije uspio zbog mrežu ili firewall!",
     "upload_muti"                    => "prijenos više datoteka",
     "upload_drag"                    => "Povucite i ispustite prijenos",
     "upload_drag_tips"               => "Otpustite za upload!",

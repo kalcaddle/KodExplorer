@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Največja dovoljena",
     "upload_size_info"               => "Če želite nastaviti, prosim spremenite php.ini največjo dovoljeno nalaganje. Ko izberete bo datoteka večja od te konfiguracije avtomatsko izločijo.",
     "upload_error"                   => "Nalaganje ni uspelo",
+    "upload_error_http"              => "Pošiljanje ni uspelo zaradi omrežja ali požarnega zidu!",
     "upload_muti"                    => "upload Multi-file",
     "upload_drag"                    => "Povleci in spusti prenos",
     "upload_drag_tips"               => "Ublažijo naložiti!",

@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Các tối đa cho phép",
     "upload_size_info"               => "Nếu bạn muốn cấu hình thêm, vui lòng sửa đổi tối đa php.ini cho phép tải lên. Khi bạn chọn một tập tin lớn hơn cấu hình này sẽ tự động lọc ra.",
     "upload_error"                   => "không thể tải lên",
+    "upload_error_http"              => "Tải lên thất bại do mạng hay tường lửa!",
     "upload_muti"                    => "upload nhiều file",
     "upload_drag"                    => "Kéo và thả tải lên",
     "upload_drag_tips"               => "Nới lỏng để tải lên!",

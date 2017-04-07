@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Suurin sallittu",
     "upload_size_info"               => "Jos haluat määrittää useampia, ota muokata php.ini suurin sallittu ladata. Kun valitset tiedoston suurempi kuin tämä kokoonpano suodattaa automaattisesti pois.",
     "upload_error"                   => "Lähetys epäonnistui",
+    "upload_error_http"              => "Lataus epäonnistui, koska ohjelma tai palomuuri!",
     "upload_muti"                    => "Useiden tiedostojen lataaminen",
     "upload_drag"                    => "Vedä ja pudota ladata",
     "upload_drag_tips"               => "Löysää ladata!",

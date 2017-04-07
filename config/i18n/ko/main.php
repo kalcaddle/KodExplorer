@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "최대 허용",
     "upload_size_info"               => "당신이 더 구성 할 경우, php.ini의 최대 허용 업로드를 수정하시기 바랍니다. 당신이 선택하면이 구성보다 큰 파일이 자동으로 필터링됩니다.",
     "upload_error"                   => "업로드 실패",
+    "upload_error_http"              => "업로드는 네트워크 나 방화벽으로 인해 실패!",
     "upload_muti"                    => "다중 파일 업로드",
     "upload_drag"                    => "드래그 앤 드롭 업로드",
     "upload_drag_tips"               => "업로드 풉니 다!",

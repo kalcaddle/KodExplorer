@@ -950,7 +950,12 @@ function file_put_out($file,$download=false,$download_filename=false){
 	if ($download || (strstr($mime,'application/') && $mime!='application/x-shockwave-flash')  ) {
 		header("Content-Type: application/octet-stream");
 		header("Content-Transfer-Encoding: binary");
-		header("Content-Disposition: attachment;filename=".$filename_output.";filename*=UTF-8''".$filename_output);
+
+		$header_name = $filename_output;
+		if(!is_wap()){
+			$header_name.=";filename*=UTF-8''".$filename_output;
+		}
+		header("Content-Disposition: attachment;filename=".$header_name);
 	}else{
 		//缓存文件
 		header('Expires: '.gmdate('D, d M Y H:i:s',time()+3600*24*20).' GMT');

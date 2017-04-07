@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Die maximal zulässige",
     "upload_size_info"               => "Wenn Sie mehr konfigurieren möchten, ändern Sie bitte php.ini maximal zulässige Upload. Wenn Sie eine Datei größer als dieser Konfiguration auswählen, wird automatisch herausfiltern.",
     "upload_error"                   => "Upload fehlgeschlagen",
+    "upload_error_http"              => "Upload fehlgeschlagen aufgrund von Netzwerk oder eine Firewall!",
     "upload_muti"                    => "Multi-Datei-Upload",
     "upload_drag"                    => "Drag-and-Drop-Upload",
     "upload_drag_tips"               => "Lösen Sie hochladen!",

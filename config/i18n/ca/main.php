@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "El màxim permès",
     "upload_size_info"               => "Si voleu configurar més, si us plau modificar php.ini màxim de pujada permès. Quan se selecciona un arxiu més gran que aquesta configuració filtrarà automàticament.",
     "upload_error"                   => "Error de pujada",
+    "upload_error_http"              => "No s'ha pogut pujar a causa de la xarxa o tallafocs!",
     "upload_muti"                    => "càrrega d'arxius múltiples",
     "upload_drag"                    => "Arrossegar i deixar anar Càrrega",
     "upload_drag_tips"               => "Afluixi per pujar!",

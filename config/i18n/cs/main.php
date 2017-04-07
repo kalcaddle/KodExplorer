@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Maximální povolená",
     "upload_size_info"               => "Chcete-li konfigurovat více, modifikovat php.ini maximální povolenou upload. Vyberete-li soubor větší než tato konfigurace automaticky vyfiltrovat.",
     "upload_error"                   => "Nahrávání selhalo",
+    "upload_error_http"              => "Nahrávání se nezdařilo kvůli problémům se sítí či firewall!",
     "upload_muti"                    => "nahrávání více souborů",
     "upload_drag"                    => "Drag and drop nahrávání",
     "upload_drag_tips"               => "Uvolněte nahrát!",

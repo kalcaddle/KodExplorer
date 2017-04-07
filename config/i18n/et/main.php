@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Maksimaalne lubatud",
     "upload_size_info"               => "Kui soovite konfigureerida rohkem, siis muuta php.ini maksimaalne lubatud üles laadida. Kui valite faili suurem kui selle konfiguratsiooni automaatselt välja filtreerida.",
     "upload_error"                   => "üleslaadimine ebaõnnestus",
+    "upload_error_http"              => "Üleslaadimine ebaõnnestus tõttu võrgu või tulemüüri!",
     "upload_muti"                    => "Multi-faili üleslaadimise",
     "upload_drag"                    => "Lohista upload",
     "upload_drag_tips"               => "Vabastage üles laadida!",

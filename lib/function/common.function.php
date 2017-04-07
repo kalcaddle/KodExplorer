@@ -234,6 +234,22 @@ function add_slashes($string){
 	return $string;
 } 
 
+
+function setcookie_header($name,$value='',$maxage=0,$path='',$domain='',$secure=false,$HTTPOnly=false){ 
+	if ( !empty($domain) ){ 
+		if ( strtolower( substr($domain, 0, 4) ) == 'www.' ) $domain = substr($domain, 4); 
+		if ( substr($domain, 0, 1) != '.' ) $domain = '.'.$domain; 
+		if ( strpos($domain, ':') ) $domain = substr($domain, 0, strpos($domain, ':')); 
+	}
+	header('Set-Cookie: '.rawurlencode($name).'='.rawurlencode($value) 
+						 .(empty($domain) ? '' : '; Domain='.$domain) 
+						 .(empty($maxage) ? '' : '; Max-Age='.$maxage) 
+						 .(empty($path) ? '' : '; Path='.$path) 
+						 .(!$secure ? '' : '; Secure') 
+						 .(!$HTTPOnly ? '' : '; HttpOnly').'; ', false); 
+	return true; 
+}
+
 /**
  * hex to binary
  */

@@ -78,11 +78,11 @@ class editor extends Controller{
 			'base64'	=> false,
 			'content'	=> $filecontents
 		);
-		if(!json_encode(array("data"=>$filecontents))){
+		// 部分防火墙编辑文件误判问题处理
+		//if(!json_encode(array("data"=>$filecontents))){
 			$data['content'] = base64_encode($filecontents);
 			$data['base64']  = true;
-		}
-		//unset($data['content']);
+		//}
 		show_json($data);
 	}
 	public function fileSave(){

@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Didžiausia leistina",
     "upload_size_info"               => "Jei norite konfigūruoti daugiau, keisti php.ini maksimalų leidžiamą įkėlimą. Kai pasirenkate failą didesnis nei šios konfigūracijos automatiškai filtruoti.",
     "upload_error"                   => "įkėlimas nepavyko",
+    "upload_error_http"              => "Įkelti nepavyko dėl tinklo ar užkarda!",
     "upload_muti"                    => "Multi-failų įkėlimo",
     "upload_drag"                    => "Vilkite ir upuść įkelti",
     "upload_drag_tips"               => "Atlaisvinkite įkelti!",

@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Upload max size",
     "upload_size_info"               => "Please amend the maximum value allowed upload in php.ini. Greater than the configuration will be automatically filtered.",
     "upload_error"                   => "Upload failed",
+    "upload_error_http"              => "Network or firewall caused upload failed!",
     "upload_muti"                    => "Multiple file upload",
     "upload_drag"                    => "Drag and drop upload",
     "upload_drag_tips"               => "Release can be uploaded!",

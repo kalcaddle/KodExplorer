@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "El máximo permitido",
     "upload_size_info"               => "Si desea configurar más, por favor modificar php.ini máximo de subida permitido. Cuando se selecciona un archivo más grande que esta configuración filtrará automáticamente.",
     "upload_error"                   => "Error de subida",
+    "upload_error_http"              => "No se pudo subir debido a la red o firewall!",
     "upload_muti"                    => "carga de archivos múltiples",
     "upload_drag"                    => "Arrastrar y soltar Carga",
     "upload_drag_tips"               => "Afloje para subir!",

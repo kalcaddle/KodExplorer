@@ -421,6 +421,7 @@ return array(
     "upload_max_size"                => "Den högsta tillåtna",
     "upload_size_info"               => "Om du vill konfigurera mer, modifiera php.ini högsta tillåtna uppladdning. När du väljer en fil som är större än denna konfiguration kommer automatiskt att filtrera ut.",
     "upload_error"                   => "Överföringen misslyckades",
+    "upload_error_http"              => "Ladda upp misslyckades på grund av nätverk eller brandvägg!",
     "upload_muti"                    => "Multi-filuppladdning",
     "upload_drag"                    => "Dra och släpp uppladdning",
     "upload_drag_tips"               => "Lossa att ladda upp!",
