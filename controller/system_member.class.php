@@ -92,8 +92,21 @@ class system_member extends Controller{
 		}
 	}
 
-	//判断自己对某个组的权限 return false/'read'/'write'    174不对
+	//获取当前用户在某个群组的权限id; false|[id]
+	//兼容旧版本 'read'|'write'|false
 	public static function user_auth_group($group_id){
+		$result = self::_user_auth_group_role($group_id);
+		if($result === false) return false;
+
+		$result = $result == 'read'  ? "1" : $result;
+		$result = $result == 'write' ? "2" : $result;
+		if(!is_array($GLOBALS['config']['path_role_group'][$result])){
+			$result = "1";
+		}
+		return $result;
+	}
+	//判断自己对某个组的权限 return false/'read'/'write'    
+	public static function _user_auth_group_role($group_id){
 		$sql = self::load_data();
 		$user_info = $sql->get($_SESSION['kod_user']['user_id']);
 		$group_info = $user_info['group_info'];//自己所在的组
@@ -113,6 +126,7 @@ class system_member extends Controller{
 		}
 		return false;
 	}
+
 
 	//删除 path id
 	public static function _filter_list($list,$filter_key = 'path'){
@@ -184,6 +198,9 @@ class system_member extends Controller{
 	 */
 	public function get($group_id='0') {
 		$result = self::get_user_at_group($group_id);
+		foreach($result as $key=>&$val){
+			unset($val['password']);
+		}
 		show_json($result);
 	}
 

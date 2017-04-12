@@ -961,26 +961,31 @@ var MaskView =  (function(){
 	var imageSize = function(){
 		var $dom = $(maskContent).find('.image');
 		if ($dom.length == 0) return;
-		var image=new Image();
-		image.src = $dom.attr('src');
-		var percent = 0.7,
-			w_width = $(window).width(),
-			w_height= $(window).height(),
-			m_width = image.width,
-			m_height= image.height,
-			width,height;
-		if (m_width >= w_width*percent){
-			width = w_width*percent;
-			height= m_height/m_width * width;
-		}else{
-			width = m_width;
-			height= m_height;
-		}
-		$dom.css({'width':width,'height':height});
-		var $content = $(maskContent);
-		$content.css({'width':'auto','height':'auto'}).css({
-			top:($(window).height()-$content.height())/2,
-			left:($(window).width()-$content.width())/2});
+		$dom.load(function(){ 
+			if (this.complete || this.readyState == "complete") { 
+				console.log(this,this.width,this.height);
+
+				var percent = 0.7,
+					w_width = $(window).width(),
+					w_height= $(window).height(),
+					m_width = this.width,
+					m_height= this.height,
+					width,height;
+				if (m_width >= w_width*percent){
+					width = w_width*percent;
+					height= m_height/m_width * width;
+				}else{
+					width = m_width;
+					height= m_height;
+				}
+
+				$dom.css({'width':width,'height':height});
+				var $content = $(maskContent);
+				$content.css({'width':'auto','height':'auto'}).css({
+					top:($(window).height()-$content.height())/2,
+					left:($(window).width()-$content.width())/2});
+			}
+		});
 	}
 	var close = function(){
 		$(maskId).fadeOut(animatetime);

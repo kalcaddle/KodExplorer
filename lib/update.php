@@ -74,10 +74,6 @@ function update_clear(){
 	del_dir(THE_DATA_PATH.'session');
 	mk_dir(THE_DATA_PATH.'session');
 	mk_dir(THE_DATA_PATH.'temp/thumb');
-	
-	del_file(__FILE__);
-	header('location:./index.php?user/logout');
-	exit;
 }
 
 // 还原用户目录 3.30~3.35之间

@@ -339,14 +339,15 @@ class explorer extends Controller{
 		$fav = array();
 		$GLOBALS['path_from_auth_check'] = true;//组权限发生变更。导致访问group_path 无权限退出问题
 		foreach($fav_list as $key => $val){
-			$has_children = path_haschildren(_DIR($val['path']),$check_file);
+			$the_path = _DIR($val['path']);
+			$has_children = path_haschildren($the_path,$check_file);
 			if( !isset($val['type'])){
 				$val['type'] = 'folder';
 			}
 			if( in_array($val['type'],array('group'))){
 				$has_children = true;
 			}
-			$the_fav = array(
+			$cell = array(
 				'name'      => $val['name'],
 				'ext' 		=> isset($val['ext'])?$val['ext']:"",
 				'menuType'  => "menuTreeFav",
@@ -356,10 +357,16 @@ class explorer extends Controller{
 				'open'      => false,
 				'isParent'  => $has_children
 			);
-			if(isset($val['type']) && $val['type']!='folder'){//icon优化
-				$the_fav['ext'] = $val['type'];
+
+			if( $cell['type'] == 'folder' && $cell['ext'] == "" ){
+				$cell['menuType'] = 'menuTreeFolderFav';
+				$cell['exists']   = intval(file_exists($the_path));
 			}
-			$fav[] = $the_fav;
+
+			if(isset($val['type']) && $val['type']!='folder'){//icon优化
+				$cell['ext'] = $val['type'];
+			}
+			$fav[] = $cell;
 		}
 		$GLOBALS['path_from_auth_check'] = false;
 		return $fav;
@@ -509,30 +516,37 @@ class explorer extends Controller{
 		$group_sql = system_group::load_data();
 		$groups = $group_sql->get(array('parent_id',$node_id));
 		$group_list = $this->_make_node_list($groups);
+		
+		if( $node_id == '1' && 
+			!$this->config['setting_system']['root_list_group']){//根群组不显示子群组
+			$group_list = array();
+		}
+
+		if( $node_id == '1' && 
+			!$this->config['setting_system']['root_list_user']){//根群组不显示用户
+			return $group_list;
+		}
 
 		//user
 		$user_list = array();
-		if($node_id !='1'){//根组不显示用户
-			$user = system_member::get_user_at_group($node_id);
-			foreach($user as $key => $val){
-				$tree_icon = 'user';
-				if ($val['user_id'] == $this->user['user_id']) {
-					$tree_icon = 'userSelf';
-				}
-				$user_list[] = array(
-					'name'      => $val['name'],
-					'menuType'  => "menuTreeUser",
-					'ext' 		=> $tree_icon,
-
-					'path' 		=> KOD_USER_SHARE.':'.$val['user_id'].'/',
-					'type'      => 'folder',
-					'open'      => false,
-					'isParent'  => false
-				);
+		$user = system_member::get_user_at_group($node_id);
+		foreach($user as $key => $val){
+			$tree_icon = 'user';
+			if ($val['user_id'] == $this->user['user_id']) {
+				$tree_icon = 'userSelf';
 			}
+			$user_list[] = array(
+				'name'      => $val['name'],
+				'menuType'  => "menuTreeUser",
+				'ext' 		=> $tree_icon,
+
+				'path' 		=> KOD_USER_SHARE.':'.$val['user_id'].'/',
+				'type'      => 'folder',
+				'open'      => false,
+				'isParent'  => false
+			);
 		}
-		$arr = array_merge($group_list,$user_list);
-		return $arr;
+		return array_merge($group_list,$user_list);
 	}
 	//session记录用户可以管理的组织；继承关系
 	private function _group_self(){//获取组织架构的用户和子组织；为空则获取根目录
@@ -557,10 +571,8 @@ class explorer extends Controller{
 			if($auth==false){//是否为该组内部成员
 				$group_path = KOD_GROUP_SHARE;
 				$tree_icon = 'groupGuest';
-			}else if($auth=='read'){
-				$tree_icon = 'groupSelf';
 			}else{
-				$tree_icon = 'groupSelfOwner';
+				$tree_icon = 'groupSelf';
 			}
 			$has_children = true;
 			$user_list = system_member::get_user_at_group($val['group_id']);
@@ -686,9 +698,12 @@ class explorer extends Controller{
 	public function pathCopy(){
 		session_start();//re start
 		$the_list = json_decode($this->in['data_arr'],true);
+		foreach ($the_list as $key => $value) {
+			_DIR(rawurldecode($value['path']));//检测来源权限
+		}
 		$_SESSION['path_copy']= json_encode($the_list);
 		$_SESSION['path_copy_type']='copy';
-		show_json($this->L['copy_success'],ture,$_SESSION);
+		show_json($this->L['copy_success']);
 	}
 	public function pathCute(){
 		session_start();//re start
@@ -1299,6 +1314,7 @@ class explorer extends Controller{
 				'open'      => false,
 				'isParent'  => false//$has_children
 			);
+
 			if( strstr($val['path'],KOD_USER_SHARE)||
 				strstr($val['path'],KOD_USER_FAV) ||
 				strstr($val['path'],KOD_GROUP_ROOT_SELF) ||
@@ -1461,11 +1477,21 @@ class explorer extends Controller{
 			$group = system_group::get_info($GLOBALS['path_id']);
 			$list['info']['name'] = $group['name'];
 			$auth = system_member::user_auth_group($GLOBALS['path_id']);
-			if ($auth=='write' || $GLOBALS['is_root']) {
+			if ($auth) {
 				$list['info']['role'] = 'owner';
 				$list['group_space_use'] = $group['config'];//自己
-			}
-			if($GLOBALS['is_root']){
+
+				//群组权限展示
+				$role = $this->config['path_role_group'][$auth];
+				$role_arr = role_permission_arr($role['actions']);
+				$list['info']['group_role'] = array(
+					'name'  => $role['name'],
+					'style' => $role['style'],
+					'action_arr'	=> $role_arr
+				);
+			}else if($GLOBALS['is_root']){
+				$list['info']['role'] = 'owner';
+				$list['group_space_use'] = $group['config'];//自己
 				$list['info']['admin_real_path'] = GROUP_PATH.$group['path'].'/home/';
 			}
 		}

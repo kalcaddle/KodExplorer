@@ -54,7 +54,7 @@ define('LANGUAGE_PATH', BASIC_PATH .'config/i18n/');//多语言目录
 define('SESSION_ID','KOD_SESSION_ID_'.substr(md5(BASIC_PATH),0,5));
 define('KOD_SESSION',   DATA_PATH .'session/');     //session目录
 
-define('OFFICE_SERVER',"https://owa-box.vips100.com/op/view.aspx?src=");
+define('OFFICE_SERVER',"http://preview.tita.com/op/view.aspx?src=");
 // https://owa-box.vips100.com/op/view.aspx?src=
 // http://preview.tita.com/op/view.aspx?src=
 // https://docview.mingdao.com/op/view.aspx?src=

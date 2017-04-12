@@ -653,7 +653,7 @@ function file_read_safe($file,$timeout = 0.1){
 
 // 安全读取文件，避免并发下读取数据为空
 function file_wirte_safe($file,$buffer,$timeout=0.1){
-	$file_temp = $file.mtime().rand_string(4);
+	$file_temp = $file.'.'.time().rand_string(5);
 	if(!$fp = fopen($file_temp, "w")){
 		@unlink($file_temp);
 		return false;
@@ -947,10 +947,9 @@ function file_put_out($file,$download=false,$download_filename=false){
 
 	$mime = get_file_mime(get_path_ext($filename));
 	$filename_output = rawurlencode(iconv_app($filename));
-	if ($download || (strstr($mime,'application/') && $mime!='application/x-shockwave-flash')  ) {
+	if ($download) {
 		header("Content-Type: application/octet-stream");
 		header("Content-Transfer-Encoding: binary");
-
 		$header_name = $filename_output;
 		if(!is_wap()){
 			$header_name.=";filename*=UTF-8''".$filename_output;

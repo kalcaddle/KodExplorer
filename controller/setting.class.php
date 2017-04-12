@@ -39,7 +39,13 @@ class setting extends Controller{
 				break;
 			case 'system':
 				if($GLOBALS['is_root']){
-					show_json($this->config['setting_system'],true,php_env_check());
+					if(isset($this->in['env_check'])){
+						show_json(php_env_check());
+					}
+
+					$result = $this->config['setting_system'];
+					unset($result['system_password']);
+					show_json($result,true);
 				}else{
 					show_json('error',false);
 				}
@@ -50,13 +56,6 @@ class setting extends Controller{
 
 	public function php_info(){
 		phpinfo();
-	}
-	public function get_setting(){
-		$setting = $GLOBALS['config']['setting_system']['menu'];
-		if (!$setting) {
-			$setting = $this->config['setting_menu_default'];
-		}
-		show_json($setting);
 	}
 
 

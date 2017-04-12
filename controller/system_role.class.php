@@ -68,6 +68,58 @@ class system_role extends Controller{
 		show_json($this->L['error'],false);
 	}
 
+	//
+	
+	/**
+	 * 用户组权限列表配置
+	 * 增删改查
+	 */
+	public function role_group_action(){
+		$sql = new fileCache(USER_SYSTEM.'system_role_group.php');
+		switch ($this->in['action']) {
+			case 'get':
+				$role_group = $sql->get();
+				if($role_group['1']['name'] == 'read'){
+					$role_group['1']['name'] = $this->L['system_role_read'];
+				}
+				if($role_group['2']['name'] == 'write'){
+					$role_group['2']['name'] = $this->L['system_role_write'];
+				}
+				show_json($role_group,true,$this->config['path_role_define']);
+				break;
+			case 'add':
+				$role_id = $sql->get_max_id().'';
+				$role_arr = json_decode($this->in['role_arr'],true);
+				if(!is_array($role_arr)) show_json($this->L['error'],false);
+				if ($sql->set($role_id,$role_arr)) {
+					show_json(array($role_id),true,$sql->get());
+				}
+				show_json($this->L['error'],false);
+				break;
+			case 'set':
+				$role_id = $this->in['role_id'];
+				$role_arr = json_decode($this->in['role_arr'],true);
+				if(!is_array($role_arr)) show_json($this->L['error'],false);
+				if ($sql->set($role_id,$role_arr)){
+					show_json($this->L['success'],true,$sql->get());
+				}
+				show_json($this->L['error'],false);
+				break;
+			case 'del':
+				$role_id = $this->in['role_id'];
+				if(in_array($role_id,array("1","2"))){
+					show_json($this->L['default_user_can_not_do'],false);
+				}
+				if($sql->remove($this->in['role_id'])){
+					show_json($this->L['success'],true,$sql->get());
+				}
+				show_json($this->L['error'],false);
+				break;
+			default:break;
+		}
+	}
+
+
 	//===========内部调用============
 	/**
 	 * 初始化数据 get   

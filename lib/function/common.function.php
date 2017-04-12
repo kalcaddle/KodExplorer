@@ -456,7 +456,7 @@ function show_json($data,$code = true,$info=''){
 	ob_end_clean();
 	header("X-Powered-By: kodExplorer.");
 	header('Content-Type: application/json; charset=utf-8');
-	$json = json_encode($result,true);
+	$json = json_encode($result);
 	if($json === false){
 		$json = __json_encode($result);
 	}
@@ -811,7 +811,7 @@ function debug_out(){
 	$out = ob_get_clean();
 	echo $out;
 	exit;
-} 
+}
 
 /**
  * 取$from~$to范围内的随机数

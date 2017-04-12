@@ -38,7 +38,6 @@
 					<li data-action="newfile"><a href="javascript:void();">
 						<i class="font-icon icon-file-text"></i><?php echo $L['newfile'];?></a></li>
 					<li data-action="past"><a href="javascript:void();">
-					<li data-action="past"><a href="javascript:void();">
 						<i class="font-icon icon-paste"></i><?php echo $L['past'];?></a></li>
 					<li data-action="search"><a href="javascript:void();">
 						<i class="font-icon icon-search"></i><?php echo $L['search'];?></a></li>

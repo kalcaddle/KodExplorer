@@ -24,8 +24,12 @@ class kodRarArchive {
 	static function bin($type){
 		$file = dirname(__FILE__).'/bin/'.$type;
 		$file = str_replace('\\','/',$file);
-		if(PHP_OS == "Darwin"){
-			$file .= '_mac';
+		if(PHP_OS == "Darwin"){//mac 
+			$file = PLUGIN_DIR.'/rarArchiveMore/bin/'.$type.'_mac';
+		}
+
+		if(!file_exists($file)){
+			show_json('bin file not exists!',false);
 		}
 		if(PATH_SEPARATOR == ':') {
 			@chmod($file,0777);
@@ -141,16 +145,14 @@ class kodRarArchive {
 			return $result;
 		}
 
-		preg_match('/-----------\n([\d\D]*)\n--------------/i', $result['data'], $match);
+		preg_match('/--------  ----\n([\d\D]*)\n-----------/i', $result['data'], $match);
 		if(!is_array($match) || strlen($match[1]) < 10){
 			return array('code'=>false,'data'=>'Match Nothing Content!');
 		}
 
-		//windows:movie\FLV Video.flv
-		//        567385   513467  90% 18-10-16 03:46  .D.....
-		//linux:test\32486963.png
-		// 93691  82643  88% 09-12-16 02:20 drw-r--r-- 396CC62C m3g 2.9
-		$reg = '/(.*)\n\s+(\d+)\s+(\d+)\s+\d+% (\d{2}-\d{2}-\d{2} \d{2}:\d{2})\s+(.*)\s+/i';
+		//windows  :...D...   93691   82633  88%  2016-12-09 02:20  396CC62C  000/a/32486963.png
+		//linux:   :-rwxr-xr-x   93691   82643  88%  2016-12-09 02:20  396CC62C  000/a/32486963.png
+		$reg = '/\s*([-\.\w]+)\s+(\d+)\s+(\d+)\s+\d+%\s+(\d{2,4}-\d{2}-\d{2} \d{2}:\d{2})\s+\w+\s+(.*)\n/i';
 		preg_match_all($reg,$match[1]."\n",$match_item);
 		if( !is_array($match_item) || 
 			count($match_item) != 6 ||
@@ -161,19 +163,19 @@ class kodRarArchive {
 		
 		$item_arr = array();
 		for ($i = 0; $i < count($match_item[0]); $i++) {
-			$mode = strtoupper($match_item[5][$i]);
-			$is_folder = substr($mode,0,1) == 'D' || substr($mode,1,1) == 'D';
+			$mode = strtoupper($match_item[1][$i]);
+			$is_folder = substr($mode,0,1) == 'D' || substr($mode,3,1) == 'D';
 			$item_arr[] = array(
 				'mtime'		=> strtotime($match_item[4][$i]),
-				'size'		=> $match_item[3][$i],
-				'z_size'	=> $match_item[2][$i],
-				'filename'	=> trim($match_item[1][$i]),
+				'size'		=> $match_item[2][$i],
+				'z_size'	=> $match_item[3][$i],
+				'filename'	=> trim($match_item[5][$i]),
 				'index'		=> $i,
-				'folder'	=> $is_folder
+				'folder'	=> intval($is_folder)
 			);
 		}
 		//debug_out($result,$match,$match_item,$item_arr);
-		return array('code'=>true,'data'=>$item_arr);;
+		return array('code'=>true,'data'=>$item_arr);
 	}
 	static function listContent7z($file) {
 		$command = self::bin('7z').' l '.escape_shell($file);

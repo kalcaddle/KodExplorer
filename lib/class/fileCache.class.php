@@ -165,13 +165,22 @@ class fileCache{
 	public static function load($file){//10000次需要4s 数据量差异不大。
 		if (!$file) return false;
 		$file = iconv_system($file);
-		if ((!file_exists($file) || filesize($file) == 0 ) && 
-			 !file_exists($file.'.lock') ){//并发下；正在写或删除
+		$file_lock = $file.'.lock';
+		if ( (!file_exists($file) || filesize($file) == 0 ) && 
+			  !file_exists($file_lock) ){//并发下；正在写或删除
 			@file_put_contents($file,CONFIG_EXIT);
 		}
 
 		$str = file_read_safe($file,0.4);
 		if($str === false || strlen($str) == 0){
+			$time = @filemtime($file); 
+			//服务器崩溃下文件不存在异常恢复
+			if( (!file_exists($file) || filesize($file) == 0 ) && 
+				file_exists($file_lock) &&
+				$time > 1000 && time() - $time > 10
+				){
+				@rename($file_lock,$file);
+			}
 			show_tips('[Error Code:1010] fileCache load error!'.$file);
 		}
 
