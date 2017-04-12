@@ -102,7 +102,7 @@ function get_headers_curl($url,$timeout=30,$depth=0,&$headers=array()){
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
 	curl_setopt($ch, CURLOPT_TIMEOUT,$timeout); 
 	$res = curl_exec($ch);
-	$res = split("\r\n", $res);
+	$res = explode("\r\n", $res);
 
 	$location = false;
 	foreach ($res as $line) {
