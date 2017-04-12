@@ -56,12 +56,13 @@
 	            $error = php_env_check();
 	            $login = $L['login'];
 	            if ($error=='') {
-	            	$login_info = str_replace(array("{0}","{1}","{2}"),array('admin','demo/demo','guest/guest'),$L['install_user_default']);
-	            	echo '<div class="success"><h4>Successful!</h4>',$L['install_login'],'<br/>'.$login_info.'</div>';
+	            	echo '<div class="success"><h4>Successful!</h4>';
 	            }else{
-	            	echo '<div class="error"><h4>error:</h4>'.$error.'</div>';
+	            	echo '<div class="error"><h4>error:</h4>'.$error."<br/>";
 	            	$login = $L['php_env_error_ignore'];
 	            }
+	            $login_info = str_replace(array("{0}","{1}","{2}"),array('admin','demo/demo','guest/guest'),$L['install_user_default']);
+	            echo $L['install_login'],'<br/>'.$login_info.'</div>';
 	            echo '<div class="inputs admin_password"><input type="password" placeholder="'.$L['login_root_password'].'" autocomplete="off"/></div><div class="inputs admin_password_repeat"><input type="password" placeholder="'.$L['login_root_password_repeat'].'" autocomplete="off"/></div>';
 	            echo '<div class="guest"><a href="javascript:void(0);" class="start">'.$login.'</a></div>';
 	        ?>
