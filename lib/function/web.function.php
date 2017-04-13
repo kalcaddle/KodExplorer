@@ -93,6 +93,9 @@ function is_wap(){
 }
 
 function get_headers_curl($url,$timeout=30,$depth=0,&$headers=array()){
+	if(!function_exists('curl_init')){
+		return false;
+	}
 	if ($depth >= 10) return false;
 	$ch = curl_init(); 
 	curl_setopt($ch, CURLOPT_URL,$url);
@@ -211,6 +214,9 @@ function url_header($url){
 		'name' 		=> $name,
 		'support_range' =>$support_range && ($length!=0)
 	);
+	if(!function_exists('curl_init')){
+		$result['support_range'] = false;
+	}
 	//debug_out($url,$header,$result);
 	return $result;
 }

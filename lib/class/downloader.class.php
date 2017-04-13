@@ -19,7 +19,7 @@ class downloader {
 			$file_header = url_header($url);
 		}
 
-		$url = $file_header['url'];		
+		$url = $file_header['url'];
 		//默认下载方式if not support range
 		if(!$file_header['support_range'] || 
 			$file_header['length'] == 0 ){
@@ -98,10 +98,11 @@ class downloader {
 			fclose($download_fp);
 			fclose($fp);
 			if(!@rename($file_temp,$file_name)){
+				usleep(round(rand(0,1000)*50));//0.01~10ms
 				@unlink($file_name);
 				$res = @rename($file_temp,$file_name);
 				if(!$res){
-					return array('code'=>false,'data'=>'file rename error!');
+					return array('code'=>false,'data'=>'rename error![open]');
 				}
 			}
 			return array('code'=>true,'data'=>'success');
@@ -117,7 +118,6 @@ class downloader {
 		@set_time_limit(0);
 		if ($fp = @fopen ($file_temp, "a")){
 			$ch = curl_init($url);
-			
 			//断点续传
 			if($support_range){
 				curl_setopt($ch, CURLOPT_RANGE, $exists_length."-");
@@ -126,12 +126,13 @@ class downloader {
 			curl_setopt($ch, CURLOPT_REFERER,get_url_link($url));
 			$res = curl_exec($ch);
 			curl_close($ch);
+			fclose($fp);
 			if($res && filesize($file_temp) != 0){
 				if(!@rename($file_temp,$file_name)){
 					@unlink($file_name);
 					$res = @rename($file_temp,$file_name);
 					if(!$res){
-						return array('code'=>false,'data'=>'file rename error!');
+						return array('code'=>false,'data'=>'rename error![curl]');
 					}
 				}
 				return array('code'=>true,'data'=>'success');
