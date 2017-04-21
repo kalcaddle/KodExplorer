@@ -730,3 +730,8 @@ h2, h3 {
     z-index: 999;
     position: fixed;
 }
+
+.js .checkable .checked td, 
+.js .checkable .checked th {
+    background: #2196f3;
+}

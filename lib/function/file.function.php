@@ -68,7 +68,7 @@ function iconv_system($str){
 function get_filesize($path){
 	$result = false;
 	$fp = fopen($path,"r");
-	if(! $fp = fopen($path,"r")) return $return;
+	if(! $fp = fopen($path,"r")) return $result;
 	if(PHP_INT_SIZE >= 8 ){ //64bit
 		$result = (float)(abs(sprintf("%u",@filesize($path))));
 	}else{
@@ -525,7 +525,7 @@ function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
 	@set_time_limit(0);
 	if (is_file($source)) {
-    	return move_file($source,$dest,$repeat_add,$repeat_type);
+		return move_file($source,$dest,$repeat_add,$repeat_type);
 	}else if(is_dir($source)) {
 		if ($dest[strlen($dest)-1] == '/') {
 			$dest = $dest . basename($source);
@@ -535,7 +535,7 @@ function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
-		    if ($file =='.' || $file =='..') continue;
+			if ($file =='.' || $file =='..') continue;
 			move_path($source."/".$file, $dest."/".$file,$repeat_add,$repeat_type);
 		}
 		closedir($dh);
@@ -544,7 +544,7 @@ function move_path2($source,$dest,$repeat_add='',$repeat_type='replace'){
 }
 
 function move_file($source,$dest,$repeat_add,$repeat_type){
-    if ($dest[strlen($dest)-1] == '/') {
+	if ($dest[strlen($dest)-1] == '/') {
 		$dest = $dest . "/" . basename($source);
 	}
 	if(file_exists($dest)){
@@ -553,34 +553,34 @@ function move_file($source,$dest,$repeat_add,$repeat_type){
 	return intval(@rename($source,$dest));
 }
 function move_path($source,$dest,$repeat_add='',$repeat_type='replace'){
-    if (!$dest || !file_exists($source)) return false;
+	if (!$dest || !file_exists($source)) return false;
 	if (is_dir($source) && $source == substr($dest,0,strlen($source))) return false;//防止父文件夹拷贝到子文件夹，无限递归
 
 	@set_time_limit(0);
 	if(is_file($source)){
-	    return move_file($source,$dest,$repeat_add,$repeat_type);
+		return move_file($source,$dest,$repeat_add,$repeat_type);
 	}
 	recursion_dir($source,$dirs,$files,-1,0);
 
 	@mkdir($dest);
 	foreach($dirs as $f){
-	    $path = $dest.'/'.substr($f,strlen($source));
-	    if(!file_exists($path)){
-	        mk_dir($path);
-	    }
+		$path = $dest.'/'.substr($f,strlen($source));
+		if(!file_exists($path)){
+			mk_dir($path);
+		}
 	}
 	$file_success = 0;
 	foreach($files as $f){
-	    $path = $dest.'/'.substr($f,strlen($source));
-	    $file_success += move_file($f,$path,$repeat_add,$repeat_type);
+		$path = $dest.'/'.substr($f,strlen($source));
+		$file_success += move_file($f,$path,$repeat_add,$repeat_type);
 	}
 	foreach($dirs as $f){
-	    rmdir($f);
+		rmdir($f);
 	}
 	@rmdir($source);
 	if($file_success == count($files)){
-	    del_dir($source);
-	    return true;
+		del_dir($source);
+		return true;
 	}
 	return false;
 }
@@ -631,13 +631,14 @@ function recursion_dir($path,&$dir,&$file,$deepest=-1,$deep=0){
 
 // 安全读取文件，避免并发下读取数据为空
 function file_read_safe($file,$timeout = 0.1){
+	clearstatcache();
 	if(!$file || !file_exists($file)) return false;
 
 	$start_time = microtime(true);
 	$index = 0;
 	do{
-	    $index++;
-	    clearstatcache();
+		clearstatcache();
+		$index++;
 		$file_size = filesize($file);
 		$result = @file_get_contents($file);
 		if( $result === false ||
@@ -653,6 +654,7 @@ function file_read_safe($file,$timeout = 0.1){
 
 // 安全读取文件，避免并发下读取数据为空
 function file_wirte_safe($file,$buffer,$timeout=0.1){
+	clearstatcache();
 	$file_temp = $file.'.'.time().rand_string(5);
 	if(!$fp = fopen($file_temp, "w")){
 		@unlink($file_temp);
@@ -665,10 +667,11 @@ function file_wirte_safe($file,$buffer,$timeout=0.1){
 	$start_time = microtime(true);
 	$index = 0;
 	do{
-	    $index++;
-	    if(!file_exists($file_lock)){
-	    	@rename($file,$file_lock);
-	    }
+		clearstatcache();
+		$index++;
+		if(!file_exists($file_lock)){
+			@rename($file,$file_lock);
+		}
 		$result = @rename($file_temp,$file);
 		if( $result === false || file_exists($file_temp)){
 			usleep(round(rand(0,1000)*10));//0.01~10ms
@@ -947,13 +950,13 @@ function file_put_out($file,$download=false,$download_filename=false){
 
 	$mime = get_file_mime(get_path_ext($filename));
 	$filename_output = rawurlencode(iconv_app($filename));
-	if ($download) {
-		header("Content-Type: application/octet-stream");
-		header("Content-Transfer-Encoding: binary");
+	if ($download || !mime_support($mime)) {
 		$header_name = $filename_output;
 		if(!is_wap()){
 			$header_name.=";filename*=UTF-8''".$filename_output;
 		}
+		header("Content-Type: application/octet-stream");
+		header("Content-Transfer-Encoding: binary");
 		header("Content-Disposition: attachment;filename=".$header_name);
 	}else{
 		//缓存文件
@@ -971,10 +974,10 @@ function file_put_out($file,$download=false,$download_filename=false){
 		}
 		header('Etag: '.$etag);
 		header('Last-Modified: '.$time.' GMT');
+		header("Content-Type: ".$mime);
 	}
 	header("X-OutFileName: ".$filename_output);
 	header("X-Powered-By: kodExplorer.");
-	header("Content-Type: ".$mime);
 	
 	//远程路径不支持断点续传；打开zip内部文件
 	if(!file_exists($file)){

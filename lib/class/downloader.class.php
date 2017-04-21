@@ -32,7 +32,7 @@ class downloader {
 			}else{
 				@unlink($save_temp);
 				@unlink($save_file);
-				return self::file_download_curl($url,$save_file);
+				return self::file_download_curl($url,$save_file,false,0,$file_header['length']);
 			}
 		}
 
@@ -64,7 +64,7 @@ class downloader {
 		}
 		// write exists data
 		file_put_contents($data_file, json_encode($exists_data));
-		$result = self::file_download_curl($url,$save_file,true,$exists_length);
+		$result = self::file_download_curl($url,$save_file,true,$exists_length,$content_length);
 		if($result['code']){
 			@unlink($data_file);
 		}
@@ -97,6 +97,12 @@ class downloader {
 			//下载完成，重命名临时文件到目标文件
 			fclose($download_fp);
 			fclose($fp);
+			
+			$filesize = get_filesize(iconv_system($file_temp));
+			if($header_size != 0 && $filesize != $header_size){
+			    return array('code'=>false,'data'=>'file size error');
+			}
+			
 			if(!@rename($file_temp,$file_name)){
 				usleep(round(rand(0,1000)*50));//0.01~10ms
 				@unlink($file_name);
@@ -113,7 +119,7 @@ class downloader {
 
 	// curl 方式下载
 	// 断点续传 http://www.linuxidc.com/Linux/2014-10/107508.htm
-	static function file_download_curl($url, $file_name,$support_range=false,$exists_length=0){
+	static function file_download_curl($url, $file_name,$support_range=false,$exists_length=0,$length=0){
 		$file_temp = $file_name.'.downloading';
 		@set_time_limit(0);
 		if ($fp = @fopen ($file_temp, "a")){
@@ -127,6 +133,16 @@ class downloader {
 			$res = curl_exec($ch);
 			curl_close($ch);
 			fclose($fp);
+
+            $filesize = get_filesize(iconv_system($file_temp));
+			if($filesize < $length && $length!=0){
+			    return array('code'=>false,'data'=>'downloading');
+			}
+			if($filesize > $length && $length!=0){
+			    //远程下载大小不匹配；则返回正在下载中，客户端重新触发下载
+			    return array('code'=>false,'data'=>'file size error');
+			}
+			
 			if($res && filesize($file_temp) != 0){
 				if(!@rename($file_temp,$file_name)){
 					@unlink($file_name);

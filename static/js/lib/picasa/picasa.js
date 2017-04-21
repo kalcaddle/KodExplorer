@@ -249,14 +249,20 @@ Picasa.prototype = {
 			'<div id="PV_Control">'+
 			'	<ul id="PV_Items"></ul>'+
 			'	<div id="PV_Buttons">'+
-			'		<div id="PV_Zoom"><a href="javascript: void(0);" id="PV_Btn_ZoomActual">1:1</a><a href="javascript: void(0);" id="PV_Btn_ZoomOut">-</a><a href="javascript: void(0);" id="PV_Btn_ZoomIn">+</a></div>'+
+			'		<a href="javascript: void(0);" id="PV_Btn_ZoomOut" class="tool-btn">-</a>'+
+			'		<a href="javascript: void(0);" id="PV_Btn_ZoomIn" class="tool-btn">+</a>'+
+			'		<a href="javascript: void(0);" id="PV_Btn_ZoomActual" class="tool-btn">1:1</a>'+
 			'		<div id="PV_Select" class="PV_Btn_Normal">'+
 			'			<a href="javascript: void(0);" id="PV_Btn_Prev"><i class="icon-arrow-left"></i></a>'+
 			'			<a href="javascript: void(0);" id="PV_Btn_Slide"><i class="icon-play"></i></a>'+
-			'			<a href="javascript: void(0);" id="PV_Btn_Next"><i class="icon-arrow-right"></i></a></div>'+
-			'		<a href="javascript:void(0);" id="PV_rotate_Left" class="rotate"><i class=" icon-rotate-left"></i></a>'+
-			'		<a href="javascript:void(0);" id="PV_rotate_Right" class="rotate"><i class="icon-rotate-right"></i></a>'+
-			'		<a href="javascript:void(0);" id="PV_Btn_Full"><i class="icon-fullscreen"></i></a>'+
+			'			<a href="javascript: void(0);" id="PV_Btn_Next"><i class="icon-arrow-right"></i></a>'+
+			'		</div>'+
+			'		<a href="javascript:void(0);" id="PV_rotate_Left" class="tool-btn rotate"><i class=" icon-rotate-left"></i></a>'+
+			'		<a href="javascript:void(0);" id="PV_rotate_Right" class="tool-btn rotate"><i class="icon-rotate-right"></i></a>'+
+			'		<a href="javascript:void(0);" id="PV_Btn_Full" class="tool-btn"><i class="icon-fullscreen"></i></a>'+
+
+			'		<a href="javascript:void(0);" id="PV_Btn_Remove" title="Remove(key delete)" class="tool-btn ml-20"><i class="icon-trash"></i></a>'+
+			'		<a href="javascript:void(0);" id="PV_Btn_Open" class="tool-btn"><i class="icon-external-link"></i></a>'+
 			'	</div>'+
 			'</div>';
 		document.body.appendChild(this.frame);
@@ -436,6 +442,17 @@ Picasa.prototype = {
 			}catch(e){}
 		});
 
+		$('#PV_Btn_Remove').die("click").bind('click',function(e){
+			try{
+				self.removeImage();
+			}catch(e){}
+		});
+		$('#PV_Btn_Open').die("click").bind('click',function(e){
+			try{
+				window.open($('#PV_Picture').attr('src'));
+			}catch(e){}
+		});
+
 		this.btnAutoPlay.onmouseover = function() {self.hint(self.lng.autoplay);}
 		this.btnAutoPlay.onmouseout = function() {self.hint();}
 		this.btnAutoPlay.onclick = function() {self.autoPlayAction(); return false;}
@@ -560,11 +577,12 @@ Picasa.prototype = {
 		if(this.isAutoPlaying) {
 			clearTimeout(this.doAuto);
 			this.isAutoPlaying = false;
+			$(this.btnAutoPlay).removeClass('seled');
 		}else{
 			this.autoPlay();
 			this.isAutoPlaying = true;
+			$(this.btnAutoPlay).addClass('seled');
 		}
-		this.setButton(this.btnAutoPlay, this.isAutoPlaying);
 	},
 	autoPlay : function() {
 		var self = this;
@@ -639,7 +657,6 @@ Picasa.prototype = {
 			this.currentSizePer = Math.round(this.currentSizePer);
 		}
 		
-		this.setButton(this.btnZoomActual, (this.currentSizePer==100));
 		var size = this.arrItems[this.currentNo][2];
 		this.currentZoomSize = [Math.round(size[0]*this.currentSizePer/100), Math.round(size[1]*this.currentSizePer/100)];
 		this.currentZoomCoord = [Math.round(this.initialCoord[0]-this.currentZoomSize[0]/2), Math.round(this.initialCoord[1]-this.currentZoomSize[1]/2)];
@@ -798,31 +815,37 @@ Picasa.prototype = {
 		var key = e.keyCode;
 		var isHotKey = false;
 		
-		if(key==27) {
+		if(key==27) {//esc
 			this.close();
 			isHotKey = true;
-		}else if(key==37) {
+		}else if(key==37) {//left
 			this.changeImage(this.currentNo-1);
 			isHotKey = true;
-		}else if(key==39) {
+		}else if(key==39) {//right
 			this.changeImage(this.currentNo+1);
 			isHotKey = true;
-		}else if(key==38 || key==187 || key==107) {
+		}else if(key==38 || key==187 || key==107) {//up + number+
 			this.zoomAction(1);
 			isHotKey = true;
-		}else if(key==40 || key==189 || key==109) {
+		}else if(key==40 || key==189 || key==109) {//down - number-
 			this.zoomAction(-1);
 			isHotKey = true;
-		}else if(key==111 || key==191 || key==220) {
+		}else if(key==111 || key==191 || key==220) {//KP_Divide less greater bar
 			this.zoomAction(100);
 			isHotKey = true;
 		}else if(key==106) {
 			this.zoomAction(this.defaultSizePer);
 			isHotKey = true;
-		}		
+		}else if(key==46) {
+			this.removeImage();
+		}
 		if(isHotKey) this.Event.end(e);
 	},
-	
+	removeImage:function(){
+		var index = $('#PV_Control #PV_Items .current').attr('number');
+		ui.path.removeImage(index);
+	},
+
 	// 滚轮操作
 	setWheel : function(b) {
 		var self = this;
@@ -854,12 +877,6 @@ Picasa.prototype = {
 	itemWheelAction : function(e) {
 		this.changeImage((this.currentNo-this.getWheel(e)));
 		this.Event.end(e);
-	},
-	
-	// 设置按钮
-	setButton : function() {
-		var args = arguments;
-		args[0].className = args[1] ? 'seled' : '';
 	},
 	
 	// 停止所有动作

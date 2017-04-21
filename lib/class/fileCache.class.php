@@ -173,11 +173,11 @@ class fileCache{
 
 		$str = file_read_safe($file,0.4);
 		if($str === false || strlen($str) == 0){
-			$time = @filemtime($file); 
 			//服务器崩溃下文件不存在异常恢复
 			if( (!file_exists($file) || filesize($file) == 0 ) && 
 				file_exists($file_lock) &&
-				$time > 1000 && time() - $time > 10
+				@filemtime($file_lock) > 1000 && 
+				time() - @filemtime($file_lock) > 10
 				){
 				@rename($file_lock,$file);
 			}

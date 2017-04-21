@@ -619,6 +619,10 @@ class explorer extends Controller{
 				substr_count(trim($val['path'],'/'),'/') <= 1){ //分享根项目
 				show_json($this->L['no_permission_write'],false);
 			}
+			if(!path_writeable($path_this)){
+				$error++;
+				continue;
+			}
 
 			// 群组文件删除，移动到个人回收站。
 			// $GLOBALS['path_type'] == KOD_GROUP_SHARE ||
@@ -1065,8 +1069,8 @@ class explorer extends Controller{
 		}
 		//下载
 		$save_path = _DIR($this->in['save_path']);
-		if (!path_writeable($save_path)){
-		   show_json($this->L['no_permission_write'],false);
+		if (!$save_path || !path_writeable($save_path)){
+			show_json($this->L['no_permission_write'],false);
 		}
 		$url = rawurldecode($this->in['url']);
 		$header = url_header($url);

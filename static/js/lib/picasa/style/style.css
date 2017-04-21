@@ -2,18 +2,18 @@
 * body {height: 100%; overflow-y: auto}
 * html{overflow-x: auto; overflow-y: hidden}
 /* www.codefans.net */
-#PicasaMask {position: fixed; _position: absolute; z-index: 9998; top: 0; left: 0; 
+#PicasaMask {position: fixed; _position: absolute; z-index: 100; top: 0; left: 0; 
 background: #000; overflow: hidden;}
 
 
-#PV_Close{position: fixed; _position: absolute; z-index: 9999; right:-70px; top:-75px;height:140px;
+#PV_Close{position: fixed; _position: absolute; z-index: 200; right:-70px; top:-75px;height:140px;
 width:140px;text-decoration:none;background:#000;border-radius:70px;opacity:0.4;filter:alpha(opacity=40);}
 #PV_Close span{display:block;margin-top:75px;margin-left:35px;color:#fff;
 font-size:35px;font-family: Arial, sans-serif;}
 #PV_Close:hover{opacity:0.6;filter:alpha(opacity=80);}
 #PV_Close:hover span{color:#f30;}
 #PV_Picture_Temp {display: none;}
-#PicasaView {position: fixed; _position: absolute; z-index: 9999; left: 0; top: 0; overflow: hidden}
+#PicasaView {position: fixed; _position: absolute; z-index: 200; left: 0; top: 0; overflow: hidden}
 	#PV_Picture {position: absolute; z-index: 0; cursor: move;
 	-webkit-box-reflect: below 1px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(80%,transparent),color-stop(70%,rgba(255,255,255,0)),to(rgba(255,255,255,0.3)));
 }
@@ -30,10 +30,6 @@ font-size:35px;font-family: Arial, sans-serif;}
 			#PV_Items img {border: none; width: 35px; height: 35px;-webkit-box-reflect: below 1px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(20%,transparent),color-stop(60%,rgba(255,255,255,0.1)),to(rgba(255,255,255,0.8)));}
 		#PV_Buttons {position: absolute; z-index: 6; margin: 20px auto 0 auto}
 			#PV_Buttons a {float: left; color: #808080; text-align: center; text-decoration: none}
-			#PV_Zoom {float: left; width: 100px; margin-top: 8px}
-				#PV_Zoom a {float: right; width: 28px; height: 19px; font: 11px/19px Tahoma; margin-left: 1px; background-image: url(Picasa_Button.gif)}
-				#PV_Zoom a:hover {color: #ccc; background-position: 0 -20px}
-				#PV_Zoom a.seled {color: #fff; background-position: 0 -40px;font-weight:800;}
 			#PV_Select {float: left; width: 78px; height: 30px; margin: 0 15px; background-image: url(Picasa_Button.gif); overflow: hidden}
 				.PV_Btn_Normal {background-position: -120px 0}
 				.PV_Btn_PrevOver {background-position: -120px -40px}
@@ -50,7 +46,7 @@ font-size:35px;font-family: Arial, sans-serif;}
 
 #PV_Buttons{opacity:0.9;}
 #PV_Zoom{margin:0;margin-right: 10px;}
-#PV_Buttons #PV_Zoom a,#PV_Buttons #PV_Btn_Full,#PV_Buttons .rotate{
+#PV_Buttons .tool-btn{
 	background-image: none;
 	margin-right: 2px;
 	border-radius: 4px;
@@ -61,10 +57,7 @@ font-size:35px;font-family: Arial, sans-serif;}
 	border:2px solid #555;
 	border-color:rgba(255,255,255,0.1);
 }
-#PV_Buttons #PV_Zoom a:hover
-,#PV_Buttons #PV_Btn_Full:hover,
-#PV_Buttons .rotate:hover
-{border: 2px solid #888;background:#222;}
+#PV_Buttons .tool-btn:hover{border: 2px solid #888;background:#222;}
 #PV_Select{
 	margin: 0 15px;
 	height: 40px;

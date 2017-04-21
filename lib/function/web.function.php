@@ -484,6 +484,36 @@ function get_os (){
 	return $os;
 }
 
+// 浏览器是否直接打开
+function mime_support($mime){
+	$arr_start = array(
+		"text/",
+		"image/",
+		"audio/",
+		"video/",
+		"message/",
+	);
+	$arr_mime = array(
+		"application/hta",
+		"application/javascript",
+		"application/json",
+		"application/x-latex",
+		"application/pdf",
+		"application/x-shockwave-flash",
+		"application/x-tex",
+		"application/x-texinfo"
+	);
+	if(in_array($mime,$arr_mime)){
+		return true;
+	}
+	foreach ($arr_start as $val) {
+		if(substr($mime,0,strlen($val)) == $val){
+			return true;
+		}
+	}
+	return false;
+}
+
 //根据扩展名获取mime
 function get_file_mime($ext){
 	$mimetypes = array(
@@ -626,7 +656,7 @@ function get_file_mime($ext){
 		"ram" => "audio/x-pn-realaudio",
 		"ras" => "image/x-cmu-raster",
 		"rgb" => "image/x-rgb",
-		"rmi audio/mid" => "http://www.dreamdu.com",
+		"rmi" => "audio/mid",
 		"roff" => "application/x-troff",
 		"rtf" => "application/rtf",
 		"rtx" => "text/richtext",
