@@ -842,7 +842,6 @@ artDialog.fn = artDialog.prototype = {
 
 		that._lockMaskWrap = lockMaskWrap;
 		that._lockMask = lockMask;
-
 		that._lock = true;
 		return that;
 	},

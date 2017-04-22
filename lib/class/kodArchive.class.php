@@ -271,9 +271,9 @@ class kodArchive {
 			//TrOn(10);
 			$test = array($files);
 			foreach ($files as $key =>$val) {
+				$val = str_replace('//','/',$val);
 				$remove_path_pre = _DIR_CLEAR(get_path_father($val));
 				$test[] = array($val,$remove_path_pre);
-
 				if($key == 0){
 					$result = PclTarCreate($file,array($val), $ext,null, $remove_path_pre);
 					continue;

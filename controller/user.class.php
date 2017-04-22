@@ -103,7 +103,7 @@ class user extends Controller{
 		define('USER_TEMP',USER.'data/temp/');
 		define('USER_RECYCLE',USER.'recycle_kod/');
 		if (!file_exists(iconv_system(USER))) {
-			$this->login( "User/".get_path_this(USER)." ".$this->L['not_exists']);
+			$this->login("User/".get_path_this(USER)." ".$this->L['not_exists']);
 		}
 		$user_home = user_home_path($this->user);//utf-8
 		if ($this->user['role'] == '1') {
@@ -269,6 +269,9 @@ class user extends Controller{
 	 * 登录view
 	 */
 	public function login($msg = ''){
+		if(isset($this->in['is_ajax'])){
+			show_json($msg,false);
+		}
 		if (!file_exists(USER_SYSTEM.'install.lock')) {
 			chmod_path(BASIC_PATH,DEFAULT_PERRMISSIONS);
 			$this->display('install.html');
@@ -294,10 +297,22 @@ class user extends Controller{
 			}
 			$root = '1';
 			$sql=system_member::load_data();
-			$user = $sql->get($root);
-			$user['password'] = md5($this->in['password']);
+			$user = array(//重置admin
+				'name'			=> 'admin',
+				'path'			=> "admin",
+				'password'		=> md5($this->in['password']),
+				'user_id'		=> $root,
+				'role'			=> '1',
+				'config'		=> array('size_max'=>'0','size_use'=>1024),
+				'group_info'	=> array('1'=>'write'),
+				'create_time'	=> time(),
+				'status'		=> 1,
+			);
 			$sql->set($root,$user);
-			if(!$user['create_time'] || !$user['path']){
+			if( !$user['create_time'] || 
+				!$user['path'] ||
+				!file_exists(USER_PATH.$user['path'])
+				){
 				$member = new system_member();
 				$member->init_install();
 			}
@@ -424,13 +439,12 @@ class user extends Controller{
 	//referer检测
 	private function checkCSRF(){
 		$not_check = array('user:common_js');
-		if( !$this->config['settings']['csrf_protect'] ||
+		if( !$this->config['setting_system']['csrf_protect'] ||
 			isset($this->in['access_token']) ||
 			in_array(ST.':'.ACT, $not_check) 
 			){
 			return;
 		}
-
 		if( !isset($_SERVER['HTTP_X_CSRF_TOKEN'])||
 			$_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['X-CSRF-TOKEN']
 		){

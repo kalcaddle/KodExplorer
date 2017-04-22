@@ -12,7 +12,6 @@ $config['settings'] = array(
 	'api_login_tonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'updload_chunk_size'=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
 	'param_rewrite'		=> false,		 //开启url 去除? 直接跟参数
-	'csrf_protect'		=> true, 		 //开启csrf保护
 );
 
 //初始化系统配置
@@ -31,8 +30,9 @@ $config['setting_system_default'] = array(
 	
 	'desktop_folder'	=> 'desktop',	//桌面文件夹别名
 	'version_type'		=> "A",			// 版本
-	'root_list_user'	=> 1,			// 组织架构根节点展示群组内用户
+	'root_list_user'	=> 0,			// 组织架构根节点展示群组内用户
 	'root_list_group'	=> 0,			// 组织架构根节点展示子群组
+	'csrf_protect'		=> 1, 		 	//开启csrf保护
 );
 //初始化默认菜单配置
 $config['setting_system_default']['menu'] = array(

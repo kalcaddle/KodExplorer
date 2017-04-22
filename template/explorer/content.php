@@ -103,18 +103,19 @@
 				        </button>
 
 				        <div class="btn-group btn-group-sm">
-					    <button type="button" class="btn btn-default btn-sm toolPathMore">
-					      <i class="font-icon icon-ellipsis-horizontal"></i><?php echo $L['button_more'];?>&nbsp;<span class="caret"></span>
-					    </button>
+						    <button type="button" class="btn btn-default btn-sm toolPathMore">
+						      <i class="font-icon icon-ellipsis-horizontal"></i><?php echo $L['button_more'];?>&nbsp;<span class="caret"></span>
+						    </button>
+						</div>
+						<div class="group_space_use fl-left hidden"></div>
+						<div class="admin_real_path hidden fl-left ml-10">
+							<button type="button" class="btn btn-default btn-sm dlg_goto_path"  title="<?php echo $L['open_the_path'];?>">
+								<i class="font-icon icon-folder-open"></i>
+							</button>
+		                </div>
+						<span class='msg fl-left'><?php echo $L['path_loading'];?></span>
+						<div class="clear"></div>
 					</div>
-					<div class="group_space_use fl-left hidden"></div>
-					<div class="admin_real_path hidden fl-left ml-10">
-						<button type="button" class="btn btn-default btn-sm dlg_goto_path"  title="<?php echo $L['open_the_path'];?>">
-							<i class="font-icon icon-folder-open"></i>
-						</button>
-	                </div>
-					<span class='msg fl-left'><?php echo $L['path_loading'];?></span>
-					<div class="clear"></div>
 				</div>
 				<div class="tools-right">
 					<div class="btn-group btn-group-sm">

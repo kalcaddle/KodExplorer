@@ -27,7 +27,9 @@
 
 <style>
 .frame-main .frame-left {bottom: 0px;}
-.frame-main .bottom_box{display:none;}
+.frame-main .bottom_box{display:none !important;}
+.tools-right #set_theme{display:none !important;}
+#PV_rotate_Left,#PV_rotate_Right,#PV_Btn_Remove{display:none !important;}
 <?php if(isset($_GET['type'])){?>
 	.topbar,.common_footer,.bottom_box{display:none;}
 	.frame-header{top:0;}

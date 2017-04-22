@@ -1310,6 +1310,7 @@ var MaskView =  (function(){
 			if (typeof jQuery === "function" && el instanceof jQuery) {
 				el = el[0];
 			}
+			if(!el) return false;
 			var rect     = el.getBoundingClientRect(),
 				vWidth   = window.innerWidth || document.documentElement.clientWidth,
 				vHeight  = window.innerHeight || document.documentElement.clientHeight,
