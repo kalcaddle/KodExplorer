@@ -8,7 +8,6 @@
 
 class user extends Controller{
 	private $user;  //用户相关信息
-	private $auth;  //用户所属组权限
 	private $notCheck;
 	function __construct(){
 		parent::__construct();
@@ -42,8 +41,7 @@ class user extends Controller{
 			$this->_setCsrfToken();
 		}
 
-		if(in_array(ST,$this->notCheckApp)) return;//不需要判断的控制器
-		if(in_array(ACT,$this->notCheck))   return;//不需要判断的action
+		if(in_array(ST,$this->notCheckApp) && in_array(ACT,$this->notCheck)) return;//不需要判断的控制器 | 不需要判断的action
 		if(isset($_SESSION['kod_login']) && $_SESSION['kod_login']===true){
 			$user = system_member::get_info($this->user['user_id']);
 			$this->login_success($user);
@@ -143,7 +141,7 @@ class user extends Controller{
 		if(isset($_SESSION) && $_SESSION['kod_login'] == 1){//避免session不可写导致循环跳转
 			$user = $_SESSION['kod_user'];
 			//admin 或者不填则允许所有kod用户登陆
-			if( $user['role'] == '1' || 
+			if( $user['role'] == '1' ||
 				!isset($this->in['check']) ||
 				!isset($this->in['value']) ){
 				$result = true;
@@ -538,4 +536,3 @@ class user extends Controller{
 		QRcode::png(rawurldecode($this->in['url']));
 	}
 }
-

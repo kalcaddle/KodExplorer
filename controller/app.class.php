@@ -19,7 +19,7 @@ class app extends Controller{
 		$this->display(TEMPLATE.'app/index.php');
 	}
 
-	public function init_app($user_info){
+	public function init_app(){
 		$list = $this->sql->get();
 		$new_user_app = $this->config['setting_system']['new_user_app'];
 		$default = explode(',',$new_user_app);

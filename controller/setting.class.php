@@ -7,7 +7,6 @@
 */
 
 class setting extends Controller{
-	private $sql;
 	function __construct(){
 		parent::__construct();
 	}

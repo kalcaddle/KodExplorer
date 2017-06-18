@@ -34,7 +34,7 @@ class system_group extends Controller{
 	 * @param  [type] $the_id   [user_id or group_id]
 	 * @param  [type] $use_size_add [变更的大小  size_max G为单位   size_use Byte为单位]
 	 */
-	public static function space_change($the_id,$use_size_add=false){
+	public function space_change($the_id,$use_size_add=false){
 		$sql = self::load_data();
 		$info = $sql->get($the_id);
 		if(!is_array($info)){
@@ -58,7 +58,7 @@ class system_group extends Controller{
 	 * 空间剩余检测
 	 * 1073741824 —— 1G
 	 */
-	public static function space_check($the_id){
+	public function space_check($the_id){
 		$sql = self::load_data();
 		$info = $sql->get($the_id);
 		if(!is_array($info)){
