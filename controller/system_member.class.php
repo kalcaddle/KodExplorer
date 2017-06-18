@@ -33,7 +33,7 @@ class system_member extends Controller{
 	 * @param  [type] $the_id   [user_id or group_id]
 	 * @param  [type] $use_size_add [变更的大小  size_max G为单位   size_use Byte为单位]
 	 */
-	public static function space_change($the_id,$use_size_add=false){
+	public function space_change($the_id,$use_size_add=false){
 		$sql = self::load_data();
 		$info = $sql->get($the_id);
 		if(!is_array($info)){
@@ -48,7 +48,7 @@ class system_member extends Controller{
 			}
 		}else{
 			$current_use = floatval($info['config']['size_use'])+floatval($use_size_add);
-		}		
+		}
 		$info['config']['size_use'] = $current_use<0?0:$current_use;
 		$sql->set($the_id,$info);
 	}
@@ -56,7 +56,7 @@ class system_member extends Controller{
 	 * 空间剩余检测
 	 * 1073741824 —— 1G
 	 */
-	public static function space_check($the_id){
+	public function space_check($the_id){
 		$sql = self::load_data();
 		$info = $sql->get($the_id);
 		if(!is_array($info)){
@@ -105,7 +105,7 @@ class system_member extends Controller{
 		}
 		return $result;
 	}
-	//判断自己对某个组的权限 return false/'read'/'write'    
+	//判断自己对某个组的权限 return false/'read'/'write'
 	public static function _user_auth_group_role($group_id){
 		$sql = self::load_data();
 		$user_info = $sql->get($_SESSION['kod_user']['user_id']);
@@ -218,7 +218,7 @@ class system_member extends Controller{
 
 		$name = trim(rawurldecode($this->in['name']));
 		$password = rawurldecode($this->in['password']);
-		$group_info = json_decode(rawurldecode($this->in['group_info']),true);		
+		$group_info = json_decode(rawurldecode($this->in['group_info']),true);
 		if(!is_array($group_info)){
 			show_json($this->L["system_member_group_error"],false);
 		}
@@ -320,8 +320,8 @@ class system_member extends Controller{
 		}
 
 		//管理员自己不能添加自己到非管理员组
-		if($GLOBALS['is_root'] 
-			&& $_SESSION['kod_user']['user_id']==$user_id 
+		if($GLOBALS['is_root']
+			&& $_SESSION['kod_user']['user_id']==$user_id
 			&& $this->in['role']!='1'){
 			show_json($this->L['error'],false);
 		}
@@ -337,7 +337,7 @@ class system_member extends Controller{
 		$this->in['name'] = rawurlencode($the_name);//还原
 		$edit_arr = array('name','role','password','group_info','home_path','status','size_max');
 		foreach ($edit_arr as $key) {
-			if(!isset($this->in[$key])) continue;            
+			if(!isset($this->in[$key])) continue;
 			$user_info[$key] = rawurldecode($this->in[$key]);
 			if($key == 'password'){
 				$user_info['password'] = md5($user_info[$key]);
@@ -367,7 +367,7 @@ class system_member extends Controller{
 
 	/**
 	 * 用户批量操作 system_member/do_action&action=&user_id=[101,222,131]&param=
-	 * action : 
+	 * action :
 	 * -------------
 	 * del                  删除用户
 	 * status_set           启用&禁用 param=0/1
@@ -375,7 +375,7 @@ class system_member extends Controller{
 	 * group_reset          重置分组 param=group_json
 	 * group_remove_from    从某个组删除 param=group_id
 	 * group_add            添加到某个分组 param=group_json
-	 */ 
+	 */
 	public function do_action() {
 		if (!isset($this->in['user_id'])){
 			show_json($this->L["username_can_not_null"],false);
@@ -391,14 +391,14 @@ class system_member extends Controller{
 		foreach ($user_arr as $user_id) {
 			switch ($action) {
 				case 'del'://删除
-					$user_info = $this->sql->get($user_id);    
+					$user_info = $this->sql->get($user_id);
 					if($this->sql->remove($user_id) && $user_info['name']!=''){
 						del_dir(iconv_system(USER_PATH.$user_info['path'].'/'));
 					}
 					break;
 				case 'status_set'://禁用&启用
 					$status = intval($this->in['param']);
-					$this->sql->set(array('user_id',$user_id),array('status',$status)); 
+					$this->sql->set(array('user_id',$user_id),array('status',$status));
 					break;
 				case 'role_set'://设置权限组
 					$role = $this->in['param'];
@@ -406,20 +406,20 @@ class system_member extends Controller{
 					if(!$GLOBALS['is_root'] && $role=='1'){
 						show_json($this->L['group_role_error'],false);
 					}
-					$this->sql->set(array('user_id',$user_id),array('role',$role)); 
+					$this->sql->set(array('user_id',$user_id),array('role',$role));
 					break;
 				case 'group_reset'://设置分组
 					$group_arr = json_decode($this->in['param'],true);
 					if(!is_array($group_arr)){
 						show_json($this->L['error'],false);
 					}
-					$this->sql->set(array('user_id',$user_id),array('group_info',$group_arr));  
+					$this->sql->set(array('user_id',$user_id),array('group_info',$group_arr));
 					break;
 				case 'group_remove_from'://从某个组移除
 					$group_id = $this->in['param'];
 					$user_info = $this->sql->get($user_id);
 					unset($user_info['group_info'][$group_id]);
-					$this->sql->set($user_id,$user_info);   
+					$this->sql->set($user_id,$user_info);
 					break;
 				case 'group_add'://添加到某个组
 					$group_arr = json_decode($this->in['param'],true);
@@ -429,8 +429,8 @@ class system_member extends Controller{
 					$user_info = $this->sql->get($user_id);
 					foreach ($group_arr as $key => $value) {
 						$user_info['group_info'][$key] = $value;
-					}                   
-					$this->sql->set($user_id,$user_info);   
+					}
+					$this->sql->set($user_id,$user_info);
 				default:break;
 			}
 		}
@@ -467,7 +467,7 @@ class system_member extends Controller{
 	//============内部处理函数=============
 	/**
 	 *初始化用户数据和配置。
-	 */    
+	 */
 	private function _initDir($path){
 		$user_folder = array('home','recycle_kod','data');
 		$home_folders = explode(',',$this->config['setting_system']['new_user_folder']);

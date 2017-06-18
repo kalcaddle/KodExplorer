@@ -15,7 +15,7 @@ function update_check(){
 	unzip_repeat();//再次解压，避免windows部分主机解压失败问题
 
 	//from <=3.23 to last
-	if( file_exists(THE_DATA_PATH.'system/member.php') && 
+	if( file_exists(THE_DATA_PATH.'system/member.php') &&
 		!file_exists(THE_DATA_PATH.'system/system_member.php')){
 		new updateToV330();
 		update_clear();
@@ -24,7 +24,7 @@ function update_check(){
 	//from [3.30~3.35]
 	$system_file = THE_DATA_PATH.'system/system_setting.php';
 	$system_data = fileCache::load($system_file);
-	if( file_exists($system_file) && 
+	if( file_exists($system_file) &&
 		(is_array($system_data) && !isset($system_data['current_version']) )
 		){
 		update330To336();
@@ -67,7 +67,7 @@ function update_clear(){
 	del_file(BASIC_PATH.'readme.txt');
 	del_file(BASIC_PATH.'controller/group.class.php');
 	del_file(BASIC_PATH.'controller/member.class.php');
-	
+
 	del_dir(THE_DATA_PATH.'i18n');
 	del_dir(THE_DATA_PATH.'thumb');
 	del_dir(BASIC_PATH.'__MACOSX');
@@ -206,7 +206,7 @@ class updateToV330{
 
 		$group_path = THE_DATA_PATH.'Group/';
 		mk_dir($group_path);
-		touch($group_path.'index.html');
+		touch($group_path.'index.htmzl');
 
 		$public = THE_DATA_PATH.'public';
 		$item_path = iconv_system($group_path.$arr['path'].'/');

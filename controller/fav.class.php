@@ -33,7 +33,7 @@ class fav extends Controller{
 			}
 			$name = $name.'('.$index.')';
 		}
-		$res=$this->sql->set(
+		$this->sql->set(
 			$name,
 			array(
 				'name' => $name,
@@ -49,9 +49,6 @@ class fav extends Controller{
 	 * 编辑
 	 */
 	public function edit() {
-		$this->in['name'] = $this->in['name'];
-		$this->in['path'] = $this->in['path'];
-		$this->in['name_to'] = $this->in['name_to'];
 		$new_fav = $this->sql->get($this->in['name']);
 		if(!isset($new_fav['type'])){
 			$new_fav['type'] = 'folder';

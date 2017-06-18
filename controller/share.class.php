@@ -14,7 +14,7 @@ class share extends Controller{
 	function __construct(){
 		parent::__construct();
 		$this->tpl = TEMPLATE.'share/';
-		$auth = system_role::get_info(1);//经过role检测
+		system_role::get_info(1);//经过role检测
 		//不需要检查的action
 		$arr_not_check = array('common_js');
 		if (!in_array(ACT,$arr_not_check)){
@@ -192,7 +192,7 @@ class share extends Controller{
 		$this->sql->set($this->in['sid'],$this->share_info);
 	}
 	public function common_js(){
-		$out = ob_get_clean();
+		ob_get_clean();
 		$the_config = array(
 			'lang'          => LANGUAGE_TYPE,
 			'system_os'		=> $this->config['system_os'],
@@ -614,7 +614,7 @@ class share extends Controller{
 			if (in_array($val['name'],$ex_name)) continue;
 			$list_new['folderlist'][] = $val;
 		}
-		$s = _DIR_OUT($list_new);
+		_DIR_OUT($list_new);
 		return _DIR_OUT($list_new);
 	}
 }
