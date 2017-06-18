@@ -757,10 +757,12 @@ class share extends Controller
             if ($val['ext'] == 'oexe') {
                 $path = iconv_system($val['path']);
                 $json = json_decode(@file_get_contents($path), true);
+
                 if (is_array($json)) {
                     $val = array_merge($val, $json);
                 }
             }
+
             $list_new['filelist'][] = $val;
         }
 
@@ -768,8 +770,10 @@ class share extends Controller
             if (in_array($val['name'], $ex_name)) {
                 continue;
             }
+
             $list_new['folderlist'][] = $val;
         }
+
         _DIR_OUT($list_new);
 
         return _DIR_OUT($list_new);

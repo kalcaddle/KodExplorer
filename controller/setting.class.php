@@ -7,7 +7,7 @@
 * @license http://kalcaddle.com/tools/licenses/license.txt
 */
 
-class settings extends Controller
+class setting extends Controller
 {
     public function __construct()
     {
@@ -57,6 +57,7 @@ class settings extends Controller
 
                     $result = $this->config['setting_system'];
                     unset($result['system_password']);
+
                     show_json($result, true);
                 } else {
                     show_json('error', false);
@@ -144,6 +145,7 @@ class settings extends Controller
                 $user_path.'data/share_temp',
                 $user_path.'recycle_kod',
             ];
+
             foreach ($path_arr as $value) {
                 del_dir($value);
                 mk_dir($value);

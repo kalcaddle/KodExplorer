@@ -65,6 +65,7 @@ class app extends Controller
     public function user_app()
     {
         $path = _DIR($this->in['path']);
+
         if (isset($this->in['action']) && $this->in['action'] == 'add') {
             $path .= '.oexe';
         }
@@ -87,9 +88,13 @@ class app extends Controller
      */
     public function get()
     {
-        $list = !isset($this->in['group']) || ('all' == $this->in['group'])
-            ? $this->sql->get()
-            : $this->sql->get(['group', $this->in['group']]);
+        $list = [];
+
+        if (!isset($this->in['group']) || $this->in['group'] == 'all') {
+            $list = $this->sql->get();
+        } else {
+            $list = $this->sql->get(['group', $this->in['group']]);
+        }
 
         $list = array_reverse($list);
 
@@ -118,14 +123,9 @@ class app extends Controller
     public function edit()
     {
         //查找到一条记录，修改为该数组
-        $this->sql->remove(
-            rawurldecode($this->in['old_name'])
-        );
+        $this->sql->remove(rawurldecode($this->in['old_name']));
 
-        if ($this->sql->set(
-            rawurldecode($this->in['name']), $this->_init()
-        )
-        ) {
+        if ($this->sql->set(rawurldecode($this->in['name']), $this->_init())) {
             show_json($this->L['success']);
         }
 
@@ -165,7 +165,6 @@ class app extends Controller
     {
         $data = rawurldecode($this->in['data']);
         $arr = json_decode($data, true);
-
         if (!is_array($arr)) {
             show_json($this->L['error'], false);
         }

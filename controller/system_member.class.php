@@ -489,44 +489,60 @@ class system_member extends Controller
             switch ($action) {
                 case 'del'://删除
                     $user_info = $this->sql->get($user_id);
+
                     if ($this->sql->remove($user_id) && $user_info['name'] != '') {
                         del_dir(iconv_system(USER_PATH.$user_info['path'].'/'));
                     }
+
                     break;
                 case 'status_set'://禁用&启用
                     $status = intval($this->in['param']);
                     $this->sql->set(['user_id', $user_id], ['status', $status]);
+
                     break;
                 case 'role_set'://设置权限组
                     $role = $this->in['param'];
                     //非系统管理员，不能将别人设置为系统管理员
+
                     if (!$GLOBALS['is_root'] && $role == '1') {
                         show_json($this->L['group_role_error'], false);
                     }
+
                     $this->sql->set(['user_id', $user_id], ['role', $role]);
+
                     break;
                 case 'group_reset'://设置分组
                     $group_arr = json_decode($this->in['param'], true);
+
                     if (!is_array($group_arr)) {
                         show_json($this->L['error'], false);
                     }
+
                     $this->sql->set(['user_id', $user_id], ['group_info', $group_arr]);
+
                     break;
                 case 'group_remove_from'://从某个组移除
                     $group_id = $this->in['param'];
                     $user_info = $this->sql->get($user_id);
+
                     unset($user_info['group_info'][$group_id]);
+
                     $this->sql->set($user_id, $user_info);
+
                     break;
                 case 'group_add'://添加到某个组
                     $group_arr = json_decode($this->in['param'], true);
+
                     if (!is_array($group_arr)) {
                         show_json($this->L['error'], false);
                     }
+
                     $user_info = $this->sql->get($user_id);
+
                     foreach ($group_arr as $key => $value) {
                         $user_info['group_info'][$key] = $value;
                     }
+
                     $this->sql->set($user_id, $user_info);
                 default:
                     break;
@@ -546,6 +562,7 @@ class system_member extends Controller
             $info['path'] = $path;
             $info['create_time'] = time();
         }
+
         $sql->reset($list);
 
         //初始化群组目录
@@ -556,9 +573,11 @@ class system_member extends Controller
         foreach ($list as $id => &$info) {//创建用户目录及初始化
             $path = make_path($info['name']);
             $root_path = GROUP_PATH.$path.'/';
+
             foreach ($home_folders as $dir) {
                 mk_dir(iconv_system($root_path.'home/'.$dir));
             }
+
             $info['path'] = $path;
             $info['create_time'] = time();
         }
