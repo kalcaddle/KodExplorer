@@ -1,8 +1,868 @@
-<?php define('î®', '¾Åş');—…ŒµêÉà„ÍÌôàË†›ÄÛ¦ÀòÕ™“©¯¹ëğ¢“ˆ¨ ¾“éŸ—¸ì™¸”´ıïÂ¥±µúÊÉ¥ú;$GLOBALS[î®] = explode('|-|+|5', 'KOD_GROUP_PATH|-|+|5{group_path}|-|+|5KOD_GROUP_SHARE|-|+|5{group_share}|-|+|5KOD_USER_SHARE|-|+|5{user_share}|-|+|5KOD_USER_RECYCLE|-|+|5{user_recycle}|-|+|5KOD_USER_FAV|-|+|5{user_fav}|-|+|5KOD_GROUP_ROOT_SELF|-|+|5{tree_group_self}|-|+|5KOD_GROUP_ROOT_ALL|-|+|5{tree_group_all}|-|+|5is_root|-|+|5\\|-|+|5/|-|+|5../|-|+|5/\\.+\\/+/|-|+|5/\\/+/|-|+|5path_type|-|+|5|-|+|5path_pre|-|+|5path_id|-|+|5path_id_user_share|-|+|5:|-|+|5share/|-|+|5kod_user|-|+|5user_id|-|+|5config|-|+|5path_role_group_default|-|+|51|-|+|5actions|-|+|5path|-|+|5role|-|+|5type|-|+|5file|-|+|5filelist|-|+|5folderlist|-|+|5share|-|+|5//|-|+|5L|-|+|5group_not_exist|-|+|5path_from_auth_check|-|+|5no_permission_group|-|+|5path_role_group|-|+|5no_permission_action|-|+|5path_role_define|-|+|5<|-|+|5>|-|+|5auth|-|+|5ext_not_allow|-|+|5||-|+|5.|-|+|5.DS_Store|-|+|5iconv|-|+|5system_charset|-|+|5utf-8|-|+|5zh-CN|-|+|5zh-TW|-|+|5gbk|-|+|5.txt|-|+|5unzip_file_charset_get|-|+|5filename|-|+|5gbk|-|+|5mb_convert_encoding|-|+|5mb_detect_encoding|-|+|5check_charset|-|+|5unicode|-|+|5cp936|-|+|5euc-cn|-|+|5ascii|-|+|5iso-8859-1|-|+|5settings|-|+|5updload_chunk_size|-|+|5in|-|+|5user|-|+|5size|-|+|5lib/core/|-|+|5Application.class.php|-|+|5default_socket_timeout|-|+|5http|-|+|5method|-|+|5GET|-|+|5timeout|-|+|5<li>|-|+|5php_env_error_iconv|-|+|5</li>|-|+|5mb_convert_encoding|-|+|5php_env_error_mb_string|-|+|55.0|-|+|5>=|-|+|5php_env_error_version|-|+|5file_get_contents|-|+|5php_env_error_file|-|+|5php_env_error_list_dir|-|+|5system|-|+|5User|-|+|5Group|-|+|5session|-|+|5/	|-|+|5php_env_error_path|-|+|5imagecreatefromjpeg|-|+|5imagecreatefromgif|-|+|5imagecreatefrompng|-|+|5imagecolorallocate|-|+|5php_env_error_gd|-|+|5.cache_data|-|+|5data ç›®å½•ä¸å­˜åœ¨!
+<?php define('ï¿½', 'ï¿½ï¿½ï¿½');
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë†ï¿½ï¿½Ûï¿½ï¿½ï¿½Õ™ï¿½ï¿½ï¿½ï¿½ï¿½ğ¢“ˆï¿½ï¿½ï¿½ï¿½éŸ—ï¿½ì™ï¿½ï¿½ï¿½ï¿½ï¿½Â¥ï¿½ï¿½ï¿½ï¿½É¥ï¿½;
+$GLOBALS[ï¿½] = explode(
+    '|-|+|5', 'KOD_GROUP_PATH|-|+|5{group_path}|-|+|5KOD_GROUP_SHARE|-|+|5{group_share}|-|+|5KOD_USER_SHARE|-|+|5{user_share}|-|+|5KOD_USER_RECYCLE|-|+|5{user_recycle}|-|+|5KOD_USER_FAV|-|+|5{user_fav}|-|+|5KOD_GROUP_ROOT_SELF|-|+|5{tree_group_self}|-|+|5KOD_GROUP_ROOT_ALL|-|+|5{tree_group_all}|-|+|5is_root|-|+|5\\|-|+|5/|-|+|5../|-|+|5/\\.+\\/+/|-|+|5/\\/+/|-|+|5path_type|-|+|5|-|+|5path_pre|-|+|5path_id|-|+|5path_id_user_share|-|+|5:|-|+|5share/|-|+|5kod_user|-|+|5user_id|-|+|5config|-|+|5path_role_group_default|-|+|51|-|+|5actions|-|+|5path|-|+|5role|-|+|5type|-|+|5file|-|+|5filelist|-|+|5folderlist|-|+|5share|-|+|5//|-|+|5L|-|+|5group_not_exist|-|+|5path_from_auth_check|-|+|5no_permission_group|-|+|5path_role_group|-|+|5no_permission_action|-|+|5path_role_define|-|+|5<|-|+|5>|-|+|5auth|-|+|5ext_not_allow|-|+|5||-|+|5.|-|+|5.DS_Store|-|+|5iconv|-|+|5system_charset|-|+|5utf-8|-|+|5zh-CN|-|+|5zh-TW|-|+|5gbk|-|+|5.txt|-|+|5unzip_file_charset_get|-|+|5filename|-|+|5gbk|-|+|5mb_convert_encoding|-|+|5mb_detect_encoding|-|+|5check_charset|-|+|5unicode|-|+|5cp936|-|+|5euc-cn|-|+|5ascii|-|+|5iso-8859-1|-|+|5settings|-|+|5updload_chunk_size|-|+|5in|-|+|5user|-|+|5size|-|+|5lib/core/|-|+|5Application.class.php|-|+|5default_socket_timeout|-|+|5http|-|+|5method|-|+|5GET|-|+|5timeout|-|+|5<li>|-|+|5php_env_error_iconv|-|+|5</li>|-|+|5mb_convert_encoding|-|+|5php_env_error_mb_string|-|+|55.0|-|+|5>=|-|+|5php_env_error_version|-|+|5file_get_contents|-|+|5php_env_error_file|-|+|5php_env_error_list_dir|-|+|5system|-|+|5User|-|+|5Group|-|+|5session|-|+|5/	|-|+|5php_env_error_path|-|+|5imagecreatefromjpeg|-|+|5imagecreatefromgif|-|+|5imagecreatefrompng|-|+|5imagecolorallocate|-|+|5php_env_error_gd|-|+|5.cache_data|-|+|5data ç›®å½•ä¸å­˜åœ¨!
 
 (æ£€æŸ¥ DATA_PATH);|-|+|5config/version.php|-|+|5\'KOD_VERSION\',\'(.*)\'|-|+|5æ‚¨æœåŠ¡å™¨å¼€å¯äº†phpç¼“å­˜,æ–‡ä»¶æ›´æ–°å°šæœªç”Ÿæ•ˆ;
 			è¯·å…³é—­ç¼“å­˜ï¼Œæˆ–ç¨å1åˆ†é’Ÿåˆ·æ–°é¡µé¢å†è¯•ï¼
 			<a href=\'http://www.tuicool.com/articles/QVjeu2i\' target=\'_blank\'>äº†è§£è¯¦æƒ…</a>|-|+|5[Error Code:1002] ç›®å½•æƒé™é”™è¯¯ï¼è¯·è®¾ç½®ç¨‹åºç›®å½•åŠæ‰€æœ‰å­ç›®å½•ä¸ºè¯»å†™çŠ¶æ€ï¼Œ
 				linux è¿è¡Œå¦‚ä¸‹æŒ‡ä»¤ï¼š
-				<pre>chmod -R 777 |-|+|5</pre>|-|+|5index.html|-|+|5system/apps.php|-|+|5update.php|-|+|5access_token|-|+|5SaeStorage|-|+|5SAE_APPNAME|-|+|5HTTP_APPNAME|-|+|5setting_system|-|+|5system_password|-|+|5kodExplorer_|-|+|5access_token error!|-|+|5need_check_code|-|+|5en|-|+|5setting_all|-|+|5language|-|+|5zh|-|+|5zh-tw|-|+|5HTTP_ACCEPT_LANGUAGE|-|+|5en|-|+|5_|-|+|5-|-|+|5~([-a-z]+)(;q=([0-9.]+))?~|-|+|5~-.*~|-|+|5kod_user_language|-|+|5..|-|+|5zh_CN|-|+|5zh_TW|-|+|5/main.php|-|+|5LANGUAGE_TYPE|-|+|5*|-|+|5?|-|+|5"|-|+|5system_setting.php|-|+|5setting_system_default|-|+|5app|-|+|5first_in|-|+|5index|-|+|5system_role_group.php|-|+|5kod_name|-|+|5system_name|-|+|5kod_name_desc|-|+|5system_desc|-|+|5powerby|-|+|5kod_power_by|-|+|5config/setting_user.php|-|+|5STATIC_PATH|-|+|5static_path|-|+|5KOD_SESSION_SSO|-|+|5kod_token|-|+|5location:./index.php?user/login|-|+|5+|-|+|5=|-|+|5_a|-|+|5_b|-|+|5_c');ë¦¥ôÎÆ³â°ÓúéÁˆƒ;
- define($GLOBALS{î®}[0],$GLOBALS{î®}{0x001});define($GLOBALS{î®}[0x0002],$GLOBALS{î®}{0x00003});define($GLOBALS{î®}[0x000004],$GLOBALS{î®}{0x05});define($GLOBALS{î®}[0x006],$GLOBALS{î®}{0x0007});define($GLOBALS{î®}[0x00008],$GLOBALS{î®}{0x000009});define($GLOBALS{î®}[0x0a],$GLOBALS{î®}{0x00b});define($GLOBALS{î®}[0x000c],$GLOBALS{î®}{0x0000d});function _DIR_CLEAR($±){$Êà=&$GLOBALS{î®};if(isset($GLOBALS[$Êà[0x00000e]])&& $GLOBALS[$Êà[0x00000e]]){return $±;}$±=str_replace($Êà{0x0f},$Êà[0x0010],trim($±));if(strstr($±,$Êà{0x00011})){$±=preg_replace($Êà[0x000012],$Êà[0x0010],$±);}$±=preg_replace($Êà{0x0000013},$Êà[0x0010],$±);return $±;}function _DIR($ºå){$¶¶¤Ò=&$GLOBALS{î®};$È=_DIR_CLEAR($ºå);¸İ¦‚ÂıÀ‰ıı÷¬±¦€Å¸†÷ï®ÂÑÊü¸ŞÆıİ‹¶»²¹ı±úˆ¯ø€Ü«§ÜñßãéĞ“¬¢;$È=iconv_system($È);½ğØ›üÖ¯ÊÕàÅŞ‘¿ßíë‡Êİæ¯Ç·ÃóÙ¡;$µß=array(KOD_GROUP_PATH,KOD_GROUP_SHARE,KOD_GROUP_ROOT_SELF,KOD_GROUP_ROOT_ALL,KOD_USER_SHARE,KOD_USER_RECYCLE,KOD_USER_FAV,);$GLOBALS[$¶¶¤Ò[0x014]]=$¶¶¤Ò{0x0015};$GLOBALS[$¶¶¤Ò[0x00016]]=HOME;Ò¾ê© ±;$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};unset($GLOBALS[$¶¶¤Ò[0x0000018]]);foreach($µß as $çŸÜîê){if(substr($È,0,strlen($çŸÜîê))==$çŸÜîê){$GLOBALS[$¶¶¤Ò[0x014]]=$çŸÜîê;$Ö›ƒ=explode($¶¶¤Ò[0x0010],$È);$Ş=$Ö›ƒ[0];unset($Ö›ƒ[0]);$è€—à=implode($¶¶¤Ò[0x0010],$Ö›ƒ);$®Ü=explode($¶¶¤Ò{0x019},$Ş);if(count($®Ü)>0x001){$GLOBALS[$¶¶¤Ò{0x000017}]=trim($®Ü[0x001]);}else{$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};}break;}}switch($GLOBALS[$¶¶¤Ò[0x014]]){case $¶¶¤Ò{0x0015}:$È=iconv_system(HOME).$È;break;¹Ú˜êâÉÛËè¹»Ôô“ïø¡Îğ‹Ï‰ª°²Øê§¾âà™úËüÅ¨É¯â†;case KOD_USER_RECYCLE:$GLOBALS[$¶¶¤Ò[0x00016]]=trim(USER_RECYCLE,$¶¶¤Ò[0x0010]);$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};Ñ»ÃÂÆ”ÌñÅşÊÓêñ“ÎÓ¬Ê ªÉó¿¬;return iconv_system(USER_RECYCLE).$¶¶¤Ò[0x0010].str_replace(KOD_USER_RECYCLE,$¶¶¤Ò{0x0015},$È);”¸×;case KOD_USER_FAV:$GLOBALS[$¶¶¤Ò[0x00016]]=trim(KOD_USER_FAV,$¶¶¤Ò[0x0010]);—‘ç‰ÖçÓ«ÒÆ¾¢›êì»–ü…Š½²;$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};return KOD_USER_FAV;case KOD_GROUP_ROOT_SELF:$GLOBALS[$¶¶¤Ò[0x00016]]=trim(KOD_GROUP_ROOT_SELF,$¶¶¤Ò[0x0010]);$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};return KOD_GROUP_ROOT_SELF;case KOD_GROUP_ROOT_ALL:$GLOBALS[$¶¶¤Ò[0x00016]]=trim(KOD_GROUP_ROOT_ALL,$¶¶¤Ò[0x0010]);$GLOBALS[$¶¶¤Ò{0x000017}]=$¶¶¤Ò{0x0015};Ê”‹¡ûßÍÏ¦ŒñÂ÷ßıİ;return KOD_GROUP_ROOT_ALL;case KOD_GROUP_PATH:$›=system_group::get_info($GLOBALS[$¶¶¤Ò{0x000017}]);if(!$GLOBALS[$¶¶¤Ò{0x000017}]|| !$›)return !1;owner_group_check($GLOBALS[$¶¶¤Ò{0x000017}]);$GLOBALS[$¶¶¤Ò[0x00016]]=group_home_path($›);$È=iconv_system($GLOBALS[$¶¶¤Ò[0x00016]]).$è€—à;ş£’ª¥Ü¿°ş»Ì‹·ØıùĞİ÷ß»ûø×²—õ¡ĞÏ óáË™;break;case KOD_GROUP_SHARE:$›=system_group::get_info($GLOBALS[$¶¶¤Ò{0x000017}]);if(!$GLOBALS[$¶¶¤Ò{0x000017}]|| !$›)return !1;owner_group_check($GLOBALS[$¶¶¤Ò{0x000017}]);ÚŒÒ’äÑ¶°†–ëƒÄµ§»Ö÷‹÷ëíÃ†®ÎÏì–;$GLOBALS[$¶¶¤Ò[0x00016]]=group_home_path($›).$¶¶¤Ò[0x001a];$È=iconv_system($GLOBALS[$¶¶¤Ò[0x00016]]).$è€—à;Ş¼Ë–ìÒ­ÙÕ½ŒäÙâİåÛÉÔŸÏƒî ğ†ËêğŠÊ­Öàš©ó€Ì’;break;case KOD_USER_SHARE:$›=system_member::get_info($GLOBALS[$¶¶¤Ò{0x000017}]);if(!$GLOBALS[$¶¶¤Ò{0x000017}]|| !$›)return !1;if($GLOBALS[$¶¶¤Ò{0x000017}]!=$_SESSION[$¶¶¤Ò{0x0001b}][$¶¶¤Ò[0x00001c]]){$ïÓËÚ=$GLOBALS[$¶¶¤Ò{0x000001d}][$¶¶¤Ò[0x01e]][$¶¶¤Ò{0x001f}][$¶¶¤Ò[0x00020]];path_role_check($ïÓËÚ);}$GLOBALS[$¶¶¤Ò[0x00016]]=$¶¶¤Ò{0x0015};$GLOBALS[$¶¶¤Ò[0x0000018]]=$ºå;if($è€—à==$¶¶¤Ò{0x0015}){return $È;}else{$««ÚËœ=explode($¶¶¤Ò[0x0010],$è€—à);$««ÚËœ[0]=iconv_app($««ÚËœ[0]);$˜‡Ñ£=system_member::user_share_get($GLOBALS[$¶¶¤Ò{0x000017}],$««ÚËœ[0]);$GLOBALS[$¶¶¤Ò[0x0000018]]=KOD_USER_SHARE.$¶¶¤Ò{0x019}.$GLOBALS[$¶¶¤Ò{0x000017}].$¶¶¤Ò[0x0010].$««ÚËœ[0].$¶¶¤Ò[0x0010];unset($««ÚËœ[0]);if(!$˜‡Ñ£)return !1;$şú³™=rtrim($˜‡Ñ£[$¶¶¤Ò{0x000021}],$¶¶¤Ò[0x0010]).$¶¶¤Ò[0x0010].iconv_app(implode($¶¶¤Ò[0x0010],$««ÚËœ));if($›[$¶¶¤Ò[0x0000022]]!=$¶¶¤Ò{0x001f}){$¥=user_home_path($›);$GLOBALS[$¶¶¤Ò[0x00016]]=$¥.rtrim($˜‡Ñ£[$¶¶¤Ò{0x000021}],$¶¶¤Ò[0x0010]).$¶¶¤Ò[0x0010];$È=$¥.$şú³™;}else{$GLOBALS[$¶¶¤Ò[0x00016]]=$˜‡Ñ£[$¶¶¤Ò{0x000021}];$È=$şú³™;}if($˜‡Ñ£[$¶¶¤Ò{0x023}]==$¶¶¤Ò[0x0024]){$GLOBALS[$¶¶¤Ò[0x0000018]]=rtrim($GLOBALS[$¶¶¤Ò[0x0000018]],$¶¶¤Ò[0x0010]);$GLOBALS[$¶¶¤Ò[0x00016]]=rtrim($GLOBALS[$¶¶¤Ò[0x00016]],$¶¶¤Ò[0x0010]);}$È=iconv_system($È);}break;default:break;}if($È!=$¶¶¤Ò[0x0010]){$È=rtrim($È,$¶¶¤Ò[0x0010]);if(is_dir($È))$È=$È.$¶¶¤Ò[0x0010];}return $È;Ñáî¬ŠÚ;}function _DIR_OUT($½){$§=&$GLOBALS{î®};if(is_array($½)){foreach($½[$§{0x00025}] as $êà­ê=>&$à„‚¤){$à„‚¤[$§{0x000021}]=pre_clear($à„‚¤[$§{0x000021}]);}foreach($½[$§[0x000026]] as $êà­ê=>&$à„‚¤){$à„‚¤[$§{0x000021}]=pre_clear(rtrim($à„‚¤[$§{0x000021}],$§[0x0010]).$§[0x0010]);}}else{$½=pre_clear($½);}return $½;}function pre_clear($´Úõ){$İÆäòª=&$GLOBALS{î®};$ıÇ¥=$GLOBALS[$İÆäòª[0x014]];ÈÍæ€ò¹˜°•ƒ‘Âíí£òïÇ‡˜û»òñıñº£ß°Ó©ıº©ğ;$Â¢ŠÆ³=rtrim($GLOBALS[$İÆäòª[0x00016]],$İÆäòª[0x0010]);ğ©“¹°¬¶ë ©ê’ã;$•âœ”=array(KOD_USER_FAV,KOD_GROUP_ROOT_SELF,KOD_GROUP_ROOT_ALL);‰¨Ÿ;if(isset($GLOBALS[$İÆäòª[0x014]])&& in_array($GLOBALS[$İÆäòª[0x014]],$•âœ”)){return $´Úõ;}if(ST==$İÆäòª{0x0000027}){return str_replace($Â¢ŠÆ³,$İÆäòª{0x0015},$´Úõ);}if($GLOBALS[$İÆäòª{0x000017}]!=$İÆäòª{0x0015}){$ıÇ¥.=$İÆäòª{0x019}.$GLOBALS[$İÆäòª{0x000017}].$İÆäòª[0x0010];}if(isset($GLOBALS[$İÆäòª[0x0000018]])){$ıÇ¥=$GLOBALS[$İÆäòª[0x0000018]];}$Üì†ş=$ıÇ¥.str_replace($Â¢ŠÆ³,$İÆäòª{0x0015},$´Úõ);$Üì†ş=str_replace($İÆäòª[0x028],$İÆäòª[0x0010],$Üì†ş);™à¿ÏÌßø;return $Üì†ş;}function owner_group_check($‡){$¬Àº=&$GLOBALS{î®};if(!$‡)show_json($GLOBALS[$¬Àº{0x0029}][$¬Àº[0x0002a]].$‡,!1);if($GLOBALS[$¬Àº[0x00000e]]||(isset($GLOBALS[$¬Àº{0x00002b}])&& $GLOBALS[$¬Àº{0x00002b}]===!0)){return;}$Çİ=system_member::user_auth_group($‡);if($Çİ==!1){if($GLOBALS[$¬Àº[0x014]]==KOD_GROUP_PATH){show_json($GLOBALS[$¬Àº{0x0029}][$¬Àº[0x000002c]],!1);}else if($GLOBALS[$¬Àº[0x014]]==KOD_GROUP_SHARE){$¶ü¢“=$GLOBALS[$¬Àº{0x000001d}][$¬Àº[0x01e]][$¬Àº{0x001f}];}}else{$¶ü¢“=$GLOBALS[$¬Àº{0x000001d}][$¬Àº{0x02d}][$Çİ];ÉÙ§âºæ²;}path_role_check($¶ü¢“[$¬Àº[0x00020]]);}function path_role_check($ü²){$“Ù¼Ê×=&$GLOBALS{î®};if($GLOBALS[$“Ù¼Ê×[0x00000e]]||(isset($GLOBALS[$“Ù¼Ê×{0x00002b}])&& $GLOBALS[$“Ù¼Ê×{0x00002b}]===!0)){return;}$…û=role_permission_arr($ü²);if(!isset($…û[ST.$“Ù¼Ê×{0x019}.ACT])){show_json($GLOBALS[$“Ù¼Ê×{0x0029}][$“Ù¼Ê×[0x002e]],!1);}}function role_permission_arr($ŞÂ‰ñ){$´Ø=&$GLOBALS{î®};$â=array();$¢¦È=$GLOBALS[$´Ø{0x000001d}][$´Ø{0x0002f}];Ùï£;foreach($ŞÂ‰ñ as $¢Åİ=>$ñø){if(!$ñø)continue;$¼ĞÌ›”=explode($´Ø{0x019},$¢Åİ);¹¨‘×©´;if(count($¼ĞÌ›”)==0x0002&& is_array($¢¦È[$¼ĞÌ›”[0]])&& is_array($¢¦È[$¼ĞÌ›”[0]][$¼ĞÌ›”[0x001]])){$â=array_merge($â,$¢¦È[$¼ĞÌ›”[0]][$¼ĞÌ›”[0x001]]);}}$ò„çöİ=array();ùà”™‘†’ıÂãÊŞø;foreach($â as $ñø){$ò„çöİ[$ñø]=$´Ø{0x001f};}return $ò„çöİ;•«³¿ß³²ä›©ÂòÄùí¥‡¶•;}function checkExt($€·÷¡¥){$ëà€ï=&$GLOBALS{î®};if(strstr($€·÷¡¥,$ëà€ï[0x000030])|| strstr($€·÷¡¥,$ëà€ï{0x0000031})|| $€·÷¡¥==$ëà€ï{0x0015}){return 0;}$û=$GLOBALS[$ëà€ï[0x032]][$ëà€ï{0x0033}];$¾¯ù=explode($ëà€ï[0x00034],$û);foreach($¾¯ù as $­„ş×){if($­„ş×!==$ëà€ï{0x0015} && stristr($€·÷¡¥,$ëà€ï{0x000035}.$­„ş×)){return 0;}}return 0x001;ÁàÂĞèùåƒ®¿ƒ¯öúĞœÌ×Ìü;}function zip_pre_name($Ø·Òô,$´¸Ê²=false){$û¬°è=&$GLOBALS{î®};if(get_path_this($Ø·Òô)==$û¬°è[0x0000036])return $û¬°è{0x0015};if(!function_exists($û¬°è{0x037})){return $Ø·Òô;}$¡á=$GLOBALS[$û¬°è{0x000001d}][$û¬°è[0x0038]];if($´¸Ê²==!1){$´¸Ê²=$û¬°è{0x00039};$¤‘ç á=get_default_lang();if(client_is_windows()&&($¤‘ç á==$û¬°è[0x00003a] || $¤‘ç á==$û¬°è{0x000003b} || LANGUAGE_TYPE==$û¬°è{0x000003b} || LANGUAGE_TYPE==$û¬°è{0x000003b})){$´¸Ê²=$û¬°è[0x03c];}}$®=@iconv($¡á,$´¸Ê²,$Ø·Òô);if(!$®){$®=$Ø·Òô;}return $®;}function unzip_filter_ext($íŠ’Á){$Œ=$GLOBALS{î®}{0x003d};“ëˆ´ÎøØßáøÂç¨òÅ¥Ÿö­©èœ´úİµˆÓîßçÛèœ;if(checkExt($íŠ’Á)){return $íŠ’Á;}return $íŠ’Á.$Œ;}function unzip_pre_name($áõ){$¬É³=&$GLOBALS{î®};if(!function_exists($¬É³{0x037})){return unzip_filter_ext($áõ);}if(isset($GLOBALS[$¬É³[0x0003e]])){$Ä=$GLOBALS[$¬É³[0x0003e]];}else{$Ä=get_charset($áõ);}$Î¬™Áò=$GLOBALS[$¬É³{0x000001d}][$¬É³[0x0038]];$áêÍ=@iconv($Ä,$Î¬™Áò,$áõ);if(!$áêÍ){$áêÍ=$áõ;}$áêÍ=unzip_filter_ext($áêÍ);return $áêÍ;}function unzip_charset_get($ş){$áÒ­=&$GLOBALS{î®};if(count($ş)==0)return $áÒ­{0x00039};$ßîœ=array();äõç;for($¬ËĞ=0;$¬ËĞ<count($ş);$¬ËĞ++){$å“Ì¤=get_charset($ş[$¬ËĞ][$áÒ­{0x00003f}]);†Ì«³–Ş¾•›„¸åÏ½ËÅ¥§ÇÑò˜«Ø¬øı¢±ñ¨ıÜ”ü›ª™º¯Ñ¡ş;if(!isset($ßîœ[$å“Ì¤])){$ßîœ[$å“Ì¤]=0x001;}else{$ßîœ[$å“Ì¤]+= 0x001;}}arsort($ßîœ);$Åµ”ˆ=array_keys($ßîœ);if(in_array($áÒ­[0x0000040],$Åµ”ˆ)){$Åµ”ˆ[0]=$áÒ­[0x0000040];}$GLOBALS[$áÒ­[0x0003e]]=$Åµ”ˆ[0];return $Åµ”ˆ[0];}function charset_check(&$õŞÓŸ,$ñûòï){$ïÇÀ=&$GLOBALS{î®};if($õŞÓŸ===$ïÇÀ{0x0015} || !function_exists($ïÇÀ{0x041})){return !1;}$=$ïÇÀ{0x00039};$Ò=@mb_convert_encoding($õŞÓŸ,$,$ñûòï);Ìëá’¢õ ªşÆŞàšÂì–¯Êˆ¬¾÷ÄÛ‚˜©İöÊî‰ìå©—äğöÆ‹…‰œòŸÌ½¨øû ½Ø¢ÖƒãùËÒ„¸¹­;$ŸÈå=@mb_convert_encoding($Ò,$ñûòï,$);if($õŞÓŸ==$ŸÈå){return !0;}return !1;}function get_charset(&$ûØ){$Ô=&$GLOBALS{î®};if($ûØ===$Ô{0x0015} || !function_exists($Ô[0x0042])){return $Ô{0x00039};}$Õû£=strtolower(@mb_detect_encoding($ûØ,$GLOBALS[$Ô{0x000001d}][$Ô{0x00043}]));if(substr($ûØ,0,0x0002)==chr(0xFF).chr(0xFE)|| substr($ûØ,0,0x0002)==chr(0xFE).chr(0xFF)){$Õû£=$Ô[0x000044];}else if(substr($ûØ,0,0x00003)==chr(0xEF).chr(0xBB).chr(0xBF)){$Õû£=$Ô{0x00039};}else if($Õû£==$Ô{0x0000045} || $Õû£==$Ô[0x046]){$Õû£=$Ô[0x0000040];}else if($Õû£==$Ô{0x0047}){$Õû£=$Ô{0x00039};}if($Õû£==$Ô[0x00048]){if(charset_check($ûØ,$Ô{0x00039})){$Õû£=$Ô{0x00039};}}return $Õû£;ÒÉÚÖƒ”;}function file_upload_size(){$«ˆ=&$GLOBALS{î®};global$config;if(isset($config[$«ˆ{0x000049}][$«ˆ[0x000004a]])){return $config[$«ˆ{0x000049}][$«ˆ[0x000004a]];}$™=get_post_max();return $™;˜­™­­Ñ»;}function space_size_use_check(){$Ø¦=&$GLOBALS{î®};if(!system_space())return;if($GLOBALS[$Ø¦[0x00000e]]==0x001)return;if($GLOBALS[$Ø¦[0x014]]==KOD_GROUP_SHARE|| $GLOBALS[$Ø¦[0x014]]==KOD_GROUP_PATH){system_group::space_check($GLOBALS[$Ø¦{0x000017}]);}else{if(ST==$Ø¦{0x0000027}){$¨=$GLOBALS[$Ø¦{0x04b}][$Ø¦[0x004c]];}else{$¨=$_SESSION[$Ø¦{0x0001b}][$Ø¦[0x00001c]];}system_member::space_check($¨);}}function space_size_use_change($¬ï,$ó=true,$‰È=false,$¯æï€=false){$±ßê=&$GLOBALS{î®};if(!system_space())return;if($‰È===!1){$‰È=$GLOBALS[$±ßê[0x014]];$¯æï€=$GLOBALS[$±ßê{0x000017}];}$ó=$ó?0x001:-0x001;if(is_file($¬ï)){$ø™“=get_filesize($¬ï);}else if(is_dir($¬ï)){$®äƒ=_path_info_more($¬ï);$ø™“=$®äƒ[$±ßê{0x0004d}];}else{return;}if($‰È==KOD_GROUP_SHARE|| $‰È==KOD_GROUP_PATH){system_group::space_change($¯æï€,$ø™“*$ó);}else{if(ST==$±ßê{0x0000027}){$‘ŒØ¹=$GLOBALS[$±ßê{0x04b}][$±ßê[0x004c]];}else{$‘ŒØ¹=$_SESSION[$±ßê{0x0001b}][$±ßê[0x00001c]];}system_member::space_change($‘ŒØ¹,$ø™“*$ó);}}function space_size_use_reset(){$ıøÔ‚Ñ=&$GLOBALS{î®};if(!system_space())return;$ĞøâÅ=isset($GLOBALS[$ıøÔ‚Ñ[0x014]])?$GLOBALS[$ıøÔ‚Ñ[0x014]]:$ıøÔ‚Ñ{0x0015};$ñœõá=isset($GLOBALS[$ıøÔ‚Ñ{0x000017}])?$GLOBALS[$ıøÔ‚Ñ{0x000017}]:$ıøÔ‚Ñ{0x0015};if($ĞøâÅ==KOD_GROUP_SHARE|| $ĞøâÅ==KOD_GROUP_PATH){system_group::space_change($ñœõá);}else{$Û¶É=$_SESSION[$ıøÔ‚Ñ{0x0001b}][$ıøÔ‚Ñ[0x00001c]];system_member::space_change($Û¶É);}}function check_list_dir(){$Öşù=&$GLOBALS{î®};$ªŸÆ=APPHOST.$Öşù[0x00004e];ºÑ«;$Ç=$Öşù{0x000004f};@ini_set($Öşù[0x050],0x001);$§œœ=stream_context_create(array($Öşù{0x0051}=>array($Öşù[0x00052]=>$Öşù{0x000053},$Öşù[0x0000054]=>0x001)));ú°çø©¼úú£Š¦ÃĞƒÄƒ¾–®Ü®öçÔ±ñÎÔ×ÇÏ‰°É²íÅ®‘ÏÔÕ¡×š¤–°ÓóŞÊÛ´üë¦ÌÀı”‘ˆÅÛº³¢éÅò¿›”˜µ¸;$æŒ=@file_get_contents($ªŸÆ,!1,$§œœ);if(stripos($æŒ,$Ç)===!1){return !0;}else{return !1;}}function php_env_check(){$šÇ¥À=&$GLOBALS{î®};$ë ¡­=$GLOBALS[$šÇ¥À{0x0029}];$¿§û=$šÇ¥À{0x0015};if(!function_exists($šÇ¥À{0x037}))$¿§û.= $šÇ¥À{0x055}.$ë ¡­[$šÇ¥À[0x0056]].$šÇ¥À{0x00057};if(!function_exists($šÇ¥À[0x000058]))$¿§û.= $šÇ¥À{0x055}.$ë ¡­[$šÇ¥À{0x0000059}].$šÇ¥À{0x00057};if(!version_compare(PHP_VERSION,$šÇ¥À[0x05a],$šÇ¥À{0x005b}))$¿§û.= $šÇ¥À{0x055}.$ë ¡­[$šÇ¥À[0x0005c]].$šÇ¥À{0x00057};if(!function_exists($šÇ¥À{0x00005d}))$¿§û.=$šÇ¥À{0x055}.$ë ¡­[$šÇ¥À[0x000005e]].$šÇ¥À{0x00057};if(!check_list_dir())$¿§û.=$šÇ¥À{0x055}.$ë ¡­[$šÇ¥À{0x05f}].$šÇ¥À{0x00057};$°¾Íö=get_path_father(BASIC_PATH);$’=array(BASIC_PATH,DATA_PATH,DATA_PATH.$šÇ¥À[0x0060],DATA_PATH.$šÇ¥À{0x00061},DATA_PATH.$šÇ¥À[0x000062],DATA_PATH.$šÇ¥À{0x0000063});ıÕ¯‹øõâøï·å‘Ø“±ÒÙŒî½½;foreach($’ as $Œ´){if(!path_writeable($Œ´)){$¿§û.= $šÇ¥À{0x055}.str_replace($°¾Íö,$šÇ¥À{0x0015},$Œ´).$šÇ¥À[0x064].$ë ¡­[$šÇ¥À{0x0065}].$šÇ¥À{0x00057};}}if(!function_exists($šÇ¥À[0x00066])|| !function_exists($šÇ¥À{0x000067})|| !function_exists($šÇ¥À[0x0000068])|| !function_exists($šÇ¥À{0x069})){$¿§û.= $šÇ¥À{0x055}.$ë ¡­[$šÇ¥À[0x006a]].$šÇ¥À{0x00057};}return $¿§û;}include(CLASS_DIR.$GLOBALS{î®}{0x0006b});function init_common(){$½=&$GLOBALS{î®};$GLOBALS[$½{0x04b}]=parse_incoming();if(!file_exists(DATA_PATH)){show_tips($½[0x00006c]);}$–À=file_get_contents(BASIC_PATH.$½{0x000006d});$¶=match($–À,$½[0x06e]);if($¶!=KOD_VERSION){show_tips($½{0x006f});}$î¹¢=$½[0x00070].BASIC_PATH.$½{0x000071};if(!file_exists(KOD_SESSION)|| !file_exists(KOD_SESSION.$½[0x0000072])){mk_dir(KOD_SESSION);touch(KOD_SESSION.$½[0x0000072]);if(!file_exists(KOD_SESSION.$½[0x0000072])){show_tips($î¹¢);}}if(!is_writable(KOD_SESSION)|| !is_writable(KOD_SESSION.$½[0x0000072])|| !is_writable(DATA_PATH.$½{0x073})|| !is_writable(DATA_PATH)){show_tips($î¹¢);}$ë=LIB_DIR.$½[0x0074];if(file_exists($ë)){if(!is_writable($ë)){show_tips($î¹¢);}include($ë);update_check($ë);del_file($ë);Æ„ıó³Óªûøê‚ÍÌ’…Şœ­¨ŒæËÓşæš¿;if(file_exists($ë)){show_tips($î¹¢);}user_logout();}}function init_session(){$ñõ=&$GLOBALS{î®};if(isset($_GET[$ñõ{0x00075}])){access_token_check($_GET[$ñõ{0x00075}]);}else{@session_name(SESSION_ID);}if(class_exists($ñõ[0x000076])|| defined($ñõ{0x0000077})|| isset($_SERVER[$ñõ[0x078]])){}else{@session_save_path(KOD_SESSION);}@session_start();@session_write_close();}function access_token_check($íïÆú){$ø›Ğìé=&$GLOBALS{î®};$ÙÛÎ=$GLOBALS[$ø›Ğìé{0x000001d}][$ø›Ğìé{0x0079}][$ø›Ğìé[0x0007a]];$ÙÛÎ=substr(md5($ø›Ğìé{0x00007b}.$ÙÛÎ),0,0x0f);…ä­•¸¬üÒì«ñªÍ¢Äü‹´Ã‡ÂĞé Õâ¸èƒåş»“ü€¨«õ£Èº¡ÔïåÛ²ò­ĞİÎ¦Áìß«ğÅª¬Ø¨»ØĞ½„Ç;$Í‚ƒ¢=Mcrypt::decode($íïÆú,$ÙÛÎ);¦Ü¬öºûûéı¨ÚÃÓ‡ûÃõÌ‚ú”ãÈ—æê‹Ïé±­—¨ç”ÇäıÅÙŠàá§İ¥«§™¿‹â×òÎâÃ¸•ğĞ¾Øä†¾ãÌÌ½Ö®ŸşŒÅ·í·;if(!$Í‚ƒ¢){show_tips($ø›Ğìé[0x000007c]);}session_id($Í‚ƒ¢);}function access_token_get(){$ôğ´ıš=&$GLOBALS{î®};$°£É=session_id();$‰úÙº=$GLOBALS[$ôğ´ıš{0x000001d}][$ôğ´ıš{0x0079}][$ôğ´ıš[0x0007a]];$‰úÙº=substr(md5($ôğ´ıš{0x00007b}.$‰úÙº),0,0x0f);´¶œ´ÂáÒúÏ‹óÉ¦Ä¶;$ù=Mcrypt::encode($°£É,$‰úÙº,0x0e10*0x0000018);‰¨Í„ƒİ¾Á»Æ½ğüÚ¥À¼÷»„°Ö«õ;return $ù;}function init_config(){init_setting();init_lang();init_user_setting();init_session();ˆ…÷´Åµ­‚Â±²™Ü¨§š™‹Î›¥ÒÂ´ß¢ÒèÀáí¹—´îÄ¶;}function need_check_code(){$¬=&$GLOBALS{î®};$öé=$GLOBALS[$¬{0x000001d}][$¬{0x0079}];óî¬‘úû­ ÎËã;if(!$öé[$¬{0x07d}]|| !function_exists($¬[0x00066])|| !function_exists($¬{0x000067})|| !function_exists($¬[0x0000068])|| !function_exists($¬{0x069})){return !1;}else{return !0;}}function get_default_lang(){$õ=&$GLOBALS{î®};$Ö=$õ[0x007e];$¹„=$GLOBALS[$õ{0x000001d}][$õ{0x0007f}][$õ[0x000080]];–ï¢ÙîâìãÒšõÍ–¤îäğÒèØ¿³ ø¸¡Êñ’àáµî»¥Ò©‰¦Ã€ô;$¤ã¿•=array();foreach($¹„ as $³=>$æ±â Ò){$¤ã¿•[$³]=$³;}$¤ã¿•[$õ{0x0000081}]=$õ[0x00003a];$¤ã¿•[$õ[0x082]]=$õ{0x000003b};›ı°ÀÑÚÊ÷ÊìøîĞ¹…ˆâ¸;$Ë=array();if(!isset($_SERVER[$õ{0x0083}])){$®À=$õ[0x00084];}else{$®À=str_replace($õ{0x000085},$õ[0x0000086],strtolower($_SERVER[$õ{0x0083}]));}preg_match_all($õ{0x087},$®À,$ÓƒëÇ,PREG_SET_ORDER);foreach($ÓƒëÇ as $êø){$Ë[$êø[0x001]]=(isset($êø[0x00003])?$êø[0x00003]:0x001);©´òô¢ìäò¦éû‰£”ÕÃŞ……ûáÙşÍ¡¸›ıõï¨ªâ;}arsort($Ë);À÷;foreach($Ë as $³=>$¼Ñ×){if(isset($¤ã¿•[$³])){$Ö=$¤ã¿•[$³];break;}$³=preg_replace($õ[0x0088],$õ{0x0015},$³);if(!isset($Ë[$³])&& isset($¤ã¿•[$³])){$Ö=$¤ã¿•[$³];break;}}return $Ö;Ú­¿´­ÖËÇñÊ½áòçÅ‘µ—“ö´‘‘†èæ·ÆÁä;}function init_lang(){$‚ç=&$GLOBALS{î®};if(isset($_COOKIE[$‚ç{0x00089}])){$”=$_COOKIE[$‚ç{0x00089}];}else{$”=get_default_lang();setcookie_header($‚ç{0x00089},$”,time()+0x0e10*0x0000018*0x064);}$”=str_replace(array($‚ç[0x0010],$‚ç{0x0f},$‚ç[0x00008a],$‚ç{0x000035}),$‚ç{0x0015},$”);if(isset($GLOBALS[$‚ç{0x000001d}][$‚ç{0x000049}][$‚ç[0x000080]])){$”=$GLOBALS[$‚ç{0x000001d}][$‚ç{0x000049}][$‚ç[0x000080]];}if($”==$‚ç{0x000008b})$”=$‚ç[0x00003a];if($”==$‚ç[0x08c])$”=$‚ç{0x000003b};$ŞÛ¿ª=LANGUAGE_PATH.$”.$‚ç{0x008d};if(!file_exists($ŞÛ¿ª)){$”=$‚ç[0x00084];$ŞÛ¿ª=LANGUAGE_PATH.$”.$‚ç{0x008d};}define($‚ç[0x0008e],$”);$GLOBALS[$‚ç{0x0029}]=include($ŞÛ¿ª);}function make_path($¸ş){$Î›ú=&$GLOBALS{î®};$°Ã=array($Î›ú[0x0010],$Î›ú{0x0f},$Î›ú{0x019},$Î›ú{0x00008f},$Î›ú[0x0000090],$Î›ú{0x091},$Î›ú[0x000030],$Î›ú{0x0000031},$Î›ú[0x00034]);ë‰¼£Ğı‰ÖôœëÁûÇ‚¦á¤ÄäŒò;return str_replace($°Ã,$Î›ú{0x000085},$¸ş);}function init_setting(){$îß=&$GLOBALS{î®};$¼ÑŸ=USER_SYSTEM.$îß[0x0092];—ÌíƒèÙÅå¢Ç;$…=$GLOBALS[$îß{0x000001d}][$îß{0x00093}];øÄˆ…ûÖ¡ö‹İÉª¤Øî»æ»ªé¥…¯Œ¨ö˜­ãé˜Ü® âª÷…¢ƒâë®ˆÄÄ«Ùï–€õÅŒ;if(!file_exists($¼ÑŸ)){$¥Ë¡=$…;fileCache::save($¼ÑŸ,$¥Ë¡);}else{$¥Ë¡=fileCache::load($¼ÑŸ);}foreach($… as $ä=>$½…áèı){if(!isset($¥Ë¡[$ä])){$¥Ë¡[$ä]=$½…áèı;}}$GLOBALS[$îß[0x000094]]->setDefaultController($¥Ë¡[$îß{0x0000095}]);Ê;$GLOBALS[$îß[0x000094]]->setDefaultAction($îß[0x096]);½Í™é¨‰€©şÆ¶„Ûé¦êÎ¦©Ôˆ“ÒïŸÔº—;$GLOBALS[$îß{0x000001d}][$îß{0x0079}]=$¥Ë¡;$Õ=USER_SYSTEM.$îß{0x0097};ü±À¦±‡ÜÏŒ¹¹²¤‰ØÎŞáá±;$‡™=$GLOBALS[$îß{0x000001d}][$îß[0x01e]];if(!file_exists($Õ)){fileCache::save($Õ,$‡™);}else{$‡™=fileCache::load($Õ);}$GLOBALS[$îß{0x000001d}][$îß{0x02d}]=$‡™;}function init_user_setting(){$£=&$GLOBALS{î®};$GLOBALS[$£{0x0029}][$£[0x00098]]=$GLOBALS[$£{0x000001d}][$£{0x0079}][$£{0x000099}];öï„¨öá÷ƒ›²¶À¼œòğÎÅòÕÒŒáïûÂµ« ­;$GLOBALS[$£{0x0029}][$£[0x000009a]]=$GLOBALS[$£{0x000001d}][$£{0x0079}][$£{0x09b}];if(isset($Ö“[$£[0x009c]])){$GLOBALS[$£{0x0029}][$£{0x0009d}]=$GLOBALS[$£{0x000001d}][$£{0x0079}][$£[0x009c]];}$Ï=BASIC_PATH.$£[0x00009e];if(file_exists($Ï)){include($Ï);}define($£{0x000009f},$GLOBALS[$£{0x000001d}][$£{0x000049}][$£[0x0a0]]);}function user_logout(){$ÕŸ =&$GLOBALS{î®};@session_destroy();@session_name($ÕŸ {0x00a1});ŞóÛÑå«—ØêåâÛá¦’Ç¿©ì—½óæÔ—é£ûªƒï‡ÔÕ²ì¯³Ø;@session_start();@session_destroy();setcookie(SESSION_ID,$ÕŸ {0x0015},time()-0x0e10,$ÕŸ [0x0010]);setcookie($ÕŸ [0x00098],$ÕŸ {0x0015},time()-0x0e10);††ˆ¯òŸíç‡Â€ğæüœéí¤¿Ä×¬óŒ†Š¤º‚âƒ;setcookie($ÕŸ [0x000a2],$ÕŸ {0x0015},time()-0x0e10);header($ÕŸ {0x0000a3});İª¦Æ±éÆ£;exit;º²äùö½§ëÉ­õíè÷Ğì€»÷¸™£ßßÕÉ§ùšì;}function hash_encode($—İøƒ){$ø•=&$GLOBALS{î®};return str_replace(base64_encode($—İøƒ),array($ø•[0x00000a4],$ø•[0x0010],$ø•{0x0a5}),array($ø•[0x00a6],$ø•{0x000a7},$ø•[0x0000a8]));}function hash_decode($ğ){$–¥ÂÀ=&$GLOBALS{î®};return base64_decode(str_replace($ğ,array($–¥ÂÀ[0x00a6],$–¥ÂÀ{0x000a7},$–¥ÂÀ[0x0000a8]),array($–¥ÂÀ[0x00000a4],$–¥ÂÀ[0x0010],$–¥ÂÀ{0x0a5})));£õ«¼™‹ïÔÄéï±¥ÆÑÅ˜è¤‘ëÌ¸äáÉÖÉÇÉì¾ôªØÇÈÖ³Ç¿Ø’¦úÃ¸çñÌò»¤½„íªÂãÕœåä¼«˜„ëğ’ı¹øÔñàää®× ;}
+				<pre>chmod -R 777 |-|+|5</pre>|-|+|5index.html|-|+|5system/apps.php|-|+|5update.php|-|+|5access_token|-|+|5SaeStorage|-|+|5SAE_APPNAME|-|+|5HTTP_APPNAME|-|+|5setting_system|-|+|5system_password|-|+|5kodExplorer_|-|+|5access_token error!|-|+|5need_check_code|-|+|5en|-|+|5setting_all|-|+|5language|-|+|5zh|-|+|5zh-tw|-|+|5HTTP_ACCEPT_LANGUAGE|-|+|5en|-|+|5_|-|+|5-|-|+|5~([-a-z]+)(;q=([0-9.]+))?~|-|+|5~-.*~|-|+|5kod_user_language|-|+|5..|-|+|5zh_CN|-|+|5zh_TW|-|+|5/main.php|-|+|5LANGUAGE_TYPE|-|+|5*|-|+|5?|-|+|5"|-|+|5system_setting.php|-|+|5setting_system_default|-|+|5app|-|+|5first_in|-|+|5index|-|+|5system_role_group.php|-|+|5kod_name|-|+|5system_name|-|+|5kod_name_desc|-|+|5system_desc|-|+|5powerby|-|+|5kod_power_by|-|+|5config/setting_user.php|-|+|5STATIC_PATH|-|+|5static_path|-|+|5KOD_SESSION_SSO|-|+|5kod_token|-|+|5location:./index.php?user/login|-|+|5+|-|+|5=|-|+|5_a|-|+|5_b|-|+|5_c'
+);
+ë¦¥ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+define($GLOBALS{ï¿½}[0], $GLOBALS{ï¿½}{0x001});
+define($GLOBALS{ï¿½}[0x0002], $GLOBALS{ï¿½}{0x00003});
+define($GLOBALS{ï¿½}[0x000004], $GLOBALS{ï¿½}{0x05});
+define($GLOBALS{ï¿½}[0x006], $GLOBALS{ï¿½}{0x0007});
+define($GLOBALS{ï¿½}[0x00008], $GLOBALS{ï¿½}{0x000009});
+define($GLOBALS{ï¿½}[0x0a], $GLOBALS{ï¿½}{0x00b});
+define($GLOBALS{ï¿½}[0x000c], $GLOBALS{ï¿½}{0x0000d});
+function _DIR_CLEAR($ï¿½)
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (isset($GLOBALS[$ï¿½ï¿½[0x00000e]]) && $GLOBALS[$ï¿½ï¿½[0x00000e]]) {
+        return $ï¿½;
+    }
+    $ï¿½ = str_replace($ï¿½ï¿½{0x0f}, $ï¿½ï¿½[0x0010], trim($ï¿½));
+    if (strstr($ï¿½, $ï¿½ï¿½{0x00011})) {
+        $ï¿½ = preg_replace($ï¿½ï¿½[0x000012], $ï¿½ï¿½[0x0010], $ï¿½);
+    }
+    $ï¿½ = preg_replace($ï¿½ï¿½{0x0000013}, $ï¿½ï¿½[0x0010], $ï¿½);
+
+    return $ï¿½;
+}
+
+function _DIR($ï¿½ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ = _DIR_CLEAR($ï¿½ï¿½);
+    ï¿½ï¿½İ¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ“ï¿½ï¿½;
+    $ï¿½ = iconv_system($ï¿½);
+    ï¿½ï¿½ï¿½Ø›ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½ï¿½Ş‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ù¡;
+    $ï¿½ï¿½ = [
+        KOD_GROUP_PATH,
+        KOD_GROUP_SHARE,
+        KOD_GROUP_ROOT_SELF,
+        KOD_GROUP_ROOT_ALL,
+        KOD_USER_SHARE,
+        KOD_USER_RECYCLE,
+        KOD_USER_FAV,
+    ];
+    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = HOME;
+    ï¿½Ò¾ê© ï¿½;
+    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+    unset($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]]);
+    foreach ($ï¿½ï¿½ as $ï¿½ï¿½ï¿½ï¿½) {
+        if (substr($ï¿½, 0, strlen($ï¿½ï¿½ï¿½ï¿½)) == $ï¿½ï¿½ï¿½ï¿½) {
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]] = $ï¿½ï¿½ï¿½ï¿½;
+            $Ö›ï¿½ = explode($ï¿½ï¿½ï¿½ï¿½[0x0010], $ï¿½);
+            $ï¿½ = $Ö›ï¿½[0];
+            unset($Ö›ï¿½[0]);
+            $è€—ï¿½ï¿½ = implode($ï¿½ï¿½ï¿½ï¿½[0x0010], $Ö›ï¿½);
+            $ï¿½ï¿½ = explode($ï¿½ï¿½ï¿½ï¿½{0x019}, $ï¿½);
+            if (count($ï¿½ï¿½) > 0x001) {
+                $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = trim($ï¿½ï¿½[0x001]);
+            } else {
+                $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+            }
+            break;
+        }
+    }
+    switch ($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]]) {
+        case $ï¿½ï¿½ï¿½ï¿½{0x0015}:
+            $ï¿½ = iconv_system(HOME).$ï¿½;
+            break;
+            ï¿½ï¿½Ú˜ï¿½ï¿½ï¿½ï¿½ï¿½è¹»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‰ï¿½ï¿½ï¿½Øê§¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¨É¯ï¿½;
+        case KOD_USER_RECYCLE:
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = trim(USER_RECYCLE, $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+            ï¿½Ñ»ï¿½ï¿½Æ”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¬Ê ï¿½ï¿½ï¿½ï¿½;
+
+            return iconv_system(USER_RECYCLE).$ï¿½ï¿½ï¿½ï¿½[0x0010].str_replace(KOD_USER_RECYCLE, $ï¿½ï¿½ï¿½ï¿½{0x0015}, $ï¿½);
+            ï¿½ï¿½ï¿½ï¿½;
+        case KOD_USER_FAV:
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = trim(KOD_USER_FAV, $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó«ï¿½Æ¾ï¿½ï¿½ï¿½ì»–ï¿½ï¿½ï¿½ï¿½ï¿½;
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+
+            return KOD_USER_FAV;
+        case KOD_GROUP_ROOT_SELF:
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = trim(KOD_GROUP_ROOT_SELF, $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+
+            return KOD_GROUP_ROOT_SELF;
+        case KOD_GROUP_ROOT_ALL:
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = trim(KOD_GROUP_ROOT_ALL, $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+            ï¿½ï¿½Ê”ï¿½ï¿½ï¿½ï¿½ï¿½Ï¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+
+            return KOD_GROUP_ROOT_ALL;
+        case KOD_GROUP_PATH:
+            $ï¿½ = system_group::get_info($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}]);
+            if (!$GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] || !$ï¿½) {
+                return !1;
+            }
+            owner_group_check($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}]);
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = group_home_path($ï¿½);
+            $ï¿½ = iconv_system($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]]).$è€—ï¿½ï¿½;
+            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß»ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½Ï ï¿½ï¿½Ë™;
+            break;
+        case KOD_GROUP_SHARE:
+            $ï¿½ = system_group::get_info($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}]);
+            if (!$GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] || !$ï¿½) {
+                return !1;
+            }
+            owner_group_check($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}]);
+            ï¿½ÚŒÒ’ï¿½Ñï¿½ï¿½ï¿½ï¿½ëƒÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã†ï¿½ï¿½ï¿½ï¿½;
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = group_home_path($ï¿½).$ï¿½ï¿½ï¿½ï¿½[0x001a];
+            $ï¿½ = iconv_system($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]]).$è€—ï¿½ï¿½;
+            ï¿½Ş¼Ë–ï¿½Ò­ï¿½Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔŸÏƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì’;
+            break;
+        case KOD_USER_SHARE:
+            $ï¿½ = system_member::get_info($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}]);
+            if (!$GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] || !$ï¿½) {
+                return !1;
+            }
+            if ($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] != $_SESSION[$ï¿½ï¿½ï¿½ï¿½{0x0001b}][$ï¿½ï¿½ï¿½ï¿½[0x00001c]]) {
+                $ï¿½ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½ï¿½[0x01e]][$ï¿½ï¿½ï¿½ï¿½{0x001f}][$ï¿½ï¿½ï¿½ï¿½[0x00020]];
+                path_role_check($ï¿½ï¿½ï¿½ï¿½);
+            }
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = $ï¿½ï¿½ï¿½ï¿½{0x0015};
+            $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]] = $ï¿½ï¿½;
+            if ($è€—ï¿½ï¿½ == $ï¿½ï¿½ï¿½ï¿½{0x0015}) {
+                return $ï¿½;
+            } else {
+                $ï¿½ï¿½ï¿½Ëœ = explode($ï¿½ï¿½ï¿½ï¿½[0x0010], $è€—ï¿½ï¿½);
+                $ï¿½ï¿½ï¿½Ëœ[0] = iconv_app($ï¿½ï¿½ï¿½Ëœ[0]);
+                $ï¿½ï¿½Ñ£ = system_member::user_share_get($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}], $ï¿½ï¿½ï¿½Ëœ[0]);
+                $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]] = KOD_USER_SHARE.$ï¿½ï¿½ï¿½ï¿½{0x019}.$GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}].$ï¿½ï¿½ï¿½ï¿½[0x0010].$ï¿½ï¿½ï¿½Ëœ[0].$ï¿½ï¿½ï¿½ï¿½[0x0010];
+                unset($ï¿½ï¿½ï¿½Ëœ[0]);
+                if (!$ï¿½ï¿½Ñ£) {
+                    return !1;
+                }
+                $ï¿½ï¿½ï¿½ï¿½ = rtrim($ï¿½ï¿½Ñ£[$ï¿½ï¿½ï¿½ï¿½{0x000021}], $ï¿½ï¿½ï¿½ï¿½[0x0010]).$ï¿½ï¿½ï¿½ï¿½[0x0010].iconv_app(
+                        implode($ï¿½ï¿½ï¿½ï¿½[0x0010], $ï¿½ï¿½ï¿½Ëœ)
+                    );
+                if ($ï¿½[$ï¿½ï¿½ï¿½ï¿½[0x0000022]] != $ï¿½ï¿½ï¿½ï¿½{0x001f}) {
+                    $ï¿½ï¿½ï¿½ = user_home_path($ï¿½);
+                    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = $ï¿½ï¿½ï¿½.rtrim($ï¿½ï¿½Ñ£[$ï¿½ï¿½ï¿½ï¿½{0x000021}], $ï¿½ï¿½ï¿½ï¿½[0x0010]).$ï¿½ï¿½ï¿½ï¿½[0x0010];
+                    $ï¿½ = $ï¿½ï¿½ï¿½.$ï¿½ï¿½ï¿½ï¿½;
+                } else {
+                    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = $ï¿½ï¿½Ñ£[$ï¿½ï¿½ï¿½ï¿½{0x000021}];
+                    $ï¿½ = $ï¿½ï¿½ï¿½ï¿½;
+                }
+                if ($ï¿½ï¿½Ñ£[$ï¿½ï¿½ï¿½ï¿½{0x023}] == $ï¿½ï¿½ï¿½ï¿½[0x0024]) {
+                    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]] = rtrim($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]], $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+                    $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]] = rtrim($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]], $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+                }
+                $ï¿½ = iconv_system($ï¿½);
+            }
+            break;
+        default:
+            break;
+    }
+    if ($ï¿½ != $ï¿½ï¿½ï¿½ï¿½[0x0010]) {
+        $ï¿½ = rtrim($ï¿½, $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+        if (is_dir($ï¿½)) {
+            $ï¿½ = $ï¿½.$ï¿½ï¿½ï¿½ï¿½[0x0010];
+        }
+    }
+
+    return $ï¿½;
+    ï¿½ï¿½ï¿½î¬Šï¿½;
+}
+
+function _DIR_OUT($ï¿½)
+{
+    $ï¿½ =& $GLOBALS{ï¿½};
+    if (is_array($ï¿½)) {
+        foreach ($ï¿½[$ï¿½{0x00025}] as $ï¿½ï¿½ï¿½ => &$ï¿½ï¿½ï¿½ï¿½) {
+            $ï¿½ï¿½ï¿½ï¿½[$ï¿½{0x000021}] = pre_clear($ï¿½ï¿½ï¿½ï¿½[$ï¿½{0x000021}]);
+        }
+        foreach ($ï¿½[$ï¿½[0x000026]] as $ï¿½ï¿½ï¿½ => &$ï¿½ï¿½ï¿½ï¿½) {
+            $ï¿½ï¿½ï¿½ï¿½[$ï¿½{0x000021}] = pre_clear(rtrim($ï¿½ï¿½ï¿½ï¿½[$ï¿½{0x000021}], $ï¿½[0x0010]).$ï¿½[0x0010]);
+        }
+    } else {
+        $ï¿½ = pre_clear($ï¿½);
+    }
+
+    return $ï¿½;
+}
+
+function pre_clear($ï¿½ï¿½ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½Ç¥ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]];
+    ï¿½ï¿½ï¿½ï¿½ò¹˜°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß°Ó©ï¿½ï¿½ï¿½ï¿½;
+    $Â¢ï¿½Æ³ = rtrim($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x00016]], $ï¿½ï¿½ï¿½ï¿½[0x0010]);
+    ï¿½ğ©“¹ï¿½ï¿½ï¿½ë ©ï¿½ï¿½;
+    $ï¿½âœ”ï¿½ = [KOD_USER_FAV, KOD_GROUP_ROOT_SELF, KOD_GROUP_ROOT_ALL];
+    ï¿½ï¿½ï¿½ï¿½;
+    if (isset($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]]) && in_array($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x014]], $ï¿½âœ”ï¿½)) {
+        return $ï¿½ï¿½ï¿½;
+    }
+    if (ST == $ï¿½ï¿½ï¿½ï¿½{0x0000027}) {
+        return str_replace($Â¢ï¿½Æ³, $ï¿½ï¿½ï¿½ï¿½{0x0015}, $ï¿½ï¿½ï¿½);
+    }
+    if ($GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}] != $ï¿½ï¿½ï¿½ï¿½{0x0015}) {
+        $ï¿½Ç¥ .= $ï¿½ï¿½ï¿½ï¿½{0x019}.$GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000017}].$ï¿½ï¿½ï¿½ï¿½[0x0010];
+    }
+    if (isset($GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]])) {
+        $ï¿½Ç¥ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x0000018]];
+    }
+    $ï¿½ï¿½ï¿½ = $ï¿½Ç¥.str_replace($Â¢ï¿½Æ³, $ï¿½ï¿½ï¿½ï¿½{0x0015}, $ï¿½ï¿½ï¿½);
+    $ï¿½ï¿½ï¿½ = str_replace($ï¿½ï¿½ï¿½ï¿½[0x028], $ï¿½ï¿½ï¿½ï¿½[0x0010], $ï¿½ï¿½ï¿½);
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+
+    return $ï¿½ï¿½ï¿½;
+}
+
+function owner_group_check($ï¿½)
+{
+    $ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (!$ï¿½) {
+        show_json($GLOBALS[$ï¿½ï¿½ï¿½{0x0029}][$ï¿½ï¿½ï¿½[0x0002a]].$ï¿½, !1);
+    }
+    if ($GLOBALS[$ï¿½ï¿½ï¿½[0x00000e]] || (isset($GLOBALS[$ï¿½ï¿½ï¿½{0x00002b}]) && $GLOBALS[$ï¿½ï¿½ï¿½{0x00002b}] === !0)) {
+        return;
+    }
+    $Çï¿½ = system_member::user_auth_group($ï¿½);
+    if ($Çï¿½ == !1) {
+        if ($GLOBALS[$ï¿½ï¿½ï¿½[0x014]] == KOD_GROUP_PATH) {
+            show_json($GLOBALS[$ï¿½ï¿½ï¿½{0x0029}][$ï¿½ï¿½ï¿½[0x000002c]], !1);
+        } else {
+            if ($GLOBALS[$ï¿½ï¿½ï¿½[0x014]] == KOD_GROUP_SHARE) {
+                $ï¿½ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½[0x01e]][$ï¿½ï¿½ï¿½{0x001f}];
+            }
+        }
+    } else {
+        $ï¿½ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½{0x02d}][$Çï¿½];
+        ï¿½ï¿½Ù§ï¿½ï¿½;
+    }
+    path_role_check($ï¿½ï¿½ï¿½ï¿½[$ï¿½ï¿½ï¿½[0x00020]]);
+}
+
+function path_role_check($ï¿½ï¿½)
+{
+    $ï¿½Ù¼ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if ($GLOBALS[$ï¿½Ù¼ï¿½ï¿½[0x00000e]] || (isset($GLOBALS[$ï¿½Ù¼ï¿½ï¿½{0x00002b}]) && $GLOBALS[$ï¿½Ù¼ï¿½ï¿½{0x00002b}] === !0)) {
+        return;
+    }
+    $ï¿½ï¿½ = role_permission_arr($ï¿½ï¿½);
+    if (!isset($ï¿½ï¿½[ST.$ï¿½Ù¼ï¿½ï¿½{0x019}.ACT])) {
+        show_json($GLOBALS[$ï¿½Ù¼ï¿½ï¿½{0x0029}][$ï¿½Ù¼ï¿½ï¿½[0x002e]], !1);
+    }
+}
+
+function role_permission_arr($ï¿½Â‰ï¿½)
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ = [];
+    $ï¿½ï¿½ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x0002f}];
+    ï¿½ï¿½ï¿½;
+    foreach ($ï¿½Â‰ï¿½ as $ï¿½ï¿½İ => $ï¿½ï¿½) {
+        if (!$ï¿½ï¿½) {
+            continue;
+        }
+        $ï¿½ï¿½Ì›ï¿½ = explode($ï¿½ï¿½{0x019}, $ï¿½ï¿½İ);
+        ï¿½ï¿½ï¿½ï¿½×©ï¿½;
+        if (count($ï¿½ï¿½Ì›ï¿½) == 0x0002 && is_array($ï¿½ï¿½ï¿½ï¿½ï¿½[$ï¿½ï¿½Ì›ï¿½[0]]) && is_array($ï¿½ï¿½ï¿½ï¿½ï¿½[$ï¿½ï¿½Ì›ï¿½[0]][$ï¿½ï¿½Ì›ï¿½[0x001]])) {
+            $ï¿½ = array_merge($ï¿½, $ï¿½ï¿½ï¿½ï¿½ï¿½[$ï¿½ï¿½Ì›ï¿½[0]][$ï¿½ï¿½Ì›ï¿½[0x001]]);
+        }
+    }
+    $ï¿½ï¿½ï¿½ï¿½ = [];
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+    foreach ($ï¿½ as $ï¿½ï¿½) {
+        $ï¿½ï¿½ï¿½ï¿½[$ï¿½ï¿½] = $ï¿½ï¿½{0x001f};
+    }
+
+    return $ï¿½ï¿½ï¿½ï¿½;
+    ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ä›©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+}
+
+function checkExt($ï¿½ï¿½ï¿½ï¿½ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (strstr($ï¿½ï¿½ï¿½ï¿½ï¿½, $ï¿½ï¿½ï¿½ï¿½[0x000030]) || strstr($ï¿½ï¿½ï¿½ï¿½ï¿½, $ï¿½ï¿½ï¿½ï¿½{0x0000031}) || $ï¿½ï¿½ï¿½ï¿½ï¿½ == $ï¿½ï¿½ï¿½ï¿½{0x0015}) {
+        return 0;
+    }
+    $ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½[0x032]][$ï¿½ï¿½ï¿½ï¿½{0x0033}];
+    $ï¿½ï¿½ï¿½ = explode($ï¿½ï¿½ï¿½ï¿½[0x00034], $ï¿½);
+    foreach ($ï¿½ï¿½ï¿½ as $ï¿½ï¿½ï¿½ï¿½) {
+        if ($ï¿½ï¿½ï¿½ï¿½ !== $ï¿½ï¿½ï¿½ï¿½{0x0015} && stristr($ï¿½ï¿½ï¿½ï¿½ï¿½, $ï¿½ï¿½ï¿½ï¿½{0x000035}.$ï¿½ï¿½ï¿½ï¿½)) {
+            return 0;
+        }
+    }
+
+    return 0x001;
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½åƒ®ï¿½ï¿½ï¿½ï¿½ï¿½Ğœï¿½ï¿½ï¿½ï¿½ï¿½;
+}
+
+function zip_pre_name($Ø·ï¿½ï¿½, $ï¿½ï¿½Êï¿½ = false)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (get_path_this($Ø·ï¿½ï¿½) == $ï¿½ï¿½ï¿½ï¿½[0x0000036]) {
+        return $ï¿½ï¿½ï¿½ï¿½{0x0015};
+    }
+    if (!function_exists($ï¿½ï¿½ï¿½ï¿½{0x037})) {
+        return $Ø·ï¿½ï¿½;
+    }
+    $ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½ï¿½[0x0038]];
+    if ($ï¿½ï¿½Êï¿½ == !1) {
+        $ï¿½ï¿½Êï¿½ = $ï¿½ï¿½ï¿½ï¿½{0x00039};
+        $ï¿½ï¿½ï¿½ï¿½ = get_default_lang();
+        if (client_is_windows(
+            ) && ($ï¿½ï¿½ï¿½ï¿½ == $ï¿½ï¿½ï¿½ï¿½[0x00003a] || $ï¿½ï¿½ï¿½ï¿½ == $ï¿½ï¿½ï¿½ï¿½{0x000003b} || LANGUAGE_TYPE == $ï¿½ï¿½ï¿½ï¿½{0x000003b} || LANGUAGE_TYPE == $ï¿½ï¿½ï¿½ï¿½{0x000003b})
+        ) {
+            $ï¿½ï¿½Êï¿½ = $ï¿½ï¿½ï¿½ï¿½[0x03c];
+        }
+    }
+    $ï¿½ = @iconv($ï¿½ï¿½, $ï¿½ï¿½Êï¿½, $Ø·ï¿½ï¿½);
+    if (!$ï¿½) {
+        $ï¿½ = $Ø·ï¿½ï¿½;
+    }
+
+    return $ï¿½;
+}
+
+function unzip_filter_ext($íŠ’ï¿½)
+{
+    $ï¿½ = $GLOBALS{ï¿½}{0x003d};
+    ï¿½ï¿½ëˆ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½èœ´ï¿½İµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+    if (checkExt($íŠ’ï¿½)) {
+        return $íŠ’ï¿½;
+    }
+
+    return $íŠ’ï¿½.$ï¿½;
+}
+
+function unzip_pre_name($ï¿½ï¿½)
+{
+    $ï¿½É³ =& $GLOBALS{ï¿½};
+    if (!function_exists($ï¿½É³{0x037})) {
+        return unzip_filter_ext($ï¿½ï¿½);
+    }
+    if (isset($GLOBALS[$ï¿½É³[0x0003e]])) {
+        $ï¿½ = $GLOBALS[$ï¿½É³[0x0003e]];
+    } else {
+        $ï¿½ = get_charset($ï¿½ï¿½);
+    }
+    $Î¬ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½É³{0x000001d}][$ï¿½É³[0x0038]];
+    $ï¿½ï¿½ï¿½ = @iconv($ï¿½, $Î¬ï¿½ï¿½ï¿½, $ï¿½ï¿½);
+    if (!$ï¿½ï¿½ï¿½) {
+        $ï¿½ï¿½ï¿½ = $ï¿½ï¿½;
+    }
+    $ï¿½ï¿½ï¿½ = unzip_filter_ext($ï¿½ï¿½ï¿½);
+
+    return $ï¿½ï¿½ï¿½;
+}
+
+function unzip_charset_get($ï¿½)
+{
+    $ï¿½Ò­ =& $GLOBALS{ï¿½};
+    if (count($ï¿½) == 0) {
+        return $ï¿½Ò­{0x00039};
+    }
+    $ï¿½ï¿½ = [];
+    ï¿½ï¿½ï¿½ï¿½;
+    for ($ï¿½ï¿½ï¿½ï¿½ = 0; $ï¿½ï¿½ï¿½ï¿½ < count($ï¿½); $ï¿½ï¿½ï¿½ï¿½++) {
+        $ï¿½Ì¤ = get_charset($ï¿½[$ï¿½ï¿½ï¿½ï¿½][$ï¿½Ò­{0x00003f}]);
+        ï¿½ï¿½Ì«ï¿½ï¿½Ş¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½Ø¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½;
+        if (!isset($ï¿½ï¿½[$ï¿½Ì¤])) {
+            $ï¿½ï¿½[$ï¿½Ì¤] = 0x001;
+        } else {
+            $ï¿½ï¿½[$ï¿½Ì¤] += 0x001;
+        }
+    }
+    arsort($ï¿½ï¿½);
+    $Åµï¿½ï¿½ï¿½ = array_keys($ï¿½ï¿½);
+    if (in_array($ï¿½Ò­[0x0000040], $Åµï¿½ï¿½ï¿½)) {
+        $Åµï¿½ï¿½ï¿½[0] = $ï¿½Ò­[0x0000040];
+    }
+    $GLOBALS[$ï¿½Ò­[0x0003e]] = $Åµï¿½ï¿½ï¿½[0];
+
+    return $Åµï¿½ï¿½ï¿½[0];
+}
+
+function charset_check(&$ï¿½ï¿½ÓŸ, $ï¿½ï¿½ï¿½ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if ($ï¿½ï¿½ÓŸ === $ï¿½ï¿½ï¿½ï¿½{0x0015} || !function_exists($ï¿½ï¿½ï¿½ï¿½{0x041})) {
+        return !1;
+    }
+    $ï¿½ = $ï¿½ï¿½ï¿½ï¿½{0x00039};
+    $ï¿½ = @mb_convert_encoding($ï¿½ï¿½ÓŸ, $ï¿½, $ï¿½ï¿½ï¿½ï¿½);
+    ï¿½ï¿½ï¿½á’¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âì–¯Êˆï¿½ï¿½ï¿½ï¿½Û‚ï¿½ï¿½İï¿½ï¿½ï¿½ï¿½å©—ï¿½ï¿½ï¿½Æ‹ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¢Öƒï¿½ï¿½ï¿½ï¿½Ò„ï¿½ï¿½ï¿½;
+    $ï¿½ï¿½ï¿½ï¿½ = @mb_convert_encoding($ï¿½, $ï¿½ï¿½ï¿½ï¿½, $ï¿½);
+    if ($ï¿½ï¿½ÓŸ == $ï¿½ï¿½ï¿½ï¿½) {
+        return !0;
+    }
+
+    return !1;
+}
+
+function get_charset(&$ï¿½ï¿½ï¿½)
+{
+    $ï¿½ =& $GLOBALS{ï¿½};
+    if ($ï¿½ï¿½ï¿½ === $ï¿½{0x0015} || !function_exists($ï¿½[0x0042])) {
+        return $ï¿½{0x00039};
+    }
+    $ï¿½ï¿½ï¿½ = strtolower(@mb_detect_encoding($ï¿½ï¿½ï¿½, $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x00043}]));
+    if (substr($ï¿½ï¿½ï¿½, 0, 0x0002) == chr(0xFF).chr(0xFE) || substr($ï¿½ï¿½ï¿½, 0, 0x0002) == chr(0xFE).chr(0xFF)) {
+        $ï¿½ï¿½ï¿½ = $ï¿½[0x000044];
+    } else {
+        if (substr($ï¿½ï¿½ï¿½, 0, 0x00003) == chr(0xEF).chr(0xBB).chr(0xBF)) {
+            $ï¿½ï¿½ï¿½ = $ï¿½{0x00039};
+        } else {
+            if ($ï¿½ï¿½ï¿½ == $ï¿½{0x0000045} || $ï¿½ï¿½ï¿½ == $ï¿½[0x046]) {
+                $ï¿½ï¿½ï¿½ = $ï¿½[0x0000040];
+            } else {
+                if ($ï¿½ï¿½ï¿½ == $ï¿½{0x0047}) {
+                    $ï¿½ï¿½ï¿½ = $ï¿½{0x00039};
+                }
+            }
+        }
+    }
+    if ($ï¿½ï¿½ï¿½ == $ï¿½[0x00048]) {
+        if (charset_check($ï¿½ï¿½ï¿½, $ï¿½{0x00039})) {
+            $ï¿½ï¿½ï¿½ = $ï¿½{0x00039};
+        }
+    }
+
+    return $ï¿½ï¿½ï¿½;
+    ï¿½ï¿½ï¿½ï¿½Öƒï¿½;
+}
+
+function file_upload_size()
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    global $config;
+    if (isset($config[$ï¿½ï¿½{0x000049}][$ï¿½ï¿½[0x000004a]])) {
+        return $config[$ï¿½ï¿½{0x000049}][$ï¿½ï¿½[0x000004a]];
+    }
+    $ï¿½ï¿½ = get_post_max();
+
+    return $ï¿½ï¿½;
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ»;
+}
+
+function space_size_use_check()
+{
+    $Ø¦ =& $GLOBALS{ï¿½};
+    if (!system_space()) {
+        return;
+    }
+    if ($GLOBALS[$Ø¦[0x00000e]] == 0x001) {
+        return;
+    }
+    if ($GLOBALS[$Ø¦[0x014]] == KOD_GROUP_SHARE || $GLOBALS[$Ø¦[0x014]] == KOD_GROUP_PATH) {
+        system_group::space_check($GLOBALS[$Ø¦{0x000017}]);
+    } else {
+        if (ST == $Ø¦{0x0000027}) {
+            $ï¿½ = $GLOBALS[$Ø¦{0x04b}][$Ø¦[0x004c]];
+        } else {
+            $ï¿½ = $_SESSION[$Ø¦{0x0001b}][$Ø¦[0x00001c]];
+        }
+        system_member::space_check($ï¿½);
+    }
+}
+
+function space_size_use_change($ï¿½ï¿½, $ï¿½ = true, $ï¿½ï¿½ = false, $ï¿½ï¿½ï¿½ = false)
+{
+    $ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (!system_space()) {
+        return;
+    }
+    if ($ï¿½ï¿½ === !1) {
+        $ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½[0x014]];
+        $ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½{0x000017}];
+    }
+    $ï¿½ = $ï¿½ ? 0x001 : -0x001;
+    if (is_file($ï¿½ï¿½)) {
+        $ï¿½ï¿½ï¿½ï¿½ = get_filesize($ï¿½ï¿½);
+    } else {
+        if (is_dir($ï¿½ï¿½)) {
+            $ï¿½ï¿½ = _path_info_more($ï¿½ï¿½);
+            $ï¿½ï¿½ï¿½ï¿½ = $ï¿½ï¿½[$ï¿½ï¿½ï¿½{0x0004d}];
+        } else {
+            return;
+        }
+    }
+    if ($ï¿½ï¿½ == KOD_GROUP_SHARE || $ï¿½ï¿½ == KOD_GROUP_PATH) {
+        system_group::space_change($ï¿½ï¿½ï¿½, $ï¿½ï¿½ï¿½ï¿½ * $ï¿½);
+    } else {
+        if (ST == $ï¿½ï¿½ï¿½{0x0000027}) {
+            $ï¿½ï¿½Ø¹ = $GLOBALS[$ï¿½ï¿½ï¿½{0x04b}][$ï¿½ï¿½ï¿½[0x004c]];
+        } else {
+            $ï¿½ï¿½Ø¹ = $_SESSION[$ï¿½ï¿½ï¿½{0x0001b}][$ï¿½ï¿½ï¿½[0x00001c]];
+        }
+        system_member::space_change($ï¿½ï¿½Ø¹, $ï¿½ï¿½ï¿½ï¿½ * $ï¿½);
+    }
+}
+
+function space_size_use_reset()
+{
+    $ï¿½ï¿½Ô‚ï¿½ =& $GLOBALS{ï¿½};
+    if (!system_space()) {
+        return;
+    }
+    $ï¿½ï¿½ï¿½ï¿½ = isset($GLOBALS[$ï¿½ï¿½Ô‚ï¿½[0x014]]) ? $GLOBALS[$ï¿½ï¿½Ô‚ï¿½[0x014]] : $ï¿½ï¿½Ô‚ï¿½{0x0015};
+    $ï¿½ï¿½ï¿½ï¿½ = isset($GLOBALS[$ï¿½ï¿½Ô‚ï¿½{0x000017}]) ? $GLOBALS[$ï¿½ï¿½Ô‚ï¿½{0x000017}] : $ï¿½ï¿½Ô‚ï¿½{0x0015};
+    if ($ï¿½ï¿½ï¿½ï¿½ == KOD_GROUP_SHARE || $ï¿½ï¿½ï¿½ï¿½ == KOD_GROUP_PATH) {
+        system_group::space_change($ï¿½ï¿½ï¿½ï¿½);
+    } else {
+        $Û¶ï¿½ = $_SESSION[$ï¿½ï¿½Ô‚ï¿½{0x0001b}][$ï¿½ï¿½Ô‚ï¿½[0x00001c]];
+        system_member::space_change($Û¶ï¿½);
+    }
+}
+
+function check_list_dir()
+{
+    $ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ï¿½ï¿½ï¿½ = APPHOST.$ï¿½ï¿½ï¿½[0x00004e];
+    ï¿½ï¿½Ñ«ï¿½;
+    $ï¿½ = $ï¿½ï¿½ï¿½{0x000004f};
+    @ini_set($ï¿½ï¿½ï¿½[0x050], 0x001);
+    $ï¿½ï¿½ï¿½ = stream_context_create([$ï¿½ï¿½ï¿½{0x0051} => [$ï¿½ï¿½ï¿½[0x00052] => $ï¿½ï¿½ï¿½{0x000053}, $ï¿½ï¿½ï¿½[0x0000054] => 0x001]]);
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ĞƒÄƒï¿½ï¿½ï¿½Ü®ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‰ï¿½É²ï¿½Å®ï¿½ï¿½ï¿½Õ¡×šï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Û´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ûºï¿½ï¿½ï¿½ï¿½ò¿›”ï¿½ï¿½ï¿½;
+    $ï¿½ = @file_get_contents($ï¿½ï¿½ï¿½ï¿½, !1, $ï¿½ï¿½ï¿½);
+    if (stripos($ï¿½, $ï¿½) === !1) {
+        return !0;
+    } else {
+        return !1;
+    }
+}
+
+function php_env_check()
+{
+    $ï¿½Ç¥ï¿½ =& $GLOBALS{ï¿½};
+    $ë ¡ï¿½ = $GLOBALS[$ï¿½Ç¥ï¿½{0x0029}];
+    $ï¿½ï¿½ï¿½ = $ï¿½Ç¥ï¿½{0x0015};
+    if (!function_exists($ï¿½Ç¥ï¿½{0x037})) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½[0x0056]].$ï¿½Ç¥ï¿½{0x00057};
+    }
+    if (!function_exists($ï¿½Ç¥ï¿½[0x000058])) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½{0x0000059}].$ï¿½Ç¥ï¿½{0x00057};
+    }
+    if (!version_compare(PHP_VERSION, $ï¿½Ç¥ï¿½[0x05a], $ï¿½Ç¥ï¿½{0x005b})) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½[0x0005c]].$ï¿½Ç¥ï¿½{0x00057};
+    }
+    if (!function_exists($ï¿½Ç¥ï¿½{0x00005d})) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½[0x000005e]].$ï¿½Ç¥ï¿½{0x00057};
+    }
+    if (!check_list_dir()) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½{0x05f}].$ï¿½Ç¥ï¿½{0x00057};
+    }
+    $ï¿½ï¿½ï¿½ï¿½ = get_path_father(BASIC_PATH);
+    $ï¿½ = [
+        BASIC_PATH,
+        DATA_PATH,
+        DATA_PATH.$ï¿½Ç¥ï¿½[0x0060],
+        DATA_PATH.$ï¿½Ç¥ï¿½{0x00061},
+        DATA_PATH.$ï¿½Ç¥ï¿½[0x000062],
+        DATA_PATH.$ï¿½Ç¥ï¿½{0x0000063},
+    ];
+    ï¿½ï¿½Õ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø“ï¿½ï¿½ï¿½ÙŒî½½;
+    foreach ($ï¿½ as $ï¿½ï¿½) {
+        if (!path_writeable($ï¿½ï¿½)) {
+            $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.str_replace($ï¿½ï¿½ï¿½ï¿½, $ï¿½Ç¥ï¿½{0x0015}, $ï¿½ï¿½).$ï¿½Ç¥ï¿½[0x064].$ë ¡ï¿½[$ï¿½Ç¥ï¿½{0x0065}].$ï¿½Ç¥ï¿½{0x00057};
+        }
+    }
+    if (!function_exists($ï¿½Ç¥ï¿½[0x00066]) || !function_exists($ï¿½Ç¥ï¿½{0x000067}) || !function_exists(
+            $ï¿½Ç¥ï¿½[0x0000068]
+        ) || !function_exists($ï¿½Ç¥ï¿½{0x069})
+    ) {
+        $ï¿½ï¿½ï¿½ .= $ï¿½Ç¥ï¿½{0x055}.$ë ¡ï¿½[$ï¿½Ç¥ï¿½[0x006a]].$ï¿½Ç¥ï¿½{0x00057};
+    }
+
+    return $ï¿½ï¿½ï¿½;
+}
+
+include(CLASS_DIR.$GLOBALS{ï¿½}{0x0006b});
+function init_common()
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $GLOBALS[$ï¿½ï¿½{0x04b}] = parse_incoming();
+    if (!file_exists(DATA_PATH)) {
+        show_tips($ï¿½ï¿½[0x00006c]);
+    }
+    $ï¿½ï¿½ = file_get_contents(BASIC_PATH.$ï¿½ï¿½{0x000006d});
+    $ï¿½ï¿½ = match($ï¿½ï¿½, $ï¿½ï¿½[0x06e]);
+    if ($ï¿½ï¿½ != KOD_VERSION) {
+        show_tips($ï¿½ï¿½{0x006f});
+    }
+    $î¹¢ = $ï¿½ï¿½[0x00070].BASIC_PATH.$ï¿½ï¿½{0x000071};
+    if (!file_exists(KOD_SESSION) || !file_exists(KOD_SESSION.$ï¿½ï¿½[0x0000072])) {
+        mk_dir(KOD_SESSION);
+        touch(KOD_SESSION.$ï¿½ï¿½[0x0000072]);
+        if (!file_exists(KOD_SESSION.$ï¿½ï¿½[0x0000072])) {
+            show_tips($î¹¢);
+        }
+    }
+    if (!is_writable(KOD_SESSION) || !is_writable(KOD_SESSION.$ï¿½ï¿½[0x0000072]) || !is_writable(
+            DATA_PATH.$ï¿½ï¿½{0x073}
+        ) || !is_writable(DATA_PATH)
+    ) {
+        show_tips($î¹¢);
+    }
+    $ï¿½ = LIB_DIR.$ï¿½ï¿½[0x0074];
+    if (file_exists($ï¿½)) {
+        if (!is_writable($ï¿½)) {
+            show_tips($î¹¢);
+        }
+        include($ï¿½);
+        update_check($ï¿½);
+        del_file($ï¿½);
+        ï¿½Æ„ï¿½ï¿½Óªï¿½ï¿½êï¿½ï¿½Ì’ï¿½Şœï¿½ï¿½ï¿½ï¿½Ëï¿½ï¿½æš¿;
+        if (file_exists($ï¿½)) {
+            show_tips($î¹¢);
+        }
+        user_logout();
+    }
+}
+
+function init_session()
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (isset($_GET[$ï¿½ï¿½{0x00075}])) {
+        access_token_check($_GET[$ï¿½ï¿½{0x00075}]);
+    } else {
+        @session_name(SESSION_ID);
+    }
+    if (class_exists($ï¿½ï¿½[0x000076]) || defined($ï¿½ï¿½{0x0000077}) || isset($_SERVER[$ï¿½ï¿½[0x078]])) {
+    } else {
+        @session_save_path(KOD_SESSION);
+    }
+    @session_start();
+    @session_write_close();
+}
+
+function access_token_check($ï¿½ï¿½ï¿½ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½ï¿½ï¿½{0x0079}][$ï¿½ï¿½ï¿½ï¿½ï¿½[0x0007a]];
+    $ï¿½ï¿½ï¿½ = substr(md5($ï¿½ï¿½ï¿½ï¿½ï¿½{0x00007b}.$ï¿½ï¿½ï¿½), 0, 0x0f);
+    ï¿½ï¿½ä­•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¢ï¿½ï¿½ï¿½ï¿½ï¿½Ã‡ÂĞï¿½ï¿½â¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Èºï¿½ï¿½ï¿½ï¿½Û²ï¿½ï¿½ï¿½Î¦ï¿½ï¿½ß«ï¿½Åªï¿½Ø¨ï¿½ï¿½Ğ½ï¿½ï¿½;
+    $Í‚ï¿½ï¿½ = Mcrypt::decode($ï¿½ï¿½ï¿½ï¿½, $ï¿½ï¿½ï¿½);
+    ï¿½ï¿½Ü¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó‡ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½È—ï¿½ï¿½ï¿½é±­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÅÙŠï¿½ï¿½İ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½Ğ¾ï¿½ä†¾ï¿½ï¿½Ì½Ö®ï¿½ï¿½ï¿½Åï¿½ï¿½;
+    if (!$Í‚ï¿½ï¿½) {
+        show_tips($ï¿½ï¿½ï¿½ï¿½ï¿½[0x000007c]);
+    }
+    session_id($Í‚ï¿½ï¿½);
+}
+
+function access_token_get()
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ï¿½ï¿½ = session_id();
+    $ï¿½ï¿½Ùï¿½ = $GLOBALS[$ï¿½ï¿½ï¿½ï¿½{0x000001d}][$ï¿½ï¿½ï¿½ï¿½{0x0079}][$ï¿½ï¿½ï¿½ï¿½[0x0007a]];
+    $ï¿½ï¿½Ùï¿½ = substr(md5($ï¿½ï¿½ï¿½ï¿½{0x00007b}.$ï¿½ï¿½Ùï¿½), 0, 0x0f);
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‹ï¿½É¦Ä¶;
+    $ï¿½ = Mcrypt::encode($ï¿½ï¿½ï¿½, $ï¿½ï¿½Ùï¿½, 0x0e10 * 0x0000018);
+    ï¿½ï¿½ï¿½Í„ï¿½İ¾ï¿½ï¿½Æ½ï¿½ï¿½Ú¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö«ï¿½ï¿½;
+
+    return $ï¿½;
+}
+
+function init_config()
+{
+    init_setting();
+    init_lang();
+    init_user_setting();
+    init_session();
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Â±ï¿½ï¿½Ü¨ï¿½ï¿½ï¿½ï¿½ï¿½Î›ï¿½ÒÂ´ß¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶;
+}
+
+function need_check_code()
+{
+    $ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ï¿½ = $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x0079}];
+    ï¿½ï¿½î¬‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+    if (!$ï¿½ï¿½[$ï¿½{0x07d}] || !function_exists($ï¿½[0x00066]) || !function_exists($ï¿½{0x000067}) || !function_exists(
+            $ï¿½[0x0000068]
+        ) || !function_exists($ï¿½{0x069})
+    ) {
+        return !1;
+    } else {
+        return !0;
+    }
+}
+
+function get_default_lang()
+{
+    $ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ = $ï¿½[0x007e];
+    $ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x0007f}][$ï¿½[0x000080]];
+    ï¿½ï¿½ï¢ï¿½ï¿½ï¿½ï¿½ï¿½Òšï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î»¥Ò©ï¿½ï¿½Ã€ï¿½;
+    $ï¿½ã¿• = [];
+    foreach ($ï¿½ï¿½ï¿½ as $ï¿½ï¿½ => $ï¿½ï¿½ï¿½) {
+        $ï¿½ã¿•[$ï¿½ï¿½] = $ï¿½ï¿½;
+    }
+    $ï¿½ã¿•[$ï¿½{0x0000081}] = $ï¿½[0x00003a];
+    $ï¿½ã¿•[$ï¿½[0x082]] = $ï¿½{0x000003b};
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½ï¿½;
+    $ï¿½ = [];
+    if (!isset($_SERVER[$ï¿½{0x0083}])) {
+        $ï¿½ï¿½ï¿½ = $ï¿½[0x00084];
+    } else {
+        $ï¿½ï¿½ï¿½ = str_replace($ï¿½{0x000085}, $ï¿½[0x0000086], strtolower($_SERVER[$ï¿½{0x0083}]));
+    }
+    preg_match_all($ï¿½{0x087}, $ï¿½ï¿½ï¿½, $Óƒï¿½ï¿½, PREG_SET_ORDER);
+    foreach ($Óƒï¿½ï¿½ as $ï¿½ï¿½) {
+        $ï¿½[$ï¿½ï¿½[0x001]] = (isset($ï¿½ï¿½[0x00003]) ? $ï¿½ï¿½[0x00003] : 0x001);
+        ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş…ï¿½ï¿½ï¿½ï¿½ï¿½Í¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¨ªï¿½;
+    }
+    arsort($ï¿½);
+    ï¿½ï¿½ï¿½;
+    foreach ($ï¿½ as $ï¿½ï¿½ => $ï¿½ï¿½ï¿½ï¿½ï¿½) {
+        if (isset($ï¿½ã¿•[$ï¿½ï¿½])) {
+            $ï¿½ = $ï¿½ã¿•[$ï¿½ï¿½];
+            break;
+        }
+        $ï¿½ï¿½ = preg_replace($ï¿½[0x0088], $ï¿½{0x0015}, $ï¿½ï¿½);
+        if (!isset($ï¿½[$ï¿½ï¿½]) && isset($ï¿½ã¿•[$ï¿½ï¿½])) {
+            $ï¿½ = $ï¿½ã¿•[$ï¿½ï¿½];
+            break;
+        }
+    }
+
+    return $ï¿½;
+    ï¿½Ú­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½Å‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+}
+
+function init_lang()
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    if (isset($_COOKIE[$ï¿½ï¿½{0x00089}])) {
+        $ï¿½ = $_COOKIE[$ï¿½ï¿½{0x00089}];
+    } else {
+        $ï¿½ = get_default_lang();
+        setcookie_header($ï¿½ï¿½{0x00089}, $ï¿½, time() + 0x0e10 * 0x0000018 * 0x064);
+    }
+    $ï¿½ = str_replace([$ï¿½ï¿½[0x0010], $ï¿½ï¿½{0x0f}, $ï¿½ï¿½[0x00008a], $ï¿½ï¿½{0x000035}], $ï¿½ï¿½{0x0015}, $ï¿½);
+    if (isset($GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x000049}][$ï¿½ï¿½[0x000080]])) {
+        $ï¿½ = $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x000049}][$ï¿½ï¿½[0x000080]];
+    }
+    if ($ï¿½ == $ï¿½ï¿½{0x000008b}) {
+        $ï¿½ = $ï¿½ï¿½[0x00003a];
+    }
+    if ($ï¿½ == $ï¿½ï¿½[0x08c]) {
+        $ï¿½ = $ï¿½ï¿½{0x000003b};
+    }
+    $ï¿½Û¿ï¿½ = LANGUAGE_PATH.$ï¿½.$ï¿½ï¿½{0x008d};
+    if (!file_exists($ï¿½Û¿ï¿½)) {
+        $ï¿½ = $ï¿½ï¿½[0x00084];
+        $ï¿½Û¿ï¿½ = LANGUAGE_PATH.$ï¿½.$ï¿½ï¿½{0x008d};
+    }
+    define($ï¿½ï¿½[0x0008e], $ï¿½);
+    $GLOBALS[$ï¿½ï¿½{0x0029}] = include($ï¿½Û¿ï¿½);
+}
+
+function make_path($ï¿½ï¿½)
+{
+    $Î›ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ï¿½ï¿½ = [
+        $Î›ï¿½[0x0010],
+        $Î›ï¿½{0x0f},
+        $Î›ï¿½{0x019},
+        $Î›ï¿½{0x00008f},
+        $Î›ï¿½[0x0000090],
+        $Î›ï¿½{0x091},
+        $Î›ï¿½[0x000030],
+        $Î›ï¿½{0x0000031},
+        $Î›ï¿½[0x00034],
+    ];
+    ï¿½ë‰¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½;
+
+    return str_replace($ï¿½ï¿½ï¿½, $Î›ï¿½{0x000085}, $ï¿½ï¿½);
+}
+
+function init_setting()
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+    $ï¿½ÑŸ = USER_SYSTEM.$ï¿½ï¿½[0x0092];
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+    $ï¿½ = $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x00093}];
+    ï¿½ï¿½Äˆï¿½ï¿½Ö¡ï¿½ï¿½ï¿½Éªï¿½ï¿½ï¿½æ»ªé¥…ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë®ˆÄÄ«ï¿½ï–€ï¿½ÅŒï¿½;
+    if (!file_exists($ï¿½ÑŸ)) {
+        $ï¿½Ë¡ = $ï¿½;
+        fileCache::save($ï¿½ÑŸ, $ï¿½Ë¡);
+    } else {
+        $ï¿½Ë¡ = fileCache::load($ï¿½ÑŸ);
+    }
+    foreach ($ï¿½ as $ï¿½ => $ï¿½ï¿½ï¿½ï¿½ï¿½) {
+        if (!isset($ï¿½Ë¡[$ï¿½])) {
+            $ï¿½Ë¡[$ï¿½] = $ï¿½ï¿½ï¿½ï¿½ï¿½;
+        }
+    }
+    $GLOBALS[$ï¿½ï¿½[0x000094]]->setDefaultController($ï¿½Ë¡[$ï¿½ï¿½{0x0000095}]);
+    ï¿½ï¿½;
+    $GLOBALS[$ï¿½ï¿½[0x000094]]->setDefaultAction($ï¿½ï¿½[0x096]);
+    ï¿½ï¿½Í™é¨‰ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Î¦ï¿½Ôˆï¿½ï¿½ï¿½Ôºï¿½;
+    $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x0079}] = $ï¿½Ë¡;
+    $ï¿½ = USER_SYSTEM.$ï¿½ï¿½{0x0097};
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½;
+    $ï¿½ï¿½ï¿½ï¿½ = $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½[0x01e]];
+    if (!file_exists($ï¿½)) {
+        fileCache::save($ï¿½, $ï¿½ï¿½ï¿½ï¿½);
+    } else {
+        $ï¿½ï¿½ï¿½ï¿½ = fileCache::load($ï¿½);
+    }
+    $GLOBALS[$ï¿½ï¿½{0x000001d}][$ï¿½ï¿½{0x02d}] = $ï¿½ï¿½ï¿½ï¿½;
+}
+
+function init_user_setting()
+{
+    $ï¿½ =& $GLOBALS{ï¿½};
+    $GLOBALS[$ï¿½{0x0029}][$ï¿½[0x00098]] = $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x0079}][$ï¿½{0x000099}];
+    ï¿½ï¿½ï„¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒŒï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½;
+    $GLOBALS[$ï¿½{0x0029}][$ï¿½[0x000009a]] = $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x0079}][$ï¿½{0x09b}];
+    if (isset($Ö“[$ï¿½[0x009c]])) {
+        $GLOBALS[$ï¿½{0x0029}][$ï¿½{0x0009d}] = $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x0079}][$ï¿½[0x009c]];
+    }
+    $ï¿½ = BASIC_PATH.$ï¿½[0x00009e];
+    if (file_exists($ï¿½)) {
+        include($ï¿½);
+    }
+    define($ï¿½{0x000009f}, $GLOBALS[$ï¿½{0x000001d}][$ï¿½{0x000049}][$ï¿½[0x0a0]]);
+}
+
+function user_logout()
+{
+    $ÕŸï¿½ =& $GLOBALS{ï¿½};
+    @session_destroy();
+    @session_name($ÕŸï¿½{0x00a1});
+    ï¿½ï¿½ï¿½ï¿½ï¿½å«—Øï¿½ï¿½ï¿½ï¿½á¦’ï¿½Ç¿ï¿½ì—½ï¿½ï¿½Ô—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ²ì¯³ï¿½;
+    @session_start();
+    @session_destroy();
+    setcookie(SESSION_ID, $ÕŸï¿½{0x0015}, time() - 0x0e10, $ÕŸï¿½[0x0010]);
+    setcookie($ÕŸï¿½[0x00098], $ÕŸï¿½{0x0015}, time() - 0x0e10);
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¬óŒ†Šï¿½ï¿½ï¿½ï¿½;
+    setcookie($ÕŸï¿½[0x000a2], $ÕŸï¿½{0x0015}, time() - 0x0e10);
+    header($ÕŸï¿½{0x0000a3});
+    ï¿½İªï¿½Æ±ï¿½Æ£;
+    exit;
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É­ï¿½ï¿½ï¿½ï¿½ï¿½ì€»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É§ï¿½ï¿½ï¿½;
+}
+
+function hash_encode($ï¿½ï¿½ï¿½ï¿½)
+{
+    $ï¿½ï¿½ =& $GLOBALS{ï¿½};
+
+    return str_replace(
+        base64_encode($ï¿½ï¿½ï¿½ï¿½), [$ï¿½ï¿½[0x00000a4], $ï¿½ï¿½[0x0010], $ï¿½ï¿½{0x0a5}], [$ï¿½ï¿½[0x00a6], $ï¿½ï¿½{0x000a7}, $ï¿½ï¿½[0x0000a8]]
+    );
+}
+
+function hash_decode($ï¿½)
+{
+    $ï¿½ï¿½ï¿½ï¿½ =& $GLOBALS{ï¿½};
+
+    return base64_decode(
+        str_replace(
+            $ï¿½, [$ï¿½ï¿½ï¿½ï¿½[0x00a6], $ï¿½ï¿½ï¿½ï¿½{0x000a7}, $ï¿½ï¿½ï¿½ï¿½[0x0000a8]], [$ï¿½ï¿½ï¿½ï¿½[0x00000a4], $ï¿½ï¿½ï¿½ï¿½[0x0010], $ï¿½ï¿½ï¿½ï¿½{0x0a5}]
+        )
+    );
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï±¥ï¿½ï¿½Å˜è¤‘ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øï¿½ï¿½Öï¿½Ç¿Øï¿½ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ò»¤½ï¿½ï¿½ï¿½ï¿½Õœï¿½ä¼«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½× ;
+}
