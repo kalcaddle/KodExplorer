@@ -37,6 +37,9 @@ abstract class Controller {
 	 */
 	public function loadModel($class){
 		$args = func_get_args();
+		if ( !$this->$class ) {
+            show_tips($class.' model not exists');
+        }
 		$this -> $class = call_user_func_array('init_model', $args);
 		return $this -> $class;
 	} 

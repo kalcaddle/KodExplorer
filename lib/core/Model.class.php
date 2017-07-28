@@ -12,24 +12,22 @@
  */
 
 abstract class Model {
-	var $db = null;
-	var $in;
-	var $config;
+	protected $db = null;
+	public $in;
 
 	/**
 	 * 构造函数
 	 * @return Null 
 	 */
-	function __construct(){
+	public function __construct(){
 		global $g_config, $in;
 		$this -> in = $in;
-		$this -> config = $config;
 	}
 	
 	/**
 	 * TODO db 
 	 */
-	function db(){
+	public function db(){
 		if ($this ->db != NULL) {
 			return $this ->db;
 		}else{

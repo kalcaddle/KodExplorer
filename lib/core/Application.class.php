@@ -13,7 +13,7 @@
 class Application {
 	public $default_controller = null;	//默认的类名
 	public $default_do = null;			//默认的方法名
-	public $sub_dir ='';				//控制器子目录
+	public $sub_dir = '';				//控制器子目录
 	public $model = '';				//控制器对应模型  对象。
 	
 	/**
@@ -70,7 +70,7 @@ class Application {
 	 */
 	private function autorun(){
 		global $config; 
-		if (count($config['autorun']) > 0) {
+		if (count($config['autorun'])) {
 			foreach ($config['autorun'] as $key => $var) {
 				$this->appRun($var['controller'],$var['function']);				
 			}
