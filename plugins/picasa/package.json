@@ -1,0 +1,42 @@
+{
+	"id":"picasa",
+	"name":"{{LNG.Plugin.default.picasa}}",
+	"title":"",
+	"version":"1.0",
+	"source":{
+		"className":"x-item-file x-jpg",
+		"screenshoot":[
+			"{{staticPath}}images/wall_page/1.jpg",
+			"{{staticPath}}images/wall_page/5.jpg"
+		]
+	},
+	"category":"media,file",
+	"description":"{{LNG.Plugin.default.picasa}}",
+	"keywords":"",
+	"auther":{
+		"copyright":"kodcloud.",
+		"homePage":"http://www.kodcloud.com",
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		},
+		"sep1001":"<hr/>",
+		"fileExt":{
+			"type":"tags",
+			"display":"{{LNG.Plugin.Config.fileExt}}",
+			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
+			"value":"jpg,jpeg,png,bmp,gif,ico,svg,cur,webp",
+		},
+		"fileSort":{
+			"type":"number",
+			"display":"{{LNG.Plugin.Config.fileSort}}",
+			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
+			"value":10
+		}
+	}
+}

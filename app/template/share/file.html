@@ -1,0 +1,45 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo $shareInfo['name'].' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_code_edit.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+<style type="text/css">
+	.frame-main{bottom: 32px;}
+</style>
+
+<body>
+	<?php include(TEMPLATE.'common/navbarShare.html');?>
+	<div class="frame-main">
+		<!-- bindary-box -->
+		<div class="bindary-box hidden">
+			<div class="title"><div class="ico"></div></div>
+			<div class="content-info">
+				<div class="name"></div>
+				<div class="size"><span></span><i class="share-time"></i></div>
+				<div class="btn-group">
+					<a type="button" class="btn btn-primary btn-download" href=""><?php echo LNG('download');?></a>
+				</div>
+				<div class="error-tips"><?php echo LNG('share_error_show_tips');?></div>
+			</div>
+		</div>
+		<div class="content-box"></div>
+	</div><!-- / frame-main end-->
+	<?php include(TEMPLATE.'common/footer.html');?>
+	<script type="text/javascript">
+		AUTH  = {'explorer.fileDownload':<?php echo $canDownload;?>};
+		G.user = "<?php echo clear_html($_GET['user']);?>";
+		G.path = "<?php echo (isset($_GET['path'])?clear_html($_GET['path']):'') ;?>";
+		G.sid = "<?php echo clear_html($_GET['sid']);?>";
+		G.shareInfo = <?php echo json_encode($shareInfo);?>;
+		G.theme = "<?php echo $configTheme;?>";
+		seajs.config({
+			preload: [
+				"lib/jquery-1.8.0.min",
+				'lib/ace/src-min-noconflict/ace'
+			]
+		});
+		seajs.use("app/src/shareIndex/main");
+	</script>
+</body>
+</html>

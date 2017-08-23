@@ -1,18 +1,18 @@
 # KodExplorer
 
-[![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kalcaddle.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kalcaddle.com) [![Download](http://kalcaddle.com/tools/version/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
+[![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kodcloud.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kodcloud.com) [![Download](http://kodcloud.com/tools/version/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
 
-> KodExplorer is a file manager for web. It is also a web IDE / browser based code editor, which allows you to develop websites directly within the web browser.You can run KodExplorer either online or locally,on Linux, Windows or Mac based platforms. The only requirement is to have PHP 5 available.
+> KodExplorer is a file manager for web. It is also a web code editor, which allows you to develop websites directly within the web browser.You can run KodExplorer either online or locally,on Linux, Windows or Mac based platforms. The only requirement is to have PHP 5 available.
 
 ![](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/common2.png)
 ![](https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/common3.png)
 
 
-### [Demo](http://demo.kalcaddle.com/) [user: demo/demo]
+### [Demo](http://demo.kodcloud.com/) [user: demo/demo]
 -----
 - [Change log](./ChangeLog.md)
-- [English Document](http://kalcaddle.com#lang=en)
-- [中文文档](http://kalcaddle.com/#lang=zh_CN)
+- [English Document](http://kodcloud.com#lang=en)
+- [中文文档](http://kodcloud.com/#lang=zh_CN)
 - [Donate](https://www.paypal.me/kalcaddle)
 
 # Features
@@ -171,6 +171,6 @@ kod is made possible by the following open source projects.
 
 
 # License
-kodexplorer is issued under GPLv3.   license.[License](http://kalcaddle.com/tools/licenses/license.txt)  
+kodcloud is issued under GPLv3.   license.[License](http://kodcloud.com/tools/licenses/license.txt)  
 Contact: kalcaddle#qq.com  
-Copyright (C) 2013 kalcaddle.com  
+Copyright (C) 2013 kodcloud.com  

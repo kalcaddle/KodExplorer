@@ -1,0 +1,40 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_setting.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+<body>
+	<div id="body">
+		<div class="app-menu-left menu-left">	
+			<h1><?php echo LNG('app');?></h1>
+			<ul class='setting'>
+				<a data-type="all"><i class="font-icon icon-reorder"></i><?php echo LNG('app_group_all');?></a>
+				<?php foreach($config['settings']['appType'] as $item){?>
+					<a data-type="<?php echo $item['type'];?>">
+					<i class="font-icon <?php echo $item['class']?>"></i><?php echo LNG($item['name']);?></a>
+				<?php } ?>
+			</ul>
+		</div>		
+		<div class='app-content main'>
+			<div class="app-model">
+				<?php if($GLOBALS['isRoot']){ ?><button class="btn btn-default create-app" action='createApp'><?php echo LNG('app_create');?></button><?php } ?>
+				<div class='h1'><i class="font-icon icon-user"></i><?php echo LNG('app_group_all');?></div>
+				<ul class="app-list"></ul>
+			</div>
+		</div>
+	</div>
+
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		seajs.config({
+			base: "<?php echo STATIC_PATH;?>js/",
+			preload: ["lib/jquery-1.8.0.min"],
+			map:[
+				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
+			]
+		});
+		seajs.use('app/src/app/main');
+	</script>
+</body>
+</html>

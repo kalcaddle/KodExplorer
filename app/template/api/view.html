@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<link href="<?php echo STATIC_PATH;?>images/common/favicon.ico" rel="Shortcut Icon">
+	<link href="<?php echo STATIC_PATH;?>style/common.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet"/>
+	<link href="./static/style/font-awesome/css/font-awesome.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet">
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_explorer.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/win10.css?ver=<?php echo KOD_VERSION;?>"/>
+	<title>File View</title>
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">
+	<![endif]--> 
+</head>
+
+
+<style type="text/css">
+	body{background: transparent;}
+	.frame-main {top: 0;bottom: 0;}
+	.show-code{width: 100%;left: 0;margin: 0;border: none;padding: 0;}
+	.content-box{position: absolute;bottom: 0;top: 0;width: 100%;}
+	.content-box iframe{width: 100%;height: 100%;}
+	.content-box.markdown-preview {padding: 0;height: 100%;}
+	.show-code,.show-code .ace_editor{height: 100%;}
+
+	.eidior-box{width:100%;height:100%;overflow: hidden;position: relative;}
+	.eidior-content{position: absolute;top: 0;left: 0;bottom: 0;right: 0;}
+	.eidior-content .ace_editor{height:100%;}
+	.content-markdown {overflow: auto;height: 100%;padding: 0 20px;}
+
+	.context-menu-list.menu-zip-list-folder{display:none !important;}
+	.menu-zip-list-file .context-menu-item.unzip-to,
+	.menu-zip-list-file .context-menu-item.unzip-this,
+	.menu-zip-list-file .context-menu-item.info,
+	.menu-zip-list-file .context-menu-item.open-with,
+	.menu-zip-list-file .context-menu-item.context-menu-separator{display:none !important;}
+
+	.ztree li a,.ztree li a:hover,
+	.ztree li a.curSelectedNode, .ztree li span.name,
+	.ztree li a.curDropTreeNode{height:30px;line-height:30px;}
+	.ztree li span.tree_icon {height: 28px;width: 26px;}
+	.ztree li span.tree_icon .x-item-file{width: 24px;height: 24px;}
+	.zip-view-dialog .zip-view-content .ztree li a .menu-item-parent{width:30px;height:30px;line-height: 30px;}
+</style>
+
+<body>
+	<div class="full-background"></div>
+	<div class="init-loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
+	<div class="frame-main">
+		<div class="bindary-box hidden">
+			<div class="title"><div class="ico"></div></div>
+			<div class="content-info">
+				<div class="name"></div>
+				<div class="size"><span></span><i class="share-time"></i></div>
+				<div class="error-tips"><?php echo LNG('share_error_show_tips');?></div>
+			</div>
+		</div>
+		<div class="content-box"></div>
+	</div><!-- / frame-main end-->
+	<script type="text/javascript" src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
+	<script type="text/javascript" src="./index.php?share/commonJs&st=api&act=view#id=<?php echo rand_string(4);?>"></script>
+
+	<?php
+		$name = rawurldecode(get_path_this($_GET['path']));
+		if(isset($_GET['name'])){
+			$name = rawurldecode($_GET['name']);
+		}
+	?>
+	<script type="text/javascript">
+		G.shareInfo = {
+			path:"<?php echo $_GET['path'];?>",
+			name:"<?php echo $name;?>",
+			mtime:0,
+			size:0
+		}
+		seajs.config({
+			base: "<?php echo STATIC_PATH;?>js/",
+			preload: ["lib/jquery-1.8.0.min",'lib/ace/src-min-noconflict/ace'],
+			map:[
+				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
+			]
+		});
+		seajs.use("<?php echo STATIC_JS;?>/src/api/view/main");
+	</script>
+</body>
+</html>

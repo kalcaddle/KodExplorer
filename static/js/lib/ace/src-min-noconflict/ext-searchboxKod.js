@@ -154,7 +154,7 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 		<div class="ace_search_form">\
 			<div class="ace_search_input">\
 				<input class="ace_search_field" placeholder="Search for" spellcheck="false"></input>\
-				<span class="search_info"></span>\
+				<span class="search-info"></span>\
 				<div class="history-list dropup">\
 					<span class="dropmenu" data-toggle="dropdown" id="history_search" aria-haspopup="true" aria-expanded="false"><i class="font-icon icon-time"></i></span>\
 					<ul class="dropdown-menu menu-top" aria-labelledby="history_search"></ul>\
@@ -228,20 +228,20 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 			});
 		}
 		this.resetEditorHeight = function(show){
-			var $search = $('.search_content');
-			var $search_body = $('.ace_search');
-			var $edit_body = $('.edit_body');
+			var $search = $('.search-content');
+			var $searchBody = $('.ace_search');
+			var $editBody = $('.edit-body');
 			if(show){
 				$search.removeClass('hidden');
-				$edit_body.css('bottom',$search_body.outerHeight());
+				$editBody.css('bottom',$searchBody.outerHeight());
 			}else{
 				$search.addClass('hidden');
-				$edit_body.css('bottom',0);
+				$editBody.css('bottom',0);
 			}
 			Editor.current() && Editor.current().resize();
 		}
 		this.setEditor = function(appSpace,editor) {
-			var $search = $('.search_content');
+			var $search = $('.search-content');
 			if($search.html() == ''){
 				$search.get(0).appendChild(this.element);
 			}
@@ -504,11 +504,11 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 				searchNum = ranges.length;
 			}
 			html ='<span class="search_at_index">'+ searchCurrent +'</span>of<span class="search_total_num">' + searchNum + '</span>';
-			$(".search_info").html(html);
+			$(".search-info").html(html);
 			if(searchCurrent == 1){
-				$(".search_info").addClass('search-first');
+				$(".search-info").addClass('search-first');
 			}else{
-				$(".search_info").removeClass('search-first');
+				$(".search-info").removeClass('search-first');
 			}
 		};
 		this.findNext = function() {

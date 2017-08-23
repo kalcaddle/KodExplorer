@@ -1,0 +1,50 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo LNG('ui_desktop').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_desktop.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+<body style="overflow: hidden;" oncontextmenu="return core.contextmenu();" id="page-desktop">
+	<?php include(TEMPLATE.'common/navbar.html');?>
+	<div class='bodymain drag-upload-box desktop' style="background-image:url('<?php echo $wall;?>');">
+		<img class="background" />
+		<div class="file-continer file-list-icon hidden"></div>
+	</div><!-- html5拖拽上传list -->
+
+	<a href="#" class="start"></a>
+	<div id="taskbar" style="display:block;"><div id="desktop"></div></div>
+	<div class="taskbar-right">
+ 		<div class="copyright dropdown-toggle"><i class="icon-info-sign"></i></div>
+		<div class="tab-hide-all"></div>
+	</div>
+	<div id="menuwin">
+		<div id="startmenu"></div>
+		<ul id="programs">
+			<li class='setting_help'><a href="#" onclick="core.setting('help');"><?php echo LNG('setting_help');?></a></li>
+			<li><div id="leftspliter"></div></li>
+			<li class='setting_about'><a href="#" onclick="core.setting('about');"><?php echo LNG('setting_about');?></a></li>
+			<li class='setting_user'><a href="#" onclick="core.setting('user');"><?php echo LNG('setting');?></a></li>
+			<li class='home_page'><a href="#" onclick="core.setting('user');"><?php echo LNG('setting');?></a></li>
+		</ul>
+		<ul id="links">
+			<li class="icon"></li>
+			<li><a href="#" onclick="core.explorer('<?php echo KOD_USER_SHARE.':'.$_SESSION['kodUser']['userID'].'/';?>','<?php echo LNG('my_share');?>');"><span><?php echo LNG('my_share');?></span></a></li>
+			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/picture','<?php echo LNG('my_picture');?>');"><span><?php echo LNG('my_picture');?></span></a></li>
+			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/music','<?php echo LNG('my_music');?>');"><span><?php echo LNG('my_music');?></span></a></li>
+			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/download','<?php echo LNG('download');?>');"><span><?php echo LNG('download');?></span></a></li>
+			<li><div id="rightspliter"></div></li>
+			<li><a href="#" onclick="core.setting('wall');"><span><?php echo LNG('setting_wall');?></span></a></li>
+			<li><a href="#" onclick="core.setting('fav');"><span><?php echo LNG('setting_fav');?></span></a></li>
+			<li><a href="#" onclick="core.setting('theme');"><span><?php echo LNG('setting_theme');?></span></a></li>
+			<li><a href="./index.php?user/logout" style="margin-top:70px;"><span><?php echo LNG('ui_logout');?>></span></a></li>
+		</ul>
+	</div>
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		var desktopApps = <?php echo json_encode($desktopApps);?>;
+		G.thisPath = G.myDesktop;
+		seajs.use("app/src/desktop/main");
+	</script>
+</body>
+</html>
+

@@ -1,8 +1,8 @@
 /*changed by warlee
-* @link http://www.kalcaddle.com/
-* @author warlee | e-mail:kalcaddle@qq.com
+* @link http://kodcloud.com/
+* @author warlee | e-mail:kodcloud@qq.com
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
-* @license http://kalcaddle.com/tools/licenses/license.txt
+* @license http://kodcloud.com/tools/license/license.txt
 */
 
 //return 时间戳到秒
@@ -16,7 +16,14 @@ var timeFloat = function(){
 	return time/1000;
 }
 var urlEncode = encodeURIComponent;
-var urlDecode = decodeURIComponent;
+var urlDecode = function(str){
+	try {
+		return decodeURIComponent(str);
+	} catch (e) {
+		return str;
+	}
+};
+
 var UUID = function(){
 	return 'uuid_'+time()+'_'+Math.ceil(Math.random()*10000)
 }
@@ -53,7 +60,7 @@ var ltrim = function (str,remove){
 	return str;
 }
 var rtrim = function (str,remove){
-	if (!str || str.length == 0) return "";
+	if (typeof(str) != 'string') return "";
 	var i;remove = remove == undefined?' ' : remove;
 	while (str.substring(str.length - remove.length) == remove ) {
 		str = str.substring(0,str.length - remove.length);
@@ -88,12 +95,9 @@ var isWap = function(){
 //var obj1 = $.extend({}, obj);//浅拷贝
 //var obj2 = $.extend(true, {}, obj);//深拷贝
 
-
-Array.prototype.remove = function(from, to) {
-	var rest = this.slice((to || from) + 1 || this.length);
-	this.length = from < 0 ? this.length + from : from;
-	return this.push.apply(this, rest);
-};
+$.objClone = function(obj){
+	return $.extend(true, {}, obj);
+}
 
 //跨框架数据共享;
 var KOD_NAMESPACE = 'kod';
@@ -158,6 +162,90 @@ var ShareData = {
 jQuery.easing.def="easeInOutCubic";//easeOutExpo,easeInOutExpo,easeInOutSine
 
 
+/**
+ * 通知中心[观察者模式]
+ * 
+ * Hook.bind('test',function(a){console.log('a2'+a,this);});
+ * Hook.once('test',console.log);
+ * Hook.trigger('test',123,3,4,5);
+ * Hook.trigger('test',456,234,234,22);
+ * 
+ */
+var Hook = function(){}
+var Hook = (function(){
+	// {'kodReady':[{action:action,once:false},{action:action,once:true}]}
+	var eventList = {};
+	var debug = false;
+	return {
+		debug:function(type){
+			debug = type;
+		},
+		get:function(key){
+			if(key) {
+				return eventList[key];
+			}else{
+				return eventList;
+			}
+		},
+		bind:function(key,action,once){
+			debug && console.trace('bind',arguments);
+			once = once?true:false;
+			var actionArr = key.split(',');
+			for (var i = 0; i < actionArr.length; i++) {
+				var current = actionArr[i];
+				if(!eventList[current]){
+					eventList[current] = [];
+				}
+				if(!$.isArray(action)){
+					action = [action];
+				}
+				for (var j = 0; j < action.length; j++) {
+					eventList[current].push({
+						"action":action[j],
+						"once":once
+					});
+				}
+			}
+			return this;
+		},
+		unbind:function(key){
+			delete eventList[key];
+			return this;
+		},
+		once:function(key,action){
+			this.bind(key,action,true);
+			return this;
+		},
+		trigger:function(){
+			debug && console.info('trigger',arguments);
+			var key = Array.prototype.shift.apply(arguments);
+			var arr = eventList[key];
+			var newArr = [];
+			if(!arr) return;
+
+			var result = false;
+			for (var i = 0; i < arr.length; i++) {
+				var item = arr[i];
+				debug && console.info('trigger',item);
+				if(!item.once){
+					newArr.push(item);
+				}
+				try{
+					var current = item['action'].apply(this,arguments);
+					if(current !== undefined){
+						result = current;
+					}
+				}catch(e){
+					console.error(e,key);
+				}
+			}
+			eventList[key] = newArr;
+			return result;
+		}
+	}
+})();
+
+
 //cookie操作
 //titmeout 单位为天
 var Cookie = (function(){
@@ -204,11 +292,12 @@ var Cookie = (function(){
 })();
 
 //LocalData操作 数据存储
+var LocalData = function(){};
 var LocalData = (function(){
-	var name_space = 'kodexplorer_';
+	var nameSpace = 'kodcloud-';
 	var makeKey = function(key){
 		if(key!=''){
-			return name_space+key;
+			return nameSpace+key;
 		}else{
 			return key;
 		}
@@ -282,6 +371,9 @@ var LocalData = (function(){
 		}
 	}
 	return {
+		setSpace:function(space){
+			nameSpace = space ? space:'';
+		},
 		support:support,
 		get:get,
 		set:set,
@@ -500,107 +592,118 @@ function download(data, strFileName, strMimeType) {
 	return true;
 }
 
-/**
- * hook;
- *
- * alert.hook("alert",window,function(){console.log(arguments);});
- * ui.pathOpen.open.hook("open",ui.pathOpen,function(){});
- * String.prototype.slice.hook("slice",String.prototype,function(){});
- *
- * hookFunc支持hook前执行；hook后执行；  如果参数是函数则默认为hook前执行；如果为对象则分别配置hook前、hook后执行
- * {before:function,after:function} //
- * ---------------------------
- * ui.fileLight.select.hook("select",ui.fileLight,{before:function(){console.log("1",arguments)},after:function(){console.log("2",arguments)}});
- *
- * ---------------------------
- * 1.hook函数在原函数之前执行；可修改传入参数；修改后返回arguments
- * 2.如果没有任何返回：则使用原始参数
- * 3.before function 如果返回"hookReturn";则不执行旧函数；相当于替换
- */
-function Hooks(){
-	return {
-		initEnv:function () {
-			Function.prototype.hook = function (funcName,context,hookFunc) {
-				var _context  = null; //函数上下文
-				var _funcName = null; //函数名
-				var _realFunc = funcName+"Old";
-
-				var hookFuncBefore = undefined;
-				var hookFuncAfter  = undefined;
-				if(typeof(hookFunc) == 'function'){
-					hookFuncBefore = hookFunc;
-				}else if(typeof(hookFunc) == 'object'){
-					hookFuncBefore = hookFunc['before'];
-					hookFuncAfter  = hookFunc['after'];
-				}
-
-				if(!hookFuncBefore){
-					hookFuncBefore = function(){};
-				}
-				_context = context || window;
-				_funcName = funcName || getFuncName(this);
-				_context[_realFunc] = this;
-				if( _context[_funcName] != undefined && 
-					_context[_funcName].prototype && 
-					_context[_funcName].prototype.isHooked){
-					console.log("Already has been hooked,unhook first");
-					return false;
-				}
-				function getFuncName (fn) {// 获取函数名
-					var strFunc = fn.toString();
-					var _regex = /function\s+(\w+)\s*\(/;
-					var patten = strFunc.match(_regex);
-					if (patten) {
-						return patten[1];
-					};
-					return '';
-				}
-				try{
-					eval('_context[_funcName] = function '+_funcName+'(){\n'+
-						'var args = Array.prototype.slice.call(arguments,0);\n'+
-						'var obj = this;\n'+
-						'args = hookFuncBefore.apply(obj,args);\n'+
-						'if(args === "hookReturn"){return;}\n'+
-						'if(args === undefined){args = arguments;}\n'+
-						'var result = _context[_realFunc].apply(obj,args);\n'+
-						'if(hookFuncAfter){return hookFuncAfter.apply(result);}\n'+
-						'else{return result;}\n'+
-						'};');
-					_context[_funcName].prototype.isHooked = true;
-					return true;
-				}catch (e){
-					console.log("Hook failed,check the params.");
-					return false;
-				}
+var pathTools = function(){};
+var pathTools = (function(){
+	var pathThis = function(path){
+		var arr = path.split('/');
+		return arr[arr.length - 1];
+	}
+	var fileSize = function(size,pointNum){
+		if(size==undefined||size==''){
+			return '0B'
+		}
+		if(pointNum==undefined){
+			pointNum = 1;
+		}
+		if (size <= 1024) return parseInt(size)+"B";
+		size = parseInt(size);
+		var unit = {
+			'G' : 1073741824,	// pow( 1024, 3)
+			'M' : 1048576,		// pow( 1024, 2)
+			'K' : 1024,		// pow( 1024, 1)
+			'B' : 1			// pow( 1024, 0)
+		};
+		for (var key in unit) {
+			if (size >= unit[key]){
+				return (size/unit[key]).toFixed(pointNum)+key;
 			}
-			Function.prototype.unhook = function (funcName,context) {
-				var _context = null;
-				var _funcName = null;
-				_context = context || window;
-				_funcName = funcName;
-				var realFunc = funcName+"Old";
-				if (!_context[_funcName].prototype.isHooked){
-					console.log("No function is hooked on");
-					return false;
-				}
-				_context[_funcName] = _context[realFunc];
-				delete _context[realFunc];
-				return true;
-			}
-		},
-		cleanEnv:function () {
-			if(Function.prototype.hasOwnProperty("hook")){
-				delete Function.prototype.hook;
-			}
-			if(Function.prototype.hasOwnProperty("unhook")){
-				delete Function.prototype.unhook;
-			}
-			return true;
 		}
 	};
-}
-var hook = new Hooks();
-hook.initEnv();
+
+	var strSortChina = function(a,b){
+		var arr = '0123456789零一二三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟万';//
+		for (var i=0;i<Math.max(a.length,b.length);i++){
+			if (a.charAt(i) != b.charAt(i)){
+				var aIndex = arr.indexOf(a.charAt(i));
+				var bIndex = arr.indexOf(b.charAt(i));
+				if(aIndex!=-1 && bIndex!=-1){//有该字符
+					if(aIndex>bIndex){
+						return 1;
+					}else if(aIndex<bIndex){
+						return -1;
+					}else{
+						return 0;
+					}
+				}else{//字符比较
+					if(a.charAt(i)>b.charAt(i)){
+						return 1;
+					}else if(a.charAt(i)<b.charAt(i)){
+						return -1;
+					}else{
+						return 0;
+					}
+				}
+			}
+		}
+		return 0;
+	}
+	//字符串排序函数 ；222>111,bbb>aaa; bbb(1).txt>bbb(0).txt [bbb(100).txt>bbb(55).txt]
+	//https://github.com/overset/javascript-natural-sort/blob/master/speed-tests.html
+	var strSort = function(a,b){
+		if(a==undefined || b==undefined){
+			return 0;
+		}
+		if(typeof(a) == "number" && typeof(b) == "number"){
+			return a>b?1:(a==b?0:-1);
+		}
+
+		var re = /([0-9\.]+)/g,	// /(-?[0-9\.]+)/g,  负数 2016-11-09 2016-11-10歧义
+			x = a.toString().toLowerCase() || '',
+			y = b.toString().toLowerCase() || '',
+			nC = String.fromCharCode(0),
+			xN = x.replace( re, nC + '$1' + nC ).split(nC),
+			yN = y.replace( re, nC + '$1' + nC ).split(nC),
+			xD = (new Date(x)).getTime(),
+			yD = xD ? (new Date(y)).getTime() : null;
+
+		if ( yD ){//时间戳排序
+			if ( xD < yD ){
+				return -1;
+			}else if ( xD > yD ){
+				return 1;
+			}
+		}
+		for( var cLoc = 0, numS = Math.max(xN.length, yN.length); cLoc < numS; cLoc++ ) {
+			oFxNcL = parseFloat(xN[cLoc]) || xN[cLoc];
+			oFyNcL = parseFloat(yN[cLoc]) || yN[cLoc];
+			if(oFxNcL== oFyNcL){
+				continue;
+			}
+			if(typeof(oFxNcL) == 'string' && typeof(oFyNcL)== 'string'){
+				//自定义字符大小顺序
+				var resultCurrent = strSortChina(oFxNcL,oFyNcL);
+				if(resultCurrent!=0){
+					return resultCurrent;
+				}
+			}else{
+				if (oFxNcL < oFyNcL){
+					return -1;
+				}else if (oFxNcL > oFyNcL){
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
+	return {
+		fileSize:fileSize,
+		strSort:strSort,
+		pathThis:pathThis
+	}
+})();
+
+
 
 //是否在数组中。
 var inArray = function(arr,value) {
@@ -629,11 +732,11 @@ var stopPP = function(e){//防止事件冒泡
 //tips message
 //type: success/error/warning/info
 var Tips =  (function(){
-	var in_time  = 400;
+	var inTime  = 400;
 	var delay = 1000;
 	var staticPath = "./static/";
 	if(typeof(G) != "undefined"){
-		staticPath = G.static_path;
+		staticPath = G.staticPath;
 	}
 	var _init = function(single,msg,code){
 		var tipsIDname = UUID();
@@ -643,8 +746,8 @@ var Tips =  (function(){
 
 		var tipsID = "#"+tipsIDname;
 		if ($(tipsID).length ==0) {
-			var html='<div id="'+tipsIDname+'" class="tips_box"><i class="tips-icon"></i><div class="tips-msg"><p></p></div>'+
-				'<a class="tips_close">×</a><div style="clear:both"></div></div>'
+			var html='<div id="'+tipsIDname+'" class="tips-box"><i class="tips-icon"></i><div class="tips-msg"><p></p></div>'+
+				'<a class="tips-close">×</a><div style="clear:both"></div></div>'
 			$('body').append(html);
 
 			$(tipsID).show().css({'left':($(window).width() - $(tipsID).innerWidth())/2});
@@ -653,9 +756,9 @@ var Tips =  (function(){
 				self.stop(true,true)
 				$(tipsID).css({'left':($(window).width() - $(tipsID).width()) / 2});
 			});
-			$(tipsID).find('.tips_close').click(function(){
+			$(tipsID).find('.tips-close').click(function(){
 				$(tipsID).animate({opacity:0},
-					in_time,0,function(){
+					inTime,0,function(){
 						$(this).hide();
 					});
 			});
@@ -673,7 +776,7 @@ var Tips =  (function(){
 			default:theType = 'info';break;
 		}
 
-		self.removeClass().addClass('tips_box '+theType);
+		self.removeClass().addClass('tips-box '+theType);
 		if (msg != undefined) self.find('.tips-msg p').html(msg);
 		$(tipsID).show().css({'left':($(window).width() - $(tipsID).innerWidth())/2});
 		return self;
@@ -687,12 +790,38 @@ var Tips =  (function(){
 		self.stop(true,true)
 			.css({opacity:0,'top':-self.height()})
 			.show()
-			.animate({opacity:1,top:0},in_time,0)
-			.delay(delay)
-			.animate({opacity:0,top:-self.height()},in_time,0,function(){
+			.animate({opacity:1,top:0},inTime,0);
+		setTimeout(function(){
+			self.animate({opacity:0,top:-self.height()},inTime,0,function(){
 				self.remove();
 			});
+		},delay);
 	};
+
+	var pop = function(msg){
+		var tipsIDname = 'messageTipsPop';
+		var $self = $("#"+tipsIDname);
+		if ($self.length ==0) {
+			var html='<div id="'+tipsIDname+'" class="tips-box-pop"><div class="tips-msg"></div></div>';
+			$('body').append(html);
+			$self = $("#"+tipsIDname);
+		}
+		$self.find('.tips-msg').html(msg);
+		$self.css({
+			'left':($(window).width() - $self.innerWidth())/2,
+			'top':($(window).height() - $self.innerHeight())/2
+		});
+
+		var animateTime = 150;
+		$self.stop(true,true)
+			.fadeIn(animateTime)
+			.animate({opacity:0.4},animateTime,0)
+			.delay(delay)
+			.animate({opacity:0},animateTime,0,function(){
+				$self.remove();
+			});
+	};
+
 	var loading = function(msg,code){
 		if (typeof(msg) == 'object'){
 			code=msg.code;
@@ -704,7 +833,7 @@ var Tips =  (function(){
 		var self = _init(true,msg,code);
 		self.stop(true,true)
 			.css({'opacity':'0','top':-self.height()})
-			.animate({opacity:1,top:0},in_time,0);
+			.animate({opacity:1,top:0},inTime,0);
 	};
 	var close = function(msg,code){
 		if (typeof(msg) == 'object'){
@@ -712,24 +841,30 @@ var Tips =  (function(){
 				code=msg.code;msg = msg.data;
 				if(code && typeof(msg) != 'string'){
 					msg = "Success!";
+					if(window.LNG && LNG.success){
+						msg = LNG['success'];
+					}					
 				}
 			}catch(e){
 				code=0;msg ='';
 			};
 		}
 		var self = _init(true,msg,code);
-		self.delay(delay)
-			.show()
-			.animate({
-					opacity:0,
-					top:-self.height()
-				},
-				in_time,0,function(){
-					self.remove();
-				});
+		setTimeout(function(){
+			self.stop(true,true).animate({opacity:0,top:- self.height()},inTime,'linear',function(){
+				self.remove();
+			});
+		},delay);
+		// $(self).stop(true,true)
+		// 	.show()
+		// 	.delay(delay)
+		// 	.animate({opacity:0,top:- self.height()},inTime,'linear',function(){
+		// 		self.remove();
+		// 	});
 	};
 	return{
 		tips:tips,
+		pop:pop,
 		loading:loading,
 		close:close
 	}
@@ -809,16 +944,16 @@ var loadRipple = function(search_arr,ignore_arr){
 		$.browser.msie && $.browser.version<=10) { //ie 10不支持 但支持worker
 	   return;//不支持html5 css3
 	}
-	//|| $(e.target).parents(".aui_state_focus").length!=0
+	//|| $(e.target).parents(".aui-state-focus").length!=0
 	$('body').on('mousedown', function (e) {
 		var $target= getTarget($(e.target));
 		if($target=='' || isIgnore($target)){
 			return;
 		}
-		var uuid = 'ripple_'+UUID();
+		var uuid = 'ripple-'+UUID();
 		var father = $target;//$(this) $target
 		var circle_width = $target.outerWidth();
-		$('<div class="ripple_father" id="'+uuid+'"><div class="ripple"></div></div>').appendTo(father);
+		$('<div class="ripple-father" id="'+uuid+'"><div class="ripple"></div></div>').appendTo(father);
 		if($target.outerWidth()<$target.outerHeight()){
 			circle_width = $target.outerHeight();
 		}
@@ -866,7 +1001,7 @@ var MaskView =  (function(){
 	var maskContent = '#maskViewContent';
 	var staticPath = "./static/";
 	if(typeof(G) != "undefined"){
-		staticPath = G.static_path;
+		staticPath = G.staticPath;
 	}
 	var add = function(content,t_opacity,t_color,time){
 		if (t_opacity != undefined) opacity == t_opacity;
@@ -897,7 +1032,7 @@ var MaskView =  (function(){
 		add("<div style='font-size:50px;color:#fff;'>"+msg+"</div>");
 	}
 	var image = function(url){
-		add("<img class='kod_image_view_loading' src='"+staticPath+"js/lib/picasa/style/loading.gif' style='position:fixed;top:50%;left:50%;opacity:0.5;z-index:99'/>"+
+		add("<img class='kod_image_view_loading' src='"+staticPath+"images/common/loading_black.gif' style='position:fixed;top:50%;left:50%;opacity:0.5;z-index:99'/>"+
 			"<img src='"+htmlEncode(url)+"' class='image kod_image_view' "+
 			" style='opacity:0.01;-webkit-box-reflect: below 1px -webkit-gradient(linear,left top,left bottom,from(transparent),"+
 			"color-stop(80%,transparent),color-stop(70%,rgba(255,255,255,0)),to(rgba(255,255,255,0.3)));'/>");
@@ -942,7 +1077,7 @@ var MaskView =  (function(){
 			}
 		});
 
-		$('#windowMaskView,#maskViewContent img').mousewheel(function(delta){
+		$('#windowMaskView,#maskViewContent img').mouseWheel(function(delta){
 			var offset = delta>0?1:-1;
 			offset = offset * Math.abs(delta/3);
 			var o_w = parseInt($dom.width()),
@@ -954,8 +1089,8 @@ var MaskView =  (function(){
 
 			var top  = parseInt($content.css("top"))-(h-o_h)/2;
 			var left = parseInt($content.css("left"))-(w-o_w)/2;
-			$(maskContent+','+maskContent+' .image').stop(false)
-				.animate({'width':w,'height':h,'top':top,'left':left},200);
+			$(maskContent+' .image').stop(false)
+				.animate({'width':w,'height':h,'top':top,'left':left},100);
 		});
 	}
 	var imageSize = function(){
@@ -963,8 +1098,6 @@ var MaskView =  (function(){
 		if ($dom.length == 0) return;
 		$dom.load(function(){ 
 			if (this.complete || this.readyState == "complete") { 
-				console.log(this,this.width,this.height);
-
 				var percent = 0.7,
 					w_width = $(window).width(),
 					w_height= $(window).height(),
@@ -1013,6 +1146,9 @@ var MaskView =  (function(){
 
 //textarea自适应高度
 (function($){
+	$.fn.exists = function(){
+		return $(this).length >0;
+	}
 	$.fn.displayWidth = function(){//文本宽度
 		var text = $(this).text() || $(this).val();
 		var html = "<span style='z-index:-1;;white-space: nowrap;font-size:"+$(this).css('font-size')+"'>"+text+"</span>";
@@ -1076,19 +1212,11 @@ var MaskView =  (function(){
 				$(this).prop('comStart', true);
 			}).on('compositionend', function(){
 				$(this).prop('comStart', false);
+				$(this).trigger('input');
 			});
-			return this;
 		});
+		return this;
 	}
-	$("#area_id").on('input propertychange change blur', function() {
-		if($(this).prop('comStart')) return;    // 中文输入过程中不截断
-		var value = $(this).val();
-		console.log("change:"+value);
-	}).on('compositionstart', function(){
-		$(this).prop('comStart', true);
-	}).on('compositionend', function(){
-		$(this).prop('comStart', false);
-	});
 
 	//自动focus，并移动光标到指定位置，默认移到最后
 	$.fn.textFocus=function(index){
@@ -1187,6 +1315,9 @@ var MaskView =  (function(){
 	$.getUrlParam = function(name,url){
 		if(!url) url = window.location.href;
 		var urlParam = $.parseUrl(url);
+		if(!name){
+			return urlParam;
+		}
 		return urlParam.params[name];//unescape
 	};
 	$.parseUrl = function(url){
@@ -1248,7 +1379,22 @@ var MaskView =  (function(){
 			element.appendChild(document.createTextNode(cssText));
 		}
 	}
-
+	$.addStyle = function(cssText){
+		var head = document.getElementsByTagName('head')[0] ||document.documentElement;
+		var id = 'add-style-css-text';
+		var element = $('#'+id).get(0);
+		if(!element){
+		    element = document.createElement('style');
+		    element.id = 'add-style-css-text';
+    		element.type="text/css";
+    		head.appendChild(element);
+		}
+		if (element.styleSheet!== undefined) {
+			element.styleSheet.cssText += cssText
+		}else {
+			element.appendChild(document.createTextNode(cssText));
+		}
+	}
 	// 进指定字符串通过浏览器下载
 	$.htmlDownload = function(str,name){
 		if(!/Trident|MSIE/.test(navigator.userAgent)){//html5 支持保存文件
@@ -1262,6 +1408,31 @@ var MaskView =  (function(){
 			ifr.contentWindow.document.execCommand('SaveAs', false, name);
 			document.body.removeChild(ifr);
 		}
+	}
+	//是否为ie ie6~11
+	$.isIE = function(){
+	    return window.ActiveXObject || "ActiveXObject" in window;
+	}
+	$.supportCss3 = function(style){
+	    if(!style) style = 'box-shadow';
+        var prefix = ['webkit', 'Moz', 'ms', 'o'],
+            i,
+            humpString = [],
+            htmlStyle = document.documentElement.style,
+            _toHumb = function (string) {
+                return string.replace(/-(\w)/g, function ($0, $1) {
+                    return $1.toUpperCase();
+                });
+            };
+    
+        for (i in prefix){
+            humpString.push(_toHumb(prefix[i] + '-' + style));
+        }
+        humpString.push(_toHumb(style));
+        for (i in humpString){
+            if (humpString[i] in htmlStyle) return true;
+        }
+        return false;
 	}
 
 	//打印html
@@ -1304,6 +1475,7 @@ var MaskView =  (function(){
 					}
 				});
 			});
+			return this;
 		},
 		inScreen:function(isCenter){//是否在屏幕中 ;isCenter 按中心点来判断
 			var el = $(this).get(0);
@@ -1319,20 +1491,26 @@ var MaskView =  (function(){
 				rect.left > vWidth || rect.top > vHeight){
 				return false;
 			}
-			// if(isCenter){//按元素中心点判断
-			// 	var left = rect.left + (rect.right - rect.left)/2;
-			// 	var top  = rect.top + (rect.bottom - rect.top)/2;
-			// 	return el.contains(efp(left,top))
-			// }
+			if(isCenter){//按元素中心点判断
+				var left = rect.left + (rect.right - rect.left)/2;
+				var top  = rect.top + (rect.bottom - rect.top)/2;
+				return el.contains(efp(left,top))
+			}
 			return (
-				  el.contains(efp(rect.left,  rect.top))
-			  ||  el.contains(efp(rect.right, rect.top))
-			  ||  el.contains(efp(rect.right, rect.bottom))
-			  ||  el.contains(efp(rect.left,  rect.bottom))
-			);
+				rect.left   >=0 && 
+				rect.right  >=0 && 
+				rect.top    >=0 && 
+				rect.bottom >=0
+			)
+			// return (
+			// 	  el.contains(efp(rect.left,  rect.top))
+			//   ||  el.contains(efp(rect.right, rect.top))
+			//   ||  el.contains(efp(rect.right, rect.bottom))
+			//   ||  el.contains(efp(rect.left,  rect.bottom))
+			// );
 		},
 		//dom绑定鼠标滚轮事件
-		mousewheel: function(fn){
+		mouseWheel: function(fn){
 			var mousewheel = jQuery.browser.mozilla ? "DOMMouseScroll" : "mousewheel";
 			this.each(function(){
 				$(this).bind(mousewheel ,function(e){
@@ -1345,17 +1523,31 @@ var MaskView =  (function(){
 		},
 		//晃动 $('.wrap').shake(4,4,100);//次数；位移；运动时间
 		shake: function(times,offset,delay){
-			this.each(function(){
-				$(this).stop().each(function(){
-					var Obj = $(this);
-					var marginLeft = parseInt(Obj.css('margin-left'));
-					delay = delay > 50 ? delay : 50;
-					Obj.animate({'margin-left':marginLeft+offset},delay,function(){
-						Obj.animate({'margin-left':marginLeft},delay,function(){
-							times = times - 1;
-							if(times > 0)
-							Obj.shake(times,offset,delay);
-						});
+			$(this).stop(true,true).each(function(){
+				var Obj = $(this);
+				var marginLeft = parseInt(Obj.css('margin-left'));
+				delay = delay > 50 ? delay : 50;
+				Obj.animate({'margin-left':marginLeft+offset},delay,function(){
+					Obj.animate({'margin-left':marginLeft},delay,function(){
+						times = times - 1;
+						if(times > 0)
+						Obj.shake(times,offset,delay);
+					});
+				});
+			});
+			return this;
+		},
+		//闪烁 $('.wrap').flash(4,100);//次数；运动时间
+		flash: function(times,delay){
+			$(this).stop(true,true).each(function(){
+				var Obj = $(this);
+				delay = delay > 50 ? delay : 50;
+				Obj.animate({'opacity':0.3},delay,function(){
+					Obj.animate({'opacity':1},delay,function(){
+						times = times - 1;
+						if(times > 0){
+							Obj.flash(times,delay);
+						}
 					});
 				});
 			});
@@ -1364,9 +1556,7 @@ var MaskView =  (function(){
 		scale:function(xScale, yScale) {
 			var Obj = $(this);
 			if($.browser.mozilla || $.browser.opera || $.browser.safari) {
-				// x轴方向和y方向分别缩放的比例
 				Obj.css('transform', 'scale(' + xScale + ', ' + yScale + ')');
-				// 缩放后，相对于父元素左上角的偏移量
 				Obj.css('transform-origin', '0px 0px');
 			}else if($.browser.msie && parseInt($.browser.version)>= 9) {
 				Obj.css('-ms-transform', 'scale(' + xScale + ')');
@@ -1587,7 +1777,110 @@ var MaskView =  (function(){
 })(jQuery);
 
 
+/**
+ * FunctionHooks;
+ *
+ * alert.hook("alert",window,function(){console.log(arguments);});
+ * kodApp.open.hook("open",kodApp,function(){});
+ * String.prototype.slice.hook("slice",String.prototype,function(){});
+ *
+ * hookFunc支持hook前执行；hook后执行；  如果参数是函数则默认为hook前执行；如果为对象则分别配置hook前、hook后执行
+ * {before:function,after:function} //
+ * ---------------------------
+ * ui.fileLight.select.hook("select",ui.fileLight,{before:function(){console.log("1",arguments)},after:function(){console.log("2",arguments)}});
+ *
+ * ---------------------------
+ * 1.hook函数在原函数之前执行；可修改传入参数；修改后返回arguments
+ * 2.如果没有任何返回：则使用原始参数
+ * 3.before function 如果返回"hookReturn";则不执行旧函数；相当于替换
+ */
+function FunctionHooks(){
+	return {
+		initEnv:function () {
+			Function.prototype.hook = function (funcName,context,hookFunc) {
+				var _context  = null; //函数上下文
+				var _funcName = null; //函数名
+				var _realFunc = funcName+"Old";
 
+				var hookFuncBefore = undefined;
+				var hookFuncAfter  = undefined;
+				if(typeof(hookFunc) == 'function'){
+					hookFuncBefore = hookFunc;
+				}else if(typeof(hookFunc) == 'object'){
+					hookFuncBefore = hookFunc['before'];
+					hookFuncAfter  = hookFunc['after'];
+				}
+
+				if(!hookFuncBefore){
+					hookFuncBefore = function(){};
+				}
+				_context = context || window;
+				_funcName = funcName || getFuncName(this);
+				_context[_realFunc] = this;
+				if( _context[_funcName] != undefined && 
+					_context[_funcName].prototype && 
+					_context[_funcName].prototype.isHooked){
+					console.log("Already has been hooked,unhook first");
+					return false;
+				}
+				function getFuncName (fn) {// 获取函数名
+					var strFunc = fn.toString();
+					var _regex = /function\s+(\w+)\s*\(/;
+					var patten = strFunc.match(_regex);
+					if (patten) {
+						return patten[1];
+					};
+					return '';
+				}
+				try{
+					eval('_context[_funcName] = function '+_funcName+'(){\n'+
+						'var args = Array.prototype.slice.call(arguments,0);\n'+
+						'var obj = this;\n'+
+						'args = hookFuncBefore.apply(obj,args);\n'+
+						'if(args === "hookReturn"){return;}\n'+
+						'if(args === undefined){args = arguments;}\n'+
+						'var result = _context[_realFunc].apply(obj,args);\n'+
+						'if(hookFuncAfter){return hookFuncAfter.apply(result);}\n'+
+						'else{return result;}\n'+
+						'};');
+					_context[_funcName].prototype.isHooked = true;
+					return true;
+				}catch (e){
+					console.log("Hook failed,check the params.");
+					return false;
+				}
+			}
+			Function.prototype.unhook = function (funcName,context) {
+				var _context = null;
+				var _funcName = null;
+				var realFunc = _funcName+"Old";
+				_context = context || window;
+				_funcName = funcName;
+				if(!_context[_funcName]){
+					return false;
+				}
+				if (!_context[_funcName].prototype.isHooked){
+					console.log("No function is hooked on");
+					return false;
+				}
+				_context[_funcName] = _context[realFunc];
+				delete _context[realFunc];
+				return true;
+			}
+		},
+		cleanEnv:function () {
+			if(Function.prototype.hasOwnProperty("hook")){
+				delete Function.prototype.hook;
+			}
+			if(Function.prototype.hasOwnProperty("unhook")){
+				delete Function.prototype.unhook;
+			}
+			return true;
+		}
+	};
+}
+var functionHooks = new FunctionHooks();
+functionHooks.initEnv();
 
 
 //yyyy-mm-dd H:i:s or yy-mm-dd  to timestamp
@@ -1870,8 +2163,7 @@ var Base64 =  (function(){
 		return output; 
 	}
 	// private method for UTF-8 encoding  
-	utf8Encode = function (string) {  
-		string = string.replace(/\r\n/g,"\n");
+	utf8Encode = function (string) {
 		var utftext = "";
 		for (var n = 0; n < string.length; n++) {  
 			var c = string.charCodeAt(n);

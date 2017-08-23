@@ -1,0 +1,27 @@
+{
+	"id":"adminer",
+	"name":"Adminer",
+	"title":"{{LNG.Adminer.meta.title}}",
+	"version":"4.3.1",
+	"source":{
+		"thumb":"",
+		"className":"font-icon icon-bar-chart bg-blue-7",
+		"screenshoot":["{{pluginHost}}static/screenshot.png"]
+	},
+	"category":"tools",
+	"description":"{{LNG.Adminer.meta.desc}}",
+	"keywords":"",
+	"auther":{
+		"copyright":"adminer.org",
+		"homePage":"https://www.adminer.org"
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"role:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		}
+	}
+}

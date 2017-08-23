@@ -1,0 +1,87 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo $shareInfo['name'].' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_code_edit.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+  </head>
+  <body <?php echo $codeThemeBlack;?>>
+	<div class="edit-main" style="height: 100%;" oncontextmenu="return core.contextmenu();">
+		<div class="tools">
+			<div class="left top-toolbar">
+				<div class="disable-mask"></div>
+				<a action="save" href="javascript:;" title="<?php echo LNG('button_save');?>(Ctrl-S)"><i class="font-icon icon-save"></i></a>
+				<a action="saveall" href="javascript:;" title="<?php echo LNG('button_save_all');?>"><i class="font-icon icon-paste"></i></a> 
+				<span class="line"></span>
+				<a action="undo" href="javascript:;" title="<?php echo LNG('undo');?>(Ctrl-Z)"><i class="font-icon icon-undo"></i></a>
+				<a action="redo" href="javascript:;" title="<?php echo LNG('redo');?>(Ctrl-Y)"><i class="font-icon icon-repeat"></i></a>
+				<a action="refresh" href="javascript:;" title="<?php echo LNG('refresh');?>(F5)"><i class="font-icon icon-refresh"></i></a>
+				<span class="line"></span>	
+				<a href="javascript:;" class="toolbar-menu menu-view-goto-line" title="<?php echo LNG('gotoline');?>(Ctrl-L)"><i class="font-icon icon-pushpin"></i></a>		
+				<a action="search" href="javascript:;" title="<?php echo LNG('search');?>(Ctrl-F)"><i class="font-icon icon-search"></i></a>
+				<a action="searchReplace" href="javascript:;" title="<?php echo LNG('replace');?>(Ctrl-F-F)"><i class="font-icon icon-random"></i></a>
+				<span class="line"></span>				
+				<a action="font" class="toolbar-menu menu-view-font" href="javascript:;" title="<?php echo LNG('font_size');?>">
+					<i class="font-icon icon-font"></i><i class="font-icon icon-caret-down"></i>
+				</a>
+				<span class="line"></span>
+				<a class="toolbar-menu menu-view-theme" href="javascript:;" title="<?php echo LNG('code_theme');?>">
+					<i class="font-icon icon-magic"></i><i class="font-icon icon-caret-down"></i>
+				</a>
+				<a class="toolbar-menu menu-view-setting" href="javascript:;" title="<?php echo LNG('setting');?>">
+					<i class="font-icon icon-cog"></i><i class="font-icon icon-caret-down"></i>
+				</a>				
+				<a action="preview" href="javascript:;" title="<?php echo LNG('preview');?>(Ctrl-Shift-S)"><i class="font-icon icon-eye-open"></i></a>
+			</div>
+			<div class="right">
+				<a action="fullscreen" href="javascript:;" title="<?php echo LNG('full_screen');?>"><i class="font-icon icon-resize-full"></i></a>
+				<a action="close" href="javascript:;" title="<?php echo LNG('close');?>"><i class="font-icon icon-remove"></i></a>
+			</div>
+			<div style="clear:both"></div>
+		</div><!-- end tools -->
+
+		<!-- 主体部分 -->
+		<div class="frame-left">
+			<div class="edit-tab">
+				<div class="tabs">
+					<a  href="javascript:Editor.add()" class="add icon-plus"></a>
+					<div style="clear:both"></div>
+				</div>
+			</div>
+			<div class="edit-body">
+				<div class="introduction">
+					<?php include(LANGUAGE_PATH.I18n::getType().'/edit.html');?>
+					<div style="clear:both"></div>
+				</div>
+				<div class="tabs"></div>
+				<div class="bottom-toolbar hidden">
+					<a class="toolbar-menu menu-view-goto-line editor_position" href="javascript:;">0:0</a>
+					<a class="file-mode" href="javascript:;">text</a>
+					<a class="toolbar-menu menuViewTab config-tab" href="javascript:;">Tabs:4</a>
+					<a class="toolbar-menu menu-view-setting config" href="javascript:;"><i class="font-icon icon-cog"></i></a>
+					<div style="clear:both"></div>
+				</div>
+			</div>
+			<div class="search-content hidden"></div>
+		</div>
+	</div>
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		AUTH  = {'explorer.fileDownload':<?php echo $canDownload;?>};
+		G.fristFile = "<?php echo (isset($_GET['filename']) ? clear_html($_GET['filename']) :'') ;?>";
+		G.codeConfig = <?php echo $editorConfig;?>;
+		G.codeThemeAll = "<?php echo $config['settingAll']['codethemeall']?>";
+		G.codeFontAll  = "<?php echo $config['settingAll']['codefontall']?>";
+		G.user = "<?php echo clear_html($_GET['user']);?>";
+		G.sid = "<?php echo clear_html($_GET['sid']);?>";
+		G.theme = "<?php echo $configTheme;?>";
+		seajs.config({
+			preload: [
+				"lib/jquery-1.8.0.min",
+				'lib/ace/src-min-noconflict/ace'
+			]
+		});
+		seajs.use("app/src/edit/main");
+	</script>
+</body>
+</html>
+

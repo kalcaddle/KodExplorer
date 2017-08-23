@@ -1,0 +1,65 @@
+<div class="full-background"></div>
+<div class="init-loading"><div>
+	<img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
+</div>
+<div class="topbar">
+	<div class="content">
+		<div class="top-left">
+			<a href="./" class="topbar-menu title">
+			<?php
+				if(substr(LNG('kod_name'),0,4) == '<img'){
+					echo LNG('kod_name');
+				}else{
+					echo '<i class="icon-cloud"></i>'.LNG('kod_name');
+				}
+			?>
+			</a>
+			<div class="share-info">
+				<span class="share-title">
+					<b class="share-title-info">
+					<?php echo isset($shareInfo['showName'])?clear_html($shareInfo['showName']):clear_html($shareInfo['name']);?>
+					</b> 
+				</span>
+				<span class="size"></span>
+				<span class="time"></span>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div class="top-right">
+			<div class="share-info-user hidden menu-group">
+				<span class="info"></span>
+				<div class="btn-group">
+				 	<a type="button" class="btn btn-primary btn-download" target="_blank" href=""><?php echo LNG('download');?></a>
+				</div>
+			</div>
+
+			<?php if(!isset($config['settings']['language'])){ ?>
+			<div class="menu-group">
+				<a id='topbar-language' data-toggle="dropdown" href="#" class="topbar-menu">
+				<i class='font-icon icon-flag'></i>&nbsp;<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu topbar-language pull-right animated menuShow" role="menu" aria-labelledby="topbar-language">
+				  	<?php 
+				  		$tpl = "";
+				  		foreach ($config['settingAll']['language'] as $key => $value) {
+				  			$name = $value[0];
+				  			$select = I18n::getType() == $key ? "this":"";
+				  			$tpl .= "<li><a href='javascript:core.language(\"{$key}\");' title=\"{$key}/{$value[1]}/{$value[2]}\" class='{$select}'><i class='lang-flag flag-{$key}'></i>{$name}</a></li>";
+				  		}
+						echo $tpl;
+					?>
+				</ul>
+			</div>
+			<?php } ?>
+			<div class="menu-group">
+				<a href="#" id='topbar-user' class="topbar-menu" data-toggle="dropdown"><i class="font-icon icon-user"></i><?php echo $_SESSION['kodUser']['name'];?>&nbsp;<b class="caret"></b></a>
+				<ul class="dropdown-menu menu-topbar-user pull-right animated menuShow" role="menu" aria-labelledby="topbar-user">
+					<li><a href="javascript:core.qrcode(window.location.href);"><i class="font-icon icon-qrcode"></i><?php echo LNG('qrcode');?></a></li>
+					<li><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo LNG('full_screen');?></a></li>
+					<li><a href="http://kodcloud.com" target="_blank"><i class="font-icon icon-code-fork"></i><?php echo LNG('ui_project_home');?></a></li>
+				</ul>			
+			</div>		
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>

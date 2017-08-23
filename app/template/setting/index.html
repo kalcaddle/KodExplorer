@@ -1,0 +1,29 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_setting.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+<body class="setting-page"  oncontextmenu="return core.contextmenu();">
+	<div id="body">
+		<div class="menu-left">	
+			<h1><?php echo LNG('setting_title');?></h1>
+			<ul class='setting'>
+				<a href="javascript:void(0);" id="system"><i class="font-icon icon-cog"></i><?php echo LNG('system_setting');?></a>
+				<a href="javascript:void(0);" id="member"><i class="font-icon icon-group"></i><?php echo LNG('system_group');?></a>
+				<a href="javascript:void(0);" id="user"><i class="font-icon icon-user"></i><?php echo LNG('setting_user');?></li>
+				<a href="javascript:void(0);" id="theme"><i class="font-icon icon-dashboard"></i><?php echo LNG('setting_theme');?></a>
+				<a href="javascript:void(0);" id="wall"><i class="font-icon icon-picture"></i><?php echo LNG('setting_wall');?></a>
+				<a href="javascript:void(0);" id="fav"><i class="font-icon icon-star"></i><?php echo LNG('setting_fav');?></a>
+				<a href="javascript:void(0);" id="help"><i class="font-icon icon-question"></i><?php echo LNG('setting_help');?></a>
+				<a href="javascript:void(0);" id="about"><i class="font-icon icon-info-sign"></i><?php echo LNG('setting_about');?></a>
+			</ul>
+		</div>
+		<div class='main'></div>
+	</div>
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		seajs.use('app/src/setting/main');
+	</script>
+</body>
+</html>

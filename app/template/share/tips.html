@@ -1,0 +1,26 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title>tips - <?php echo LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_code_edit.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+
+<body style="overflow:hidden;">
+	<?php include(TEMPLATE.'common/navbarShare.html');?>
+	<div class="frame-main">
+		<?php if($msg=='password'){?>
+		<div class="share-page-passowrd">
+			<b><?php echo LNG('share_password');?>:</b>
+			<input type="password" class="form-control"/>
+			<a href="javascript:void(0);" class="btn btn-primary share_login"><?php echo LNG('button_ok');?></a>
+		</div>
+		<?php }else{?>
+		<div class="share-page-error"><b>tips:</b><?php echo $msg;?></div>
+		<?php }?>
+	</div><!-- / frame-main end-->
+	<?php include(TEMPLATE.'common/footer.html');?>
+	<script type="text/javascript">
+		seajs.use("app/src/shareIndex/main");
+	</script>
+</body>
+</html>

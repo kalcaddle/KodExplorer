@@ -1,8 +1,8 @@
 /*
-* @link http://www.kalcaddle.com/
-* @author warlee | e-mail:kalcaddle@qq.com
+* @link http://kodcloud.com/
+* @author warlee | e-mail:kodcloud@qq.com
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
-* @license http://kalcaddle.com/tools/licenses/license.txt
+* @license http://kodcloud.com/tools/license/license.txt
 */
 body {
 	background:#f6f6f6;font-size: 13px; padding: 0px; margin: 0px; color:#666;
@@ -29,9 +29,9 @@ a:hover{color:#f30;}
 .inputs div{margin-bottom: 15px;}
 .inputs div span{display: block;float: left;width:70px;line-height:30px;height:30px;}
 .inputs div input{height:33px;width:180px;border-radius:0;}
-.inputs .check_code{margin-bottom: 0;}
-.inputs .check_code input{width:100px;height: 40px;float: left;}
-.inputs .check_code img{
+.inputs .check-code{margin-bottom: 0;}
+.inputs .check-code input{width:100px;height: 40px;float: left;}
+.inputs .check-code img{
 	float: left;
 	padding-left: 0;
 	width: 80px;
@@ -52,7 +52,7 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 .actions #submit:hover{background: #369;}
 .actions #submit:active{background: #444;}
 .msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
-.common_footer{
+.common-footer{
 	color:#999;text-align: center;width: 100%;
 	background:#eee;padding: 10px;
 	position: absolute;

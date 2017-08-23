@@ -270,10 +270,9 @@ var // currently active contextMenu trigger
                 // show menu
                 op.show.call($this, e.data, e.pageX, e.pageY);
                 
-
                 //change by warlee
                 try{
-                    rightMenu.menuShow();
+                    $.contextMenu.menuShow();
                 } catch(e) {};
                 
             }
@@ -466,6 +465,7 @@ var // currently active contextMenu trigger
                         break;
                     }
                     opt.$selected && opt.$selected.trigger('mouseup');
+
                     return;
                     
                 case 32: // space
@@ -516,7 +516,12 @@ var // currently active contextMenu trigger
                 $round = $prev;
             
             // skip disabled
-            while ($prev.hasClass('disabled') || $prev.hasClass('not-selectable')) {
+            while (
+                $prev.hasClass('disabled') || 
+                $prev.hasClass('hidden') ||     //add by warlee;
+                $prev.hasClass('not-selectable')
+
+                ) {
                 if ($prev.prev().length) {
                     $prev = $prev.prev();
                 } else {
@@ -559,7 +564,10 @@ var // currently active contextMenu trigger
                 $round = $next;
 
             // skip disabled
-            while ($next.hasClass('disabled') || $next.hasClass('not-selectable')) {
+            while (
+                $next.hasClass('disabled') || 
+                $next.hasClass('hidden') ||     //add by warlee;
+                $next.hasClass('not-selectable')) {
                 if ($next.next().length) {
                     $next = $next.next();
                 } else {
@@ -730,7 +738,7 @@ var // currently active contextMenu trigger
                 data = $this.data(),
                 opt = data.contextMenu,
                 root = data.contextMenuRoot;
-            
+
             $this.removeClass('hover');
             opt.$selected = null;
         }
@@ -1095,6 +1103,7 @@ var // currently active contextMenu trigger
             }
             // re-check disabled for each item
             opt.$menu.children().each(function(){
+                key = $(this).data('contextMenuKey');
                 var $item = $(this),
                     key = $item.data('contextMenuKey'),
                     item = opt.items[key],
@@ -1268,7 +1277,7 @@ $.contextMenu = function(operation, options) {
                     $(this).contextMenu("destroy");
                 });
             }
-            
+
             switch (o.trigger) {
                 case 'hover':
                         $context
@@ -1619,3 +1628,5 @@ $.contextMenu.op = op;
 $.contextMenu.menus = menus;
 
 })(jQuery);
+
+$.contextMenu.menuAdd = function(){};

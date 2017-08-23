@@ -1,0 +1,137 @@
+body {
+    background: transparent;
+	overflow:hidden;
+}
+
+.clock {
+    position: absolute;
+    opacity: 1;
+}
+
+.fill .clock {
+    left: 50%;
+    top: 50%;
+}
+
+.centre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+}
+
+.expand {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+
+.anchor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+}
+
+.element {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.round {
+    border-radius: 296px;
+}
+
+.circle-1 {
+    background: white;
+    width: 12px;
+    height: 12px;
+}
+
+.circle-2 {
+    background: #FA9F22;
+    width: 8px;
+    height: 8px;
+}
+
+.circle-3 {
+    background: black;
+    width: 4px;
+    height: 4px;
+}
+
+.second {
+    transform: rotate(180deg);
+}
+
+.minute {
+    transform: rotate(54deg);
+}
+
+.second-hand {
+    width: 2px;
+    height: 164px;
+    background: #FA9F22;
+    transform: translate(-50%,-100%) translateY(24px);
+}
+
+.hour {
+    transform: rotate(304.5deg);
+}
+
+.thin-hand {
+    width: 4px;
+    height: 50px;
+    background: white;
+    transform: translate(-50%,-100%);
+}
+
+.fat-hand {
+    width: 10px;
+    height: 57px;
+    border-radius: 10px;
+    background: white;
+    transform: translate(-50%,-100%) translateY(-18px);
+}
+
+.minute-hand {
+    height: 112px;
+}
+
+.hour-text {
+    position: absolute;
+    font: 40px Hei, Helvetica, Arial, sans-serif;
+    color: white;
+    transform: translate(-50%,-50%);
+}
+
+.hour-10 {
+    padding-left: 0.4ex;
+}
+.hour-11 {
+    padding-left: 0.25ex;
+}
+
+.minute-text {
+    position: absolute;
+    font: 12px Avenir Next, Helvetica, Arial, sans-serif;
+    color: white;
+    transform: translate(-50%,-50%);
+}
+
+.minute-line {
+    background: white;
+    width: 1px;
+    height: 9px;
+    transform: translate(-50%,-100%) translateY(-131px);
+    opacity: 0.34;
+}
+
+.file{opacity:0.9;}
+.element.fat-hand{height:50px;}
+.element.fat-hand.minute-hand{height:70px;}
+

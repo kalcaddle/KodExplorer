@@ -1,0 +1,22 @@
+@media \0screen\,screen\9 {
+	#page-desktop .topbar,
+	#page-desktop .topbar .topbar-menu,
+	#page-desktop .topbar .topbar-menu.this,
+	#page-desktop .topbar .topbar-menu:hover,
+	#page-desktop .file-continer .file.hover,
+	#page-desktop .file-continer .file.select,
+	#page-desktop .file-continer .file.file-select-drag-temp,
+
+	.topbar .content .share-title-info,
+	.bindary-box .title .ico,
+	.desktop,div.background,
+	.task-tab .tabs .tab,
+	.task-tab .tabs .tab.hover,.task-tab .tabs .tab.this{
+		behavior: url("./?pluginApp/to/toolsCommon/pie");
+	}
+}
+    
+.mCSB_scrollTools .mCSB_draggerContainer{z-index:99;}
+.mCS-minimal-dark.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{
+	background-color: rgba(100,100,100,0.3);width:6px;
+}

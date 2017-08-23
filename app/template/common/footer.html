@@ -1,0 +1,24 @@
+<div class="common-footer">
+	<?php 
+		$settings = $GLOBALS['config']['settings'];
+		$settingSystem = $GLOBALS['config']['settingSystem'];
+		if(is_wap()){
+			echo '<span class="pr-10"><a href="javascript:void(0);" forceWap="1">'.LNG('wap_page_phone').'</a> | '.
+				 '<a href="javascript:void(0);" forceWap="0">'.LNG('wap_page_pc').'</a></span> ';
+		}
+
+		echo '<span class="copyright-content">';
+		if(isset($settings['copyright'])){
+			echo $settings['copyright'];
+		}else{
+			echo LNG('copyright_pre').' v'.KOD_VERSION.' | '.LNG('copyright_info');
+		}
+		echo '  <a href="javascript:core.copyright();" class="icon-info-sign copyright-bottom"></a>';
+		if(isset($settingSystem['globalIcp'])){
+			echo "&nbsp;&nbsp;  ".$settingSystem['globalIcp'];
+		}
+		echo '</span>'
+	?>
+</div>
+<!-- https://getfirebug.com/firebuglite -->
+<?php include(TEMPLATE.'common/footerCommon.html');?>

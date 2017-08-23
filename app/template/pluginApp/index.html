@@ -1,0 +1,45 @@
+<?php include(TEMPLATE.'common/header.html');?> 
+	<title><?php echo LNG('PluginCenter').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title> 
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_setting.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	 
+</head>
+<body oncontextmenu="return core.contextmenu();">
+	<div id="body" class="plugin-page">
+		<div class="app-menu-left menu-left">	
+			<div class="search">
+				<div class="search-btn btn-search font-icon icon-search"></div>
+				<div class="search-btn btn-close font-icon icon-remove hidden"></div>
+				<input type="text" placeholder="<?php echo LNG('search');?>" />
+			</div>
+			<ul class='setting'>
+				<a data-type="install"><i class="font-icon icon-download-alt"></i><?php echo LNG('PluginInstalled');?></a>
+				<a data-type="update"><i class="font-icon icon-refresh"></i><?php echo LNG('PluginUpdate');?></a>
+			</ul>
+
+			<div class="line"><?php echo LNG("PluginType");?></div>
+			<ul class='setting'>
+				<a data-type="all"><i class="font-icon icon-reorder"></i><?php echo LNG("PluginTypeAll");?></a>
+				<a data-type="file"><i class="font-icon icon-folder-open-alt"></i><?php echo LNG("PluginTypeFile");?></la>
+				<a data-type="safe"><i class="font-icon icon-book"></i><?php echo LNG("PluginTypeSafe");?></a>
+				<a data-type="tools"><i class="font-icon icon-suitcase"></i><?php echo LNG("PluginTypeTools");?></a>
+				<a data-type="media"><i class="font-icon icon-film"></i><?php echo LNG("PluginTypeMedia");?></a>
+				<a data-type="others"><i class="font-icon icon-ellipsis-horizontal"></i><?php echo LNG("PluginTypeOthers");?></a>
+			</ul>
+		</div>
+		<div class='app-content main app-plugins'>
+			<div class="app-model app-content-box">
+				<div class='h1'></div>
+				<ul class="app-list"></ul>
+			</div>
+			<div class="app-model app-descript can-select can-right-menu hidden"></div>
+		</div>		
+	</div>
+	
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		seajs.use('app/src/plugins/main');
+	</script>
+</body>
+</html>
+

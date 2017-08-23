@@ -1,0 +1,86 @@
+<div class="full-background"></div>
+<div class="init-loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
+<div class="topbar">
+	<div class="content">
+		<div class="top-left">
+			<a href="./" class="topbar-menu title">
+			<?php
+				$config = $GLOBALS['config'];
+				if(substr(LNG('kod_name'),0,4) == '<img'){
+					echo LNG('kod_name');
+				}else{
+					echo '<i class="icon-cloud"></i>'.LNG('kod_name');
+				}
+			?>
+			</a>
+		<?php 
+			foreach ($config['settingSystem']['menu'] as $key=>$value) {
+				if ($value['use']!='1') continue;
+				$has = ST==$value['name']?'this':'';
+				$target = " target='".$value['target']."'" ;
+				$name = $value['name'];
+				if(LNG('ui_'.$name) != 'ui_'.$name){
+					$name = "<i class='font-icon menu-".$value['name']."'></i>".LNG('ui_'.$name);
+				}
+				if($value['icon']){
+					$name = $value['icon'].LNG($value['name']);
+				}
+				if($value['display']){
+					$name = $value['display'];
+				}
+				echo "<a class='topbar-menu ".$has."' href='".urldecode($value['url'])."'"
+					.$target.">".urldecode($name)."</a>";
+			}
+		?>
+		</div>
+		<div class="top-right">
+			<?php if(!isset($config['settings']['language'])){ ?>
+			<div class="menu-group">
+				<a id='topbar-language' data-toggle="dropdown" href="#" class="topbar-menu">
+				<i class='font-icon icon-flag'></i>&nbsp;<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu topbar-language pull-right animated menuShow" role="menu" aria-labelledby="topbar-language">
+				  	<?php 
+				  		$tpl = "";
+				  		foreach ($config['settingAll']['language'] as $key => $value) {
+				  			$name = $value[0];
+				  			$select = I18n::getType() == $key ? "this":"";
+				  			$tpl .= "<li><a href='javascript:core.language(\"{$key}\");' title=\"{$key}/{$value[1]}/{$value[2]}\" class='{$select}'><i class='lang-flag flag-{$key}'></i>{$name}</a></li>";
+				  		}
+						echo $tpl;
+					?>
+				</ul>
+			</div>
+			<?php } ?>
+			<!-- 全局设置语言则不再显示 -->
+			
+			<div class="menu-group">
+				<a href="#" id='topbar-user' data-toggle="dropdown" class="topbar-menu"><i class="font-icon icon-user"></i><?php echo $_SESSION['kodUser']['name'];?>&nbsp;<b class="caret"></b></a>
+				<ul class="dropdown-menu menu-topbar-user pull-right animated menuShow" role="menu" aria-labelledby="topbar-user">
+					<?php if($GLOBALS['isRoot']){ ?>
+					<li class="menu-system-setting"><a href="javascript:core.setting('system');"><i class="font-icon icon-cog"></i><?php echo LNG('system_setting');?></a></li>
+					<?php } ?>
+
+					<?php if($GLOBALS['isRoot'] || $GLOBALS['auth']['systemMember.get']){ ?>
+					<li class="menu-system-group"><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo LNG('setting_member');?></a></li>
+					<?php } ?>
+					<?php if($GLOBALS['isRoot'] || $GLOBALS['auth']['pluginApp.index']){ ?>
+					<li class="menu-system-plugin">
+						<a href="javascript:void(0);" onclick="core.openWindowBig('./index.php?pluginApp/index','<?php echo LNG('PluginCenter');?>');"><i class="font-icon icon-puzzle-piece"></i><?php echo LNG('PluginCenter');?></a></li>
+					<li role="presentation" class="divider"></li> 
+					<?php } ?>
+	
+
+					<li class="menu-system-user"><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo LNG('setting_user');?></a></li>
+					<li class="menu-system-theme"><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo LNG('setting_theme');?></a></li>
+					<li class="menu-system-full"><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo LNG('full_screen');?></a></li>
+					<li class="menu-system-help"><a href="javascript:core.setting('help');"><i class="font-icon icon-question"></i><?php echo LNG('setting_help');?></a></li>
+					<li class="menu-system-about"><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo LNG('setting_about');?></a></li>
+					<li role="presentation" class="divider"></li>
+					<li class="menu-system-logout"><a href="./index.php?user/logout"><i class="font-icon icon-signout"></i><?php echo LNG('ui_logout');?></a></li>
+				</ul>
+			</div>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>

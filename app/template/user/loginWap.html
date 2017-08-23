@@ -1,0 +1,60 @@
+<!--user login-->
+	<?php include(TEMPLATE.'common/header.html');?>
+	<link href="<?php echo STATIC_PATH;?>style/wap/login.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet">
+	<title><?php echo strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+</head>
+
+<body>
+	<div class="loginbox login-wap" >
+		<div class="title">
+			<div class="logo">
+				<i class="icon-cloud"></i><?php echo strip_tags(LNG('kod_name'));?>
+			</div>
+			<div class='info'><?php echo LNG('kod_name_desc');?></div>
+		</div>
+		<div class="form">
+			<form action="#">
+				<div class="inputs">
+					<div><span><?php echo LNG('username');?>：</span><input id="username" name='name' type="text" placeholder="<?php echo LNG('username');?>" required/> </div>
+					<div><span><?php echo LNG('password');?>：</span><input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" required /></div>
+					
+					<?php if(need_check_code()){?>
+					<div class='check-code'>
+						<span><?php echo LNG('login_code');?>：</span>
+						<input name='checkCode' class="check-code" type="text" placeholder="<?php echo LNG('login_code');?>" required autocomplete="off"/>
+						<img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
+						<div style="clear:both;"></div>
+					</div>
+					<?php }?>
+				</div>
+				<div class="actions">
+					<input type="submit" id="submit" value="<?php echo LNG('login');?>" />
+					<input type="checkbox" class="checkbox" name="rememberPassword" id='rememberPassword-label'/>
+					<label for='rememberPassword-label'><?php echo LNG('login_rember_password');?></label>
+				</div>
+				<div class="msg"><?php echo $msg;?></div>
+				<div style="clear:both;"></div>
+
+				<?php if ($this->config['settingSystem']['autoLogin'] == '1') {?>
+				<div class='guest'>
+				<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo LNG('guest_login');?><i class=' icon-arrow-right'></i></a>
+				</div>
+				<?php } ?>
+			</form>
+		</div>
+	</div>
+
+	<?php $GLOBALS['loadCommonJs'] = true;?>
+	<?php include(TEMPLATE.'common/footer.html');?>
+	<script type="text/javascript" >
+		seajs.config({
+			base: "<?php echo STATIC_PATH;?>js/",
+			preload: ["lib/jquery-1.8.0.min"],
+			map:[
+				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
+			]
+		});
+		seajs.use("<?php echo STATIC_JS;?>/src/user/main");
+	</script>
+</body>
+</html>

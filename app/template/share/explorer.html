@@ -1,0 +1,54 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo $shareInfo['name'].' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_explorer.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+
+<style>
+.frame-main .frame-left {bottom: 0px;}
+.frame-main .bottom-box{display:none !important;}
+.tools-right #set_theme{display:none !important;}
+#PV_rotate_Left,#PV_rotate_Right,#PV_Btn_Remove{display:none !important;}
+<?php if(isset($_GET['type'])){?>
+	.topbar,.common-footer,.bottom-box{display:none;}
+	.frame-header{top:0;}
+	.frame-main{top:0px;bottom:0px;}
+	.frame-main .frame-left #folder-list-tree{bottom:5px;}	
+	<?php if($_GET['type']=="explorer"){?>
+		.frame-header .header-content .header-left{display:none;}
+		.frame-header .header-content .header-middle{left:12px;}
+		.frame-main .frame-left,.frame-main .frame-resize{display:none;}
+		.frame-main .frame-right{left:0px;}
+		.task-tab{display:none;}
+	<?php } ?>
+
+	<?php if($_GET['type']=="fileList"){?>
+		.frame-header{display:none;}
+		.frame-main .frame-left,.frame-main .frame-resize{display:none;}
+		.frame-main .frame-right{left:0px;}
+		.frame-main{top:0px;}
+		.task-tab,#set_theme,#fav,#home{display:none !important;}
+		.header-middle{top:3px;left:5px;right:140px;}
+		#list-type-header{top:35px;}
+	<?php } ?>
+<?php } ?>
+</style>
+
+
+<body style="overflow:hidden;" oncontextmenu="return core.contextmenu();" id="page-explorer">
+	<?php include(TEMPLATE.'common/navbarShare.html');?>
+	<?php include(TEMPLATE.'explorer/content.html');?>
+	<?php include(TEMPLATE.'common/footer.html');?>
+	<script type="text/javascript" >
+		AUTH  = {'explorer.fileDownload':<?php echo clear_html($canDownload);?>};
+		G.thisPath = "<?php echo $dir;?>";
+		G.user = "<?php echo clear_html($_GET['user']);?>";
+		G.sid = "<?php echo clear_html($_GET['sid']);?>";
+		G.shareInfo = <?php echo json_encode($shareInfo);?>;
+		G.theme = "<?php echo $configTheme;?>";
+		seajs.use("app/src/shareExplorer/main");
+	</script>
+</body>
+</html>
+

@@ -1,0 +1,202 @@
+<div class="frame-main">
+	<div class='frame-left'>
+		<ul id="folder-list-tree" class="ztree"></ul>
+		<div class="bottom-box">
+			<div class="user-space-info"></div>
+			<div class="box-content">
+				<div class="cell menu-recycle-button"><i class="font-icon icon-trash"></i><span><?php echo LNG('recycle');?></span></div>
+				<div class="cell menuShareButton"><i class="font-icon icon-share-sign"></i><span><?php echo LNG('my_share');?></span></div>
+				<div style="clear:both"></div>
+			</div>
+		</div>
+	</div><!-- / frame-left end-->
+	
+	<div class='frame-resize'></div>
+	<div class='frame-right'>
+		<div class="frame-header">
+			<div class="header-content">
+				<div class="header-left">
+					<div class="btn-group btn-group-sm">
+						<button class="btn btn-default" id='btn-history-back' title='<?php echo LNG('history_back');?>' type="button">
+							<i class="font-icon icon-angle-left"></i>
+						</button>
+						<button class="btn btn-default" id='btn-history-next' title='<?php echo LNG('history_next');?>' type="button">
+							<i class="font-icon icon-angle-right"></i>
+						</button>
+					</div>
+				</div><!-- /header left -->
+
+				<div class='header-middle'>
+					<button class="btn btn-default btn-left-radius ml-10" id='home' title='<?php echo LNG('root_path');?>'>
+						<i class="font-icon icon-home"></i>
+					</button>
+					<div id='yarnball' title="<?php echo LNG('address_in_edit');?>"></div>
+					<div id='yarnball-input'><input type="text" name="path" value="" class="path" id="path"/></div>
+
+					<button class="btn btn-default" id='fav' title='<?php echo LNG('add_to_fav');?>' type="button">
+						<i class="font-icon icon-star"></i>
+					</button>
+					<!-- <button class="btn btn-default" id='refresh' title='<?php echo LNG('refresh_all');?>' type="button">
+						<i class="font-icon icon-refresh"></i>
+					</button> -->
+					<button class="btn btn-default btn-right-radius" id='goto-father' title='<?php echo LNG('go_up');?>' type="button">
+						<i class="font-icon icon-circle-arrow-up"></i>
+					</button>
+					<div class="path-tips" title="<?php echo LNG('only_read_desc');?>" title-timeout="0">
+						<i class="icon-warning-sign"></i><span></span>
+					</div>
+
+					<div class="role-label-box"></div>
+				</div><!-- /header-middle end-->		
+				<div class='header-right'>
+					<input type="text" name="seach" class="btn-left-radius"/>
+					<button class="btn btn-default btn-right-radius" id='search' title='<?php echo LNG('search');?>' type="button">
+						<i class="font-icon icon-search"></i>
+					</button>
+				</div>
+			</div>
+		</div><!-- / header end -->
+		<div class="frame-right-main">
+			<div class="tools">
+				<div class="tools-left tools-left-share <?php if(ST!='share'){echo 'hidden';}?>">
+					<!-- 文件功能 -->
+					<div class="kod-toolbar kod-toolbar-path btn-group btn-group-sm">
+						<button data-action='select-all' class="btn btn-default" type="button">
+							<i class="font-icon icon-check"></i><?php echo LNG('selectAll');?>
+						</button>
+						<button data-action='upload' class="btn btn-default" type="button">
+							<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?>
+						</button>
+						
+						<button data-action='download' class="btn btn-default" type="button">
+							<i class="font-icon icon-download"></i><?php echo LNG('download');?>
+						</button>					        				        
+					</div>
+					<span class='msg'><?php echo LNG('path_loading');?></span>
+					<div class="clear"></div>
+				</div>
+
+
+				<div class="tools-left tools-left-explorer <?php if(ST=='share'){echo 'hidden';}?>">
+					<!-- 回收站tool -->
+					<div class="kod-toolbar kod-toolbar-recycle btn-group btn-group-sm hidden fl-left">
+						<button data-action='recycle-clear' class="btn btn-default" type="button">
+				        	<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('recycle_clear');?>
+				        </button>
+					</div>
+
+					<!-- 分享 tool -->
+					<div class="kod-toolbar kod-toolbar-share btn-group btn-group-sm hidden fl-left">
+						<button data-action='refresh' class="btn btn-default" type="button">
+				        	<i class="font-icon icon-refresh"></i><?php echo LNG('refresh');?>
+				        </button>
+					</div>
+
+					<!-- 文件功能 -->
+					<div class="kod-toolbar kod-toolbar-path fl-left">
+						<div class="btn-group btn-group-sm fl-left mr-10">
+							<button data-action='newfolder' class="btn btn-default" type="button">
+					        	<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('newfolder');?>
+					        </button>
+					        <button data-action='newfile' class="btn btn-default tool-path-newfile" type="button">
+					        	<i class="font-icon icon-caret-down"></i>
+					        </button>
+						</div>
+
+						<div class="btn-group btn-group-sm fl-left mr-10">
+							<button data-action='upload' class="btn btn-default" type="button">
+					        	<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?>
+					        </button>
+					        <button data-action='upload-more' class="btn btn-default tool-path-upload" type="button">
+					        	<i class="font-icon icon-caret-down"></i>
+					        </button>
+						</div>
+
+					    <button type="button" class="btn btn-default btn-sm toolbar-path-more fl-left mr-10">
+					    	<i class="font-icon icon-ellipsis-horizontal"></i>
+					    	<?php echo LNG('button_more');?>&nbsp;<span class="caret"></span>
+					    </button>
+
+						<div class="group-space-use fl-left hidden"></div>
+						<div class="admin-real-path hidden fl-left">
+							<button type="button" class="btn btn-default btn-sm dialog-goto-path ml-10"  title="<?php echo LNG('open_the_path');?>">
+								<i class="font-icon icon-folder-open"></i>
+							</button>
+		                </div>
+						<span class='msg fl-left'><?php echo LNG('path_loading');?></span>
+						<div class="clear"></div>
+					</div>
+				</div>
+				<div class="tools-right">
+					<div class="btn-group btn-group-sm">
+						<button data-action='set-icon' title="<?php echo LNG('list_icon');?>" type="button" class="btn btn-default">
+							<i class="font-icon icon-th"></i>
+						</button>
+						<button data-action='set-list' title="<?php echo LNG('list_list');?>" type="button" class="btn btn-default">
+							<i class="font-icon icon-list"></i>
+						</button>
+						<button data-action='set-split' title="<?php echo LNG('list_list_split');?>" type="button" class="btn btn-default">
+							<i class="font-icon icon-columns"></i>
+						</button>
+
+						<div class="btn-group btn-group-sm menu-theme-list">
+						<button data-action="set-theme" title="<?php echo LNG('setting_theme');?>" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+						  <i class="font-icon icon-dashboard"></i>&nbsp;&nbsp;<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu pull-right dropdown-menu-theme animated menuShow">
+							<?php 
+								$arr = explode(',',$config['settingAll']['themeall']);
+								foreach ($arr as $value) {
+									echo "<li class='list' theme='{$value}'><a href='javascript:void(0);'>".LNG('theme_'.$value)."</a></li>\n";
+								}
+							?>
+						</ul>
+					  </div>
+					</div>
+					<div class="set-icon-size">
+						<span class="dropdown-toggle" data-toggle="dropdown">
+					    	<i class="font-icon icon-zoom-in"></i>
+					    </span>
+					    <ul class="dropdown-menu set-icon-size-slider animated menuShow">
+						    <div class="slider-bg"></div>
+						    <div class="slider-handle"></div>
+					    </ul>
+					</div>
+				</div>
+				<div style="clear:both"></div>
+			</div><!-- end tools -->
+			<div id='list-type-header' class="hidden">
+				<div id="main-title">
+					<div class="filename" field="name"><?php echo LNG('name');?><span></span></div><div class="resize filename-resize"></div>
+					<div class="filetype" field="ext"><?php echo LNG('type');?><span></span></div><div class="resize filetype-resize"></div>
+					<div class="filesize" field="size"><?php echo LNG('size');?><span></span></div><div class="resize filesize-resize"></div>
+					<div class="filetime" field="mtime"><?php echo LNG('modify_time');?><span></span></div><div class="resize filetime-resize"></div>
+					<div style="clear:both"></div>
+				</div>
+			</div>
+			</div><!-- list type 列表排序方式 -->
+
+			<div class='bodymain drag-upload-box menu-body-main'>
+				<div class="line-split-box hidden">
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+					<div class="split-line"></div>
+				</div>
+				<div class="file-continer"></div>
+				<div class="file-continer-more"></div>
+			</div><!-- html5拖拽上传list -->
+			<div class="file-select-info">
+				<span class="item-num"></span>
+				<span class="item-select"></span>
+			</div>
+		</div>
+	</div><!-- / frame-right end-->
+</div><!-- / frame-main end-->
+

@@ -1,0 +1,75 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<link href="<?php echo STATIC_PATH;?>style/login.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet">
+	<title><?php echo LNG('php_env_check').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+</head>
+
+<body>
+	<?php 
+		$arr = array(8);
+		$get = $arr[mt_rand(0,count($arr)-1)];
+		$image = STATIC_PATH."images/wall_page/".$get.".jpg";
+		echo '<img class="background" src="'.$image.'" />';
+		echo '<style type="text/css">.title{background: #6699cc url('.$image.') 0px -92px;}</style>';
+	?>
+	<div class="loginbox" >
+		<div class="title">
+			<div class="logo"><i class="icon-cloud"></i><?php echo strip_tags(LNG('kod_name'));?></div>
+			<div class='info'>——<?php echo LNG('kod_name_desc');?></div>
+			<div class="menu-group">
+				<a id='footer-language' data-toggle="dropdown" href="javascript:void(0);" class="topbar-menu">
+				<i class='font-icon icon-flag'></i>Language<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu footer-language pull-left animated menuShow" role="menu" aria-labelledby="footer-language">
+					<?php 
+				  		$tpl = "";
+				  		foreach ($config['settingAll']['language'] as $key => $value) {
+				  			$name = $value[0];
+				  			$select = I18n::getType() == $key ? "this":"";
+				  			$tpl .= "<li><a href='javascript:core.language(\"{$key}\");' title=\"{$key}/{$value[1]}/{$value[2]}\" class='{$select}'><i class='lang-flag flag-{$key}'></i>{$name}</a></li>";
+				  		}
+						echo $tpl;
+					?>
+				</ul>
+			</div>
+		</div>
+		<div class="form" style="padding: 10px 20px;">
+			<h3><?php echo LNG('php_env_check');?></h3>
+			<?php
+	            $error = php_env_check();
+	            $login = LNG('login');
+	            if ($error=='') {
+	            	echo '<div class="success"><h4>Successful!</h4>';
+	            }else{
+	            	echo '<div class="error"><h4>error:</h4>'.$error."<br/>";
+	            	$login = LNG('php_env_error_ignore');
+	            }
+	            $login_info = str_replace(array("{0}","{1}","{2}"),array('admin','demo/demo','guest/guest'),LNG('install_user_default'));
+	            echo LNG('install_login'),'<br/>'.$login_info.'</div>';
+	            echo '<div class="inputs admin-password"><input type="password" placeholder="'.LNG('login_root_password').'" autocomplete="off"/></div><div class="inputs admin-password-repeat"><input type="password" placeholder="'.LNG('login_root_password_repeat').'" autocomplete="off"/></div>';
+	            echo '<div class="guest"><a href="javascript:void(0);" class="start">'.$login.'</a></div>';
+	        ?>
+		</div>
+	</div>
+
+	<?php $GLOBALS['loadCommonJs'] = true;?>
+	<?php include(TEMPLATE.'common/footer.html');?>
+	<script type="text/javascript" >
+		setTimeout(function(){
+			if( typeof(seajs) == 'undefined' ||
+				typeof(LNG) == 'undefined'
+				){
+				alert('js文件不完整,请查看浏览器控制台和服务器配置是否正常。或检查文件是否被修改(或咨询主机商压缩js导致文件损坏);[js load error!]');
+			}
+		},1000);
+		seajs.config({
+			base: "<?php echo STATIC_PATH;?>js/",
+			preload: ["lib/jquery-1.8.0.min"],
+			map:[
+				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
+			]
+		});
+		seajs.use("<?php echo STATIC_JS;?>/src/user/main");
+	</script>
+
+</body>
+</html>

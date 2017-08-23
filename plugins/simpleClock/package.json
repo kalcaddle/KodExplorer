@@ -1,0 +1,22 @@
+{
+	"id":"simpleClock",
+	"name":"clock",
+	"title":"时钟 clock",
+	"source":{
+		"className":"font-icon icon-time bg-blue-6"
+	},
+	"description":"桌面时钟挂件(desktop widget)",
+	"auther":{
+		"copyright":"kodcloud.",
+		"homePage":"http://www.kodcloud.com",
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		}
+	}
+}

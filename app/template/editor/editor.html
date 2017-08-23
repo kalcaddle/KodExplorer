@@ -1,0 +1,45 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo LNG('ui_editor').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_editor.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+
+<?php if(isset($_GET['project'])){?>
+<style>.topbar{display: none;}.frame-header{top:0;}.frame-main{top:0px;}</style>
+<?php } ?>
+
+<body style="overflow:hidden;" oncontextmenu="return core.contextmenu();" id="page-editor">
+	<?php include(TEMPLATE.'common/navbar.html');?>
+	<div class="frame-main">
+		<div class="tools-left">
+			<a class="home" href="#"  title='<?php echo LNG('root_path');?>'><i class="icon-home"></i></a>
+			<a class="view" href="#"  title='<?php echo LNG('manage_folder');?>'><i class="icon-laptop"></i></a>
+			<a class="folder" href="#" title='<?php echo LNG('newfolder');?>'><i class="icon-folder-close-alt"></i></a>
+			<a class="file" href="#" title='<?php echo LNG('newfile');?>'><i class="icon-file-alt"></i></a>		
+			<a class="refresh" href="#" title='<?php echo LNG('refresh');?>'><i class="icon-refresh"></i></a>		 
+		</div>
+		<div class='frame-left'>
+			<ul id="folder-list-tree" class="ztree"></ul>
+		</div><!-- / frame-left end-->
+		<div class='frame-resize'></div>
+		<div class='frame-right'>
+			<div class="frame-right-main"  style="height:100%;padding:0;margin:0;">
+				<div class="resize-mask"></div>
+				<div class="message-box"><div class="content"></div></div>
+				<div class="menu-tree-root"></div>
+				<div class="menu-tree-folder"></div>
+				<div class="menu-tree-file"></div>				
+				<div class ='frame'>
+					 <iframe name="OpenopenEditor" src="./index.php?editor/edit" style="width:100%;height:100%;border:0;" frameborder=0></iframe>
+				</div>	
+			</div>
+		</div><!-- / frame-right end-->
+	</div><!-- / frame-main end-->
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		G.project = "<?php echo (isset($_GET['project'])?clear_html($_GET['project']):'') ;?>";
+		seajs.use("app/src/editor/main");
+	</script>
+</body>
+</html>

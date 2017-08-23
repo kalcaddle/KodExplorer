@@ -1,0 +1,58 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo $shareInfo['name'].' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_editor.css?ver=<?php echo KOD_VERSION;?>"/>
+	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
+	
+</head>
+
+
+<?php if(isset($_GET['project'])){?>
+<style>
+.topbar{display: none;}
+.frame-header,.frame-main,.frame-main .frame-left{top:0;}
+.edit-content.markdown-full-page .edit-right-frame .markdown-preview {padding-top: 50px;}
+.edit-body {bottom: 30px;}
+</style>
+<?php } ?>
+
+<?php if(isset($_GET['user'])){?>
+<style>
+.frame-main .frame-left{top:0;}
+.frame-main{bottom: 32px;}
+</style>
+<?php } ?>
+
+<body style="overflow:hidden;" oncontextmenu="return core.contextmenu();" id="page-editor">
+	<?php include(TEMPLATE.'common/navbarShare.html');?>
+	<div class="frame-main">
+		<div class='frame-left'>
+			<ul id="folder-list-tree" style="margin-top:10px;" class="ztree"></ul>
+		</div><!-- / frame-left end-->
+		<div class='frame-resize'></div>
+		<div class='frame-right'>
+			<div class="frame-right-main"  style="height:100%;padding:0;margin:0;">
+				<div class="resize-mask"></div>
+				<div class="message-box"><div class="content"></div></div>
+				<div class="menu-tree-root"></div>
+				<div class="menu-tree-folder"></div>
+				<div class="menu-tree-file"></div>				
+				<div class ='frame'>
+					 <iframe name="OpenopenEditor"
+					  src="./index.php?share/edit&user=<?php echo clear_html($_GET['user']);?>&sid=<?php echo clear_html($_GET['sid']);?>" 
+					  style="width:100%;height:100%;border:0;" frameborder=0></iframe>
+				</div>	
+			</div>
+		</div><!-- / frame-right end-->
+	</div><!-- / frame-main end-->
+	<?php include(TEMPLATE.'common/footerCommon.html');?>
+	<script type="text/javascript">
+		AUTH  = {'explorer.fileDownload':<?php echo $canDownload;?>};
+		G.project = "<?php echo (isset($_GET['project'])?clear_html($_GET['project']):'') ;?>";
+		G.user = "<?php echo clear_html($_GET['user']);?>";
+		G.sid = "<?php echo clear_html($_GET['sid']);?>";
+		G.shareInfo = <?php echo json_encode($shareInfo);?>;
+		G.theme = "<?php echo $configTheme;?>";
+		seajs.use("app/src/shareEditor/main");
+	</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<script type="text/javascript" src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
+<?php
+	//commonjs
+	Hook::trigger('templateCommonFooter');
+	if(ST == 'share' || isset($GLOBALS['loadCommonJs'])){
+		if(isset($_GET['user'])){
+			$userInfo = '&user='.clear_html($_GET['user']).'&sid='.clear_html($_GET['sid']);
+		}else{//login...
+			$userInfo = "";
+		}
+		echo '<script type="text/javascript" src="./index.php?share/commonJs&st='.ST.'&act='.ACT.$userInfo.'#id='.rand_string(4).'"></script>';
+	}else{
+		echo '<script type="text/javascript" src="./index.php?user/commonJs&st='.ST.'&act='.ACT.'#id='.rand_string(4).'"></script>';
+	}
+
+	$settings = $GLOBALS['config']['settings'];
+	$settingSystem = $GLOBALS['config']['settingSystem'];
+	if(isset($settings['globalJs'])){
+		echo "\n	".'<script type="text/javascript" id="settings-global-js">'.$settings['globalJs'].'</script>';
+	}
+	if(isset($settings['globalCss'])){
+		echo "\n	".'<style type="text/css" id="settings-global-css">'.$settings['globalCss'].'</style>';
+	}
+	if(isset($settingSystem['globalCss'])){
+		echo "\n	".'<style type="text/css" id="setting-system-global-css">'.$settingSystem['globalCss'].'</style>';
+	}
+	if(isset($settingSystem['globalHtml'])){
+		echo "\n	".$settingSystem['globalHtml']."\n";
+	}
+?>
+
+<script type="text/javascript">
+	seajs.config({
+		base: "<?php echo STATIC_PATH;?>js/",
+		preload: [
+			"lib/jquery-1.8.0.min",
+		],
+		map:[
+			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
+		]
+	});
+</script>
