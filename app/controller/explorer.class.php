@@ -1028,7 +1028,7 @@ class explorer extends Controller{
 			if (get_path_father($image)==DATA_THUMB){//当前目录则不生成缩略图
 				$imageThumb=$this->path;
 			}else {
-				$cm=new ImageThumb($image,'file');
+				$cm = new ImageThumb($image,'file');
 				$cm->prorate($imageThumb,250,250);//生成等比例缩略图
 			}
 		}

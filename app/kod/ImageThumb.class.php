@@ -40,6 +40,7 @@ class ImageThumb {
 		$info = '';
 		$data = GetImageSize($file, $info);
 		$img  = false;
+		//var_dump($data,$file,memory_get_usage()-$GLOBALS['config']['appMemoryStart']);
 		switch ($data[2]) {
 			case IMAGETYPE_GIF:
 				if (!function_exists('imagecreatefromgif')) {
@@ -50,15 +51,21 @@ class ImageThumb {
 			case IMAGETYPE_JPEG:
 				if (!function_exists('imagecreatefromjpeg')) {
 					break;
-				} 
+				}
 				$img = imagecreatefromjpeg($file);
 				break;
 			case IMAGETYPE_PNG:
 				if (!function_exists('imagecreatefrompng')) {
 					break;
 				}
-				$img = imagecreatefrompng($file);
+				$img = @imagecreatefrompng($file);
 				imagesavealpha($img,true);
+				break;
+			case IMAGETYPE_XBM:
+				$img = imagecreatefromxbm($file);
+				break;
+			case IMAGETYPE_WBMP:
+				$img = imagecreatefromwbmp($file);
 				break;
 			case IMAGETYPE_BMP:
 				$img = imagecreatefrombmp($file);
@@ -69,13 +76,11 @@ class ImageThumb {
 	}
 
 	public static function imageSize($file){
-		$img = self::image($file);
-		$result = false;
-		if($img){
-			$result = array('width'=>imageSX($img),"height"=>imageSY($img));
-			imageDestroy($img);
+		$size = GetImageSize($file);
+		if(!$size){
+			return false;
 		}
-		return $result;
+		return array('width'=>$size[0],"height"=>$size[1]);
 	}
 
 	// 生成扭曲型缩图

@@ -18,9 +18,8 @@ class adminerPlugin extends PluginBase{
 		));
 	}
 	public function index(){
-		@session_start();
-		$_SESSION['AdminerAccess'] = 1;
-		@session_write_close();
+		include(LIB_DIR.'api/sso.class.php');
+		SSO::sessionSet('AdminerAccess');
 		header('Location: '.$this->pluginHost.'adminer/');
 	}
 }

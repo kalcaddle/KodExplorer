@@ -1,4 +1,5 @@
 define(function(require, exports) {
+	var currentFileUrl = '';
 	var tplZipview = 
 	'<div class="zip-view-content">\
 		<div class="header">\
@@ -33,7 +34,7 @@ define(function(require, exports) {
 	});
 
 	return function(appOption){
-		var zTreeList;
+		var zTree;
 		var setting = {
 			view: {
 				showLine: false,
@@ -82,7 +83,7 @@ define(function(require, exports) {
 					if($(event.target).hasClass('menu-item-parent')){
 						return;
 					}
-					zTreeList.selectNode(treeNode);
+					zTree.selectNode(treeNode);
 					pathInfoNode(treeNode);
 					if(treeNode && treeNode.type=='folder'){
 						$("#"+treeNode.tId+'_switch').click();
@@ -97,14 +98,14 @@ define(function(require, exports) {
 				beforeRightClick:function(treeId, treeNode){
 					if(!treeNode) return;
 					pathInfoNode(treeNode);
-					zTreeList.selectNode(treeNode);
+					zTree.selectNode(treeNode);
 				},
 				onDblClick:function(event,treeId,treeNode){
 					if($(event.target).hasClass('.menu-item-parent')){
 						return;
 					}
 					if(treeNode && treeNode.type == 'file'){
-						menuAction('open',zTreeList);
+						menuAction('open',zTree);
 					}
 				}
 			}
@@ -118,16 +119,17 @@ define(function(require, exports) {
 					}
 					var item = tree[i];
 					tree[i] = {
-						name:core.pathThis(item['filename']),
-						path:item['filename'],
-						isParent:!!(item['child']),
-						type:item['folder']?'folder':'file',
+						name:core.pathThis(item.filename),
+						filePath:item.filename,
+						path:currentFileUrl+'&index='+item.index+"&name=/"+urlEncode(item.filename),
+						isParent:!!(item.child),
+						type:item.folder?'folder':'file',
 						menuType:item['folder']?'menu-zip-list-folder':'menu-zip-list-file',
-						ext:core.pathExt(item['filename']),
-						mtime:item['mtime'],
-						index:item['index'],
-						size:item['size'],
-						child:item['child']
+						ext:core.pathExt(item.filename),
+						mtime:item.mtime,
+						index:item.index,
+						size:item.size,
+						child:item.child
 					}
 					if(item['folder']){
 						delete(tree[i]['ext']);
@@ -317,21 +319,17 @@ define(function(require, exports) {
 			kodApp.download(url);
 		}
 		var zipFileOpen = function(tree,node,app){
-			var filePath = tree.setting.filePath;
-			var fileUrl  = tree.setting.fileUrl;
 			var ext = node.ext;
-			var url = fileUrl+'&index='+node.index+"&name=/"+urlEncode(node.path);
-
-			//zip内的zip则不处理
-			if( ext == 'zip'){
-				ext = 'unknow';
+			if( ext == 'zip'){//zip内的zip则不处理
+				//ext = 'unknow';
 			}
 			//文件太大，提示解压后
 			if(node.size >= 1024*1024*200){
 				Tips.tips(LNG.zipview_file_big,'warning');
 				ext = 'unknow';
 			}
-			kodApp.open(url,ext,app);
+			kodApp.setLastOpenTarget($('#'+node.tId));
+			kodApp.open(node.path,ext,app);
 		}
 		var zipFileUnzipTo = function(tree,node){
 			core.api.pathSelect(
@@ -369,7 +367,7 @@ define(function(require, exports) {
 						return;
 					}
 					ui.f5(true,true,function(){
-						var thePath = unzipTo+core.pathThis(node.path);
+						var thePath = unzipTo+node.name;
 						ui.path.setSelectByFilename(thePath);
 					});
 				}
@@ -388,7 +386,7 @@ define(function(require, exports) {
 		var pathInfoData = function(node){
 			var data = {
 				name:node.name,
-				path:node.path,
+				path:node.filename,
 				size:node.size,
 				sizeFriendly:pathTools.fileSize(node.size),
 				mtime:date(LNG.time_type_info,node.mtime)
@@ -407,7 +405,7 @@ define(function(require, exports) {
 		}
 
 		var pathInfo = function(zTree,node){
-			var icoType = (node.type =='folder')?'folder':core.pathExt(node.path);
+			var icoType = (node.type =='folder')?'folder':node.ext;
 			var tplFile = (node.type =='folder')?tplPathInfo:tplFileInfo;	
 			var render = template.compile(tplFile);
 			var data = pathInfoData(node);
@@ -417,7 +415,7 @@ define(function(require, exports) {
 				padding:5,
 				ico:core.iconSmall(icoType),
 				fixed: true,//不跟随页面滚动
-				title:core.pathThis(node.path),
+				title:node.name,
 				content:render(data),
 				ok: true
 			});
@@ -508,9 +506,9 @@ define(function(require, exports) {
 				menuType:'menu-zip-list-folder'
 			}
 			$.fn.zTree.init($("#"+treeID),setting,treeData);
-			zTreeList = $.fn.zTree.getZTreeObj(treeID);
+			zTree = $.fn.zTree.getZTreeObj(treeID);
 			resetOdd(treeID);
-			pathInfoNode(zTreeList.getNodeByParam("index",'-1',null));
+			pathInfoNode(zTree.getNodeByParam("index",'-1',null));
 		}
 
 		var init = function(path){
@@ -520,6 +518,7 @@ define(function(require, exports) {
 				return;
 			}
 			var fileUrl = appOption.apiList+'&path='+urlEncode(path);
+			currentFileUrl = fileUrl;
 			if (typeof(G.sharePage) != 'undefined' && G.sid) {
 				kodApp.openUnknow(path);
 				return;
@@ -536,8 +535,8 @@ define(function(require, exports) {
 					if(data.code){
 						var name = urlDecode(core.pathThis(path));
 						initData(name,data.data,path);
-						zTreeList.setting.filePath = path;
-						zTreeList.setting.fileUrl  = fileUrl;
+						zTree.setting.filePath = path;
+						zTree.setting.fileUrl  = fileUrl;
 					}else{//预览失败
 						kodApp.openUnknow(path,data.data);
 					}

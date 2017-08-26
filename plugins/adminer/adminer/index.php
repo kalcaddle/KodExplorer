@@ -11,10 +11,11 @@
 @ignore_user_abort(true);
 @set_time_limit(3600*2);//set_time_limit(0)  1day
 @ini_set('memory_limit','2028M');//2G;
-include(__DIR__.'/../../../app/api/sso.php');
-if(!check_session_data('AdminerAccess')){
+include('./../../../app/api/sso.class.php');
+if(!SSO::sessionCheck('AdminerAccess')){
 	die('Not Authorized!');
 }
+
 
 error_reporting(6135);$Lc=!preg_match('~^(unsafe_raw)?$~',ini_get("filter.default"));if($Lc||ini_get("filter.default_flags")){foreach(array('_GET','_POST','_COOKIE','_SERVER')as$X){$Wh=filter_input_array(constant("INPUT$X"),FILTER_UNSAFE_RAW);if($Wh)$$X=$Wh;}}if(function_exists("mb_internal_encoding"))mb_internal_encoding("8bit");if(isset($_GET["file"])){if($_SERVER["HTTP_IF_MODIFIED_SINCE"]){header("HTTP/1.1 304 Not Modified");exit;}header("Expires: ".gmdate("D, d M Y H:i:s",time()+365*24*60*60)." GMT");header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");header("Cache-Control: immutable");if($_GET["file"]=="favicon.ico"){header("Content-Type: image/x-icon");echo
 lzw_decompress("\0\0\0` \0Ñ\0\n @\0¥CÑË\"\0`E„Q∏‡ˇá?¿tvM'îJd¡d\\åb0\0ƒ\"ô¿f”à§Ós5õœÁ—AùXPaJì0Ñ•ë8Ñ#RäT©ëz`à#.©«cÌX√˛»Ä?¿-\0°Im?†.´M∂Ä\0»Ø(Ãâ˝¿/(%å\0");}elseif($_GET["file"]=="default.css"){header("Content-Type: text/css; charset=utf-8");echo

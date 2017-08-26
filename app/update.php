@@ -102,6 +102,7 @@ function updateApps(){
 		$dataDist[$key] = $value;
 	}
 	fileCache::save($fileDist,$dataDist);
+	move_path(THE_BASIC_PATH.'/app/desktop_app.php',THE_DATA_PATH.'system/desktop_app.php');
 }
 function updateSystemSetting(){
 	$systemFile = THE_DATA_PATH.'system/system_setting.php';
@@ -132,7 +133,9 @@ class Update3To400{
 		$this->initMember();
 	}
 	private function keyGet($str){
-		$str = str_replace(array('_id','theme_diy'),array('ID','themeDIY'),$str);
+		$str = str_replace(
+			array('_id','theme_diy','device_uuid'),
+			array('ID','themeDIY','deviceUUID'),$str);
 		$str = explode('_',$str);
 		for ($i=0; $i < count($str); $i++) {
 			if ($i == 0) continue;

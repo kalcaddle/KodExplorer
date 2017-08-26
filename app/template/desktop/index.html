@@ -5,9 +5,11 @@
 	
 </head>
 <body style="overflow: hidden;" oncontextmenu="return core.contextmenu();" id="page-desktop">
-	<?php include(TEMPLATE.'common/navbar.html');?>
-	<div class='bodymain drag-upload-box desktop' style="background-image:url('<?php echo $wall;?>');">
+	<div class="full-background desktop" style="background-image:url('<?php echo $wall;?>');">
 		<img class="background" />
+	</div>
+	<?php include(TEMPLATE.'common/navbar.html');?>
+	<div class='bodymain drag-upload-box desktop'>
 		<div class="file-continer file-list-icon hidden"></div>
 	</div><!-- html5拖拽上传list -->
 
@@ -23,8 +25,8 @@
 			<li class='setting_help'><a href="#" onclick="core.setting('help');"><?php echo LNG('setting_help');?></a></li>
 			<li><div id="leftspliter"></div></li>
 			<li class='setting_about'><a href="#" onclick="core.setting('about');"><?php echo LNG('setting_about');?></a></li>
-			<li class='setting_user'><a href="#" onclick="core.setting('user');"><?php echo LNG('setting');?></a></li>
-			<li class='home_page'><a href="#" onclick="core.setting('user');"><?php echo LNG('setting');?></a></li>
+			<li class='setting_user'><a href="#" onclick="core.setting('user');"><?php echo LNG('setting_user');?></a></li>
+			<li class='setting_homepage'><a href="#" onclick="core.openWindow('http://kodcloud.com','<?php echo $L['my_document'];?>');">kodCloud 主页</a></li>
 		</ul>
 		<ul id="links">
 			<li class="icon"></li>

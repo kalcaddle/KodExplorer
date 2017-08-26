@@ -15,6 +15,9 @@ kodReady.push(function(){
 		// $(scrollArr.join(',')).mCustomScrollbar({theme:"minimal-dark"});
 	});
 
+	//关闭随机壁纸
+	//$.addStyle('#random-wallpaper,.randomImage{display:none;}');
+
 
 	//编辑器扩展
 	kodApp.appSupportSet('aceEditor','vue,we,wpy');

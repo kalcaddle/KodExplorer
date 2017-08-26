@@ -158,53 +158,51 @@ class user extends Controller{
 	 */
 	public function sso(){
 		$result = false;
-		$error  = "not login";
-		if(isset($_SESSION) && $_SESSION['kodLogin'] == 1){//避免session不可写导致循环跳转
-			$user = $_SESSION['kodUser'];
-			//admin 或者不填则允许所有kod用户登陆
-			if( $user['role'] == '1' || 
-				!isset($this->in['check']) ||
-				!isset($this->in['value']) ){
-				$result = true;
-			}
+		$error  = "未登录!";
+		if(!isset($_SESSION) || $_SESSION['kodLogin'] != 1){//避免session不可写导致循环跳转
+			$this->login($error);
+		}
+		$user = $_SESSION['kodUser'];
+		//admin 或者不填则允许所有kod用户登陆
+		if( $user['role'] == '1' || 
+			!isset($this->in['check']) ||
+			!isset($this->in['value']) ){
+			$result = true;
+		}
 
-			$checkValue = false;
-			switch ($this->in['check']) {
-				case 'userID':$checkValue = $user['userID'];break;
-				case 'userName':$checkValue = $user['name'];break;
-				case 'roleID':$checkValue = $user['role'];break;
-				case 'roleName':
-					$role = systemRole::getInfo($user['role']);
-					$checkValue = $role['name'];
-					break;
-				case 'groupID':
-					$checkValue = array_keys($user['groupInfo']);
-					break;
-				case 'groupName':
-					$checkValue = array();
-					foreach ($user['groupInfo'] as $groupID=>$val){
-						$item = systemGroup::getInfo($groupID);
-						$checkValue[] = $item['name'];
-					}
-					break;
-				default:break;
-			}
-			if(!$result && $checkValue != false){
-				if( (is_string($checkValue) && $checkValue == $this->in['value']) || 
-					(is_array($checkValue)  && in_array($this->in['value'],$checkValue))
-					){
-					$result = true;
-				}else{
-					$error = $this->in['check'].' not accessed, It\'s must be "'.$this->in['value'].'"';
+		$checkValue = false;
+		switch ($this->in['check']) {
+			case 'userID':$checkValue = $user['userID'];break;
+			case 'userName':$checkValue = $user['name'];break;
+			case 'roleID':$checkValue = $user['role'];break;
+			case 'roleName':
+				$role = systemRole::getInfo($user['role']);
+				$checkValue = $role['name'];
+				break;
+			case 'groupID':
+				$checkValue = array_keys($user['groupInfo']);
+				break;
+			case 'groupName':
+				$checkValue = array();
+				foreach ($user['groupInfo'] as $groupID=>$val){
+					$item = systemGroup::getInfo($groupID);
+					$checkValue[] = $item['name'];
 				}
+				break;
+			default:break;
+		}
+		if(!$result && $checkValue != false){
+			if( (is_string($checkValue) && $checkValue == $this->in['value']) || 
+				(is_array($checkValue)  && in_array($this->in['value'],$checkValue))
+				){
+				$result = true;
+			}else{
+				$error = $this->in['check'].' 没有权限, 配置权限需要为: "'.$this->in['value'].'"';
 			}
 		}
 		if($result){
-			@session_name('KOD_SESSION_SSO');
-			@session_id($_COOKIE['KOD_SESSION_SSO']);
-			@session_start();
-			$_SESSION[$this->in['app']] = 'success';
-			@session_write_close();
+			include(LIB_DIR.'api/sso.class.php');
+			SSO::sessionSet($this->in['app']);
 			header('location:'.$this->in['link']);
 			exit;
 		}

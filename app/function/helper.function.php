@@ -200,10 +200,11 @@ function check_list_dir(){
 }
 function php_env_check(){
 	$error = '';
-	if(!function_exists('iconv')) $error.= '<li>'.LNG('php_env_error_iconv').'</li>';
-	if(!function_exists('mb_convert_encoding')) $error.= '<li>'.LNG('php_env_error_mb_string').'</li>';
+	if(!function_exists('iconv')) $error.= '<li>'.LNG('php_env_error').' iconv</li>';
+	if(!function_exists('curl_init')) $error.= '<li>'.LNG('php_env_error').' curl</li>';
+	if(!function_exists('mb_convert_encoding')) $error.= '<li>'.LNG('php_env_error').' mb_string</li>';
+	if(!function_exists('file_get_contents')) $error.='<li>'.LNG('php_env_error').' file_get_contents</li>';
 	if(!version_compare(PHP_VERSION,'5.0','>=')) $error.= '<li>'.LNG('php_env_error_version').'</li>';
-	if(!function_exists('file_get_contents')) $error.='<li>'.LNG('php_env_error_file').'</li>';
 	if(!check_list_dir()) $error.='<li>'.LNG('php_env_error_list_dir').'</li>';
 
 	$parent = get_path_father(BASIC_PATH);
@@ -343,11 +344,20 @@ function init_setting(){
 	if (file_exists($settingUser)) {
 		include($settingUser);
 	}
-	
+
+	if(is_array($GLOBALS['L'])){
+		I18n::set($GLOBALS['L']);
+	}
 	I18n::set(array(
 		'kod_name' 	=> $GLOBALS['config']['settingSystem']['systemName'],
 		'kod_name_desc' => $GLOBALS['config']['settingSystem']['systemDesc'],
-	));	
+	));
+	if(isset($GLOBALS['config']['setting_system']['system_name'])){
+		I18n::set(array(
+			'kod_name' 	=> $GLOBALS['config']['setting_system']['system_name'],
+			'kod_name_desc' => $GLOBALS['config']['setting_system']['system_desc'],
+		));
+	}
 	define('STATIC_PATH',$GLOBALS['config']['settings']['staticPath']);
 }
 

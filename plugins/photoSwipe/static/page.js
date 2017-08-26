@@ -1,58 +1,72 @@
 define(function(require, exports) {
+	var itemsArr = [];
 	var getImageArr = function(imagePath){
-		var items = [];
+		itemsArr = [];
 		var index = -1;
-		var width = 0,height = 0;
-		if(window.Config){
-			if(Config.pageApp == 'editor'){
-				var $folder = $(".curSelectedNode").parent().parent();
-				var fileNum = 0;
-				var zTree = ui.tree.zTree()
-				$folder.find('li[treenode]').each(function(){
-					var node = zTree.getNodeByTId($(this).attr('id'));
-					if(!node) return;
-
-					var thePath = node.path;
-					var ext = core.pathExt(node.path);
-					if(!kodApp.appSupportCheck('photoSwipe',ext)){
-						return;
-					}
-					if(thePath == imagePath){
-						index = fileNum;
-					}
-					fileNum ++;
-					items.push({
-						src:core.path2url(thePath),
-						msrc:core.path2url(thePath),
-						title:urlDecode(core.pathThis(thePath)),
-						w:width,h:height
-					});
-				});
-			}else{
-				$('.file-continer .ico.picture').each(function(i){
-					var $image = $(this).find('img');
-					var thePath = hashDecode($(this).parents('.file').attr('data-path'));
-					if(thePath == imagePath){
-						index = i;
-					}
-					items.push({
-						src:core.path2url(thePath),
-						msrc:$image.attr('data-original'),
-						title:urlDecode(core.pathThis(thePath)),
-						w:width,h:height
-					});
-				});
+		var itemsPush = function(path,msrc,$dom){
+			var width = 0,height = 0;
+			if(!msrc){
+				msrc = core.path2url(path);
 			}
+			itemsArr.push({
+				src:core.path2url(path),
+				msrc:msrc,
+				title:urlDecode(core.pathThis(path)),
+				w:width,h:height,
+				$dom:$dom?$dom:false
+			});
 		}
-		if(items.length == 0 || index == -1){
-			items = [{
-				src:core.path2url(imagePath),
-				msrc:core.path2url(imagePath),
-				title:urlDecode(core.pathThis(imagePath)),
-				w:width,h:height
-			}];
+
+		//打开时最后的target对象dom [文件列表;搜索列表;树目录[编辑器压缩文件预览]]
+		var $lastTarget = kodApp.getLastOpenTarget();
+		//console.log('test',$lastTarget);
+		if(!$lastTarget || _.get($lastTarget,'length') == 0){
+		}else if($lastTarget.hasClass('file-box')){
+			var $continer = $lastTarget.parents('.file-continer');
+			$continer.find('.ico.picture').each(function(i){
+				var $image = $(this).find('img');
+				var thePath = hashDecode($(this).parents('.file').attr('data-path'));
+				if(thePath == imagePath){
+					index = i;
+				}
+				itemsPush(thePath,$image.attr('data-original'),$image);
+			});
+		}else if($lastTarget.parents('.search-result').exists()){//搜索列表
+			var $continer = $lastTarget.parents('.search-result');
+			$continer.find('.file-item').each(function(i){
+				var thePath = hashDecode($(this).attr('data-path'));
+				var ext = core.pathExt(thePath);
+				if(!kodApp.appSupportCheck('photoSwipe',ext)){
+					return;
+				}
+				if(thePath == imagePath){
+					index = i;
+				}
+				itemsPush(thePath,false,$(this).find('.file-icon'));
+			});
+		}else if($lastTarget.parents('.ztree').exists()){ //树目录:编辑器或压缩文件内打开
+			var id = $lastTarget.parents('.ztree').attr('id');
+			var zTree = $.fn.zTree.getZTreeObj(id);
+			var fileNum = 0;
+			$lastTarget.parent().find('li[treenode]').each(function(){
+				var node = zTree.getNodeByTId($(this).attr('id'));
+				if(!node) return;
+				var thePath = node.path;
+				var ext = core.pathExt(node.path);
+				if(!kodApp.appSupportCheck('photoSwipe',ext)){
+					return;
+				}
+				if(thePath == imagePath){
+					index = fileNum;
+				}
+				fileNum ++;
+				itemsPush(thePath,false,$(this).find('.tree_icon'));
+			});
 		}
-		return {items:items,index:index};
+		if(itemsArr.length == 0 || index == -1){
+			itemsPush(imagePath);
+		}
+		return {items:itemsArr,index:index};
 	}
 
 	var options = {
@@ -68,17 +82,13 @@ define(function(require, exports) {
 		showAnimationDuration: 300,
 		hideAnimationDuration: 300,
 		getThumbBoundsFn: function(index) {
-			// 自动获取图片大小后;不支持打开关闭渐变动画了
-			var thumbnail = $('.ico.picture')[index];
-			if(!thumbnail || $(thumbnail).find('img').length == 0){//目录切换后没有原图
-				var result = {x:$(window).width()/2,y:$(window).height()/2,w:1,h:1};
-				return result;
+			var item = itemsArr[index];
+			if(!item || !item.$dom){//目录切换后没有原图
+				return {x:$(window).width()/2,y:$(window).height()/2,w:1,h:1};
 			}
-			thumbnail = $(thumbnail).find('img').get(0);
 			var pageYScroll = window.pageYOffset || document.documentElement.scrollTop; 
-			var rect = thumbnail.getBoundingClientRect();
-			var result = {x:rect.left,y:rect.top + pageYScroll,w:rect.width,h:rect.height};
-			return result;
+			var rect = $(item.$dom).get(0).getBoundingClientRect();
+			return {x:rect.left,y:rect.top + pageYScroll,w:rect.width,h:rect.height};
 		}
 	};
 
@@ -95,6 +105,9 @@ define(function(require, exports) {
 			if($('.pswp_content').length == 0){
 				$(photoSwipeTpl).appendTo('body');
 				$('.pswp__caption__center').css({"text-align":"center"});
+			}
+			if($('.pswp').hasClass('pswp--open')){//已经打开
+				return;
 			}
 
 			var image = getImageArr(imagePath);

@@ -827,7 +827,7 @@ var Tips =  (function(){
 			code=msg.code;
 			msg = msg.data;
 		}
-		if (msg == undefined) msg = 'loading...';
+		if (msg == undefined) msg = _.get(window,'LNG.loading','loading...');
 		msg+= "&nbsp;&nbsp; <img src='"+staticPath+"images/common/loading_circle.gif'/>";
 
 		var self = _init(true,msg,code);
@@ -1262,11 +1262,13 @@ var MaskView =  (function(){
 
 //拖动事件
 (function($){
-	$.fn.drag = function(obj,is_stopPP) {
+	$.fn.drag = function(obj,isStopPP) {
 		this.each(function(){
 			var isDraging 		= false;
 			var mouseFirstX		= 0;
 			var mouseFirstY		= 0;
+			var offsetX = 0;
+			var offsetY = 0;
 
 			var $that = $(this);
 			$that.die('mousedown').live('mousedown',function(e){
@@ -1280,15 +1282,34 @@ var MaskView =  (function(){
 					stopPP(e);
 					return false;
 				});
-				if(is_stopPP){//指定不冒泡才停止向上冒泡。split拖拽调整宽度，父窗口拖拽框选防止冒泡
+				if(isStopPP){//指定不冒泡才停止向上冒泡。split拖拽调整宽度，父窗口拖拽框选防止冒泡
 					stopPP(e);return false;
 				}
 				//stopPP(e);return false;//跨iframe导致事件屏蔽问题
 			});
+
+			//移动端拖拽支持
+			$that.on('touchstart',function(e){
+				dragStart(e);
+			}).on('touchmove',function(e){
+				dragMove(e);
+			}).on('touchend',function(e){
+				dragEnd(e);
+				stopPP(e);
+				return false;
+			});
+			var getEvent = function(e){
+				if( e.originalEvent && 
+					e.originalEvent.targetTouches){
+					return  e.originalEvent.targetTouches[0];
+				}
+				return e;
+			}
 			var dragStart = function(e){
+				var mouse = getEvent(e);
 				isDraging = true;
-				mouseFirstX = e.pageX;
-				mouseFirstY = e.pageY;
+				mouseFirstX = mouse.pageX;
+				mouseFirstY = mouse.pageY;
 				if (typeof(obj["start"]) == 'function'){
 					obj["start"](e,$that);
 				}
@@ -1296,14 +1317,18 @@ var MaskView =  (function(){
 			var dragMove = function(e){
 				if (!isDraging) return true;
 				if (typeof(obj["move"]) == 'function'){
-					obj["move"](e.pageX-mouseFirstX,e.pageY-mouseFirstY,e,$that);
+					var mouse = getEvent(e);
+					offsetX = mouse.pageX - mouseFirstX;
+					offsetY = mouse.pageY - mouseFirstY;
+					obj["move"](offsetX,offsetY,e,$that);
 				}
 			};
 			var dragEnd = function(e){
 				if (!isDraging) return false;
 				isDraging = false;
 				if (typeof(obj["end"]) == 'function'){
-					obj["end"](e.pageX-mouseFirstX,e.pageY-mouseFirstY,e,$that);
+					//var mouse = getEvent(e);
+					obj["end"](offsetX,offsetY,e,$that);
 				}
 			};
 		});

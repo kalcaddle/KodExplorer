@@ -15,10 +15,17 @@ a{text-decoration:none;color: #69C;font-weight: 800;}
 a:hover{color:#f30;}
 
 .background{
-	position: absolute;
-	right: 0px;top: 0px; bottom: 0px;left: 0px;
-	background-size: 100% 100%;
+	position: fixed;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background:#fefefe;
+    background-size: cover;
 }
+
+
 .title{width:100%;background:#6699cc url(../../images/common/login.png);height:150px;padding-top:0px;}
 .title .logo{text-align: center;font-size: 35px;width: 100%;padding-top:40px;color:#fff;font-weight:lighter;}
 .title .logo i{color:#aaddff;font-weight: 400;}
@@ -40,7 +47,7 @@ a:hover{color:#f30;}
 	border: 1px solid #ccc;
 }	
 
-.form{padding-top: 13px;width:300px;margin: 0 auto;}
+.form{padding-top: 13px;width:300px;margin: 0 auto;padding-bottom: 40px;}
 input,input:focus {outline: none; box-shadow: none; border: 1px solid #bbb;padding:3px 5px;}
 input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;}
 
@@ -61,7 +68,6 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 	font-size: 10px;
 }
 
-
 .loginbox .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
 .loginbox .error{padding:10px;color:#a94442;background-color: #f2dede;border:#ebccd1 1px solid;font-size:14px;}
 .loginbox .error a{background-color: #f2dede;border:#ebccd1 1px solid;}
@@ -72,3 +78,51 @@ input:focus {border-color: #75A1F0; outline: none; box-shadow: 0 0 12px #75A1F0;
 		border-radius:20px;padding:6px 1.5em;;display: inline-block;}
 .loginbox .guest a i{padding-left: 8px;}
 .loginbox .guest a:hover{color:#f60;border-color:#f60;}
+
+
+
+.loginbox{
+	margin:50px 20px 0;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px 0 rgba(0,0,1,.1);
+    box-shadow:0 15px 30px 0 rgba(0,0,1,.1), 0 0 20px rgba(0,0,0,0.2)
+}
+
+div .loginbox{background:none;}
+/*div .title{background: rgba(255,255,255,0.4);}*/
+div .form{width: 100%;background: rgba(255,255,255,0.9);}
+div .inputs {padding: 10px 10px 0px 50px;}
+div .inputs div input,.inputs div input:focus{background: #fff;border-radius:2px;}
+div .inputs div input:focus{    
+	border: 1px solid #3890ff;
+    box-shadow: 0 0 0 3px rgba(56,144,255,.15);
+}
+div .actions .checkbox{
+	margin-left:40px;
+	position: relative;top: -1px;
+}
+div .actions .checkbox:focus{box-shadow: none;}
+div .actions #submit{
+	margin-left:40px;padding:5px 0px;
+	width: 180px;border-radius:4px;
+    border: 1px solid #217ef2;
+    background-color: #3890ff;
+	background-image: linear-gradient(0deg,hsla(0,0%,100%,.06) 0,hsla(0,0%,100%,.06)),linear-gradient(0deg,rgba(9,109,236,.5) 0,rgba(76,155,255,.5));
+    box-shadow: inset 0 1px 0 hsla(0,0%,100%,.08), 0 1px 1px rgba(0,0,0,.08);
+    text-shadow: 0 -1px 0 rgba(0,0,0,.1);
+}
+.inputs .check-code input{border-radius: 2px 0 0 2px;}
+.loginbox .guest{padding: 15px 0 10px 0;position: relative;}
+.loginbox .guest a{
+	padding: 20px 0 10px 0;margin-left:70px;padding:5px 0px;
+	color: #217ef2;width: 180px;border-radius:4px;
+    border: 1px solid #217ef2;
+}
+.common-footer {
+	background: rgba(0,0,0,0.01);color: #fff;
+	position: relative;margin-top:100px;padding-top: 20px;
+	background-image:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.01));
+}
+

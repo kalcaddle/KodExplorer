@@ -48,7 +48,7 @@
 			"type":"number",
 			"display":"{{LNG.Plugin.Config.fileSort}}",
 			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
-			"value":1000,
+			"value":50,
 		},
 
 		"cacheFile":{

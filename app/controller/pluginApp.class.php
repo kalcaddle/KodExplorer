@@ -25,10 +25,10 @@ class pluginApp extends Controller{
 			}
 			$model = $this->loadModel('Plugin');
 			if(!$model->checkAuth($route[2])){
-				show_tips("Plugin not open,or you have't permission");
+				show_tips("Plugin not open,or you have't permission[".$route[2]."]");
 			}
 			if(!$this->checkAccessPlugin()){
-				show_tips("Sorry! You have't permission");
+				show_tips("Sorry! You have't permission[".$route[2]."]");
 			}
 			Hook::apply($route[2].'Plugin.'.$route[3]);
 		}

@@ -34,6 +34,34 @@ var dialogList = {//加入人物列表
 };
 //$.contextMenu.hidden();
 
+var bindTouchDrag = function($wrap){
+	if(!isWap()){
+		return;
+	}
+	var startLeft,startTop;
+	var position = function(x,y){
+		$wrap.css({
+			left:x + startLeft,
+			top :y + startTop
+		});
+	}
+	$wrap.find('.aui-title').drag({
+		start:function(){
+			startLeft = parseInt($wrap.css('left'));
+			startTop  = parseInt($wrap.css('top'));
+		},
+		move:function(offsetx,offsety,e){
+			position(offsetx,offsety);
+			$wrap.addClass('aui-state-drag');
+			return false;
+		},
+		end:function(offsetx,offsety){
+			$wrap.removeClass('aui-state-drag');
+			position(offsetx,offsety);
+		}
+	});
+}
+
 
 ;(function ($, window, undefined) {
 $.noop = $.noop || function () {}; // jQuery 1.3.2
@@ -46,7 +74,7 @@ var _thisScript,_path,
 	_$html = $('html'),
 	_elem = document.documentElement,
 	_isMobile = 'createTouch' in document && !('onmousemove' in _elem)
-		|| /(iPhone|iPad|iPod)/i.test(navigator.userAgent),
+		|| /(iPhone|iPad|iPod|Android)/i.test(navigator.userAgent),
 	_expando = 'artDialog' + + new Date,
 	_titleBarHeight = 0;
 
@@ -189,6 +217,10 @@ artDialog.fn = artDialog.prototype = {
 			DOM.wrap.addClass('dialog-max dialog-max-first');
 		}
 
+		if( isWap() && 
+			config.height !='100%'){//统一设置位置
+			config.top = '40px';
+		}
 		config.follow
 		? that.follow(config.follow)
 		: that.position(config.left, config.top);
@@ -207,6 +239,7 @@ artDialog.fn = artDialog.prototype = {
 		_titleBarHeight = DOM.title.css('height');
 		_titleBarHeight = _titleBarHeight.replace('px','');
 		$(DOM.wrap).find('iframe').focus();
+		bindTouchDrag($(DOM.wrap));
 		return that;
 	},
 	
@@ -1414,7 +1447,6 @@ artDialog.dragEvent.prototype = {
 		this.onend(event.clientX, event.clientY);
 		return false;
 	}
-
 };
 
 preMouseUpTime=0;
@@ -1572,6 +1604,7 @@ _use = function (event) {
 	resizeDirection= $(event.target).attr('resize');
 	_dragEvent.start(event);
 };
+
 
 // 代理 mousedown 事件触发对话框拖动
 _$document.bind('mousedown', function (event) {

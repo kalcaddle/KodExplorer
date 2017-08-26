@@ -37,11 +37,13 @@
 		<div class="form">
 			<form action="#">
 				<div class="inputs">
-					<div><span><?php echo LNG('username');?>：</span>
-					<input id="username" name='name' type="text" placeholder="<?php echo LNG('username');?>" required autocomplete="on"/>
+					<div>
+						<span><?php echo LNG('username');?>：</span>
+						<input id="username" name='name' type="text" placeholder="<?php echo LNG('username');?>" required autocomplete="on"/>
 					</div>
-					<div><span><?php echo LNG('password');?>：</span>
-					<input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" required  autocomplete="on" />
+					<div>
+						<span><?php echo LNG('password');?>：</span>
+						<input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" required  autocomplete="on" />
 					</div>
 	            	<?php if(need_check_code()){?>
 					<div class='check-code'>
@@ -54,11 +56,15 @@
 				</div>
 
 				<div class="actions">
+					<label for='rm'>
+						<input type="checkbox" class="checkbox" name="rememberPassword" id='rm'/>
+						<?php echo LNG('login_rember_password');?>
+					</label>
+					<a href="javascript:void(0);" class="forget-password"><?php echo LNG('forget_password');?></a>
+					<br/>
 					<input type="submit" id="submit" value="<?php echo LNG('login');?>" />
-					<input type="checkbox" class="checkbox" name="rememberPassword" id='rm'/>
-					<label for='rm'><?php echo LNG('login_rember_password');?></label>
 				</div>
-				<a href="javascript:void(0);" class="forget-password"><?php echo LNG('forget_password');?></a>
+				
 				<div class="msg"><?php echo $msg;?></div>
 				<div style="clear:both;"></div>
 

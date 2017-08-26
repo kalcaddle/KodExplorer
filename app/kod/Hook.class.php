@@ -70,6 +70,14 @@ class Hook{
 	static public function unbind($event) {
 		self::$events[$event] = false;
 	}
+	
+	//数据处理;只支持传入一个参数
+	static public function filter($event,&$param) {
+		$result = self::trigger($event,$param);
+		if($result){
+		    $param = $result;
+		}
+	}
 	static public function trigger($event) {
 		$actions = @self::$events[$event];
 		if(is_array($actions) && count($actions) >= 1) {
@@ -80,7 +88,7 @@ class Hook{
 					continue;
 				}
 				$action['times'] = $action['times'] + 1;
-				//var_dump($action['action'],$args); //debug
+				
 				$res = self::apply($action['action'],$args);
 				if(!is_null($res)){
 					$result = $res;

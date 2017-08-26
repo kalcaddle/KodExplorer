@@ -191,8 +191,7 @@ class PluginBase{
 	 */
 	final function echoFile($file,$replace=false){
 		$filePath = $this->pluginPath.$file;
-		$ext = get_path_this($file);
-		if($ext == 'js'){
+		if(ACT == 'commonJs'){
 			echo "\n/* [".$this->pluginName.'/'.$file."] */";
 			if(!file_exists($filePath)){
 				echo "   /* ==>[not exist]*/";
