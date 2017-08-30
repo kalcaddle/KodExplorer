@@ -1,8 +1,14 @@
 <div class="full-background"></div>
-<div class="init-loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
+<div class="init-loading">
+	<div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
+</div>
 <div class="topbar">
 	<div class="content">
-		<div class="top-left">
+		<button class="btn btn-wap-menu hidden"
+			data-toggle="collapse" data-target="#top-menu-left" 
+		><i class="font-icon icon-reorder"></i></button>
+
+		<div class="top-left collapse" id="top-menu-left">
 			<a href="./" class="topbar-menu title">
 			<?php
 				$config = $GLOBALS['config'];

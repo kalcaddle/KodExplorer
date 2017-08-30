@@ -482,20 +482,8 @@ class user extends Controller{
 		return is_string($this->in[$key])? rawurldecode($this->in[$key]):'';
 	}
 
-	/**
-	 * 权限验证；统一入口检验
-	 */
-	public function authCheck(){
-		$auth = $GLOBALS['auth'] = systemRole::getInfo($this->user['role']);
-		if(in_array(ST,$this->notCheckST)) return;//不需要判断的控制器
-		if(in_array(ACT,$this->notCheckACT))   return;//不需要判断的action
-		if(in_array(ST.'.'.ACT,$this->notCheckApp))   return;//不需要判断的对应入口
-		if (!array_key_exists(ST,$this->config['roleSetting']) ) return;
-		if (!in_array(ACT,$this->config['roleSetting'][ST])) return;//输出处理过的权限
-		$this->_checkCSRF();
-		if (isset($GLOBALS['isRoot']) && $GLOBALS['isRoot'] == 1) return;
-
-		$key = ST.'.'.ACT;
+	private function initAuth(){
+		$auth = systemRole::getInfo($this->user['role']);
 		//向下版本兼容处理
 		//未定义；新版本首次使用默认开放的功能
 		if(!isset($auth['userShare.set'])){
@@ -527,9 +515,24 @@ class user extends Controller{
 		if(!$auth['explorer.fileDownload']){
 			$auth['explorer.zip'] = 0;
 		}
-
 		$auth['userShare.del'] = $auth['userShare.set'];
-		if ($auth[$key] != 1) show_json(LNG('no_permission'),false);
+		$GLOBALS['auth'] = $auth;
+	}
+
+	/**
+	 * 权限验证；统一入口检验
+	 */
+	public function authCheck(){
+		$this->initAuth();
+		if(in_array(ST,$this->notCheckST)) return;//不需要判断的控制器
+		if(in_array(ACT,$this->notCheckACT))   return;//不需要判断的action
+		if(in_array(ST.'.'.ACT,$this->notCheckApp))   return;//不需要判断的对应入口
+		if (!array_key_exists(ST,$this->config['roleSetting']) ) return;
+		if (!in_array(ACT,$this->config['roleSetting'][ST])) return;//输出处理过的权限
+		$this->_checkCSRF();
+		if (isset($GLOBALS['isRoot']) && $GLOBALS['isRoot'] == 1) return;
+
+		if ($GLOBALS['auth'][ST.'.'.ACT] != 1) show_json(LNG('no_permission'),false);
 		//扩展名限制：新建文件&上传文件&重命名文件&保存文件&zip解压文件
 		$check_arr = array(
 			'mkfile'    =>  $this->_checkKey('path'),

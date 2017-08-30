@@ -1390,9 +1390,9 @@ class explorer extends Controller{
 				$role = $this->config['pathRoleGroup'][$auth];
 				$roleArr = role_permission_arr($role['actions']);
 				$list['info']['groupRole'] = array(
-					'name'  => $role['name'],
-					'style' => $role['style'],
-					'action_arr'	=> $roleArr
+					'name'  	=> $role['name'],
+					'style' 	=> $role['style'],
+					'authArr'	=> $roleArr
 				);
 			}
 			if($GLOBALS['isRoot']){

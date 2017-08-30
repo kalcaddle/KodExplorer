@@ -46,7 +46,7 @@ function zip_pre_name($fileName,$toCharset=false){
 	//write_log("zip:".$charset.';'.$toCharset.';'.$fileName,'zip');
 	$result = iconv_to($fileName,$charset,$toCharset);
 	if(!$result){
-	    $result = $fileName;
+		$result = $fileName;
 	}
 	return $result;
 }
@@ -72,7 +72,7 @@ function unzip_pre_name($fileName){
 	$toCharset = $GLOBALS['config']['systemCharset'];
 	$result = iconv_to($fileName,$charset,$toCharset);
 	if(!$result){
-	    $result = $fileName;
+		$result = $fileName;
 	}
 	$result = unzip_filter_ext($result);
 	//echo $charset.'==>'.$toCharset.':'.$result.'==='.$fileName.'<br/>';
@@ -137,7 +137,7 @@ function get_charset(&$str) {
 	$charset=strtolower(@mb_detect_encoding($str,$GLOBALS['config']['checkCharset']));
 	$charsetGet = $charset;
 	if ($charset == 'cp936'){
-	    // 有交叉，部分文件无法识别
+		// 有交叉，部分文件无法识别
 		if(charset_check($str,'gbk') && charset_check($str,'gbk','big5')){
 			$charset = 'gbk';
 		}else if(charset_check($str,'big5') && charset_check($str,'big5','gbk')){
@@ -151,22 +151,22 @@ function get_charset(&$str) {
 		$charset = 'utf-8';
 	}
 	if ($charset == 'iso-8859-1'){
-	    //检测详细编码;value为用什么编码检测；为空则用utf-8
-	    $check = array(
-	        'utf-8'       => $charset,
-	        'cp1251'      => 'gbk',
-	        'windows-1252'=> 'gbk',
-	        'utf-16'      => 'gbk'
-        );
-        foreach($check as $key => $val){
-            if(charset_check($str,$key,$val)){
-                if($val == ''){
-                    $val = 'utf-8';
-                }
-    			$charset = $key;
-    			break;
-    		}
-        }
+		//检测详细编码;value为用什么编码检测；为空则用utf-8
+		$check = array(
+			'utf-8'       => $charset,
+			'windows-1252'=> 'utf-8',
+			'cp1251'      => 'utf-8',
+			'utf-16'      => 'gbk'
+		);
+		foreach($check as $key => $val){
+			if(charset_check($str,$key,$val)){
+				if($val == ''){
+					$val = 'utf-8';
+				}
+				$charset = $key;
+				break;
+			}
+		}
 	}
 	//show_json($charset,false,$charsetGet);
 	return $charset;
@@ -271,12 +271,12 @@ function init_common(){
 	//version check update 
 	$file = LIB_DIR.'update.php';
 	if(file_exists($file)){
-	    //覆盖安装文件删除不了重定向问题优化
-	    if(!is_writable($file) ){
-	        show_tips($errorTips);
-	    }
+		//覆盖安装文件删除不了重定向问题优化
+		if(!is_writable($file) ){
+			show_tips($errorTips);
+		}
 
-	    //update;
+		//update;
 		include($file);
 		updateCheck($file);
 

@@ -85,13 +85,11 @@ class share extends Controller{
 		if (!is_array($user) || !isset($user['password'])){
 			$this->_error(LNG('share_error_user'));
 		}
-
-		$sharePath = _DIR_CLEAR($this->shareInfo['path']);
+		
 		$userHome = user_home_path($user);
 		define('USER',USER_PATH.$user['path'].'/');
 		define('USER_TEMP',USER.'data/share_temp/');
 		define('HOME',$userHome);
-
 		$shareData = USER_PATH.$user['path'].'/data/share.php';
 		if (!file_exists(iconv_system($shareData))) {
 			$this->_error(LNG('share_error_user'));
@@ -102,10 +100,9 @@ class share extends Controller{
 			$this->_error(LNG('share_error_sid'));
 		}
 		$this->shareInfo = $list[$this->in['sid']];
-
-
+		$sharePath = _DIR_CLEAR($this->shareInfo['path']);
 		if ($user['role'] != '1') {
-			$sharePath = HOME.$sharePath;
+			$sharePath = HOME.ltrim($sharePath,'/');
 		}else{
 			$sharePath = _DIR_CLEAR($this->shareInfo['path']);
 		}
@@ -125,7 +122,8 @@ class share extends Controller{
 			$this->path = $sharePath;
 		}
 		$this->path = _DIR_CLEAR($this->path);
-		$GLOBALS['kodPathPre'] = iconv_app(_DIR_CLEAR($sharePath));		
+		$GLOBALS['kodPathPre'] = iconv_app(_DIR_CLEAR($sharePath));
+		//debug_out($GLOBALS['kodPathPre'],$GLOBALS['kodPathId'],$this->shareInfo,$this->path,$sharePath);
 	}
 	private function _clear($path){
 		return  iconv_system(_DIR_CLEAR($path));

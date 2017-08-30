@@ -1,5 +1,5 @@
 kodReady.push(function(){
-    if(!$.supportCss3()){//ie8 ie9
+    if(!$.supportCss3() || isWap()){//ie8 ie9
         return;
     }
 	if(_.get(window,'Config.pageApp') != 'desktop'){

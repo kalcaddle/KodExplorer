@@ -870,6 +870,21 @@ var Tips =  (function(){
 	}
 })();
 
+var Title = (function(){
+	var oldTitle = document.title;
+	var reset = function(){
+		document.title = oldTitle;
+	}
+	var set = function(msg){
+		document.title = msg + '        ' +oldTitle;
+	}
+	return {
+		reset:reset,
+		set:set
+	}
+})();
+
+
 //获取keys
 var objectKeys = function(obj){
 	var keys = [];
@@ -1271,33 +1286,36 @@ var MaskView =  (function(){
 			var offsetY = 0;
 
 			var $that = $(this);
-			$that.die('mousedown').live('mousedown',function(e){
-				if (e.which != 1) return true;
-				dragStart(e);
-				if($that.setCapture) $that.setCapture();
-				$(document).mousemove(function(e) {dragMove(e);});
-				$(document).one('mouseup',function(e) {
+			if(isWap()){
+			//移动端拖拽支持
+				$that.unbind('mousedown').on('touchstart',function(e){
+					dragStart(e);
+				}).unbind('touchmove').on('touchmove',function(e){
+					dragMove(e);
+				}).unbind('touchend').on('touchend',function(e){
 					dragEnd(e);
-					if($that.releaseCapture) {$that.releaseCapture();}
 					stopPP(e);
 					return false;
 				});
-				if(isStopPP){//指定不冒泡才停止向上冒泡。split拖拽调整宽度，父窗口拖拽框选防止冒泡
-					stopPP(e);return false;
-				}
-				//stopPP(e);return false;//跨iframe导致事件屏蔽问题
-			});
-
-			//移动端拖拽支持
-			$that.on('touchstart',function(e){
-				dragStart(e);
-			}).on('touchmove',function(e){
-				dragMove(e);
-			}).on('touchend',function(e){
-				dragEnd(e);
-				stopPP(e);
-				return false;
-			});
+			}else{
+				$that.die('mousedown').live('mousedown',function(e){
+					if (e.which != 1) return true;
+					dragStart(e);
+					if($that.setCapture) $that.setCapture();
+					$(document).mousemove(function(e) {dragMove(e);});
+					$(document).one('mouseup',function(e) {
+						dragEnd(e);
+						if($that.releaseCapture) {$that.releaseCapture();}
+						stopPP(e);
+						return false;
+					});
+					if(isStopPP){//指定不冒泡才停止向上冒泡。split拖拽调整宽度，父窗口拖拽框选防止冒泡
+						stopPP(e);return false;
+					}
+					//stopPP(e);return false;//跨iframe导致事件屏蔽问题
+				});
+			}
+			
 			var getEvent = function(e){
 				if( e.originalEvent && 
 					e.originalEvent.targetTouches){
@@ -1310,6 +1328,8 @@ var MaskView =  (function(){
 				isDraging = true;
 				mouseFirstX = mouse.pageX;
 				mouseFirstY = mouse.pageY;
+				offsetX = 0;
+				offsetY = 0;
 				if (typeof(obj["start"]) == 'function'){
 					obj["start"](e,$that);
 				}

@@ -186,8 +186,9 @@ class Update3To400{
 				$menu[] = $value;
 			}
 			$result['menu'] = $menu;
-			fileCache::save($file,$result);
 		}
+		$result['newUserApp'] = $GLOBALS['config']['settingSystemDefault']['newUserApp'];
+		fileCache::save($file,$result);
 	}
 	function initMember(){
 		$file = THE_DATA_PATH.'system/system_member.php';

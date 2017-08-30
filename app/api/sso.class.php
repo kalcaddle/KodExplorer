@@ -5,7 +5,15 @@ class SSO{
 	static private function init(){
 		$sessionName = 'KOD_SESSION_SSO';
 		$sessionID   = $_COOKIE[$sessionName]?$_COOKIE[$sessionName]:md5(uniqid());
-		$sessionPath = dirname(dirname(dirname(__FILE__))).'/data/session/';
+		$basicPath   = dirname(dirname(dirname(__FILE__))).'/';
+		$sessionPath = $basicPath.'data/session/';
+		if(file_exists($basicPath.'define.php')){
+			include($basicPath.'define.php');
+			$sessionPath = DATA_PATH;
+		}
+		if(!file_exists($sessionPath)){
+			mkdir($sessionPath);
+		}
 		@session_write_close();
 		@session_name($sessionName);
 		@session_save_path($sessionPath);

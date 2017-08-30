@@ -41,14 +41,14 @@ define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限�
 /*
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;
  * 1. 需要先将data文件夹移到别的地方 例如将data文件夹拷贝到D:/
- * 2. 在config文件夹下新建define.php 新增一行 define('DATA_PATH','D:/data/'); (避免升级覆盖)
+ * 2. 在config文件夹下新建define.php 新增一行 <?php define('DATA_PATH','D:/data/');
  */
 
 if(file_exists(BASIC_PATH.'config/define.php')){
 	include(BASIC_PATH.'config/define.php');
 }
 if(!defined('DATA_PATH')){
-	define('DATA_PATH',     BASIC_PATH .'data/');       //用户数据目录
+	define('DATA_PATH',BASIC_PATH .'data/');       //用户数据目录
 }
 define('USER_PATH',     DATA_PATH .'User/');        //用户目录
 define('GROUP_PATH',    DATA_PATH .'Group/');       //群组目录
