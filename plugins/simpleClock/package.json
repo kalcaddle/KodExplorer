@@ -2,6 +2,7 @@
 	"id":"simpleClock",
 	"name":"clock",
 	"title":"时钟 clock",
+	"version":"1.1",
 	"source":{
 		"className":"font-icon icon-time bg-blue-6"
 	},

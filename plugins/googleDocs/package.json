@@ -2,7 +2,7 @@
 	"id":"googleDocs",
 	"name":"{{LNG.googleDocs.meta.name}}",
 	"title":"{{LNG.googleDocs.meta.title}}",
-	"version":"1.0",
+	"version":"1.1",
 	"category":"file",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"

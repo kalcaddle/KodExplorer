@@ -2,7 +2,7 @@
 	"id":"photoSwipe",
 	"name":"PhotoSwipe Image",
 	"title":"PhotoSwipe Image Viewer",
-	"version":"1.0",
+	"version":"1.2",
 	"source":{
 		"className":"x-item-file x-png",
 		"screenshoot":[

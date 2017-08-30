@@ -2,6 +2,7 @@
 	"id":"toolsCommon",
 	"name":"toolsCommon",
 	"title":"toos setting",
+	"version":"1.1",
 	"hidden":1,
 	"source":{
 		"className":"x-item-file x-ini"
