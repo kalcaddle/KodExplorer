@@ -69,10 +69,10 @@ class yzOfficePlugin extends PluginBase{
 	private function getObj(){
 		$path = $this->filePath($this->in['path']);
 		
-		// require_once($this->pluginPath.'php/yzOffice.class.php');
-		// return  new yzOffice($this,$path);
-		require_once($this->pluginPath.'php/yzOffice2.class.php');
-		return new yzOffice2($this,$path);
+		require_once($this->pluginPath.'php/yzOffice.class.php');//文档分享预览
+		return  new yzOffice($this,$path);
+		// require_once($this->pluginPath.'php/yzOffice2.class.php');//官网用户demo
+		// return new yzOffice2($this,$path);
 	}
 }
 

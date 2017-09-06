@@ -117,6 +117,9 @@ function charset_check(&$str,$check,$tempCharset='utf-8'){
 //https://segmentfault.com/a/1190000003020776
 //http://blog.sina.com.cn/s/blog_b97feef301019571.html
 function get_charset(&$str) {
+	if($GLOBALS['config']['checkCharsetDefault']){//直接指定编码
+		return $GLOBALS['config']['checkCharsetDefault'];
+	}
 	if ($str === '' || !function_exists("mb_detect_encoding")){
 		return 'utf-8';
 	}
@@ -154,9 +157,9 @@ function get_charset(&$str) {
 		//检测详细编码;value为用什么编码检测；为空则用utf-8
 		$check = array(
 			'utf-8'       => $charset,
-			'windows-1252'=> 'utf-8',
+			'utf-16'      => 'gbk',
+			'cp1252'      => 'utf-8',
 			'cp1251'      => 'utf-8',
-			'utf-16'      => 'gbk'
 		);
 		foreach($check as $key => $val){
 			if(charset_check($str,$key,$val)){

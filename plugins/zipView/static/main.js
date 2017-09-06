@@ -1,8 +1,7 @@
 kodReady.push(function(){
 	var apiView = function(){
 		var url = '{{pluginApi}}unzipList&accessToken='+G.accessToken
-		//var url = 'explorer/unzipList&accessToken='+G.accessToken;
-		if (typeof(G.sharePage) != 'undefined') {
+		if (typeof(G.sid) != 'undefined') {
 			url = '{{pluginApi}}unzipList&user='+G.user+'&sid='+G.sid;
 		}
 		return url;

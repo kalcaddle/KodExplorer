@@ -30,6 +30,11 @@
 ?>
 
 <script type="text/javascript">
+	<?php
+		if(defined('INSTALL_CHANNEL')){
+			echo "var installChannel='".INSTALL_CHANNEL."';\n";
+		}
+	?>
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
 		preload: [

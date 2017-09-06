@@ -70,6 +70,7 @@ function unzipRepeat(){
 function updateClear(){
 	del_file(THE_DATA_PATH.'system/group.php');
 	del_file(THE_DATA_PATH.'system/member.php');
+	del_file(THE_DATA_PATH.'2.0-4.06.zip');
 	del_file(THE_DATA_PATH.'2.0-'.UPDATE_VERSION.'.zip');
 	del_file(THE_BASIC_PATH.'readme.txt');
 

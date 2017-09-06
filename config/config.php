@@ -68,9 +68,12 @@ $config['appStartTime'] = mtime();
 $config['appCharset']	= 'utf-8';//该程序整体统一编码
 $config['checkCharset'] = 'ASCII,UTF-8,GB2312,GBK,BIG5,UTF-16,UCS-2,'.
 		'Unicode,EUC-KR,EUC-JP,SHIFT-JIS,EUCJP-WIN,SJIS-WIN,JIS,LATIN1';//文件打开自动检测编码
+$config['checkCharsetDefault'] = '';//if set,not check;
 
+if(!defined('HOST')){
+	define('HOST',get_host().'/');
+}
 define('WEB_ROOT',get_webroot(BASIC_PATH));
-define('HOST',get_host().'/');
 define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));			//程序根目录
 define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));	//插件目录
 

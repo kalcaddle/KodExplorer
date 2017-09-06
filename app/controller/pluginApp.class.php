@@ -34,6 +34,7 @@ class pluginApp extends Controller{
 		}
 	}
 
+	//权限认证
 	private function checkAccessPlugin(){
 		if( $_SESSION['kodLogin'] == true ||
 			$_SESSION['accessPlugin'] == 'ok' ||

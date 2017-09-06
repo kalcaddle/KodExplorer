@@ -9,7 +9,6 @@ class zipViewPlugin extends PluginBase{
 			'user.commonJs.insert' => 'zipViewPlugin.echoJs',
 		));
 	}
-
 	public function unzipList(){
 		$path = $this->filePath($this->in['path']);
 		if(isset($this->in['index'])){

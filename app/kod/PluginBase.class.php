@@ -24,7 +24,7 @@ class PluginBase{
 
 		$this->pluginName = str_replace('Plugin','',get_class($this));
 		$this->pluginPath = PLUGIN_DIR.$this->pluginName.'/';
-		$this->pluginApi  = APP_HOST.'?pluginApp/to/'.$this->pluginName.'/';
+		$this->pluginApi  = APP_HOST.'index.php?pluginApp/to/'.$this->pluginName.'/';
 		$this->pluginHost = $this->config['settings']['pluginHost'].$this->pluginName.'/';
 		$this->pluginHostDefault = PLUGIN_HOST.$this->pluginName.'/';
 		$this->pluginLangArr = $this->initLang();
@@ -73,7 +73,6 @@ class PluginBase{
 		return $icon;
 	}
 
-
 	final function filePath($path){
 		if(substr($path,0,4) == 'http'){
 			$cacheName = md5($path.'kodcloud').'.'.get_path_ext($path);
@@ -85,10 +84,21 @@ class PluginBase{
 			$path = $cacheFile;
 		}else{
 			$path = _DIR($path);
+			//php7.1,含有中文文件,windows下 curl上传会有问题
+			if( strtoupper(substr(PHP_OS, 0,3)) === 'WIN' &&
+				version_compare(phpversion(), '7.1.0', '>=') &&
+				preg_match("/([\x81-\xfe][\x40-\xfe])/", $path, $match)){
+
+				$name = hash_path($path).'.'.get_path_ext($path);
+				$cacheFile = TEMP_PATH.$this->pluginName.'/files/'.$name;
+				mk_dir(get_path_father($cacheFile));
+				if(!file_exists($cacheFile)){
+					@copy($path,$cacheFile);
+				}
+				$path = $cacheFile;
+			}
 		}
 		if (!file_exists($path)) {
-			header("HTTP/1.1 404 Not Found");  
-			header("Status: 404 Not Found");  
 			show_tips(LNG('file').' '.LNG('not_exists'));
 		}
 		return $path;

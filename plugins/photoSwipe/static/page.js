@@ -83,7 +83,7 @@ define(function(require, exports) {
 		hideAnimationDuration: 300,
 		getThumbBoundsFn: function(index) {
 			var item = itemsArr[index];
-			if(!item || !item.$dom){//目录切换后没有原图
+			if(!item || !item.$dom || item.$dom.length == 0){//目录切换后没有原图
 				return {x:$(window).width()/2,y:$(window).height()/2,w:1,h:1};
 			}
 			var pageYScroll = window.pageYOffset || document.documentElement.scrollTop; 

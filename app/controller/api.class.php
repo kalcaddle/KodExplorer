@@ -26,7 +26,6 @@ class api extends Controller{
 		$this->setIdentify();
 		$this->display('view.html');
 	}
-
 	private function setIdentify(){
 		if(! $_SESSION['accessPlugin'] ){
 			session_start();
@@ -34,8 +33,7 @@ class api extends Controller{
 			session_write_close();
 		}
 	}
-
-	private function checkAccessToken(){
+	public function checkAccessToken(){
 		$model  = $this->loadModel('Plugin');
 		$config = $model->getConfig('fileView');
 		if(!$config['apiKey']){

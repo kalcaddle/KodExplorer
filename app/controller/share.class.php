@@ -220,6 +220,7 @@ class share extends Controller{
 			'staticPath'    => STATIC_PATH,
 			'version'       => KOD_VERSION,
 			'versionDesc'   => $versionDesc,
+			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
 
 			'uploadMax'		=> file_upload_size(),
 			'jsonData'     	=> "",

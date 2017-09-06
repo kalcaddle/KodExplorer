@@ -1,5 +1,7 @@
 <?php
 
+// 文档分享预览
+// http://yozodoc.com/
 class yzOffice{
 	public $cachePath = 'yzOffice/';
 	public $plugin;
@@ -23,7 +25,7 @@ class yzOffice{
 			$task_has = json_decode(file_get_contents($this->taskFile),true);
 			$this->task = is_array($task_has)?$task_has:false;
 		}
-		//$this->upload();
+		//show_json($this->upload(),false);
 	}
 	public function runTask(){
 		$task = array(
@@ -141,8 +143,9 @@ class yzOffice{
 		$result = url_request($file,'GET');
 		if($result['code'] == 200){
 			if($ext == 'svg'){
-				$from = array('永中DCS','xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALsAAADKCAYAAAD97jEOAAABkklEQVR42u3SgQ0A&#10;AATAMFzudM');
-				$result['data'] = str_replace($from,array('',' sr="'),$result['data']);
+				$result['data'] = str_replace('永中DCS','',$result['data']);
+				$from = '/clip-path="url\(#clipPath\d+\)" width="18\d+" xlink:href="/';
+				$result['data'] = preg_replace($from,'sr="',$result['data']);
 			}
 			file_put_contents($cacheFile, $result['data']);
 			file_put_out($cacheFile,false);

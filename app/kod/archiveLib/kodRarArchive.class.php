@@ -38,6 +38,8 @@ class kodRarArchive {
 	static function run($cmd){
 		if (strtoupper(substr(PHP_OS, 0,3)) != 'WIN') {//linux
 			$cmd = "export LANG='en_US.UTF-8' && ".$cmd;
+			@setlocale(LC_ALL,'en_US.UTF-8');
+			@putenv('LC_ALL=en_US.UTF-8');
 		}
 		$result = shell_exec($cmd);
 		//debug_out($cmd,$result);

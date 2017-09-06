@@ -258,6 +258,7 @@ class user extends Controller{
 			),
 			'phpVersion'	=> PHP_VERSION,
 			'version'       => KOD_VERSION,
+			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
 			'jsonData'   	=> "",
 			'selfShare'		=> systemMember::userShareList($this->user['userID']),
 			'userConfig' 	=> $this->config['user'],

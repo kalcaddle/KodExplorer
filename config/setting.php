@@ -13,7 +13,7 @@ $config['settings'] = array(
 	'updloadChunkSize'	=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
 	
-	'pluginServer'		=> "//kodcloud.com/tools/version/",
+	'pluginServer'		=> "https://api.kodcloud.com/?",
 	'staticPath'		=> "./static/",	//静态文件目录
 	'pluginHost'		=> PLUGIN_HOST  //静态文件目录
 );

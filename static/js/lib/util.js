@@ -1366,9 +1366,12 @@ var MaskView =  (function(){
 		return urlParam.params[name];//unescape
 	};
 	$.parseUrl = function(url){
+		if(!url){
+			url = window.location.href;
+		}
 		var a = document.createElement('a');
 		a.href = url;
-		return {
+		var result = {
 			source: url,
 			protocol: a.protocol.replace(':', ''),
 			host: a.hostname,
@@ -1395,6 +1398,8 @@ var MaskView =  (function(){
 			relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
 			segments: a.pathname.replace(/^\//, '').split('/')
 		};
+		result.url = result.protocol + '://' + result.host + result.path + result.query;
+		return result;
 	}
 
 	//选择器，目标含有特殊字符的预处理
@@ -1456,8 +1461,16 @@ var MaskView =  (function(){
 	}
 	//是否为ie ie6~11
 	$.isIE = function(){
-	    return window.ActiveXObject || "ActiveXObject" in window;
+	    return !!(window.ActiveXObject || "ActiveXObject" in window);
 	}
+	$.isIE8 = function(){
+		if($.isIE && parseInt($.browser.version) <=8 ){
+			return true;
+		}
+		return false;
+	}
+
+
 	$.supportCss3 = function(style){
 	    if(!style) style = 'box-shadow';
         var prefix = ['webkit', 'Moz', 'ms', 'o'],

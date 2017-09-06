@@ -983,28 +983,30 @@ function file_put_out($file,$download=-1,$downFilename=false){
 		$download = true;
 	}
 	$headerName = $filenameOutput;
+	if(ua_has("Chrome") && !ua_has('Edge')){ //chrome下载
+		$filenameOutput = '"'.$filenameOutput.'"';
+	}
 	if(!is_wap()){
 		$headerName.=";filename*=utf-8''".$filenameOutput;
 	}
-	if( ua_has("Safari") && 
-	    !ua_has('Edge')){//safari 中文下载问题
+	if( ua_has("Safari") && !ua_has('Edge')){//safari 中文下载问题
 		$headerName = rawurldecode($filenameOutput);
 	}
-	//var_dump($headerName,$_SERVER['USER_AGENT'],$filenameOutput);exit;
+	//var_dump($headerName,$filenameOutput,$_SERVER['HTTP_USER_AGENT']);exit;
 	if ($download) {
-		header("Content-Type: application/octet-stream");
-		header("Content-Transfer-Encoding: binary");
-		header("Content-Disposition: attachment;filename=".$headerName);
+		header('Content-Type: application/octet-stream');
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: attachment;filename='.$headerName);
 	}else{
-		header("Content-Type: ".$mime);
-		header("Content-Disposition: inline;filename=".$headerName);
+		header('Content-Type: '.$mime);
+		header('Content-Disposition: inline;filename='.$headerName);
 	}
 	
 	//缓存文件
 	header('Expires: '.gmdate('D, d M Y H:i:s',time()+3600*24*20).' GMT');
-	header("Cache-Pragma: public");
+	header('Cache-Pragma: public');
 	header('Pragma: public'); 
-	header("Cache-Control: cache, must-revalidate");
+	header('Cache-Control: cache, must-revalidate');
 	if (isset($_SERVER['If-Modified-Since']) && 
 		(strtotime($_SERVER['If-Modified-Since']) == filemtime($file))) {
 		header('304 Not Modified', true, 304);

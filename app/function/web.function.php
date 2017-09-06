@@ -100,8 +100,6 @@ function is_wap(){
 	return false;
 }
 
-
-
 function parse_headers($raw_headers){
 	$headers = array();
 	$key = '';
@@ -257,8 +255,10 @@ function curl_progress_get($file,$uuid=''){
 	return -3;
 }
 
-function url_request($url,$method='GET',$data=false,$headers=false,
-					 $options=false,$json=false,$timeout=3600){
+// https://segmentfault.com/a/1190000000725185
+// http://blog.csdn.net/havedream_one/article/details/52585331 
+// php7.1 curl上传中文路径文件失败问题？【暂时通过重命名方式解决】
+function url_request($url,$method='GET',$data=false,$headers=false,$options=false,$json=false,$timeout=3600){
 	ignore_timeout();
 	$ch = curl_init();
 	$upload = false;

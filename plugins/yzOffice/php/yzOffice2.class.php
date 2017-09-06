@@ -1,5 +1,7 @@
 <?php
 
+//官网用户demo
+//http://www.yozodcs.com/examples.html
 class yzOffice2{
 	public $cachePath = 'yzOffice/';
 	public $plugin;
@@ -23,6 +25,7 @@ class yzOffice2{
 			$task_has = json_decode(file_get_contents($this->taskFile),true);
 			$this->task = is_array($task_has)?$task_has:false;
 		}
+		//show_json($this->upload(),false);
 	}
 	public function runTask(){
 		$task = array(
