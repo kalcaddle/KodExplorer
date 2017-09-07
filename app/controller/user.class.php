@@ -54,7 +54,7 @@ class user extends Controller{
 		if(in_array(ACT,$this->notCheckACT))   return;//不需要判断的action
 		if(in_array(ST.'.'.ACT,$this->notCheckApp))   return;//不需要判断的对应入口
 
-		if(isset($_SESSION['kodLogin']) && $_SESSION['kodLogin']===true){
+		if(isset($_SESSION['kodLogin']) && $_SESSION['kodLogin']===true && $this->user){
 			$user = systemMember::getInfo($this->user['userID']);
 			$this->_loginSuccess($user);
 			return;

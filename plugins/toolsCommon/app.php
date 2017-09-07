@@ -20,6 +20,16 @@ class toolsCommonPlugin extends PluginBase{
 		$system = DATA_PATH.'system/';
 		$bakcupLast = $system.'backup/last/';
 		$backupLastDay = $system.'backup/day/'.date('Ymd',time()).'/';
+		
+		//每N天备份一次;首次备份当天
+		$backupRepeat = 5;
+		$day = intval(date('d',time()));
+		if( !@file_exists($bakcupLast) ||
+			(!@file_exists($backupLastDay) && $day % $backupRepeat == 0)
+			){
+			mk_dir($backupLastDay);
+			$this->backupTo($backupLastDay);
+		}
 
 		//每天覆盖备份一次
 		if(!@file_exists($bakcupLast)){
@@ -29,16 +39,6 @@ class toolsCommonPlugin extends PluginBase{
 		$lastTime = @filemtime($bakcupLast.'/system_member.php');
 		if(time() - $lastTime > 60*60*24){
 			$this->backupTo($bakcupLast);
-		}
-
-		//每N天备份一次;
-		$backupRepeat = 5;
-		if(intval(date('d',time())) % $backupRepeat == 0){
-			if(@file_exists($backupLastDay)){
-				return;
-			}
-			mk_dir($backupLastDay);
-			$this->backupTo($backupLastDay);
 		}
 	}
 	private function backupTo($folder){
