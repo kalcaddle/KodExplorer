@@ -49,7 +49,7 @@ class Application {
 		$subDir = $this -> subDir ? $this -> subDir . '/' : '';
 		$classFile = CONTROLLER_DIR . $subDir.$class.'.class.php';
 		$className = $class;//.'Controller'
-		if (!file_exists($classFile)) {
+		if (!file_exists_case($classFile)) {
 			show_tips($class.' controller not exists!');
 		}
 		if (!class_exists($className)) {
@@ -85,8 +85,21 @@ class Application {
 		$URI = $GLOBALS['in']['URLremote'];
 		if (!isset($URI[0]) || $URI[0] == '') $URI[0] = $this->defaultController;
 		if (!isset($URI[1]) || $URI[1] == '') $URI[1] = $this->defaultAction;
-		define('ST',$URI[0]);
-		define('ACT',$URI[1]);
+
+		//需要校验权限的方法,统一大小写敏感;处理需要权限的方法
+		$roleSetting = $GLOBALS['config']['roleSetting'];
+		$st  = $URI[0];
+		$act = $URI[1];
+		if (array_key_exists($st,$roleSetting) ){
+			if( !in_array($act,$roleSetting[$st]) && 
+				in_array_not_case($act,$roleSetting[$st])
+				){
+				show_tips($act.' action not exists!');
+			}
+		}
+
+		define('ST',$st);
+		define('ACT',$act);
 		//自动加载运行类。
 		$this->autorun();
 		$this->appRun(ST,ACT);

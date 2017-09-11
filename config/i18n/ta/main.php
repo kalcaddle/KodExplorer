@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "அப்",
     "menu_move_del"                  => "நீக்கு",
     "menu_open_window"               => "புதிய சாளரத்தை திறக்கவும்",
+    "menu_sub_menu"                  => "துணைமெனு",
     "url_path"                       => "URL முகவரியை",
     "url_path_desc"                  => "URL முகவரியை அல்லது JS குறியீடு",
     "no_permission_read"             => "நீங்கள் படிக்க அனுமதி இல்லை!",

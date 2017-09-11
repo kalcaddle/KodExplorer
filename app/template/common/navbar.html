@@ -9,35 +9,49 @@
 		><i class="font-icon icon-reorder"></i></button>
 
 		<div class="top-left collapse" id="top-menu-left">
-			<a href="./" class="topbar-menu title">
-			<?php
+			<?php 
 				$config = $GLOBALS['config'];
+				$html = '<a href="./" class="topbar-menu title">';
+				$subMenu = '';
+				$isWap = is_wap();
 				if(substr(LNG('kod_name'),0,4) == '<img'){
-					echo LNG('kod_name');
+					$html .= LNG('kod_name').'</a>';
 				}else{
-					echo '<i class="icon-cloud"></i>'.LNG('kod_name');
+					$html .= '<i class="icon-cloud"></i>'.LNG('kod_name').'</a>';
 				}
+				foreach ($config['settingSystem']['menu'] as $key=>$value) {
+					if ($value['use']!='1') continue;
+					$has = ST==$value['name']?'this':'';
+					$target = " target='".$value['target']."'" ;
+					$name = $value['name'];
+					if(LNG('ui_'.$name) != 'ui_'.$name){
+						$name = "<i class='font-icon menu-".$value['name']."'></i><span>".LNG('ui_'.$name).'</span>';
+					}
+					if($value['icon']){
+						$name = $value['icon'].'<span>'.LNG($value['name']).'</span>';
+					}
+					if($value['subMenu'] && !$isWap){
+						$subMenu .= "<li><a class='topbar-menu-sub ".$has."' href='".urldecode($value['url'])."'"
+								 .$target.">".urldecode($name)."</a></li>";
+					}else{
+						$html .= "<a class='topbar-menu ".$has."' href='".urldecode($value['url'])."'"
+							  .$target.">".urldecode($name)."</a>";
+					}
+				}
+				echo $html;
 			?>
-			</a>
-		<?php 
-			foreach ($config['settingSystem']['menu'] as $key=>$value) {
-				if ($value['use']!='1') continue;
-				$has = ST==$value['name']?'this':'';
-				$target = " target='".$value['target']."'" ;
-				$name = $value['name'];
-				if(LNG('ui_'.$name) != 'ui_'.$name){
-					$name = "<i class='font-icon menu-".$value['name']."'></i>".LNG('ui_'.$name);
-				}
-				if($value['icon']){
-					$name = $value['icon'].LNG($value['name']);
-				}
-				if($value['display']){
-					$name = $value['display'];
-				}
-				echo "<a class='topbar-menu ".$has."' href='".urldecode($value['url'])."'"
-					.$target.">".urldecode($name)."</a>";
-			}
-		?>
+
+			<?php if($subMenu){?>
+			<div class="menu-group fl">
+				<a class="topbar-menu" id="topbar-submenu" 
+					data-toggle="dropdown" href="javascript:void(0);" title="<?php echo LNG('menu_sub_menu');?>">
+					<i class="icon-th-large"></i>
+				</a>
+				<ul class="dropdown-menu topbar-submenu pull-left animated menuShow" role="menu" aria-labelledby="topbar-submenu">
+					<?php echo $subMenu;?>
+				</ul>
+			</div>
+			<?php } ?>
 		</div>
 		<div class="top-right">
 			<?php if(!isset($config['settings']['language'])){ ?>

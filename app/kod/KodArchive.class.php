@@ -99,6 +99,7 @@ class KodArchive {
 				$result[$i]['filename'] = str_replace(array('../','..\\'),"_",$result[$i]['filename']);
 				if($output){
 					$result[$i]['filename'] = iconv_to($result[$i]['filename'],$charset,'utf-8');
+					unset($result[$i]['stored_filename']);
 				}
 			}
 			return array('code'=>true,'data'=>$result);

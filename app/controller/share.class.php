@@ -490,22 +490,24 @@ class share extends Controller{
 
 	// 获取文件数据
 	public function fileGet(){
-		if(isset($this->in['fileUrl'])){
+		if(isset($this->in['fileUrl'])){ //http
 			$displayName = $this->in['name'];
-			$filepath = $this->in['fileUrl'];
+			$filepath = _DIR_CLEAR($this->in['fileUrl']);
+			$filepath = str_replace(':/','://',$filepath);
 		}else{
 			$displayName = _DIR_CLEAR(rawurldecode($this->in['filename']));
 			$filepath= $this->sharePath.iconv_system($displayName);
-			if (!file_exists($filepath)){
-				show_json(LNG('not_exists'),false);
-			}
 			if (!path_readable($filepath)){
 				show_json(LNG('no_permission_read'),false);
 			}
 			if (filesize($filepath) >= 1024*1024*20){
 				show_json(LNG('edit_too_big'),false);
 			}
+			if (!file_exists($filepath)){
+				show_json(LNG('not_exists'),false);
+			}
 		}
+
 		$fileContents=file_get_contents($filepath);//文件内容
 		$charset=get_charset($fileContents);
 		if ($charset!='' && 

@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "上移",
     "menu_move_del"                  => "删除",
     "menu_open_window"               => "新窗口打开",
+    "menu_sub_menu"                  => "子菜单",
     "url_path"                       => "url地址",
     "url_path_desc"                  => "url地址或js代码",
     "no_permission_read"             => "您没有读取权限！",

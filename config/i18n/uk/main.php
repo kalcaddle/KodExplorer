@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "вгору",
     "menu_move_del"                  => "видаляти",
     "menu_open_window"               => "Відкрити нове вікно",
+    "menu_sub_menu"                  => "Підменю",
     "url_path"                       => "URL-адресу",
     "url_path_desc"                  => "URL-адресу або JS-код",
     "no_permission_read"             => "У вас немає дозволу на читання!",

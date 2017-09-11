@@ -9,16 +9,36 @@ class SSO{
 		$sessionPath = $basicPath.'data/session/';
 		if(file_exists($basicPath.'define.php')){
 			include($basicPath.'define.php');
-			$sessionPath = DATA_PATH;
+			$sessionPath = DATA_PATH.'session/';
 		}
 		if(!file_exists($sessionPath)){
 			mkdir($sessionPath);
 		}
+		$sessionSavePath = @session_save_path();
 		@session_write_close();
 		@session_name($sessionName);
-		@session_save_path($sessionPath);
+		if( class_exists('SaeStorage') ||
+			defined('SAE_APPNAME') ||
+			defined('SESSION_PATH_DEFAULT') ||
+			@ini_get('session.save_handler') != 'files' ||
+			isset($_SERVER['HTTP_APPNAME']) ){
+			//sae 关闭自定义session路径
+		}else{
+			@session_save_path($sessionPath);//session path
+		}
 		@session_id($sessionID);
+
 		@session_start();
+		$_SESSION['kodSSO'] = true;
+		@session_write_close();
+		unset($_SESSION);
+		@session_start();
+		if(!$_SESSION['kodSSO']){
+			@session_save_path($sessionSavePath);//session path
+			@session_start();
+			$_SESSION['kodSSO'] = true;
+			@session_write_close();
+		}
 		//echo '<pre>';var_dump($_SESSION);echo '</pre>';exit;
 		return $_SESSION;
 	}

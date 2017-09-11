@@ -47,7 +47,9 @@ class editor extends Controller{
 	public function fileGet(){
 		if(isset($this->in['fileUrl'])){
 			$pass = $this->config['settingSystem']['systemPassword'];
-			$urlInfo = parse_url_query($this->in['fileUrl']);
+			$fileUrl = _DIR_CLEAR($this->in['fileUrl']);
+			$fileUrl = str_replace(':/','://',$fileUrl);
+			$urlInfo = parse_url_query($fileUrl);
 			if( isset($urlInfo['fid']) &&
 				strlen(Mcrypt::decode($urlInfo['fid'],$pass)) != 0
 				){
@@ -58,7 +60,7 @@ class editor extends Controller{
 				}
 			}else{
 				$displayName = rawurldecode($urlInfo['name']);
-				$filepath = $this->in['fileUrl'].'&accessToken='.access_token_get();
+				$filepath = $fileUrl.'&accessToken='.access_token_get();
 			}
 		}else{
 			$displayName = rawurldecode($this->in['filename']);

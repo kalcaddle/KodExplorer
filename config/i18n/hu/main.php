@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "fel",
     "menu_move_del"                  => "töröl",
     "menu_open_window"               => "Új ablak megnyitása",
+    "menu_sub_menu"                  => "almenü",
     "url_path"                       => "url címe",
     "url_path_desc"                  => "url cím vagy js kód",
     "no_permission_read"             => "Nem jogosultsága olvasni!",

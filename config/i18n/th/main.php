@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "ขึ้น",
     "menu_move_del"                  => "ลบ",
     "menu_open_window"               => "เปิดหน้าต่างใหม่",
+    "menu_sub_menu"                  => "เมนูย่อย",
     "url_path"                       => "ที่อยู่ URL",
     "url_path_desc"                  => "ที่อยู่ URL หรือรหัส JS",
     "no_permission_read"             => "คุณไม่ได้รับอนุญาตให้อ่าน!",

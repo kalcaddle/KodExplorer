@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "بالا",
     "menu_move_del"                  => "حذف کردن",
     "menu_open_window"               => "باز کردن پنجره جدید",
+    "menu_sub_menu"                  => "زیر منو",
     "url_path"                       => "آدرس URL",
     "url_path_desc"                  => "آدرس URL و یا کد JS",
     "no_permission_read"             => "شما اجازه خواندن ندارد!",

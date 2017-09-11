@@ -117,6 +117,11 @@ function filter_html($html){
 	return preg_replace($find,$replace,$html);
 }
 
+
+function in_array_not_case($needle, $haystack) {
+    return in_array(strtolower($needle),array_map('strtolower',$haystack));
+}
+
 /**
  * 将obj深度转化成array
  * 

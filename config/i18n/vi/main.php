@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "up",
     "menu_move_del"                  => "xóa bỏ",
     "menu_open_window"               => "Mở một cửa sổ mới",
+    "menu_sub_menu"                  => "Submenu",
     "url_path"                       => "địa chỉ url",
     "url_path_desc"                  => "địa chỉ url hoặc mã js",
     "no_permission_read"             => "Bạn không có quyền để đọc!",

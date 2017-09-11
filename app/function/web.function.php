@@ -545,7 +545,7 @@ function url_header($url){
 	$result = array(
 		'url' 		=> $fileUrl,
 		'length' 	=> $length,
-		'name' 		=> $name,
+		'name' 		=> trim($name,'"'),
 		'supportRange' =>$supportRange && ($length!=0),
 		'all'		=> $header,
 	);

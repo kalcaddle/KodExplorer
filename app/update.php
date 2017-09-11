@@ -88,7 +88,7 @@ function updateClear(){
 //APP更新覆盖
 function updateApps(){
 	$fileDist = THE_DATA_PATH.'system/apps.php';
-	$dataDist = fileCache::load($fileDist);
+	$dataDist = FileCache::load($fileDist);
 	$dataNew  = getApps();
 	foreach ($dataNew as $key => $value) {
 		if(!is_array($value)){//删除标记
@@ -97,7 +97,7 @@ function updateApps(){
 		}
 		$dataDist[$key] = $value;
 	}
-	fileCache::save($fileDist,$dataDist);
+	FileCache::save($fileDist,$dataDist);
 	move_path(THE_BASIC_PATH.'/app/desktop_app.php',THE_DATA_PATH.'system/desktop_app.php');
 }
 function updateSystemSetting(){
@@ -113,7 +113,7 @@ function updateSystemSetting(){
 		}
 	}
 	$data['currentVersion'] = KOD_VERSION;
-	fileCache::save($systemFile,$data);
+	FileCache::save($systemFile,$data);
 	return $data;
 }
 
@@ -179,7 +179,7 @@ class Update3To400{
 	}
 	private function parseFile($file,$idKey = false,$child=array()){
 		if(!file_exists(iconv_system($file)) ) return false;
-		$data = fileCache::load($file);//此处文件会转编码为系统编码
+		$data = FileCache::load($file);//此处文件会转编码为系统编码
 		if(!$idKey){
 			$result = $this->keyReplace($data,$child);
 		}else{//第一层是id
@@ -188,7 +188,7 @@ class Update3To400{
 				$result[$id] = $this->keyReplace($value,$child);
 			}
 		}
-		fileCache::save($file,$result);
+		FileCache::save($file,$result);
 		return $result;
 	}
 
@@ -206,7 +206,7 @@ class Update3To400{
 			$result['menu'] = $menu;
 		}
 		$result['newUserApp'] = $GLOBALS['config']['settingSystemDefault']['newUserApp'];
-		fileCache::save($file,$result);
+		FileCache::save($file,$result);
 	}
 	function initMember(){
 		$file = THE_DATA_PATH.'system/system_member.php';
@@ -252,7 +252,7 @@ class Update3To400{
 				$value['path']= str_replace(array_keys($path),array_values($path),$value['path']);
 				$value['ext'] = str_replace(array_keys($icon),array_values($icon),$value['ext']);
 			}
-			fileCache::save($file,$favData);
+			FileCache::save($file,$favData);
 		}
 	}
 
@@ -274,7 +274,7 @@ class Update3To400{
 			}
 			$result[$id] = $arr;
 		}
-		fileCache::save($file,$result);
+		FileCache::save($file,$result);
 	}
 }
 
@@ -283,7 +283,7 @@ class Update3To400{
 function update330To336(){
 	//change user path
 	$the_file = THE_DATA_PATH.'system/system_member.php';
-	$the_data = fileCache::load($the_file);
+	$the_data = FileCache::load($the_file);
 	foreach ($the_data as &$item) {
 		if( $item['path'] !== $item['name'] &&
 			strlen($item['path']) == '32'){
@@ -300,11 +300,11 @@ function update330To336(){
 			$item['path'] = $path;
 		}
 	}
-	fileCache::save($the_file,$the_data);
+	FileCache::save($the_file,$the_data);
 
 	//change group path
 	$the_file = THE_DATA_PATH.'system/system_group.php';
-	$the_data = fileCache::load($the_file);
+	$the_data = FileCache::load($the_file);
 	foreach ($the_data as &$item) {
 		if( $item['path'] !== $item['name'] &&
 			strlen($item['path']) == '32'){
@@ -321,7 +321,7 @@ function update330To336(){
 			$item['path'] = $path;
 		}
 	}
-	fileCache::save($the_file,$the_data);
+	FileCache::save($the_file,$the_data);
 }
 
 
@@ -350,7 +350,7 @@ class updateToV330{
 		$data['current_version'] = $data['currentVersion'];
 		unset($data['systemPassword']);
 		unset($data['currentVersion']);
-		fileCache::save($systemFile,$data);
+		FileCache::save($systemFile,$data);
 	}
 	private function init_role(){
 		$file_in = THE_DATA_PATH.'system/group.php';
@@ -358,7 +358,7 @@ class updateToV330{
 			return;
 		}
 		$file_out = THE_DATA_PATH.'system/system_role.php';
-		$data = fileCache::load($file_in);
+		$data = FileCache::load($file_in);
 		$data_new = array();
 		if(!is_array($data) || count($data)<2){
 			$data = array(
@@ -401,7 +401,7 @@ class updateToV330{
 			$this->role_array[$key] = $id;//记录对应关系，后面用于用户重置为id
 			$data_new[$id] = $value;
 		}
-		fileCache::save($file_out,$data_new);
+		FileCache::save($file_out,$data_new);
 		del_file(THE_DATA_PATH.'system/group.php');
 	}
 	private function init_group(){//新建
@@ -419,7 +419,7 @@ class updateToV330{
 			"create_time"=> time()
 		);
 		$data = array('1'=>$arr);
-		fileCache::save($file_out,$data);
+		FileCache::save($file_out,$data);
 
 		$group_path = THE_DATA_PATH.'Group/';
 		mk_dir($group_path);
@@ -439,7 +439,7 @@ class updateToV330{
 	private function reset_user_config(&$user){
 		$user_path = iconv_system(THE_DATA_PATH.'User/'.$user['name'].'/');
 		$file_in = $user_path.'data/config.php';
-		$data = fileCache::load($file_in);
+		$data = FileCache::load($file_in);
 
 		if(!file_exists($user_path.'home')){
 			mk_dir($user_path.'home/desktop');
@@ -451,14 +451,14 @@ class updateToV330{
 			$data = $GLOBALS['config']['settingSystemDefault'];
 		}
 		$data['theme'] = 'win10';
-		fileCache::save($file_in,$data);
+		FileCache::save($file_in,$data);
 	}
 	private function init_user(){
 		$file_in = THE_DATA_PATH.'system/member_old.php';
 		$file_out = THE_DATA_PATH.'system/system_member.php';
 		@rename(THE_DATA_PATH.'system/member.php',$file_in);//backup
 
-		$data = fileCache::load($file_in);
+		$data = FileCache::load($file_in);
 		$data_new = array();
 		$default =array(
 			"admin" => array(
@@ -480,7 +480,7 @@ class updateToV330{
 				"status" => 1
 			)
 		);
-		fileCache::save($file_out,$default);
+		FileCache::save($file_out,$default);
 		if(!is_array($data) || count($data)==0){
 			$data = $default;
 		}
@@ -504,16 +504,16 @@ class updateToV330{
 			$this->reset_user_config($value);
 			$data_new[$id] = $value;
 		}
-		fileCache::save($file_out,$data_new);
+		FileCache::save($file_out,$data_new);
 	}
 }
 
 function getApps(){
-	$app = '{"\u65f6\u949f":{"type":"url","content":"http:\/\/hoorayos.com\/demo\/extapp\/clock\/index.php","group":"tools","name":"\u65f6\u949f","desc":"\u65f6\u949f\u6302\u4ef6","icon":"time.png","width":"140","height":"140","simple":1,"resize":0},"365\u65e5\u5386":{"type":"url","content":"http:\/\/baidu365.duapp.com\/wnl.html?bd_user=855814346&bd_sig=a64e6e262e8cfa1c42dd716617be2102&canvas_pos=platform","group":"life","name":"365\u65e5\u5386","desc":"365\u65e5\u5386","icon":"365.png","width":"544","height":"440","simple":0,"resize":1},"\u5feb\u9012\u67e5\u8be2":{"type":"url","content":"http:\/\/baidu.kuaidi100.com\/index2.html","group":"tools","name":"\u5feb\u9012\u67e5\u8be2","desc":"","icon":"kuaidi.gif","width":"545","height":"420","simple":0,"resize":1},"\u9ed18\u5bf9\u51b3":{"type":"url","content":"http:\/\/swf.baoku.360.cn\/swf\/20110921\/1\/ball.swf","group":"game","name":"\u9ed18\u5bf9\u51b3","desc":"\u7ecf\u5178\u53f0\u7403","icon":"ball8.png","width":"650","height":"500","simple":0,"resize":1},"\u767e\u5ea6\u968f\u5fc3\u542c":{"type":"url","content":"http:\/\/fm.baidu.com\/?embed=hao123","group":"music","name":"\u767e\u5ea6\u968f\u5fc3\u542c","desc":"\u767e\u5ea6\u968f\u5fc3\u542c","icon":"baidu.png","width":"980","height":"550","simple":0,"resize":1},"\u8ba1\u7b97\u5668":{"type":"url","content":"http:\/\/tools.jb51.net\/static\/skin\/flash\/773460494c0e2274d5f07e568fadf8e0.swf","group":"tools","name":"\u8ba1\u7b97\u5668","desc":"\u8ba1\u7b97\u5668","icon":"calcu.png","width":"538","height":"600","simple":0,"resize":1},"\u5929\u6c14":{"type":"url","content":"http:\/\/hoorayos.com\/demo\/extapp\/weather\/index.php","group":"tools","name":"\u5929\u6c14","desc":"\u5929\u6c14\u9884\u62a5","icon":"weather.png","width":"200","height":"300","simple":1,"resize":0},"js\u5728\u7ebf\u538b\u7f29":{"type":"url","content":"http:\/\/tool.lu\/js\/","group":"others","name":"js\u5728\u7ebf\u538b\u7f29","desc":"js\u5728\u7ebf\u538b\u7f29","icon":"js.png","width":"860","height":"620","simple":0,"resize":1},"\u4e2d\u56fd\u8c61\u68cb":{"type":"url","content":"http:\/\/sda.4399.com\/4399swf\/upload_swf\/ftp14\/cwb\/20140401\/y2.swf","group":"game","name":"\u4e2d\u56fd\u8c61\u68cb","desc":"\u4e2d\u56fd\u8c61\u68cb","icon":"xiangqi.jpg","width":"650","height":"502","simple":0,"resize":1},"\u97f3\u60a6\u53f0":{"type":"url","content":"http:\/\/www.yinyuetai.com\/baidu\/index","group":"movie","name":"\u97f3\u60a6\u53f0","desc":"\u97f3\u60a6\u53f0","icon":"yingyuetai.png","width":"810","height":"460","simple":0,"resize":1},"\u9ad8\u5fb7\u5730\u56fe":{"type":"url","content":"http:\/\/ditu.amap.com\/","group":"life","name":"\u9ad8\u5fb7\u5730\u56fe","desc":"gaode map","icon":"map.png","width":"800","height":"600","simple":0,"resize":1},"\u6709\u9053\u8bcd\u5178":{"type":"url","content":"http:\/\/dict.youdao.com\/app\/baidu","group":"tools","name":"\u6709\u9053\u8bcd\u5178","desc":"","icon":"youdao.jpg","width":"548","height":"490","simple":0,"resize":1,"undefined":0},"\u8c46\u74e3\u7535\u53f0":{"type":"url","content":"http:\/\/douban.fm\/partner\/qq_plus","group":"music","name":"\u8c46\u74e3\u7535\u53f0","desc":"\u8c46\u74e3\u7535\u53f0","icon":"douban.png","width":"545","height":"460","simple":0,"resize":1,"undefined":0},"iqiyi\u5f71\u89c6":{"type":"url","content":"http:\/\/www.qiyi.com\/mini\/baidu.html?from115","group":"movie","name":"iqiyi\u5f71\u89c6","desc":"iqiyi\u5f71\u89c6","icon":"iqiyi.png","width":"1000","height":"643","simple":0,"resize":1,"undefined":0},"Web PhotoShop":{"type":"url","content":"http:\/\/www.kantu.com\/tool\/ps\/","group":"tools","name":"Web PhotoShop","desc":"ps","icon":"ps.png","width":"800","height":"560","simple":0,"resize":1,"undefined":0},"icloud":{"type":"app","content":"window.open(\"https:\/\/www.icloud.com\/\");","group":"others","name":"icloud","desc":"icloud","icon":"icloud.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u8fc5\u6377\u6587\u6863\u8f6c\u6362":{"type":"url","content":"http:\/\/app.xunjiepdf.com\/","group":"tools","name":"\u8fc5\u6377\u6587\u6863\u8f6c\u6362","desc":"\u5404\u7c7b\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362","icon":"xunjie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"Vector Magic":{"type":"url","content":"https:\/\/zh.vectormagic.com\/","group":"tools","name":"Vector Magic","desc":"\u8f6c\u6362\u6210\u77e2\u91cf\u56fe","icon":"vector.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"Kingdom Rush":{"type":"url","content":"http:\/\/s4.4399.com:8080\/4399swf\/upload_swf\/ftp6\/liwen\/20110913\/4.swf","group":"game","name":"Kingdom Rush","desc":"\u7687\u5bb6\u5b88\u536b\u519b","icon":"kingdom.png","width":"700","height":"600","simple":0,"resize":1,"undefined":0},"\u817e\u8bafcanvas":{"type":"app","content":"window.open(\"http:\/\/canvas.qq.com\/templates\");","group":"tools","name":"\u817e\u8bafcanvas","desc":"\u5728\u7ebf\u56fe\u7247\u8bbe\u8ba1\u5de5\u5177","icon":"qqcanvas.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"OfficeConverter":{"type":"url","content":"http:\/\/cn.office-converter.com\/","group":"tools","name":"OfficeConverter","desc":"\u514d\u8d39\u5728\u7ebf\u6587\u4ef6\u8f6c\u6362\u5668","icon":"officeconvert.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"pptv\u76f4\u64ad":{"type":"url","content":"http:\/\/app.aplus.pptv.com\/tgapp\/baidu\/live\/main","group":"movie","name":"pptv\u76f4\u64ad","desc":"","icon":"pptv.jpg","width":"798","height":"534","simple":0,"resize":1,"undefined":0},"\u641c\u72d0\u5f71\u89c6":{"type":"url","content":"http:\/\/tv.sohu.com\/upload\/sohuapp\/index.html?api_key=9ca7e3cdef8af010b947f4934a427a2c","group":"movie","name":"\u641c\u72d0\u5f71\u89c6","desc":"\u641c\u72d0\u5f71\u89c6","icon":"souhu.jpg","width":"798","height":"583","simple":0,"resize":1,"undefined":0},"\u767e\u5ea6DOC":{"type":"url","content":"http:\/\/word.baidu.com\/","group":"tools","name":"\u767e\u5ea6DOC","desc":"\u5728\u7ebf\u6587\u6863\u7f16\u8f91\u3001\u5206\u4eab","icon":"baidudoc.png","width":"80%","height":"80%","simple":0,"resize":1,"undefined":0},"\u767e\u5ea6\u8111\u56fe":{"type":"url","content":"http:\/\/naotu.baidu.com\/","group":"tools","name":"\u767e\u5ea6\u8111\u56fe","desc":"\u5728\u7ebf\u601d\u7ef4\u5bfc\u56fe","icon":"naotu.png","width":"80%","height":"80%","simple":0,"resize":1,"undefined":0},"\u7f51\u6613\u4e91\u97f3\u4e50":{"type":"app","content":"window.open(\"http:\/\/music.163.com\/#\/my\/\");","group":"music","name":"\u7f51\u6613\u4e91\u97f3\u4e50","desc":"\u5f3a\u5927","icon":"wangyi.jpg","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u521b\u53ef\u8d34":{"type":"url","content":"https:\/\/www.chuangkit.com\/startdesign","group":"tools","name":"\u521b\u53ef\u8d34","desc":"\u514d\u8d39\u7684\u5728\u7ebf\u8bbe\u8ba1\u5de5\u5177","icon":"chuangketie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"trello":{"type":"app","content":"window.open(\"https:\/\/trello.com\/\");","group":"tools","name":"trello","desc":"\u9879\u76ee\u7ba1\u7406\u4e91\u5e73\u53f0","icon":"trello.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u4e00\u8d77\u5199office":{"type":"url","content":"https:\/\/yiqixie.com\/d\/home","group":"tools","name":"\u4e00\u8d77\u5199office","desc":"\u5728\u7ebf\u534f\u4f5coffice","icon":"yiqixie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"ProcessOn":{"type":"url","content":"http:\/\/processon.com\/diagrams","group":"tools","name":"ProcessOn","desc":"\u514d\u8d39\u5728\u7ebf\u4f5c\u56fe\uff0c\u5b9e\u65f6\u534f\u4f5c","icon":"on.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"\u77f3\u58a8\u6587\u6863":{"type":"url","content":"https:\/\/shimo.im\/desktop","group":"tools","name":"\u77f3\u58a8\u6587\u6863","desc":"shimo","icon":"shimo.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"\u5fae\u4fe1":{"type":"app","content":"window.open(\"https:\/\/wx.qq.com\/\");","group":"tools","name":"\u5fae\u4fe1","desc":"\u5fae\u4fe1\u7f51\u9875\u7248","icon":"wechart.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0}}';
+	$app = '{"\u65f6\u949f":{"type":"url","content":"http:\/\/hoorayos.com\/demo\/extapp\/clock\/index.php","group":"tools","name":"\u65f6\u949f","desc":"\u65f6\u949f\u6302\u4ef6","icon":"time.png","width":"140","height":"140","simple":1,"resize":0},"365\u65e5\u5386":{"type":"url","content":"http:\/\/baidu365.duapp.com\/wnl.html?bd_user=855814346&bd_sig=a64e6e262e8cfa1c42dd716617be2102&canvas_pos=platform","group":"life","name":"365\u65e5\u5386","desc":"365\u65e5\u5386","icon":"365.png","width":"544","height":"440","simple":0,"resize":1},"\u5feb\u9012\u67e5\u8be2":{"type":"url","content":"http:\/\/baidu.kuaidi100.com\/index2.html","group":"tools","name":"\u5feb\u9012\u67e5\u8be2","desc":"","icon":"kuaidi.gif","width":"545","height":"420","simple":0,"resize":1},"\u9ed18\u5bf9\u51b3":{"type":"url","content":"http:\/\/swf.baoku.360.cn\/swf\/20110921\/1\/ball.swf","group":"game","name":"\u9ed18\u5bf9\u51b3","desc":"\u7ecf\u5178\u53f0\u7403","icon":"ball8.png","width":"650","height":"500","simple":0,"resize":1},"\u767e\u5ea6\u968f\u5fc3\u542c":{"type":"url","content":"http:\/\/fm.baidu.com\/?embed=hao123","group":"music","name":"\u767e\u5ea6\u968f\u5fc3\u542c","desc":"\u767e\u5ea6\u968f\u5fc3\u542c","icon":"baidu.png","width":"980","height":"550","simple":0,"resize":1},"\u8ba1\u7b97\u5668":{"type":"url","content":"http:\/\/tools.jb51.net\/static\/skin\/flash\/773460494c0e2274d5f07e568fadf8e0.swf","group":"tools","name":"\u8ba1\u7b97\u5668","desc":"\u8ba1\u7b97\u5668","icon":"calcu.png","width":"538","height":"600","simple":0,"resize":1},"\u5929\u6c14":{"type":"url","content":"http:\/\/hoorayos.com\/demo\/extapp\/weather\/index.php","group":"tools","name":"\u5929\u6c14","desc":"\u5929\u6c14\u9884\u62a5","icon":"weather.png","width":"200","height":"300","simple":1,"resize":0},"js\u5728\u7ebf\u538b\u7f29":{"type":"url","content":"http:\/\/tool.lu\/js\/","group":"others","name":"js\u5728\u7ebf\u538b\u7f29","desc":"js\u5728\u7ebf\u538b\u7f29","icon":"js.png","width":"860","height":"620","simple":0,"resize":1},"\u4e2d\u56fd\u8c61\u68cb":{"type":"url","content":"http:\/\/sda.4399.com\/4399swf\/upload_swf\/ftp14\/cwb\/20140401\/y2.swf","group":"game","name":"\u4e2d\u56fd\u8c61\u68cb","desc":"\u4e2d\u56fd\u8c61\u68cb","icon":"xiangqi.jpg","width":"650","height":"502","simple":0,"resize":1},"\u97f3\u60a6\u53f0":{"type":"url","content":"http:\/\/www.yinyuetai.com\/baidu\/index","group":"movie","name":"\u97f3\u60a6\u53f0","desc":"\u97f3\u60a6\u53f0","icon":"yingyuetai.png","width":"810","height":"460","simple":0,"resize":1},"\u9ad8\u5fb7\u5730\u56fe":{"type":"url","content":"http:\/\/ditu.amap.com\/","group":"life","name":"\u9ad8\u5fb7\u5730\u56fe","desc":"gaode map","icon":"map.png","width":"800","height":"600","simple":0,"resize":1},"\u6709\u9053\u8bcd\u5178":{"type":"url","content":"http:\/\/dict.youdao.com\/app\/baidu","group":"tools","name":"\u6709\u9053\u8bcd\u5178","desc":"","icon":"youdao.jpg","width":"548","height":"490","simple":0,"resize":1,"undefined":0},"\u8c46\u74e3\u7535\u53f0":{"type":"url","content":"http:\/\/douban.fm\/partner\/qq_plus","group":"music","name":"\u8c46\u74e3\u7535\u53f0","desc":"\u8c46\u74e3\u7535\u53f0","icon":"douban.png","width":"545","height":"460","simple":0,"resize":1,"undefined":0},"iqiyi\u5f71\u89c6":{"type":"url","content":"http:\/\/www.qiyi.com\/mini\/baidu.html?from115","group":"movie","name":"iqiyi\u5f71\u89c6","desc":"iqiyi\u5f71\u89c6","icon":"iqiyi.png","width":"1000","height":"643","simple":0,"resize":1,"undefined":0},"Web PhotoShop":{"type":"url","content":"http:\/\/www.kantu.com\/tool\/ps\/","group":"tools","name":"Web PhotoShop","desc":"ps","icon":"ps.png","width":"800","height":"560","simple":0,"resize":1,"undefined":0},"icloud":{"type":"app","content":"window.open(\"https:\/\/www.icloud.com\/\");","group":"others","name":"icloud","desc":"icloud","icon":"icloud.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u8fc5\u6377\u6587\u6863\u8f6c\u6362":{"type":"url","content":"http:\/\/app.xunjiepdf.com\/","group":"tools","name":"\u8fc5\u6377\u6587\u6863\u8f6c\u6362","desc":"\u5404\u7c7b\u6587\u4ef6\u683c\u5f0f\u8f6c\u6362","icon":"xunjie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"Vector Magic":{"type":"url","content":"https:\/\/zh.vectormagic.com\/","group":"tools","name":"Vector Magic","desc":"\u8f6c\u6362\u6210\u77e2\u91cf\u56fe","icon":"vector.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"Kingdom Rush":{"type":"url","content":"http:\/\/s4.4399.com:8080\/4399swf\/upload_swf\/ftp6\/liwen\/20110913\/4.swf","group":"game","name":"Kingdom Rush","desc":"\u7687\u5bb6\u5b88\u536b\u519b","icon":"kingdom.png","width":"700","height":"600","simple":0,"resize":1,"undefined":0},"\u817e\u8bafcanvas":{"type":"app","content":"window.open(\"http:\/\/canvas.qq.com\/templates\");","group":"tools","name":"\u817e\u8bafcanvas","desc":"\u5728\u7ebf\u56fe\u7247\u8bbe\u8ba1\u5de5\u5177","icon":"qqcanvas.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"OfficeConverter":{"type":"url","content":"http:\/\/cn.office-converter.com\/","group":"tools","name":"OfficeConverter","desc":"\u514d\u8d39\u5728\u7ebf\u6587\u4ef6\u8f6c\u6362\u5668","icon":"officeconvert.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"pptv\u76f4\u64ad":{"type":"url","content":"http:\/\/app.aplus.pptv.com\/tgapp\/baidu\/live\/main","group":"movie","name":"pptv\u76f4\u64ad","desc":"","icon":"pptv.jpg","width":"798","height":"534","simple":0,"resize":1,"undefined":0},"\u641c\u72d0\u5f71\u89c6":{"type":"url","content":"http:\/\/tv.sohu.com\/upload\/sohuapp\/index.html?api_key=9ca7e3cdef8af010b947f4934a427a2c","group":"movie","name":"\u641c\u72d0\u5f71\u89c6","desc":"\u641c\u72d0\u5f71\u89c6","icon":"souhu.jpg","width":"798","height":"583","simple":0,"resize":1,"undefined":0},"\u767e\u5ea6\u8111\u56fe":{"type":"url","content":"http:\/\/naotu.baidu.com\/","group":"tools","name":"\u767e\u5ea6\u8111\u56fe","desc":"\u5728\u7ebf\u601d\u7ef4\u5bfc\u56fe","icon":"naotu.png","width":"80%","height":"80%","simple":0,"resize":1,"undefined":0},"\u7f51\u6613\u4e91\u97f3\u4e50":{"type":"app","content":"window.open(\"http:\/\/music.163.com\/#\/my\/\");","group":"music","name":"\u7f51\u6613\u4e91\u97f3\u4e50","desc":"\u5f3a\u5927","icon":"wangyi.jpg","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u521b\u53ef\u8d34":{"type":"url","content":"https:\/\/www.chuangkit.com\/startdesign","group":"tools","name":"\u521b\u53ef\u8d34","desc":"\u514d\u8d39\u7684\u5728\u7ebf\u8bbe\u8ba1\u5de5\u5177","icon":"chuangketie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"trello":{"type":"app","content":"window.open(\"https:\/\/trello.com\/\");","group":"tools","name":"trello","desc":"\u9879\u76ee\u7ba1\u7406\u4e91\u5e73\u53f0","icon":"trello.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0},"\u4e00\u8d77\u5199office":{"type":"url","content":"https:\/\/yiqixie.com\/d\/home","group":"tools","name":"\u4e00\u8d77\u5199office","desc":"\u5728\u7ebf\u534f\u4f5coffice","icon":"yiqixie.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"ProcessOn":{"type":"url","content":"http:\/\/processon.com\/diagrams","group":"tools","name":"ProcessOn","desc":"\u514d\u8d39\u5728\u7ebf\u4f5c\u56fe\uff0c\u5b9e\u65f6\u534f\u4f5c","icon":"on.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"\u77f3\u58a8\u6587\u6863":{"type":"url","content":"https:\/\/shimo.im\/desktop","group":"tools","name":"\u77f3\u58a8\u6587\u6863","desc":"shimo","icon":"shimo.png","width":"90%","height":"80%","simple":0,"resize":1,"undefined":0},"\u5fae\u4fe1":{"type":"app","content":"window.open(\"https:\/\/wx.qq.com\/\");","group":"tools","name":"\u5fae\u4fe1","desc":"\u5fae\u4fe1\u7f51\u9875\u7248","icon":"wechart.png","width":"800","height":"600","simple":0,"resize":1,"undefined":0}}';
 	$json = json_decode($app,true);
 	$remove = array(
 		"qq音乐","在线视频","linux终端","好照片","三维地图","地图",
-		"天天动听FM","虾米电台","酷狗","ps","美食天下","酷狗电台");
+		"天天动听FM","虾米电台","酷狗","ps","美食天下","酷狗电台","百度DOC");
 	foreach ($remove as $value) {
 		$json[$value] = false;
 	}

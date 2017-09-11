@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "į viršų",
     "menu_move_del"                  => "panaikinti",
     "menu_open_window"               => "Atidaryti naują langą",
+    "menu_sub_menu"                  => "Submeniu",
     "url_path"                       => "URL adresas",
     "url_path_desc"                  => "URL adresas arba JS kodas",
     "no_permission_read"             => "Jūs neturite leidimo skaityti!",

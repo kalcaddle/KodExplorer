@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "ऊपर",
     "menu_move_del"                  => "मिटाना",
     "menu_open_window"               => "एक नया विंडो खोलें",
+    "menu_sub_menu"                  => "सबमेनू",
     "url_path"                       => "यूआरएल पता",
     "url_path_desc"                  => "यूआरएल एड्रेस या जे एस कोड",
     "no_permission_read"             => "आप पढ़ने के लिए अनुमति नहीं है!",

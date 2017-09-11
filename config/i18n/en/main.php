@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "Up",
     "menu_move_del"                  => "Remove",
     "menu_open_window"               => "New window",
+    "menu_sub_menu"                  => "Submenu",
     "url_path"                       => "Url link",
     "url_path_desc"                  => "Url or javascript",
     "no_permission_read"             => "Does not have read permissions",

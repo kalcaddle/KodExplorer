@@ -127,13 +127,13 @@ function get_filesize($path){
 }
 
 //文件是否存在，区分文件大小写
-function file_exist_case( $fileName){
+function file_exists_case( $fileName){
 	if(file_exists($fileName) === false){
 		return false;
 	}
 	$status         = false;
 	$directoryName  = dirname( $fileName );
-	$fileArray      = glob( $directoryName . '/*', GLOB_NOSORT );
+	$fileArray      = glob( $directoryName . '/*', GLOB_NOSORT);
 	if ( preg_match( "/\\\|\//", $fileName) ){
 		$array    = preg_split("/\\\|\//", $fileName);
 		$fileName = $array[ count( $array ) -1 ];
@@ -147,6 +147,7 @@ function file_exist_case( $fileName){
 	}
 	return $status;
 }
+
 
 function path_readable($path){
 	$result = intval(is_readable($path));

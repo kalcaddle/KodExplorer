@@ -527,7 +527,7 @@ class user extends Controller{
 		$this->initAuth();
 		if(in_array(ST,$this->notCheckST)) return;//不需要判断的控制器
 		if(in_array(ACT,$this->notCheckACT))   return;//不需要判断的action
-		if(in_array(ST.'.'.ACT,$this->notCheckApp))   return;//不需要判断的对应入口
+		if(in_array(ST.'.'.ACT,$this->notCheckApp)) return;//不需要判断的对应入口
 		if (!array_key_exists(ST,$this->config['roleSetting']) ) return;
 		if (!in_array(ACT,$this->config['roleSetting'][ST])) return;//输出处理过的权限
 		$this->_checkCSRF();

@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "sus",
     "menu_move_del"                  => "șterge",
     "menu_open_window"               => "Deschide o fereastră nouă",
+    "menu_sub_menu"                  => "submeniu",
     "url_path"                       => "adresă URL-ul",
     "url_path_desc"                  => "adresă URL-ul sau codul js",
     "no_permission_read"             => "Nu aveți permisiunea de a citi!",

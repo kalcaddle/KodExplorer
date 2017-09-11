@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "fins",
     "menu_move_del"                  => "esborrar",
     "menu_open_window"               => "Obrir una nova finestra",
+    "menu_sub_menu"                  => "Submenú",
     "url_path"                       => "l'adreça URL",
     "url_path_desc"                  => "l'adreça URL o el codi js",
     "no_permission_read"             => "Vostè no té permís per llegir!",

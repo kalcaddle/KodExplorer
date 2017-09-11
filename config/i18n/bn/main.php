@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "আপ",
     "menu_move_del"                  => "মুছুন",
     "menu_open_window"               => "একটি নতুন উইন্ডোতে খুলুন",
+    "menu_sub_menu"                  => "সাবমেনু",
     "url_path"                       => "URL ঠিকানা",
     "url_path_desc"                  => "URL ঠিকানা বা JS কোড",
     "no_permission_read"             => "আপনি পড়ার অনুমতি আছে না!",

@@ -178,7 +178,7 @@ a.button:focus { outline: none;}
 .x-pl,.x-pm,.x-cgi,.x-as,.x-asm,.x-clj,.x-cbl,.x-cfm,.x-d,.x-diff,.x-dot,.x-ejs,.x-erl,.x-ftl,.x-go,.x-hs,.x-vbs,.x-haml,.x-erb,.x-jade,.x-json,.x-jq,.x-jsx,.x-ji,.x-tex,.x-lisp,.x-ls,.x-lsl,.x-lua,.x-lp,.x-matlab,.x-mel,.x-r,.x-yaml,.x-yml {background-image: url("../../images/file_icon/icon_file/code.png");}
 .x-bin,.x-hex,.x-zip,.x-pdf,.x-swf,.x-gzip,.x-rar,.x-arj,.x-tar,.x-gz,.x-cab,.x-tbz,.x-tbz2,.x-lzh,.x-uue,.x-bz2,.x-ace,.x-exe,.x-so,.x-dll,.x-chm,.x-rtf,.x-odp,.x-odt,.x-pages,.x-class,.x-psd,.x-ttf,.x-fla,.x-7z,.x-dmg,.x-dat,.x-ipa,.x-lib,.x-a,.x-apk,.x-so,.x-o {background-image: url("../../images/file_icon/icon_file/bin.png");}
 .x-music,.x-mp3,.x-wma,.x-mp2,.x-mid,.x-aac,.x-wav,.x-m4a,.x-m3u,.x-m4a,.x-midi,.x-mid,.x-flac,.x-alac,.x-ape,.x-ac3 {background-image: url("../../images/file_icon/icon_file/music.png");}
-.x-avi,.x-rm,.x-rmvb,.x-mpg,.x-mkv,.x-wmv,.x-mov,.x-mp4,.x-evo,.x-divx,.x-3gp,.x-asf,.x-cue,.x-hd,.x-hdmov,.x-mov,.x-mp4v,.x-mpeg,.x-ogm,.x-qt,.x-spx,.x-vob,.x-wmv,.x-xvid,.x-webm,.x-m4v {background-image: url("../../images/file_icon/icon_file/movie.png");}
+.x-avi,.x-rm,.x-rmvb,.x-mpg,.x-mkv,.x-wmv,.x-mov,.x-mp4,.x-evo,.x-divx,.x-3gp,.x-asf,.x-cue,.x-hd,.x-hdmov,.x-mov,.x-mp4v,.x-mpeg,.x-ogm,.x-qt,.x-spx,.x-vob,.x-wmv,.x-xvid,.x-webm,.x-m4v {background-image: url("../../images/file_icon/icon_file/movie/movie.png");}
 .x-html,.x-htm,.x-url,.x-tpl,.x-lnk,.x-haml,.x-shtml,.x-webloc,.x-hta,.x-xhtml {background-image: url("../../images/file_icon/icon_file/html.png");}
 .x-css,.x-less,.x-sass {background-image: url("../../images/file_icon/icon_file/css.png");}
 .x-js,.x-coffee,.x-jsx {background-image: url("../../images/file_icon/icon_file/js.png");}
@@ -541,6 +541,21 @@ body{overflow-x: hidden;}
 .file-list-list.icon .file-action-menu .action-menu:hover{
 	background: #69bdff;color: #fff;
 }
+
+
+
+.menu-group.fl.tool.tool-submenu{
+	left: 42px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+.menu-group.fl.tool.tool-submenu a,.menu-group.fl.tool.tool-submenu a:hover{color:#fff;}
+.menu-group.fl.tool.tool-submenu .topbar-submenu a{
+	color:#333;text-align: left;
+}
+.menu-group.fl.tool.tool-submenu .topbar-submenu a:hover{background:#def;}
+.menu-group.fl.tool.tool-submenu .topbar-submenu a .font-icon{display:none;}
+
+
 
 .file-action-menu .action-menu i{padding-right:3px;}
 .file-action-menu .menu-close{text-align: center;background: #f0f8ff;}

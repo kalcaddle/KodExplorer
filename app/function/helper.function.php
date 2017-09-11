@@ -2,10 +2,6 @@
 
 //扩展名权限判断 有权限则返回1 不是true
 function checkExt($file){
-	// $ext = get_path_ext($file);
-	// if($ext == 'php' || $ext == 'txt') return 0;
-	// return 1;
-
 	if (strstr($file,'<') || strstr($file,'>') || $file=='') {
 		return 0;
 	}

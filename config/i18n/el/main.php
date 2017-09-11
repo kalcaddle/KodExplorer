@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "επάνω",
     "menu_move_del"                  => "Διαγραφή",
     "menu_open_window"               => "Ανοίξτε ένα νέο παράθυρο",
+    "menu_sub_menu"                  => "Υπομενού",
     "url_path"                       => "url διεύθυνση",
     "url_path_desc"                  => "url διεύθυνση ή JS κώδικα",
     "no_permission_read"             => "Δεν έχετε άδεια για να διαβάσετε!",

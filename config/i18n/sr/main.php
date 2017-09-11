@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "горе",
     "menu_move_del"                  => "избрисати",
     "menu_open_window"               => "Отвори нови прозор",
+    "menu_sub_menu"                  => "Подмени",
     "url_path"                       => "uRL адреса",
     "url_path_desc"                  => "УРЛ адреса или ЈС код",
     "no_permission_read"             => "Немате дозволе за читање!",

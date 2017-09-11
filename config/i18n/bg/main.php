@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "нагоре",
     "menu_move_del"                  => "изтривам",
     "menu_open_window"               => "Отваряне на нов прозорец",
+    "menu_sub_menu"                  => "Подменю",
     "url_path"                       => "URL адрес",
     "url_path_desc"                  => "URL адрес или JS код",
     "no_permission_read"             => "Вие нямате разрешение да чете!",

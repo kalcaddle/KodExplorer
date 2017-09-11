@@ -6,7 +6,7 @@
 * @license http://kodcloud.com/tools/license/license.txt
 */
 
-//配置数据,可在setting_user.php中更改覆盖
+//配置数据,可在setting_user.php中添加变量覆盖,升级后不会被替换
 $config['settings'] = array(
 	'downloadUrlTime'	=> 0,			 //下载地址生效时间，按秒计算，0代表不限制
 	'apiLoginTonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
@@ -14,7 +14,7 @@ $config['settings'] = array(
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
 	
 	'pluginServer'		=> "https://api.kodcloud.com/?",
-	'staticPath'		=> "./static/",	//静态文件目录
+	'staticPath'		=> "./static/",	//静态文件目录,可以配置到cdn;
 	'pluginHost'		=> PLUGIN_HOST  //静态文件目录
 );
 $config['settings']['appType'] = array(
@@ -164,7 +164,7 @@ $config['roleSetting'] = array(
 	'systemMember'	=> array('get','add','edit','doAction'),
 	'systemGroup'	=> array('get','add','del','edit'),
 	'systemRole'	=> array('add','del','edit','roleGroupAction'),
-	//不开放此功能【避免扩展名修改，导致系统安全问题】	
+	//不开放此功能【避免扩展名修改，导致系统安全问题】
 	'pluginApp'		=> array('index','appList','changeStatus','setConfig','unInstall')
 );
 

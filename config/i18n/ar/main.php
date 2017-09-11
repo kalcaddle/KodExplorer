@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "فوق",
     "menu_move_del"                  => "حذف",
     "menu_open_window"               => "فتح نافذة جديدة",
+    "menu_sub_menu"                  => "القائمة الفرعية",
     "url_path"                       => "الموقع الالكترونى",
     "url_path_desc"                  => "الموقع الالكترونى أو رمز شبيبة",
     "no_permission_read"             => "لم يكن لديك إذن لقراءة!",

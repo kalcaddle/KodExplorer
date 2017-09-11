@@ -10,10 +10,11 @@ class adminerPlugin extends PluginBase{
 	}
 	public function addMenu(){
 		navbar_menu_add(array(
-			'name'		=> 'adminer',
-			'display'	=> $this->appIcon().'Adminer',
+			'name'		=> 'Adminer',
+			'icon'		=> $this->appIcon(),
 			'url'		=> $this->pluginApi,
 			'target'	=> '_blank',
+			'subMenu'	=> '1',
 			'use'		=> '1'
 		));
 	}

@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "දක්වා",
     "menu_move_del"                  => "Delete",
     "menu_open_window"               => "නව කවුළුවක විවෘත කරන්න",
+    "menu_sub_menu"                  => "උපමෙනු",
     "url_path"                       => "url එක ලිපිනය",
     "url_path_desc"                  => "url එක ලිපිනය හෝ JS කේතය",
     "no_permission_read"             => "ඔබ කියවා කිරීමට අවසර නැත!",

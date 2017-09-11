@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "アップ",
     "menu_move_del"                  => "削除",
     "menu_open_window"               => "新しいウィンドウを開きます。",
+    "menu_sub_menu"                  => "サブメニュー",
     "url_path"                       => "URLアドレス",
     "url_path_desc"                  => "URLアドレスまたはjsのコード",
     "no_permission_read"             => "あなたは読み取り権限を持っていません！",

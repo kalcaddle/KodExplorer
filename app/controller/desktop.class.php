@@ -13,11 +13,6 @@ class desktop extends Controller{
 	}
 	public function index() {
 		$wap = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
-		if($wap){
-			header("location:./index.php?explorer");
-			exit;
-		}
-
 		$desktopApps = include(DATA_PATH.'system/desktop_app.php');
 		$wall = $this->config['user']['wall'];
 		if(strlen($wall)<3){

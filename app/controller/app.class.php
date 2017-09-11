@@ -53,11 +53,9 @@ class app extends Controller{
 	 */
 	public function userApp() {
 		$path = _DIR($this->in['path']);
-		if (isset($this->in['action']) && 
-			$this->in['action'] == 'add'){
+		if(get_path_ext($path) != 'oexe'){
 			$path .= '.oexe';
 		}
-		
 		if (!checkExt($path)) {
 			show_json(LNG('error'));exit;
 		}

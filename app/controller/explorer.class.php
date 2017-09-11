@@ -141,8 +141,7 @@ class explorer extends Controller{
 				$ext = get_path_ext($new);
 				$tplFile = $tplPath.'newfile.'.$ext;
 				if(file_exists($tplFile)){
-					$content = file_get_contents($tplFile);
-					file_put_contents($new,$content);
+					copy_dir($tplFile,$new);
 				}
 			}
 			Hook::trigger("explorer.mkfileAfter",$new);
@@ -170,7 +169,7 @@ class explorer extends Controller{
 
 	public function pathRname(){
 		$rnameTo=_DIR($this->in['rnameTo']);
-		if (file_exist_case($rnameTo)) {
+		if (file_exists_case($rnameTo)) {
 			show_json(LNG('name_isexists'),false);
 		}
 		Hook::trigger("explorer.pathRnameBefore",$this->path,$rnameTo);

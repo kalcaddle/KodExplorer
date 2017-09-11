@@ -259,6 +259,7 @@ return array(
     "menu_move_up"                   => "su",
     "menu_move_del"                  => "cancellare",
     "menu_open_window"               => "Aprire una nuova finestra",
+    "menu_sub_menu"                  => "sottomenu",
     "url_path"                       => "indirizzo URL",
     "url_path_desc"                  => "indirizzo URL o il codice js",
     "no_permission_read"             => "Non si ha il permesso di leggere!",
