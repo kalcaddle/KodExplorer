@@ -23,12 +23,13 @@
 					if ($value['use']!='1') continue;
 					$has = ST==$value['name']?'this':'';
 					$target = " target='".$value['target']."'" ;
-					$name = $value['name'];
+					$name = rawurldecode($value['name']);
 					if(LNG('ui_'.$name) != 'ui_'.$name){
-						$name = "<i class='font-icon menu-".$value['name']."'></i><span>".LNG('ui_'.$name).'</span>';
-					}
-					if($value['icon']){
-						$name = $value['icon'].'<span>'.LNG($value['name']).'</span>';
+						$name = "<i class='font-icon menu-".$name."'></i><span>".LNG('ui_'.$name).'</span>';
+					}else if($value['icon']){
+						$name = $value['icon'].'<span>'.LNG($name).'</span>';
+					}else if(!strstr($name,'<') && $value['subMenu']){
+						$name = "<i class='font-icon words'><em>".$name."</em></i><span>".LNG($name).'</span>';
 					}
 					if($value['subMenu'] && !$isWap){
 						$subMenu .= "<li><a class='topbar-menu-sub ".$has."' href='".urldecode($value['url'])."'"
