@@ -259,7 +259,7 @@ return array(
     "menu_move_up"                   => "Вверх",
     "menu_move_del"                  => "Удалить",
     "menu_open_window"               => "Открыть новое окно",
-    "menu_sub_menu"                  => "Подменю",
+    "menu_sub_menu"                  => "Дополнения",
     "url_path"                       => "URL-адрес",
     "url_path_desc"                  => "URL-адрес или JS-код",
     "no_permission_read"             => "У вас нет разрешения на чтение",
