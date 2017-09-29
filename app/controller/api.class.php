@@ -9,7 +9,6 @@
 class api extends Controller{
 	function __construct(){
 		parent::__construct();
-		$this->tpl = TEMPLATE.'api/';
 	}
 
 	/**

@@ -8,8 +8,11 @@
 *{box-sizing:content-box;}
 body, input, textarea{
     -webkit-font-smoothing: antialiased;font-smoothing: antialiased;
-    font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", 微软雅黑, "Lantinghei SC", STXihei, "WenQuanYi Micro Hei", Arial, sans-serif !important;
+    font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", 
+    微软雅黑, "Lantinghei SC", STXihei, "WenQuanYi Micro Hei", Arial, sans-serif !important;
 }
+/* 图片方向校正 https://gxnotes.com/article/126807.html */
+img {image-orientation: from-image;}
 
 /* kod ie8 hack*/
 @media \0screen\,screen\9 {

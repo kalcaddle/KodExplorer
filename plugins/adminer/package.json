@@ -16,12 +16,10 @@
 		"homePage":"https://www.adminer.org"
 	},
 	"configItem":{
-		"pluginAuth":{
-			"type":"userSelect",
-			"value":"role:1",
-			"display":"{{LNG.Plugin.config.auth}}",
-			"desc":"{{LNG.Plugin.config.authDesc}}",
-			"require":1
+		"menuSubMenu":{
+			"type":"switch",
+			"value":1,
+			"display":"{{LNG.menu_sub_menu}}"
 		}
 	}
 }

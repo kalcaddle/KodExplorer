@@ -12,7 +12,6 @@
 class pluginApp extends Controller{
 	function __construct() {
 		parent::__construct();
-		$this->tpl = TEMPLATE.'pluginApp/';
 	}
 
 	//?pluginApp/to/epubReader/index&a=1
@@ -20,17 +19,22 @@ class pluginApp extends Controller{
 	public function to() {
 		$route = $this->in['URLremote'];
 		if(count($route) >= 3){
+			$app = $route[2];
+			$action = $route[3];
+
 			if(count($route) == 3){
-				$route[3] = 'index';
+				$action = 'index';
 			}
 			$model = $this->loadModel('Plugin');
-			if(!$model->checkAuth($route[2])){
-				show_tips("Plugin not open,or you have't permission[".$route[2]."]");
+			if(!$model->checkAuth($app)){
+				show_tips("Plugin not open,or you have't permission[".$app."]");
 			}
-			if(!$this->checkAccessPlugin()){
-				show_tips("Sorry! You have't permission[".$route[2]."]");
+
+			$appConfig = $model->getConfig($app);
+			if(!$appConfig['pluginAuthOpen'] && !$this->checkAccessPlugin()){
+				show_tips("Sorry! You have't permission[".$app."]");
 			}
-			Hook::apply($route[2].'Plugin.'.$route[3]);
+			Hook::apply($app.'Plugin.'.$action);
 		}
 	}
 

@@ -12,6 +12,8 @@ function myAutoloader($name) {
 		CLASS_DIR.$name.'.class.php',
 		CORER_DIR.$name.'.class.php',
 		SDK_DIR.$name.'.class.php',
+		CORER_DIR.'/Driver/Cache/'.$name.'.class.php',
+		CORER_DIR.'/Driver/DB/'.$name.'.class.php',
 
 		MODEL_DIR.$name.'.class.php',
 		CONTROLLER_DIR.$name.'.class.php',
@@ -33,7 +35,6 @@ if (version_compare(PHP_VERSION, '5.3', '<')) {
 } else {
 	spl_autoload_register('myAutoloader', true, true);
 }
-
 
 
 /**
@@ -148,18 +149,6 @@ function ignore_timeout(){
 	@ini_set('memory_limit', '2028M');//2G;
 }
 
-/**
- * 计算时间差
- * 
- * @param char $pretime 
- * @return char 
- */
-function spend_time(&$pretime){
-	$now = microtime(1);
-	$spend = round($now - $pretime, 5);
-	$pretime = $now;
-	return $spend;
-} 
 
 function check_code($code){
 	ob_clean();
@@ -186,15 +175,7 @@ function check_code($code){
 	imagedestroy($im);//销毁图片
 }
 
-/**
- * 返回当前浮点式的时间,单位秒;主要用在调试程序程序时间时用
- * 
- * @return float 
- */
-function microtime_float(){
-	list($usec, $sec) = explode(' ', microtime());
-	return ((float)$usec + (float)$sec);
-}
+
 /**
  * 计算N次方根
  * @param  $num 
@@ -390,7 +371,9 @@ function show_tips($message,$url= '', $time = 3,$title = ''){
 	}
 	
 	if(is_array($message) || is_object($message)){
-		$message = "<pre>".json_encode_force($message).'</pre>';
+		$message = json_encode_force($message);
+		$message = nl2br(htmlspecialchars($message));
+		$message = "<pre>".$message.'</pre>';
 	}else{
 		$message = filter_html(nl2br($message));
 	}	
@@ -596,6 +579,11 @@ function hex2str($hex){
 	return $string;
 }
 
+if(!function_exists('json_encode')){
+	function json_encode($data){
+		__json_encode($data);
+	}
+}
 function __json_encode( $data ) {
 	if( is_array($data) || is_object($data) ) { 
 		$islist = is_array($data) && ( empty($data) || array_keys($data) === range(0,count($data)-1) ); 
@@ -651,38 +639,6 @@ function __json_encode( $data ) {
 		$json = strtolower(var_export( $data, true )); 
 	} 
 	return $json; 
-}
-
-/**
- * 简单模版转换，用于根据配置获取列表：
- * 参数：cute1:第一次切割的字符串，cute2第二次切割的字符串,
- * arraylist为待处理的字符串，$current 为标记当前项，$current_str为当项标记的替换。
- * $tpl为处理后填充到静态模版({0}代表切割后左值,{1}代表切割后右值,{this}代表当前项填充值)
- * 例子：
- * $arr="default=淡蓝(默认)=5|mac=mac海洋=6|mac1=mac1海洋=7";
- * $tpl="<li class='list {this}' theme='{0}'>{1}_{2}</li>\n";
- * echo getTplList('|','=',$arr,$tpl,'mac'),'<br/>';
- */
-function getTplList($cute1, $cute2, $arraylist, $tpl,$current,$current_str=''){
-	$list = explode($cute1, $arraylist);
-	if ($current_str == '') $current_str ="this";
-	$html = '';
-	foreach ($list as $value) {
-		$info = explode($cute2, $value);
-		$arr_replace = array();	
-		foreach ($info as $key => $value) {
-			$arr_replace[$key]='{'.$key .'}';
-		}
-		if ($info[0] == $current) {
-			$temp = str_replace($arr_replace, $info, $tpl);
-			$temp = str_replace('{this}', $current_str, $temp);
-		} else {
-			$temp = str_replace($arr_replace, $info, $tpl);
-			$temp = str_replace('{this}', '', $temp);
-		}
-		$html .= $temp;
-	} 
-	return $html;
 }
 
 /**
@@ -821,36 +777,6 @@ function msubstr($str, $start = 0, $length, $charset = "utf-8", $suffix = true){
 	return $slice;
 } 
 
-function web2wap(&$content){
-	$search = array ("/<img[^>]+src=\"([^\">]+)\"[^>]+>/siU",
-		"/<a[^>]+href=\"([^\">]+)\"[^>]*>(.*)<\/a>/siU",
-		"'<br[^>]*>'si",
-		"'<p>'si",
-		"'</p>'si",
-		"'<script[^>]*?>.*?</script>'si", // 去掉 javascript
-		"'<[\/\!]*?[^<>]*?>'si", // 去掉 HTML 标记
-		"'([\r\n])[\s]+'", // 去掉空白字符
-		); // 作为 PHP 代码运行
-	$replace = array ("#img#\\1#/img#",
-		"#link#\\1#\\2#/link#",
-		"[br]",
-		"",
-		"[br]",
-		"",
-		"",
-		"",
-		);
-	$text = preg_replace ($search, $replace, $content);
-	$text = str_replace("[br]", "<br/>", $text);
-	$img_start = "<img src=\"" . $publish_url . "automini.php?src=";
-	$img_end = "&amp;pixel=100*80&amp;cache=1&amp;cacheTime=1000&amp;miniType=png\" />";
-	$text = preg_replace ("/#img#(.*)#\/img#/isUe", "'$img_start'.urlencode('\\1').'$img_end'", $text);
-	$text = preg_replace ("/#link#(.*)#(.*)#\/link#/isU", "<a href=\"\\1\">\\2</a>", $text);
-	while (preg_match("/<br\/><br\/>/siU", $text)) {
-		$text = str_replace('<br/><br/>', '<br/>', $text);
-	} 
-	return $text;
-} 
 
 /**
  * 获取变量的名字

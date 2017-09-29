@@ -18,7 +18,7 @@
 			"tabs":[
 				{
 					"name":"{{LNG.Plugin.tab.basic}}",
-					"field":["sep001","pluginAuth","openWith","apiServer"]
+					"field":["pluginAuth","pluginAuthOpen","sep001","openWith","apiServer"]
 				}
 			]
 		},
@@ -29,6 +29,14 @@
 			"desc":"{{LNG.Plugin.config.authDesc}}",
 			"require":1
 		},
+		"pluginAuthOpen":{
+			"type":"switch",
+			"value":0,
+			"display":"{{LNG.Plugin.config.authOpen}}",
+			"desc":"{{LNG.Plugin.config.authOpenDesc}}",
+			"require":1
+		},
+		"sep001":"<hr/>",
 		"openWith":{
 			"type":"radio",
 			"value":"dialog",
@@ -45,7 +53,6 @@
 			"desc":"{{LNG.officeLive.Config.apiServerDesc}}",
 			"require":1
 		},
-		"sep1001":"<hr/>",
 		"fileExt":{
 			"type":"tags",
 			"display":"{{LNG.Plugin.Config.fileExt}}",

@@ -9,7 +9,6 @@
 class editor extends Controller{
 	function __construct()    {
 		parent::__construct();
-		$this->tpl = TEMPLATE . 'editor/';
 	}
 
 	// 多文件编辑器
@@ -71,7 +70,7 @@ class editor extends Controller{
 			if (!path_readable($filepath)){
 				show_json(LNG('no_permission_read_all'),false);
 			}
-			if (filesize($filepath) >= 1024*1024*20){
+			if (filesize($filepath) >= 1024*1024*40){
 				show_json(LNG('edit_too_big'),false);
 			}
 		}

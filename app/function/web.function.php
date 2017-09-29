@@ -166,7 +166,7 @@ function curl_progress_set(){
 	$GLOBALS['curlCurrentFile']['setNum'] += 1;
 	$args = func_get_args();
 	if (is_resource($args[0])) {// php 5.5
-	    array_shift($args);
+		array_shift($args);
 	}
 	$downTotal = $args[0];
 	$downSize = $args[1];
@@ -339,7 +339,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 			break;
 		case 'DOWNLOAD':
 			//远程下载到指定文件；进度条
-		    $downTemp = $data.'.'.rand_string(5);
+			$downTemp = $data.'.'.rand_string(5);
 			$fp = fopen ($downTemp,'w+');
 			curl_progress_bind($downTemp,'',true);//下载进度
 			curl_setopt($ch, CURLOPT_NOPROGRESS, false);
@@ -406,7 +406,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 		}
 	}
 	if($method == 'DOWNLOAD'){
-	    @fclose($fp);
+		@fclose($fp);
 		@clearstatcache();
 		if($success){
 			move_path($downTemp,$data);
@@ -648,6 +648,72 @@ function parse_incoming(){
 	$return['URLremote'] = $remote;
 	return $return;
 } 
+
+function db_escape($str) {
+	$str = addslashes($str);
+	$str = str_replace(array('_', '%'),array('\\_', '\\%'), $str);
+	return $str;
+}
+
+/**
+ * 获取输入参数 支持过滤和默认值
+ * 使用方法:
+ * <code>
+ * input('id',0); 获取id参数 自动判断get或者post
+ * input('post.name','','htmlspecialchars'); 获取$_POST['name']
+ * input('get.'); 获取$_GET
+ * </code> 
+ * @param string $name 变量的名称 支持指定类型
+ * @param mixed $default 不存在的时候默认值
+ * @param mixed $filter 参数过滤方法
+ * @return mixed
+ */
+function input($name,$default='',$filter=null) {
+	$default_filter = 'htmlspecialchars,db_escape';
+	if(strpos($name,'.')) { // 指定参数来源
+		list($method,$name) = explode('.',$name,2);
+	}else{ // 默认为自动判断
+		$method = 'request';
+	}
+	switch(strtolower($method)) {
+		case 'get'     :   $input =& $_GET;break;
+		case 'post'    :   $input =& $_POST;break;
+		case 'request' :   $input =& $_REQUEST;   break;
+
+		case 'put'     :   parse_str(file_get_contents('php://input'), $input);break;
+		case 'session' :   $input =& $_SESSION;   break;
+		case 'cookie'  :   $input =& $_COOKIE;    break;
+		case 'server'  :   $input =& $_SERVER;    break;
+		case 'globals' :   $input =& $GLOBALS;    break;
+		default:return NULL;
+	}
+	$filters = isset($filter)?$filter:$default_filter;
+	if($filters) {
+		$filters = explode(',',$filters);
+	}
+	if(empty($name)) { // 获取全部变量
+		$data = $input; 
+		foreach($filters as $filter){
+			$data = array_map($filter,$data); // 参数过滤
+		}
+	}elseif(isset($input[$name])) { // 取值操作
+		$data =	$input[$name];
+		foreach($filters as $filter){
+			if(function_exists($filter)) {
+				$data = is_array($data)?array_map($filter,$data):$filter($data); // 参数过滤
+			}else{
+				$data = filter_var($data,is_int($filter)?$filter:filter_id($filter));
+				if(false === $data) {
+					return isset($default)?$default:NULL;
+				}
+			}
+		}
+	}else{ // 变量默认值
+		$data = isset($default)?$default:NULL;
+	}
+	return $data;
+}
+
 
 function url2absolute($index_url, $preg_url){
 	if (preg_match('/[a-zA-Z]*\:\/\//', $preg_url)) return $preg_url;

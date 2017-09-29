@@ -1,10 +1,13 @@
 <?php
-class pluginModel extends Model{
+class pluginModel{
+	var $in;
+	var $config;
 	function __construct(){
-		parent::__construct();
-		return $this;
+		global $config, $in;
+		//parent::__construct();
+		$this -> in = &$in;
+		$this -> config = &$config;
 	}
-
 	public function loadData(){
 		if(!isset($this->config['settingSystem']['pluginList'])){
 			$this->config['settingSystem']['pluginList'] = array();

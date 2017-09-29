@@ -82,9 +82,6 @@ var quoteEncode = function(str){
 	str = str.replace(/(['"])/g,'\\$1');
 	return str;
 }
-var canvasSupport = function() {
-	return !!document.createElement('canvas').getContext;
-}
 var isWap = function(){
 	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
 		return true;
@@ -915,7 +912,7 @@ var $sizeInt = function($obj){
 }
 
 //点击水波效果；按钮
-var loadRipple = function(search_arr,ignore_arr){
+var loadRipple = function(search_arr,ignoreArr){
 	var UUID = function(){
 		var time = (new Date()).valueOf();
 		return 'uuid_'+parseInt(time/1000)+'_'+Math.ceil(Math.random()*10000)
@@ -946,8 +943,8 @@ var loadRipple = function(search_arr,ignore_arr){
 		return '';
 	}
 	var isIgnore = function($target){
-		for (var i = 0; i < ignore_arr.length; i++) {
-			var select = ignore_arr[i];
+		for (var i = 0; i < ignoreArr.length; i++) {
+			var select = ignoreArr[i];
 			if($target.closest(select).length !=0){//从当前想上查找
 				return true;
 			}
@@ -967,13 +964,13 @@ var loadRipple = function(search_arr,ignore_arr){
 		}
 		var uuid = 'ripple-'+UUID();
 		var father = $target;//$(this) $target
-		var circle_width = $target.outerWidth();
+		var circleWidth = $target.outerWidth();
 		$('<div class="ripple-father" id="'+uuid+'"><div class="ripple"></div></div>').appendTo(father);
 		if($target.outerWidth()<$target.outerHeight()){
-			circle_width = $target.outerHeight();
+			circleWidth = $target.outerHeight();
 		}
-		circle_width = circle_width>150?150:circle_width;
-		circle_width = circle_width<50?50:circle_width;
+		circleWidth = circleWidth>150?150:circleWidth;
+		circleWidth = circleWidth<50?50:circleWidth;
 
 		var $ripp = $('#'+uuid).css({
 			left: 0,
@@ -989,17 +986,17 @@ var loadRipple = function(search_arr,ignore_arr){
 		}
 		$('#'+uuid+' .ripple').css({
 			'background':$target.css('color'),
-			"margin-left":e.pageX - circle_width/2 - $target.offset().left,
-			"margin-top": e.pageY - circle_width/2 - $target.offset().top,
-			"width": circle_width,
-			"height":circle_width
+			"margin-left":e.pageX - circleWidth/2 - $target.offset().left,
+			"margin-top": e.pageY - circleWidth/2 - $target.offset().top,
+			"width": circleWidth,
+			"height":circleWidth
 		});
 
 		var animateTime = 700;
 		setTimeout(function(){
 			$ripp.find('.ripple').css('transform',"scale(2.5)");
 		},animateTime);
-		$(this).one('mouseup',function(){
+		$(this).one('click mouseup mouseleave',function(e){
 			$ripp.animate({'opacity':0},400,function(){
 				$ripp.remove();
 			});
@@ -1470,7 +1467,17 @@ var MaskView =  (function(){
 		return false;
 	}
 
-
+	$.supportUploadFolder = function(){
+		if(isWap()){
+			return false;
+		}
+		var el = document.createElement('input');
+		el.type = 'file';
+		return typeof el.webkitdirectory !== "undefined" || typeof el.directory !== "undefined";
+	};
+	$.supportCanvas = function() {
+		return !!document.createElement('canvas').getContext;
+	}
 	$.supportCss3 = function(style){
 	    if(!style) style = 'box-shadow';
         var prefix = ['webkit', 'Moz', 'ms', 'o'],
@@ -1535,6 +1542,27 @@ var MaskView =  (function(){
 			});
 			return this;
 		},
+
+		myDbclick:function(callback){
+			var timeout = 0.5;
+			$(this).die('mouseup').live('mouseup',function(e){
+				if(e.which !== 1) return;
+				var preClick = $(this).data('myDbclick');
+				var time = timeFloat();
+				if(!preClick){
+					$(this).data('myDbclick',time);
+					return;
+				}
+				if(time - preClick <= timeout){
+					callback && callback(e);
+				}
+				$(this).data('myDbclick',time);
+				return true;
+			});
+			return this;
+		},
+
+
 		inScreen:function(isCenter){//是否在屏幕中 ;isCenter 按中心点来判断
 			var el = $(this).get(0);
 			if (typeof jQuery === "function" && el instanceof jQuery) {
@@ -1942,8 +1970,9 @@ functionHooks.initEnv();
 
 
 //yyyy-mm-dd H:i:s or yy-mm-dd  to timestamp
-var strtotime = function(datetime){   
+var strtotime = function(datetime){
 	var tmp_datetime = datetime.replace(/:/g,'-');   
+	tmp_datetime = tmp_datetime.replace(/\//g,'-');  
 	tmp_datetime = tmp_datetime.replace(/ /g,'-');   
 	var arr = tmp_datetime.split("-");   
 	var y=arr[0];

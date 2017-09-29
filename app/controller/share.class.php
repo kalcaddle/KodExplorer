@@ -13,7 +13,6 @@ class share extends Controller{
 	private $path;
 	function __construct(){
 		parent::__construct();
-		$this->tpl = TEMPLATE.'share/';
 		$auth = systemRole::getInfo(1);//经过role检测
 
 		$arrNotCheck = array('commonJs');
@@ -222,10 +221,13 @@ class share extends Controller{
 			'versionDesc'   => $versionDesc,
 			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
 
-			'uploadMax'		=> file_upload_size(),
 			'jsonData'     	=> "",
 			'sharePage'     => 'share',
 			'settings'		=> array(
+				'updloadChunkSize'	=> file_upload_size(),
+				'updloadThreads'	=> $this->config['settings']['updloadThreads'],
+				'updloadBindary'	=> $this->config['settings']['updloadBindary'],
+				
 				'paramRewrite'	=> $this->config['settings']['paramRewrite'],
 				'pluginServer'	=> $this->config['settings']['pluginServer'],
 				//'appType'		=> $this->config['settings']['appType']

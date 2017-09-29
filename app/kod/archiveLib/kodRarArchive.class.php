@@ -33,7 +33,7 @@ class kodRarArchive {
 		if(PATH_SEPARATOR == ':') {
 			@chmod($file,0777);
 		}
-		return '"'.$file.'"';
+		return $file;
 	}
 	static function run($cmd){
 		if (strtoupper(substr(PHP_OS, 0,3)) != 'WIN') {//linux

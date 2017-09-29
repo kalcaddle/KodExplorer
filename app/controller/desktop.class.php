@@ -9,7 +9,6 @@
 class desktop extends Controller{
 	function __construct() {
 		parent::__construct();
-		$this->tpl = TEMPLATE.'desktop/';
 	}
 	public function index() {
 		$wap = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');

@@ -16,7 +16,7 @@ class app extends Controller{
 	 * 用户首页展示
 	 */
 	public function index() {
-		$this->display(TEMPLATE.'app/index.html');
+		$this->display('index.html');
 	}
 
 	public function initApp(){

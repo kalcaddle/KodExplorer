@@ -451,4 +451,3 @@ if (!defined("PCLTRACE_LIB"))
 
 // ----- End of double include look
 }
-?>

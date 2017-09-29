@@ -11,10 +11,17 @@
 @ignore_user_abort(true);
 @set_time_limit(3600*2);//set_time_limit(0)  1day
 @ini_set('memory_limit','2028M');//2G;
+
 include('./../../../app/api/sso.class.php');
-if(!SSO::sessionCheck('AdminerAccess')){
-	die('Not Authorized!');
+$host = "http://".$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
+$host = substr($host,0,strpos($host,'plugins/adminer'));
+SSO::sessionAuth('AdminerAccess','check=roleID&value=1',$host);
+class AdminerSoftware extends Adminer {
+	function login($login, $password) {return true;}
 }
+function adminer_object() {return new AdminerSoftware;}
+
+
 
 
 error_reporting(6135);$Lc=!preg_match('~^(unsafe_raw)?$~',ini_get("filter.default"));if($Lc||ini_get("filter.default_flags")){foreach(array('_GET','_POST','_COOKIE','_SERVER')as$X){$Wh=filter_input_array(constant("INPUT$X"),FILTER_UNSAFE_RAW);if($Wh)$$X=$Wh;}}if(function_exists("mb_internal_encoding"))mb_internal_encoding("8bit");if(isset($_GET["file"])){if($_SERVER["HTTP_IF_MODIFIED_SINCE"]){header("HTTP/1.1 304 Not Modified");exit;}header("Expires: ".gmdate("D, d M Y H:i:s",time()+365*24*60*60)." GMT");header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");header("Cache-Control: immutable");if($_GET["file"]=="favicon.ico"){header("Content-Type: image/x-icon");echo

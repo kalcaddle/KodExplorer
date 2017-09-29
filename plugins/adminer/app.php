@@ -9,18 +9,18 @@ class adminerPlugin extends PluginBase{
 		));
 	}
 	public function addMenu(){
+		$config = $this->getConfig();
+		$subMenu = $config['menuSubMenu'];
 		navbar_menu_add(array(
 			'name'		=> 'Adminer',
 			'icon'		=> $this->appIcon(),
 			'url'		=> $this->pluginApi,
 			'target'	=> '_blank',
-			'subMenu'	=> '1',
+			'subMenu'	=> $subMenu,
 			'use'		=> '1'
 		));
 	}
 	public function index(){
-		include(LIB_DIR.'api/sso.class.php');
-		SSO::sessionSet('AdminerAccess');
 		header('Location: '.$this->pluginHost.'adminer/');
 	}
 }

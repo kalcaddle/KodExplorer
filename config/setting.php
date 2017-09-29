@@ -11,12 +11,21 @@ $config['settings'] = array(
 	'downloadUrlTime'	=> 0,			 //下载地址生效时间，按秒计算，0代表不限制
 	'apiLoginTonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'updloadChunkSize'	=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
+	'updloadThreads'	=> 5,			 //上传并发数;部分低配服务器上传失败则将此设置为1
+	'updloadBindary'	=> 1,			 //以二进制方式上传;后端服务器以php://input接收;0则为传统方式上传
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
+	'httpSendFile'		=> false,		 //调用webserver下载 http://www.laruence.com/2012/05/02/2613.html; 
+										 //https://www.lovelucy.info/x-sendfile-in-nginx.html
 	
 	'pluginServer'		=> "https://api.kodcloud.com/?",
 	'staticPath'		=> "./static/",	//静态文件目录,可以配置到cdn;
 	'pluginHost'		=> PLUGIN_HOST  //静态文件目录
 );
+// windows upload threads;兼容不支持并发的服务器
+if($config['systemOS'] == 'windows'){
+	$config['settings']['updloadThreads'] = 1;
+}
+
 $config['settings']['appType'] = array(
 	array('type' => 'tools','name' => 'app_group_tools','class' => 'icon-suitcase'),
 	array('type' => 'game','name' => 'app_group_game','class' => 'icon-dashboard'),
@@ -139,7 +148,7 @@ $config['settingAll'] = array(
 	
 	'themeall'		=> "mac,win10,win7,metro,metro_green,metro_purple,metro_pink,metro_orange,alpha_image,alpha_image_sun,alpha_image_sky,diy",
 	'codethemeall'	=> "chrome,clouds,crimson_editor,eclipse,github,kuroir,solarized_light,tomorrow,xcode,ambiance,monokai,idle_fingers,pastel_on_dark,solarized_dark,twilight,tomorrow_night_blue,tomorrow_night_eighties",
-	'codefontall'	=> 'Consolas,Courier,DejaVu Sans Mono,Liberation Mono,Menlo,Monaco,Monospace,Source Code Pro',
+	'codefontall'	=> 'Source Code Pro,Consolas,Courier,DejaVu Sans Mono,Liberation Mono,Menlo,Monaco,Monospace',
 	'wallall'		=> "1,2,3,4,5,6,7,8,9,10,11,12,13"
 );
 
@@ -152,7 +161,7 @@ $config['roleSetting'] = array(
 		'mkdir','mkfile','pathRname','pathDelete','zip','unzip','unzipList',
 		'pathCopy','pathCute','pathCuteDrag','pathCopyDrag','clipboard','pathPast',
 		'serverDownload','fileUpload','search','pathDeleteRecycle',
-		'fileDownload','zipDownload','fileDownloadRemove','fileProxy','officeView','officeSave'),
+		'fileDownload','zipDownload','fileDownloadRemove','fileProxy','fileSave','officeView','officeSave'),
 	'app'		=> array('userApp','initApp','add','edit','del'),//
 	'editor'	=> array('fileGet','fileSave'),
 
@@ -178,7 +187,7 @@ $config['pathRoleDefine'] = array(
 	),
 	'write' => array(
 		'add'	=> array('explorer.mkdir','explorer.mkfile','explorer.zip','explorer.unzip','app.userApp'),
-		'edit'	=> array('explorer.officeSave','explorer.imageRotate','editor.fileSave'),
+		'edit'	=> array('explorer.officeSave','explorer.imageRotate','editor.fileSave','explorer.fileSave'),
 		'change'=> array('explorer.pathRname','explorer.pathPast','explorer.pathCopyDrag','explorer.pathCuteDrag'),
 		'upload'=> array('explorer.fileUpload','explorer.serverDownload'),
 		'remove'=> array('explorer.pathDelete','explorer.pathCute'),

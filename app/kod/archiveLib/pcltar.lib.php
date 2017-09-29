@@ -1085,7 +1085,6 @@ if (!defined("PCL_TAR"))
         TrFctEnd(__FILE__, __LINE__, PclErrorCode(), PclErrorString());
         return PclErrorCode();
       }
-
       // ----- Call the adding fct inside the tar
       if (($v_result = PclTarHandleAddList($p_tar, $p_list, $p_mode, $v_list_detail, $p_add_dir, $p_remove_dir)) == 1)
       {
@@ -1402,7 +1401,6 @@ if (!defined("PCL_TAR"))
 
       // ----- Store the file infos
       $p_list_detail[$v_nb++] = $v_header;
-
       // ----- Look for directory
       if (is_dir($p_filename))
       {
@@ -1416,11 +1414,18 @@ if (!defined("PCL_TAR"))
 
         // ----- Read the directory for files and sub-directories
         $p_hdir = opendir($p_filename);
-        $p_hitem = readdir($p_hdir); // '.' directory
-        $p_hitem = readdir($p_hdir); // '..' directory
+        
+        // changed by warlee;php7以后 目录第一二个不一定是. 和..
+        // $p_hitem = readdir($p_hdir); // '.' directory
+        // $p_hitem = readdir($p_hdir); // '..' directory
         while ($p_hitem = readdir($p_hdir))
         {
-          // ----- Look for a file
+          //add by warlee;
+          if ($p_hitem == "." || $p_hitem == "..") {
+            continue;
+          }
+          
+            // ----- Look for a file
           if (is_file($v_path.$p_hitem))
           {
             TrFctMessage(__FILE__, __LINE__, 4, "Add the file '".$v_path.$p_hitem."'");
@@ -1547,7 +1552,6 @@ if (!defined("PCL_TAR"))
       TrFctEnd(__FILE__, __LINE__, PclErrorCode(), PclErrorString());
       return PclErrorCode();
     }
-
     // ----- Look for a file
     if (is_file($p_filename))
     {
@@ -3633,4 +3637,3 @@ if (!defined("PCL_TAR"))
 
 // ----- End of double include look
 }
-?>

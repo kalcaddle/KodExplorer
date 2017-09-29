@@ -61,6 +61,7 @@ function iconv_to($str,$from,$to){
 		}
 		return $str;
 	}
+	unset($str);
 	return $result;
 }
 function path_filter($path){
@@ -327,15 +328,14 @@ function path_check($path){
 function _path_info_more($dir, &$fileCount = 0, &$pathCount = 0, &$size = 0){
 	if (!$dh = @opendir($dir)) return array('fileCount'=>0,'folderCount'=>0,'size'=>0);
 	while (($file = readdir($dh)) !== false) {
-		if ($file != "." && $file != "..") {
-			$fullpath = $dir . "/" . $file;
-			if (!is_dir($fullpath)) {
-				$fileCount ++;
-				$size += get_filesize($fullpath);
-			} else {
-				_path_info_more($fullpath, $fileCount, $pathCount, $size);
-				$pathCount ++;
-			}
+		if ($file =='.' || $file =='..') continue;
+		$fullpath = $dir . "/" . $file;
+		if (!is_dir($fullpath)) {
+			$fileCount ++;
+			$size += get_filesize($fullpath);
+		} else {
+			_path_info_more($fullpath, $fileCount, $pathCount, $size);
+			$pathCount ++;
 		}
 	}
 	closedir($dh);
@@ -393,19 +393,18 @@ function path_list($dir,$listFile=true,$checkChildren=false){
 	}
 	$folderList = array();$fileList = array();//文件夹与文件
 	while (($file = readdir($dh)) !== false) {
-		if ($file != "." && $file != ".." && $file != ".svn" ) {
-			$fullpath = $dir . $file;
-			if (is_dir($fullpath)) {
-				$info = folder_info($fullpath);
-				if($checkChildren){
-					$info['isParent'] = path_haschildren($fullpath,$listFile);
-				}
-				$folderList[] = $info;
-			} else if($listFile) {//是否列出文件
-				$info = file_info($fullpath);
-				if($checkChildren) $info['isParent'] = false;
-				$fileList[] = $info;
+		if ($file =='.' || $file =='..' || $file == ".svn") continue;
+		$fullpath = $dir . $file;
+		if (is_dir($fullpath)) {
+			$info = folder_info($fullpath);
+			if($checkChildren){
+				$info['isParent'] = path_haschildren($fullpath,$listFile);
 			}
+			$folderList[] = $info;
+		} else if($listFile) {//是否列出文件
+			$info = file_info($fullpath);
+			if($checkChildren) $info['isParent'] = false;
+			$fileList[] = $info;
 		}
 	}
 	closedir($dh);
@@ -417,16 +416,15 @@ function path_haschildren($dir,$checkFile=false){
 	$dir = rtrim($dir,'/').'/';
 	if (!$dh = @opendir($dir)) return false;
 	while (($file = readdir($dh)) !== false){
-		if ($file != "." && $file != "..") {
-			$fullpath = $dir.$file;
-			if ($checkFile) {//有子目录或者文件都说明有子内容
-				if(@is_file($fullpath) || is_dir($fullpath.'/')){
-					return true;
-				}
-			}else{//只检查有没有文件
-				if(@is_dir($fullpath.'/')){//解决部分主机报错问题
-					return true;
-				}
+		if ($file =='.' || $file =='..') continue;
+		$fullpath = $dir.$file;
+		if ($checkFile) {//有子目录或者文件都说明有子内容
+			if(@is_file($fullpath) || is_dir($fullpath.'/')){
+				return true;
+			}
+		}else{//只检查有没有文件
+			if(@is_dir($fullpath.'/')){//解决部分主机报错问题
+				return true;
 			}
 		}
 	}
@@ -456,20 +454,19 @@ function del_dir($dir){
 	if (!$dh = opendir($dir)) return false;
 	@set_time_limit(0);
 	while (($file = readdir($dh)) !== false) {
-		if ($file != "." && $file != "..") {
-			$fullpath = $dir . '/' . $file;
-			if (!is_dir($fullpath)) {
-				if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
-					chmod($fullpath, 0777);
-					if (!unlink($fullpath)) {
-						return false;
-					}
+		if ($file =='.' || $file =='..') continue;
+		$fullpath = $dir . '/' . $file;
+		if (!is_dir($fullpath)) {
+			if (!unlink($fullpath)) { // 删除不了，尝试修改文件权限
+				chmod($fullpath, 0777);
+				if (!unlink($fullpath)) {
+					return false;
 				}
-			} else {
-				if (!del_dir($fullpath)) {
-					chmod($fullpath, 0777);
-					if (!del_dir($fullpath)) return false;
-				}
+			}
+		} else {
+			if (!del_dir($fullpath)) {
+				chmod($fullpath, 0777);
+				if (!del_dir($fullpath)) return false;
 			}
 		}
 	}
@@ -515,9 +512,8 @@ function copy_dir($source, $dest){
 		}
 		if (!$dh = opendir($source)) return false;
 		while (($file = readdir($dh)) !== false) {
-			if ($file != "." && $file != "..") {
-				$result = copy_dir($source . "/" . $file, $dest . "/" . $file);
-			}
+			if ($file =='.' || $file =='..') continue;
+			$result = copy_dir($source . "/" . $file, $dest . "/" . $file);
 		}
 		closedir($dh);
 	}
@@ -772,9 +768,16 @@ function file_search($path,$search,$is_case){
 	$strpos = 'stripos';//是否区分大小写
 	if ($is_case) $strpos = 'strpos';
 
+	//文本文件 超过40M不再搜索
+	if(@filesize($path) >= 1024*1024*40){
+		return false;
+	}
 	$content = file_get_contents($path);
 	$charset = get_charset($content);
-	if(!in_array($charset,array('utf-8','ascii'))){
+
+	//搜索关键字为纯英文则直接搜索；含有中文则转为utf8再搜索，为兼容其他文件编码格式
+	$notAscii = preg_match("/[\x7f-\xff]/", $search);
+	if($notAscii && !in_array($charset,array('utf-8','ascii'))){
 		$content = iconv_to($content,$charset,'utf-8');
 	}
 
@@ -859,11 +862,10 @@ function chmod_path($path,$mod){
 	if (is_file($path)) return @chmod($path,$mod);
 	if (!$dh = @opendir($path)) return false;
 	while (($file = readdir($dh)) !== false){
-		if ($file != "." && $file != "..") {
-			$fullpath = $path . '/' . $file;
-			chmod_path($fullpath,$mod);
-			@chmod($fullpath,$mod);
-		}
+		if ($file =='.' || $file =='..') continue;
+		$fullpath = $path . '/' . $file;
+		chmod_path($fullpath,$mod);
+		@chmod($fullpath,$mod);
 	}
 	closedir($dh);
 	return @chmod($path,$mod);
@@ -1022,11 +1024,24 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	header('Last-Modified: '.$time.' GMT');
 	header("X-OutFileName: ".$filenameOutput);
 	header("X-Powered-By: kodExplorer.");
+
+	//调用webserver下载
+	$server = strtolower($_SERVER['SERVER_SOFTWARE']);
+	if($server && $GLOBALS['config']['settings']['httpSendFile']){
+		if(strstr($server,'nginx')){//nginx
+			header("X-Sendfile: ".$file);
+		}else if(strstr($server,'apache')){ //apache
+			header('X-Accel-Redirect: '.$file);
+		}else if(strstr($server,'http')){//light http
+			header( "X-LIGHTTPD-send-file: " . $file);
+		}
+		return;
+	}
 	
 	//远程路径不支持断点续传；打开zip内部文件
 	if(!file_exists($file)){
 		header('HTTP/1.1 200 OK');
-		header('Content-Length:'.($end+1));
+		header('Content-Length: '.($end+1));
 		return;
 	}
 	header("Accept-Ranges: bytes");
@@ -1053,8 +1068,8 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	$cur = $start;
 	fseek($fp, $start,0);
 	while(!feof($fp) && $cur <= $end){ // && (connection_status() == 0)
-		print fread($fp, min(1024 * 16, ($end - $cur) + 1));
-		$cur += 1024 * 16;
+		print fread($fp, min(1024 * 100, ($end - $cur) + 1));
+		$cur += 1024 * 100;
 		flush();
 	}
 	fclose($fp);
@@ -1188,6 +1203,18 @@ function kod_move_uploaded_file($fromPath,$savePath){
 	chmod_path($savePath,DEFAULT_PERRMISSIONS);
 	return $result;
 }
+function check_upload($error){
+	$status = array(
+		'UPLOAD_ERR_OK',        //没有错误发生，文件上传成功。
+		'UPLOAD_ERR_INI_SIZE',  //上传的文件超过了php.ini 中 upload_max_filesize 选项限制的值。
+		'UPLOAD_ERR_FORM_SIZE', //上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值。
+		'UPLOAD_ERR_PARTIAL',   //文件只有部分被上传。
+		'UPLOAD_ERR_NO_FILE',   //没有文件被上传。
+		'UPLOAD_ERR_NO_TMP_DIR',//找不到临时文件夹。php 4.3.10 和 php 5.0.3 引进。
+		'UPLOAD_ERR_CANT_WRITE',//文件写入失败。php 5.1.0 引进。
+	);
+	return $error.':'.$status[$error];
+}
 
 /**
  * 文件上传处理。大文件支持分片上传
@@ -1202,6 +1229,9 @@ function upload($path,$tempPath,$repeatAction='replace'){
 	if (!empty($_FILES)) {
 		$fileName = iconv_system(path_clear_name($_FILES[$fileInput]["name"]));
 		$uploadFile = $_FILES[$fileInput]["tmp_name"];
+		if(!$uploadFile && $_FILES[$fileInput]['error']>0){
+			show_json(check_upload($_FILES[$fileInput]['error']),false);
+		}
 		if($fileName == "image.jpg" && is_wap()){//拍照上传
 			$fileName = date('Ymd H:i:s',time()).'.jpg';
 		}
@@ -1322,7 +1352,8 @@ function write_log($log, $type = 'default', $level = 'log'){
 	if(!defined('LOG_PATH')){
 		return;
 	}
-	$now_time = date('[H:i:s]');
+	list($usec, $sec) = explode(' ', microtime());
+	$now_time = date('[H:i:s.').substr($usec,2,3).'] ';
 	$target   = LOG_PATH . strtolower($type) . '/';
 	mk_dir($target);
 	if (!path_writeable($target)){

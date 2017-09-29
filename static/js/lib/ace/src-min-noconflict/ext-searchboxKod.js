@@ -517,6 +517,7 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 			this.historySearch.add(this.searchInput.value);
 		};
 		this.findPrev = function() {
+			console.log(123123);
 			this.find(true, true);
 			//添加历史记录
 			this.historySearch.add(this.searchInput.value);

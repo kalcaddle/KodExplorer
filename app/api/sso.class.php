@@ -57,8 +57,7 @@ class SSO{
 
 	static public function sessionCheck($key,$value='success'){
 		$session = self::init();
-		if( isset($session[$key]) && 
-			$session[$key] == $value){
+		if( isset($session[$key]) && $session[$key] == $value){
 			return true;
 		}
 		return false;
@@ -79,6 +78,7 @@ class SSO{
 					':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
 		}
 		if(!self::sessionCheck($appKey)){
+			session_destroy();
 			header('Location: '.$authUrl.'&link='.rawurlencode($appUrl));
 			exit;
 		}

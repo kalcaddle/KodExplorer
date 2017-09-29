@@ -217,8 +217,10 @@
   //   filename.
   //   Note that no real action is taken, if the archive does not exist it is not
   //   created. Use create() for that.
+  //   
+  //   changed by warlee; PclZip=>__construct; php7.1不再支持5php4的构造函数方法
   // --------------------------------------------------------------------------------
-  function PclZip($p_zipname)
+  function __construct($p_zipname)
   {
 
     // ----- Tests the zlib
@@ -5718,5 +5720,3 @@
   }
   // --------------------------------------------------------------------------------
 
-
-?>

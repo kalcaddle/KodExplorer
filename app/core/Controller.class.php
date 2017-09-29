@@ -11,7 +11,6 @@
  */
 abstract class Controller {
 	public $in;
-	public $db;
 	public $config;	// 全局配置
 	public $tpl;	// 模板目录
 	public $values;	// 模板变量
@@ -20,13 +19,12 @@ abstract class Controller {
 	 * 构造函数
 	 */
 	function __construct(){
-		global $in,$config,$db;
-
-		$this -> db  = $db;
-		$this -> config = &$config;
-		$this -> in = &$in;	
-		$this -> values['config'] = &$config;
-		$this -> values['in'] = &$in;
+		global $in,$config;
+		$this ->config = &$config;
+		$this ->in = &$in;	
+		$this ->values['config'] = &$config;
+		$this ->values['in'] = &$in;
+		$this ->tpl = TEMPLATE.get_class($this).'/';
 	} 
 
 	/**

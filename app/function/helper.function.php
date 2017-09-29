@@ -127,9 +127,9 @@ function get_charset(&$str) {
 		'utf-32be' 	=> chr(0x00) . chr(0x00) . chr(0xFE) . chr(0xFF),
 	);
 	foreach ($bom_arr as $key => $value) {
-		if ( substr($str,0,strlen($value)) === $value ){
+		if (substr($str,0,strlen($value)) === $value ){
 			return $key;
-		} 
+		}
 	}
 
 	//前面检测成功则，自动忽略后面
@@ -248,7 +248,7 @@ function init_common(){
 	// session path create and check
 	$errorTips = "[Error Code:1002] 目录权限错误！请设置程序目录及所有子目录为读写状态，
 				linux 运行如下指令：
-				<pre>chmod -R 777 ".BASIC_PATH.'</pre>';
+				<pre>su -c 'setenforce 0'\nchmod -R 777 ".BASIC_PATH.'</pre>';
 	//检查session是否存在
 	if( !file_exists(KOD_SESSION) ||
 		!file_exists(KOD_SESSION.'index.html')){

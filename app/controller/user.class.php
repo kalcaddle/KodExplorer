@@ -16,7 +16,6 @@ class user extends Controller{
 		//php5.4 bug;需要重新读取一次
 		@session_start();
 		@session_write_close();
-		$this->tpl  = TEMPLATE  . 'user/';
 		if(!isset($_SESSION)){//避免session不可写导致循环跳转
 			$this->login(DATA_PATH."<br/>".LNG('path_can_not_write_data') );
 		}else{
@@ -249,12 +248,14 @@ class user extends Controller{
 			
 			'myhome'        => MYHOME,
 			'myDesktop'		=> MYHOME.DESKTOP_FOLDER.'/',
-			'uploadMax'		=> file_upload_size(),
-
 			'settings'		=> array(
-				'paramRewrite'	=> $this->config['settings']['paramRewrite'],
-				'pluginServer'	=> $this->config['settings']['pluginServer'],
-				'appType'		=> $this->config['settings']['appType']
+				'updloadChunkSize'	=> file_upload_size(),
+				'updloadThreads'	=> $this->config['settings']['updloadThreads'],
+				'updloadBindary'	=> $this->config['settings']['updloadBindary'],
+
+				'paramRewrite'		=> $this->config['settings']['paramRewrite'],
+				'pluginServer'		=> $this->config['settings']['pluginServer'],
+				'appType'			=> $this->config['settings']['appType']
 			),
 			'phpVersion'	=> PHP_VERSION,
 			'version'       => KOD_VERSION,
@@ -499,6 +500,7 @@ class user extends Controller{
 		$auth['explorer.pathCopyDrag']      = $auth['explorer.pathCuteDrag'];
 
 		$auth['explorer.officeSave']        = $auth['editor.fileSave'];
+		$auth['explorer.fileSave']          = $auth['editor.fileSave'];
 		$auth['explorer.imageRotate']       = $auth['editor.fileSave'];
 		$auth['explorer.fileDownloadRemove']= $auth['explorer.fileDownload'];
 		$auth['explorer.zipDownload']       = $auth['explorer.fileDownload'];

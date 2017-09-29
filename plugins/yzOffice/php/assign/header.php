@@ -36,7 +36,7 @@
 	}
 
 	div.navbar-inverse .navbar-inner {
-		background:#eee;
+		background:#eee;filter:none;
 	    background-image: linear-gradient(to bottom,#fff,#eee);
 	    border-bottom: 1px solid #ddd;
 	    background-repeat: repeat-x;
@@ -103,6 +103,11 @@
 		}
 	?>
 </style>
+<script type="text/javascript">
+	if(!window.addEventListener){
+		window.addEventListener = window.attachEvent;
+	}
+</script>
 <link href="./static/style/font-awesome/css/font-awesome.css?ver=<?php echo KOD_VERSION;?>" rel="stylesheet">
 <!--[if IE 7]>
 <link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome-ie7.css">

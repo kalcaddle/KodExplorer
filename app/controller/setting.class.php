@@ -16,7 +16,6 @@ class setting extends Controller{
 	 * 用户首页展示
 	 */
 	public function index() {
-		$this->tpl = TEMPLATE.'setting/';
 		$this->display('index.html');
 	}
 

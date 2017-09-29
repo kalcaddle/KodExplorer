@@ -128,7 +128,10 @@ class KodArchive {
 			if($GLOBALS['config']['systemCharset'] != 'utf-8'){
 				$indexPath = unzip_pre_name($partName);//系统编码
 			}
-			$pathRemove = get_path_father($indexPath);
+
+			//$pathRemove = get_path_father($indexPath);
+			$pathRemove = get_path_father($partName);//中文情况文件情况兼容
+
 			if($indexInfo['folder']){
 				$indexPath = rtrim($indexPath,'/').'/';//tar 解压文件夹需要/结尾
 				$partName = array($partName);

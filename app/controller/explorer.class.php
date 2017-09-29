@@ -11,7 +11,6 @@ class explorer extends Controller{
 	public $user;
 	public function __construct(){
 		parent::__construct();
-		$this->tpl = TEMPLATE."explorer/";
 		$this->user = $_SESSION['kodUser'];
 		if (isset($this->in['path'])) {
 			//游客访问别人zip，解压到**目录；入口不检测权限
@@ -625,7 +624,8 @@ class explorer extends Controller{
 			if(!path_writeable($pathThis)){
 				$error++;
 				continue;
-			}		
+			}
+			//show_json($pathThis,false,file_exists($pathThis));
 
 			// 群组文件删除，移动到个人回收站。
 			// $GLOBALS['kodPathType'] == KOD_GROUP_SHARE ||
@@ -1015,10 +1015,8 @@ class explorer extends Controller{
 		if (!is_dir(DATA_THUMB)){
 			mk_dir(DATA_THUMB);
 		}
-		
 		$image = $this->path;
 		$imageMd5  = @md5_file($image);//文件md5
-
 		if (strlen($imageMd5)<5) {
 			$imageMd5 = md5($image);
 		}
@@ -1108,15 +1106,15 @@ class explorer extends Controller{
 
 	//通用缩略图
 	public function fileThumb(){
-		Hook::trigger("explorer.fileThumb",$this->path);
+		Hook::trigger("explorer.fileThumbStart",$this->path);
 	}
 	//通用预览
 	public function fileView(){
-		Hook::trigger("explorer.fileView",$this->path);
+		Hook::trigger("explorer.fileViewStart",$this->path);
 	}
 	//通用保存
 	public function fileSave(){
-		Hook::trigger("explorer.fileSave",$this->path);
+		Hook::trigger("explorer.fileSaveStart",$this->path);
 	}
 	//代理输出
 	public function fileProxy(){
@@ -1372,7 +1370,7 @@ class explorer extends Controller{
 				$list['info']['role'] = "owner";
 			}
 			if($GLOBALS['isRoot']){
-				$list['info']['adminRealPath'] = USER_PATH.$user['path'].'/home/';
+				$list['info']['adminRealPath'] = get_path_father($GLOBALS['kodPathPre']);
 			}
 		}
 		//自己管理的目录
@@ -1397,7 +1395,7 @@ class explorer extends Controller{
 			if($GLOBALS['isRoot']){
 				$list['groupSpaceUse'] = $group['config'];//自己
 				$list['info']['role'] = 'owner';
-				$list['info']['adminRealPath'] = GROUP_PATH.$group['path'].'/home/';
+				$list['info']['adminRealPath'] = $GLOBALS['kodPathPre'];
 			}
 		}
 	}
