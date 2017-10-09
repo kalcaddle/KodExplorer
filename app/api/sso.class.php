@@ -57,10 +57,10 @@ class SSO{
 
 
 	static public function sessionCheck($key,$value='success'){
-		$path = session_save_path();//还原session路径
+		//$path = session_save_path();//还原session路径
 		$session = self::init();
 		if( isset($session[$key]) && $session[$key] == $value){
-			session_save_path($path);
+			//session_save_path($path);
 			return true;
 		}
 		return false;
@@ -84,8 +84,11 @@ class SSO{
 			$appUrl = this_url();
 		}
 		if(!self::sessionCheck($appKey)){
+			session_destroy();
 			header('Location: '.$authUrl.'&link='.rawurlencode($appUrl));
 			exit;
 		}
 	}
 }
+
+
