@@ -58,6 +58,9 @@ class editor extends Controller{
 					$displayName = rawurldecode($urlInfo['downFilename']);
 				}
 			}else{
+				if(is_file($filepath) || substr($filepath,0,4) != 'http'){
+					show_json(LNG('not url'),false);
+				}
 				$displayName = rawurldecode($urlInfo['name']);
 				$filepath = $fileUrl.'&accessToken='.access_token_get();
 			}

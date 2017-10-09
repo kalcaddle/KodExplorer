@@ -102,8 +102,6 @@ class share extends Controller{
 		$sharePath = _DIR_CLEAR($this->shareInfo['path']);
 		if ($user['role'] != '1') {
 			$sharePath = HOME.ltrim($sharePath,'/');
-		}else{
-			$sharePath = _DIR_CLEAR($this->shareInfo['path']);
 		}
 		if ($this->shareInfo['type'] != 'file'){
 			$sharePath=rtrim($sharePath,'/').'/';
@@ -333,6 +331,9 @@ class share extends Controller{
 		if (isset($this->in['project'])) {
 			$path = $this->sharePath.$this->_clear($this->in['project']);
 		}
+		if (isset($this->in['path'])) {
+			$path = $this->sharePath.$this->_clear($this->in['path']);
+		}
 		if (isset($this->in['name'])){
 			$path=$path.'/'.$this->_clear($this->in['name']);
 		}
@@ -382,7 +383,7 @@ class share extends Controller{
 	public function fileUpload(){
 		$fileName = $_FILES['file']['name']? $_FILES['file']['name']:$GLOBALS['in']['name'];
 		$GLOBALS['isRoot']=0;
-		$GLOBALS['auth']['extNotAllow'] = "php|asp|jsp|html|htm";
+		$GLOBALS['auth']['extNotAllow'] = "php|asp|jsp|html|htm|htaccess";
 		if(!checkExt($fileName)){
 			show_json(LNG('no_permission_ext'),false);
 		}
@@ -432,7 +433,7 @@ class share extends Controller{
 		if ($this->shareInfo['notDownload']=='1') {
 			show_json(LNG('share_not_download_tips'),false);
 		}
-		$path = _DIR_CLEAR($this->in['path']);
+		$path = get_path_this(_DIR_CLEAR($this->in['path']));
 		$path = iconv_system(USER_TEMP.$path);
 		file_put_out($path,true);
 		del_file($path);
@@ -467,7 +468,7 @@ class share extends Controller{
 		$listNum = count($zipList);
 		$files = array();
 		for ($i=0; $i < $listNum; $i++) {
-			$item = _DIR_CLEAR($this->path.$this->_clear($zipList[$i]['path']));
+			$item = $this->path.$this->_clear($zipList[$i]['path']);
 			if(file_exists($item)){
 				$files[] = $item;
 			}
@@ -496,8 +497,11 @@ class share extends Controller{
 			$displayName = $this->in['name'];
 			$filepath = _DIR_CLEAR($this->in['fileUrl']);
 			$filepath = str_replace(':/','://',$filepath);
+			if(is_file($filepath) || substr($filepath,0,4) != 'http'){
+				show_json(LNG('url error!'),false);
+			}
 		}else{
-			$displayName = _DIR_CLEAR(rawurldecode($this->in['filename']));
+			$displayName = _DIR_CLEAR($this->in['filename']);
 			$filepath= $this->sharePath.iconv_system($displayName);
 			if (!path_readable($filepath)){
 				show_json(LNG('no_permission_read'),false);

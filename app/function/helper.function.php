@@ -6,6 +6,8 @@ function checkExt($file){
 		return 0;
 	}
 	$notAllow = $GLOBALS['auth']['extNotAllow'];
+
+	$notAllow .= '|htaccess';//防破解安全处理
 	$extArr = explode('|',$notAllow);
 	foreach ($extArr as $current) {
 		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名

@@ -1,0 +1,38 @@
+{
+	"id":"VLCPlayer",
+	"name":"VLC Player",
+	"title":"VLC 播放器",
+	"version":"1.1",
+	"source":{
+		"icon":"{{pluginHost}}/static/images/icon.png"
+	},
+	"category":"media,file",
+	"description":"VLCPlayer mediafile player;",
+	"keywords":"",
+	"auther":{
+		"copyright":"kodcloud.",
+		"homePage":"http://www.kodcloud.com",
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		},
+
+		"fileExt":{
+			"type":"tags",
+			"display":"{{LNG.Plugin.Config.fileExt}}",
+			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
+			"value":"aac,arc,arj,asf,asx,avi,f4v,flv, m2ts,m4v,mp2,mov,mp3,mp4,mp4v,mpe,mpg,mts,mkv,ogv,3gp,mpeg,wav,wma,wmv,rm,rmvb,vob,webm,webmv,   mp3,wav,wma,m4a,aac,oga,ogg,webma",
+		},
+		"fileSort":{
+			"type":"number",
+			"display":"{{LNG.Plugin.Config.fileSort}}",
+			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
+			"value":1,
+		}
+	}
+}

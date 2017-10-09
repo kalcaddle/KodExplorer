@@ -870,10 +870,10 @@ class explorer extends Controller{
 	}
 	//文件下载后删除,用于文件夹下载
 	public function fileDownloadRemove(){
-		$path = rawurldecode(_DIR_CLEAR($this->in['path']));
+		$path = get_path_this(_DIR_CLEAR($this->in['path']));
 		$path = iconv_system(USER_TEMP.$path);
 		file_put_out($path,true);
-
+		
 		Hook::trigger("explorer.pathRemoveBefore",$path,false);
 		del_file($path);
 		Hook::trigger("explorer.pathRemoveAfter",$path);

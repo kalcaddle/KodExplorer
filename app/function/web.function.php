@@ -69,9 +69,17 @@ function this_url(){
 function reset_path($str){
 	return str_replace('\\','/',$str);
 }
-function get_webroot($app_path){
-	$webRoot = str_replace(reset_path($_SERVER['SCRIPT_NAME']),'',$app_path.'index.php').'/';
-	if (substr($webRoot,-10) == 'index.php/') {//解决部分主机不兼容问题
+function get_webroot($app_path=''){
+	$index='index.php';
+	if($app_path == ''){
+		$self_file  = reset_path($_SERVER['SCRIPT_NAME']);
+		$index_path = reset_path($_SERVER['SCRIPT_FILENAME']);
+		$app_path = substr($index_path,0,strrpos($index_path,'/'));
+		$index = substr($index_path,1+strrpos($index_path,'/'));
+	}
+
+	$webRoot = str_replace($self_file,'',$app_path.$index).'/';
+	if (substr($webRoot,-(strlen($index)+1)) == $index.'/') {//解决部分主机不兼容问题
 		$webRoot = reset_path($_SERVER['DOCUMENT_ROOT']).'/';
 	}
 	return $webRoot;
@@ -659,16 +667,16 @@ function db_escape($str) {
  * 获取输入参数 支持过滤和默认值
  * 使用方法:
  * <code>
- * input('id',0); 获取id参数 自动判断get或者post
- * input('post.name','','htmlspecialchars'); 获取$_POST['name']
- * input('get.'); 获取$_GET
+ * in('id',0); 获取id参数 自动判断get或者post
+ * in('post.name','','htmlspecialchars'); 获取$_POST['name']
+ * in('get.'); 获取$_GET
  * </code> 
  * @param string $name 变量的名称 支持指定类型
  * @param mixed $default 不存在的时候默认值
  * @param mixed $filter 参数过滤方法
  * @return mixed
  */
-function input($name,$default='',$filter=null) {
+function in($name,$default='',$filter=null) {
 	$default_filter = 'htmlspecialchars,db_escape';
 	if(strpos($name,'.')) { // 指定参数来源
 		list($method,$name) = explode('.',$name,2);

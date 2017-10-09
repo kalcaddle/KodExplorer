@@ -1395,7 +1395,8 @@ var MaskView =  (function(){
 			relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ''])[1],
 			segments: a.pathname.replace(/^\//, '').split('/')
 		};
-		result.url = result.protocol + '://' + result.host + result.path + result.query;
+		var port = result.port ? ':'+result.port:'';
+		result.url = result.protocol + '://' + result.host + port + result.path + result.query;
 		return result;
 	}
 

@@ -13,9 +13,7 @@
 @ini_set('memory_limit','2028M');//2G;
 
 include('./../../../app/api/sso.class.php');
-$host = "http://".$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
-$host = substr($host,0,strpos($host,'plugins/adminer'));
-SSO::sessionAuth('AdminerAccess','check=roleID&value=1',$host);
+SSO::sessionAuth('AdminerAccess','check=roleID&value=1');
 class AdminerSoftware extends Adminer {
 	function login($login, $password) {return true;}
 }

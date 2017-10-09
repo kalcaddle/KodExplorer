@@ -30,8 +30,8 @@ class yzOfficePlugin extends PluginBase{
 		if(!file_exists($pageFile)){
 			$result = url_request($html,'GET');
 			if($result['code'] == 200){
-				$titlt = '<title>永中文档转换服务</title>';
-				$content = str_replace($titlt,'<title>'.$fileName.'</title>',$result['data']);
+				$title = '<title>永中文档转换服务</title>';
+				$content = str_replace($title,'<title>'.$fileName.'</title>',$result['data']);
 				file_put_contents($pageFile,$content);
 			}else{
 				$app->clearChche();

@@ -1,6 +1,7 @@
 <?php
 
 
+require_once(dirname(dirname(__FILE__)).'/function/web.function.php');
 class SSO{
 	static private function init(){
 		$sessionName = 'KOD_SESSION_SSO';
@@ -56,8 +57,10 @@ class SSO{
 
 
 	static public function sessionCheck($key,$value='success'){
+		$path = session_save_path();//还原session路径
 		$session = self::init();
 		if( isset($session[$key]) && $session[$key] == $value){
+			session_save_path($path);
 			return true;
 		}
 		return false;
@@ -65,20 +68,22 @@ class SSO{
 
 	/**
 	 * 直接调用kod的登陆检测(适用于同服务器同域名;)
-	 * @param  [type] $kodHost kod的地址;例如 http://test.com/
+	 * @param  [type] $kodHost kod的地址;例如 http://test.com/ ;默认为
 	 * @param  [type] $appKey  应用标记 例如 loginCheck
-	 * @param  [type] $appUrl  验证后跳转到的url
+	 * @param  [type] $appUrl  验证后跳转到的url;默认为当前url
 	 * @param  [type] $auth    验证方式：例如:'check=userName&value=smartx'
 	 *          check (userID|userName|roleID|roleName|groupID|groupName) 校验方式,为空则所有登陆用户
 	 */
-	static public function sessionAuth($appKey,$auth,$kodHost,$appUrl=''){
+	static public function sessionAuth($appKey,$auth,$kodHost='',$appUrl=''){
+		if($kodHost==''){
+			$basicPath   = dirname(dirname(dirname(__FILE__))).'/';
+			$kodHost = get_host().'/'.str_replace(get_webroot(),'',$basicPath);//程序根目录
+		}
 		$authUrl = rtrim($kodHost,'/').'/index.php?user/sso&app='.$appKey.'&'.$auth;
 		if($appUrl == ''){
-			$appUrl = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].
-					':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+			$appUrl = this_url();
 		}
 		if(!self::sessionCheck($appKey)){
-			session_destroy();
 			header('Location: '.$authUrl.'&link='.rawurlencode($appUrl));
 			exit;
 		}

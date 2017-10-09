@@ -2,7 +2,7 @@
 	"id":"adminer",
 	"name":"Adminer",
 	"title":"{{LNG.Adminer.meta.title}}",
-	"version":"4.3.2",
+	"version":"4.31",
 	"source":{
 		"thumb":"",
 		"className":"font-icon icon-bar-chart bg-blue-7",

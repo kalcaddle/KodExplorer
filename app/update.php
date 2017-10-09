@@ -370,12 +370,12 @@ class updateToV330{
 				"guest" => array(
 					"role" => "guest",
 					"name" => "guest",
-					"ext_not_allow" => "php|asp|jsp"
+					"ext_not_allow" => "php|asp|jsp|html|htm|htaccess"
 				),
 				"default" => array(
 					"role" => "default",
 					"name" => "default",
-					"ext_not_allow" => "php|asp|jsp",
+					"ext_not_allow" => "php|asp|jsp|html|htm|htaccess",
 					"explorer:mkdir" => 1,
 					"explorer:mkfile" => 1,
 					"explorer:pathDelete" => 1,
