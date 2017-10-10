@@ -71,13 +71,12 @@ function reset_path($str){
 }
 function get_webroot($app_path=''){
 	$index='index.php';
+	$self_file  = reset_path($_SERVER['SCRIPT_NAME']);
 	if($app_path == ''){
-		$self_file  = reset_path($_SERVER['SCRIPT_NAME']);
 		$index_path = reset_path($_SERVER['SCRIPT_FILENAME']);
 		$app_path = substr($index_path,0,strrpos($index_path,'/'));
 		$index = substr($index_path,1+strrpos($index_path,'/'));
 	}
-
 	$webRoot = str_replace($self_file,'',$app_path.$index).'/';
 	if (substr($webRoot,-(strlen($index)+1)) == $index.'/') {//解决部分主机不兼容问题
 		$webRoot = reset_path($_SERVER['DOCUMENT_ROOT']).'/';

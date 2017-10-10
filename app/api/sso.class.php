@@ -57,10 +57,8 @@ class SSO{
 
 
 	static public function sessionCheck($key,$value='success'){
-		//$path = session_save_path();//还原session路径
 		$session = self::init();
 		if( isset($session[$key]) && $session[$key] == $value){
-			//session_save_path($path);
 			return true;
 		}
 		return false;
@@ -68,7 +66,7 @@ class SSO{
 
 	/**
 	 * 直接调用kod的登陆检测(适用于同服务器同域名;)
-	 * @param  [type] $kodHost kod的地址;例如 http://test.com/ ;默认为
+	 * @param  [type] $kodHost kod的地址;例如 http://test.com/ ;默认为插件目录
 	 * @param  [type] $appKey  应用标记 例如 loginCheck
 	 * @param  [type] $appUrl  验证后跳转到的url;默认为当前url
 	 * @param  [type] $auth    验证方式：例如:'check=userName&value=smartx'
@@ -76,8 +74,17 @@ class SSO{
 	 */
 	static public function sessionAuth($appKey,$auth,$kodHost='',$appUrl=''){
 		if($kodHost==''){
-			$basicPath   = dirname(dirname(dirname(__FILE__))).'/';
-			$kodHost = get_host().'/'.str_replace(get_webroot(),'',$basicPath);//程序根目录
+			$appUrl = this_url();
+			if(strstr($appUrl,'/plugins/')){
+				$kodHost = substr($appUrl,0,strpos($appUrl,'/plugins/'));
+			}else{
+				$kodHost = $_SERVER['HTTP_REFERER'];
+				if(strstr($kodHost,'/index.php?')){
+					$kodHost = substr($kodHost,0,strpos($kodHost,'/index.php?'));
+				}else if(strstr($kodHost,'/?')){
+					$kodHost = substr($kodHost,0,strpos($kodHost,'/?'));
+				}
+			}
 		}
 		$authUrl = rtrim($kodHost,'/').'/index.php?user/sso&app='.$appKey.'&'.$auth;
 		if($appUrl == ''){
