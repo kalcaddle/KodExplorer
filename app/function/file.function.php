@@ -54,14 +54,15 @@ function iconv_to($str,$from,$to){
 	if (!function_exists('iconv')){
 		return $str;
 	}
-	$result = iconv($from, $to, $str);
-	if(strlen($result)==0){ //转换失败；尝试用mb转换；android环境部分问题解决
-		if(function_exists('mb_convert_encoding')){
-			return @mb_convert_encoding($str,$to,$from);
-		}
+	//尝试用mb转换；android环境部分问题解决
+	if(function_exists('mb_convert_encoding')){
+		$result = @mb_convert_encoding($str,$to,$from);
+	}else{
+		$result = @iconv($from, $to, $str);
+	}
+	if(strlen($result)==0){ 
 		return $str;
 	}
-	unset($str);
 	return $result;
 }
 function path_filter($path){
@@ -838,6 +839,10 @@ function file_search($path,$search,$is_case){
 				}
 			}
 			$line_str = substr($content,$from,$to - $from);
+			if($strpos($line_str,$search) === false){ //截取乱码避免
+				$line_str = $search;
+			}
+
 			$result[] = array('line'=>$line+1,'str'=>$line_str);
 			if(++$i >= $len_search ){
 				break;
@@ -1015,7 +1020,7 @@ function file_put_out($file,$download=-1,$downFilename=false){
 		header('304 Not Modified', true, 304);
 		exit;
 	}
-	$etag = '"'.md5($time).'"';
+	$etag = '"'.md5($time.$file_size).'"';
 	if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag){
 		header("Etag: ".$etag, true, 304);
 		exit;
@@ -1233,7 +1238,7 @@ function upload($path,$tempPath,$repeatAction='replace'){
 			show_json(check_upload($_FILES[$fileInput]['error']),false);
 		}
 		if($fileName == "image.jpg" && is_wap()){//拍照上传
-			$fileName = date('Ymd H:i:s',time()).'.jpg';
+			$fileName = iconv_system(path_clear_name($in["lastModifiedDate"])).'.jpg';
 		}
 	}else if (isset($in["name"])) {
 		$fileName = iconv_system(path_clear_name($in["name"]));
@@ -1241,6 +1246,13 @@ function upload($path,$tempPath,$repeatAction='replace'){
 		if(isset($in['base64Upload'])){
 			$uploadFile = "base64"; 
 		}
+		if($fileName == "image.jpg" && is_wap()){//拍照上传
+			$fileName = iconv_system(path_clear_name($in["lastModifiedDate"])).'.jpg';
+		}
+	}else if( isset($in["check_md5"]) ) {//断点续传检测
+	    $fileName = iconv_system(path_clear_name($in["file_name"]));
+	    $savePath = get_filename_auto($path.$fileName,""); //自动重命名
+		return upload_chunk("",$tempPath,$savePath);
 	}else{
 		show_json('param error',false);
 	}
@@ -1273,7 +1285,7 @@ function upload_chunk($uploadFile,$tempPath,$savePath){
 	//if(mt_rand(0, 100) < 50) die("server error".$chunk); //分片失败重传
 	//文件分块检测是否已上传，已上传则忽略；断点续传
 	if($check_md5 !== false){
-		$chunk_file_pre = $tempPath.md5($tempPath.$savePath).'.part';
+		$chunk_file_pre = $tempPath.md5($savePath).'.part';
 		$chunk_file = $chunk_file_pre.$chunk;
 		if( file_exists($chunk_file) && md5_file($chunk_file) == $check_md5){
 			$arr = array();

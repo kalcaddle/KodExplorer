@@ -2,9 +2,9 @@
 	"id":"jPlayer",
 	"name":"jPlayer",
 	"title":"jPlayer",
-	"version":"1.1",
+	"version":"1.2",
 	"source":{
-		"icon":"{{pluginHost}}/static/images/icon.png",
+		"icon":"{{pluginHost}}static/images/icon.png",
 		"screenshoot":[
 			"https://raw.githubusercontent.com/kalcaddle/static/master/images/kod/file-player.png"
 		]

@@ -33,6 +33,10 @@ kodReady.push(function(){
 		sort:"{{config.fileSort}}",
 		icon:'{{pluginHost}}/static/images/icon.png',
 		callback:function(path,ext){
+			if(isWap()){//ios不支持文件下载
+				window.open(core.path2url(path));
+				return;
+			}
 			var list = [{
 				url:core.path2url(path),
 				name:urlDecode(core.pathThis(path)),//zip内文件播放

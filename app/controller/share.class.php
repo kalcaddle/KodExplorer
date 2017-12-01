@@ -383,7 +383,7 @@ class share extends Controller{
 	public function fileUpload(){
 		$fileName = $_FILES['file']['name']? $_FILES['file']['name']:$GLOBALS['in']['name'];
 		$GLOBALS['isRoot']=0;
-		$GLOBALS['auth']['extNotAllow'] = "php|asp|jsp|html|htm|htaccess";
+		$GLOBALS['auth']['extNotAllow'] = "htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm";
 		if(!checkExt($fileName)){
 			show_json(LNG('no_permission_ext'),false);
 		}
@@ -411,7 +411,7 @@ class share extends Controller{
 	//代理输出
 	public function fileProxy(){
 		$mime = get_file_mime(get_path_ext($this->path));
-		if($mime == 'text/plain'){//文本则转编码
+		if($mime == 'text/plain' && is_file($this->path)){//文本则转编码
 			$fileContents = file_get_contents($this->path);
 			$charset=get_charset($fileContents);
 			if ($charset!='' || $charset!='utf-8') {
@@ -495,9 +495,8 @@ class share extends Controller{
 	public function fileGet(){
 		if(isset($this->in['fileUrl'])){ //http
 			$displayName = $this->in['name'];
-			$filepath = _DIR_CLEAR($this->in['fileUrl']);
-			$filepath = str_replace(':/','://',$filepath);
-			if(is_file($filepath) || substr($filepath,0,4) != 'http'){
+			$filepath = $this->in['fileUrl'];
+			if(!request_url_safe($filepath)){
 				show_json(LNG('url error!'),false);
 			}
 		}else{
@@ -538,31 +537,41 @@ class share extends Controller{
 	}
 	
 	public function image(){
-		if (filesize($this->path) <= 1024*50 ||
+		$thumbWidth = 250;
+		if(isset($this->in['thumbWidth'])){
+			$thumbWidth = intval($this->in['thumbWidth']);//自定义预览大图
+		}
+		if(substr($this->path,0,4) == 'http'){
+			header('Location: '.$this->in['path']);
+			exit;
+		}
+		if (@filesize($this->path) <= 1024*50 ||
 			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
-			file_put_out($this->path);
+			file_put_out($this->path,false);
 			return;
 		}
-		$image = $this->path;
-		$image_md5  = @md5_file($image);//文件md5
-		if (strlen($image_md5)<5) {
-			$image_md5 = md5($image);
-		}
-		$imageThumb = DATA_THUMB.$image_md5.'.png';
 		if (!is_dir(DATA_THUMB)){
 			mk_dir(DATA_THUMB);
 		}
+		$image = $this->path;
+		$imageMd5  = @md5_file($image).'_'.$thumbWidth;//文件md5
+		if (strlen($imageMd5)<5) {
+			$imageMd5 = md5($image).'_'.$thumbWidth;
+		}
+		$imageThumb = DATA_THUMB.$imageMd5.'.png';
 		if (!file_exists($imageThumb)){//如果拼装成的url不存在则没有生成过
 			if (get_path_father($image)==DATA_THUMB){//当前目录则不生成缩略图
-				$imageThumb = $this->path;
+				$imageThumb=$this->path;
 			}else {
-				$cm=new ImageThumb($image,'file');
-				$cm->prorate($imageThumb,224,200);//生成等比例缩略图
+				$cm = new ImageThumb($image,'file');
+				$cm->prorate($imageThumb,$thumbWidth,$thumbWidth);//生成等比例缩略图
 			}
 		}
-		if (!file_exists($imageThumb) || filesize($imageThumb)<100){//缩略图生成失败则用默认图标
-			$imageThumb = $this->path;
+		if (!file_exists($imageThumb) || 
+			filesize($imageThumb)<100){//缩略图生成失败则使用原图
+			$imageThumb=$this->path;
 		}
+		file_put_out($imageThumb,false);
 		file_put_out($imageThumb);//输出
 	}
 

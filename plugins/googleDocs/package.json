@@ -1,0 +1,37 @@
+{
+	"id":"googleDocs",
+	"name":"{{LNG.googleDocs.meta.name}}",
+	"title":"{{LNG.googleDocs.meta.title}}",
+	"version":"1.1",
+	"category":"file",
+	"source":{
+		"icon":"{{pluginHost}}static/images/icon.png"
+	},
+	"description":"{{LNG.googleDocs.meta.desc}}",
+	"auther":{
+		"copyright":"kodcloud",
+		"homePage":"http://kodcloud.com"
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		},
+
+		"fileExt":{
+			"type":"tags",
+			"display":"{{LNG.Plugin.Config.fileExt}}",
+			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
+			"value":"doc,docx,rtf,xls,xlsx,wps,ppt,pptx,pps,.odt,ods,odp,ott,ots,otp,dxf,ps,eps,xps,psd,tif,tiff,bmp,svg,pages,ai,ttf",
+		},
+		"fileSort":{
+			"type":"number",
+			"display":"{{LNG.Plugin.Config.fileSort}}",
+			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
+			"value":-1,
+		}
+	}
+}

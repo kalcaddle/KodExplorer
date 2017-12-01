@@ -6,13 +6,13 @@
 
 <body>
 	<?php
-		$arr = array(2,3,6,8,9,10,12);
+		$arr = array(2,3,6,8,9,11,12);
 		$get = $arr[mt_rand(0,count($arr)-1)];
 		$image = STATIC_PATH."images/wall_page/".$get.".jpg";
-		echo '<div class="background" style="background-image:url('.$image.')"></div>';
-		echo '<style type="text/css">.title{background: #6699cc url('.$image.') 0px -92px;}</style>';
+		echo '<style type="text/css">.aero:before,.aero:after,.background{background-image:url('.$image.')}</style>';
 	?>
-	<div class="loginbox login-wap" >
+	<div class="background"></div>
+	<div class="loginbox login-wap aero" >
 		<div class="title">
 			<div class="logo">
 				<i class="icon-cloud"></i><?php echo strip_tags(LNG('kod_name'));?>
@@ -23,38 +23,37 @@
 			<form action="#">
 				<div class="inputs">
 					<div>
-						<span><?php echo LNG('username');?>：</span>
-						<input id="username" name='name' type="text" placeholder="<?php echo LNG('username');?>" required/> 
+						<i class="font-icon icon-user"></i>
+						<input id="username" name='name' type="text" placeholder="<?php echo LNG('username');?>" 
+						required disabled/> 
 					</div>
 					<div>
-						<span><?php echo LNG('password');?>：</span>
-						<input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" required />
+						<i class="font-icon  icon-key"></i>
+						<input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" 
+						required disabled/>
 					</div>
 					
 					<?php if(need_check_code()){?>
 					<div class='check-code'>
-						<span><?php echo LNG('login_code');?>：</span>
+						<i class="font-icon icon-unlock-alt"></i>
 						<input name='checkCode' class="check-code" type="text" placeholder="<?php echo LNG('login_code');?>" required autocomplete="off"/>
 						<img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
-						<div style="clear:both;"></div>
 					</div>
 					<?php }?>
 				</div>
 				<div class="actions">
-					<div>
-						<label for='rememberPassword-label'>
-							<input type="checkbox" class="checkbox" name="rememberPassword" id='rememberPassword-label'/>
-							<?php echo LNG('login_rember_password');?>
-						</label>
-					</div>
+					<label for='rm'>
+						<input type="checkbox" class="checkbox" name="rememberPassword" id='rm'/>
+						<?php echo LNG('login_rember_password');?>
+					</label>
+					<a href="javascript:void(0);" class="forget-password"><?php echo LNG('forget_password');?></a>
 					<input type="submit" id="submit" value="<?php echo LNG('login');?>" />
 				</div>
 				<div class="msg"><?php echo $msg;?></div>
-				<div style="clear:both;"></div>
 
 				<?php if ($this->config['settingSystem']['autoLogin'] == '1') {?>
 				<div class='guest'>
-				<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo LNG('guest_login');?><i class=' icon-arrow-right'></i></a>
+					<a href="./index.php?user/loginSubmit&name=guest&password=guest"><?php echo LNG('guest_login');?><i class=' icon-arrow-right'></i></a>
 				</div>
 				<?php } ?>
 			</form>

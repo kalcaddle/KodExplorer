@@ -1,17 +1,34 @@
 define(function(require, exports) {
+	var imageUrl = function(path){
+	    if(path.substr(0,4) == 'http'){
+			return path;
+		}
+		var imageThumb = G.appHost+'explorer/image';
+		if(G.sid){
+			imageThumb = G.appHost+'share/image&user='+G.user+'&sid='+G.sid;
+		}
+		imageThumb += '&path='+urlEncode(path)+'&thumbWidth=1200';
+		return imageThumb;
+	}
+
 	var itemsArr = [];
 	var getImageArr = function(imagePath){
 		itemsArr = [];
 		var index = -1;
 		var itemsPush = function(path,msrc,$dom){
+		    if($dom && $dom.attr('data-src')){
+				path = $dom.attr('data-src');
+				msrc = $dom.attr('data-original');
+			}
 			var width = 0,height = 0;
+			var link  = imageUrl(path);
 			if(!msrc){
-				msrc = core.path2url(path);
+				msrc = link;
 			}
 			itemsArr.push({
-				src:core.path2url(path),
+				src:link,
 				msrc:msrc,
-				title:urlDecode(core.pathThis(path)),
+				title:core.pathThis(urlDecode(path)),
 				w:width,h:height,
 				$dom:$dom?$dom:false
 			});
@@ -35,6 +52,9 @@ define(function(require, exports) {
 			var $continer = $lastTarget.parents('.search-result');
 			$continer.find('.file-item').each(function(i){
 				var thePath = hashDecode($(this).attr('data-path'));
+				if($(this).attr('data-src')){
+					thePath = $(this).attr('data-src');
+				}
 				var ext = core.pathExt(thePath);
 				if(!kodApp.appSupportCheck('photoSwipe',ext)){
 					return;
@@ -64,7 +84,9 @@ define(function(require, exports) {
 			});
 		}
 		if(itemsArr.length == 0 || index == -1){
-			itemsPush(imagePath);
+		    itemsArr = [];
+		    itemsPush(imagePath);
+		    index = 0;
 		}
 		return {items:itemsArr,index:index};
 	}

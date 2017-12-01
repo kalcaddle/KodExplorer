@@ -229,14 +229,14 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 		}
 		this.resetEditorHeight = function(show){
 			var $search = $('.search-content');
-			var $searchBody = $('.ace_search');
-			var $editBody = $('.edit-body');
+			var $search_body = $('.ace_search');
+			var $edit_body = $('.edit_body');
 			if(show){
 				$search.removeClass('hidden');
-				$editBody.css('bottom',$searchBody.outerHeight());
+				$edit_body.css('bottom',$search_body.outerHeight());
 			}else{
 				$search.addClass('hidden');
-				$editBody.css('bottom',0);
+				$edit_body.css('bottom',0);
 			}
 			Editor.current() && Editor.current().resize();
 		}
@@ -517,7 +517,6 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 			this.historySearch.add(this.searchInput.value);
 		};
 		this.findPrev = function() {
-			console.log(123123);
 			this.find(true, true);
 			//添加历史记录
 			this.historySearch.add(this.searchInput.value);

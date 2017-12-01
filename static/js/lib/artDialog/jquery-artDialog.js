@@ -177,6 +177,11 @@ artDialog.fn = artDialog.prototype = {
 			DOM.wrap.addClass('dialog-can-resize');
 		}
 
+		if($.isIE8()){
+			config.animate = false;
+			this.config.animate = false;
+		}
+
 		//没有title
 		if(!config.title){
 			//DOM.wrap.find('.dialogShow').removeClass('dialogShow');
@@ -647,7 +652,6 @@ artDialog.fn = artDialog.prototype = {
 
 		var animateTime = 200;
 		var animateCss = 'translation-200';
-		var $taskTab = $(".task-tab #"+that.config.id);
 		$wrap.addClass(animateCss);//animation 0.25s all
 		setTimeout(function(){
 			$wrap.removeClass(animateCss);
@@ -674,14 +678,24 @@ artDialog.fn = artDialog.prototype = {
 			}});
 		}else{//隐藏
 			if ($wrap.css('visibility') == 'hidden') return this;
-			var scale = $taskTab.outerWidth() / $wrap.outerWidth();
+
+			var toWidth  = 0;
+			var toLeft   = 0;
+			var toTop    = $(window).height();
+			if ($(".task-tab #"+that.config.id).exists()){
+				var $taskTab = $(".task-tab #"+that.config.id);
+				toWidth = $taskTab.outerWidth()
+				toLeft  = $taskTab.offset().left;
+				toTop   = $taskTab.offset().top;
+			}
+			var scale = toWidth / $wrap.outerWidth();
 			$wrap.data('initSize',{
 				left: $wrap.context.offsetLeft,
 				top: $wrap.context.offsetTop
 			});
 			$wrap.css({
-				'left':$taskTab.offset().left - (1-scale)*$wrap.outerWidth()/2,
-				'top':$taskTab.offset().top - (1-scale)*$wrap.outerHeight()/2,
+				'left':toLeft - (1-scale)*$wrap.outerWidth()/2,
+				'top':toTop - (1-scale)*$wrap.outerHeight()/2,
 				'transform': 'scale('+scale+','+scale+')',
 				'opacity':0
 			}).animate({},{duration:animateTime,complete:function(){

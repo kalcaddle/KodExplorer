@@ -104,8 +104,6 @@ class yzOffice{
 		$mode = $config['preview'];
 		if(in_array($ext,array("xls","xlsb","xlsx","xlt","xlsm","csv"))){
 			$mode = '1';//excle不支持高清模式，自动切换
-		}else if(in_array($ext,array("ppt","pptx","pptm","pps","ppsx"))){
-			$mode = '0';//ppt默认采用高清模式
 		}
 		return $mode;
 	}

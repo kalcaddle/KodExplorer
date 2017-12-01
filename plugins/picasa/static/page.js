@@ -1,7 +1,18 @@
 define(function(require, exports) {
+	var imageUrl = function(path){
+		if(path.substr(0,4) == 'http'){
+			return path;
+		}
+		var imageThumb = G.appHost+'explorer/image';
+		if(G.sid){
+			imageThumb = G.appHost+'share/image&user='+G.user+'&sid='+G.sid;
+		}
+		imageThumb += '&path='+urlEncode(path)+'&thumbWidth=1200';
+		return imageThumb;
+	}
 	var getImageArr = function(imagePath){
 		var items = [];
-		var index = 0;
+		var index = -1;
 		if(window.Config){
 			if(Config.pageApp == 'editor'){
 				var $folder = $(".curSelectedNode").parent().parent();
@@ -21,7 +32,7 @@ define(function(require, exports) {
 					}
 					fileNum ++;
 					items.push([
-						[core.path2url(thePath),core.path2url(thePath),thePath],
+						[imageUrl(thePath),imageUrl(thePath),thePath],
 						core.pathThis(thePath),[0,0],''
 					]);
 				});
@@ -29,19 +40,23 @@ define(function(require, exports) {
 				$('.file-continer .ico.picture').each(function(i){
 					var thumb = $(this).find('img').attr('data-original');
 					var thePath = hashDecode($(this).parents('.file').attr('data-path'));
+					if($(this).find('img').attr('data-src')){
+    					thePath = $(this).find('img').attr('data-src');
+    				}
 					if(thePath == imagePath){
 						index = i;
 					}
 					items.push([
-						[thumb,core.path2url(thePath),thePath],
+						[thumb,imageUrl(thePath),thePath],
 						core.pathThis(thePath),[0,0],''
 					]);
 				});
 			}
 		}
-		if(items.length == 0){
-			items = [[[core.path2url(imagePath),core.path2url(imagePath),imagePath],
-					 core.pathThis(imagePath),[0,0],'']];
+		if(items.length == 0 || index == -1){
+		    items = [[[imageUrl(imagePath),imageUrl(imagePath),imagePath],
+					 core.pathThis(urlDecode(imagePath)),[0,0],'']];
+			index = 0;
 		}
 		return {items:items,index:index};
 	}
@@ -90,11 +105,17 @@ define(function(require, exports) {
 			myPicasa.resetImage(imgageBig,imageSmall);
 		});
 	}
-	return function(imagePath,appStatic){
-		if (imagePath.indexOf('http') == 0) {
-			MaskView.image(core.path2url(imagePath));
-			return;
+	var loadImageBefore = function(){
+	    var index = parseInt($('#PV_Control #PV_Items .current').attr('number'));
+		var path = myPicasa.arrItems[index][0][2];
+
+		if(path.substr(0,4) == 'http'){
+		    $("#PV_rotate_Left,#PV_rotate_Right,#PV_Btn_Remove").addClass('hidden');
+		}else{
+		    $("#PV_rotate_Left,#PV_rotate_Right,#PV_Btn_Remove").removeClass('hidden');
 		}
+	}
+	return function(imagePath,appStatic){
 		require.async([
 			appStatic+'picasa/style/style.css',
 			appStatic+'picasa/picasa.js'
@@ -103,9 +124,10 @@ define(function(require, exports) {
 				myPicasa = new Picasa();
 				myPicasa.removeImage = removeImage;
 				myPicasa.imageRotate = imageRotate;
+				myPicasa.loadImageBefore = loadImageBefore;
 			}
-			var image = getImageArr(imagePath);
-			myPicasa.play(image.items,image.index);
+			var images = getImageArr(imagePath);
+			myPicasa.play(images.items,images.index);
 		});
 	}	
 });

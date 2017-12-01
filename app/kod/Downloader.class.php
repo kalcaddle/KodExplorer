@@ -18,8 +18,11 @@ class Downloader {
 		}else{
 			$fileHeader = url_header($url);
 		}
-
 		$url = $fileHeader['url'];
+		if(!$url){
+			return array('code'=>false,'data'=>'url error!');
+		}
+
 		//默认下载方式if not support range
 		if(!$fileHeader['supportRange'] || 
 			$fileHeader['length'] == 0 ){

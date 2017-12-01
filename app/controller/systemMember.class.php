@@ -361,7 +361,7 @@ class systemMember extends Controller{
 			unset($userInfo['homePath']);
 		}
 		if($this->sql->set($userID,$userInfo)){
-			self::spaceChange($userID);//重置用户使用空间
+			//self::spaceChange($userID);//重置用户使用空间
 			show_json(LNG('success'),true,$userInfo);
 		}
 		show_json(LNG('error_repeat'),false);

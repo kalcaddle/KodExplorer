@@ -77,7 +77,7 @@ class explorer extends Controller{
 		if (count($infoList)==1 && $infoList[0]['type']!='folder') {//单个文件
 			$file = $infoList[0]['path'];
 			if( $GLOBALS['isRoot'] || 
-				$GLOBALS['auth']["explorer.fileDownloa"]==1 ||
+				$GLOBALS['auth']["explorer.fileDownload"]==1 ||
 				isset($this->in['viewPage'])){
 				$data['downloadPath'] = _make_file_proxy($file);
 			}
@@ -156,16 +156,28 @@ class explorer extends Controller{
 		}
 		$new = rtrim($this->path,'/');
 		$new = get_filename_auto($new,'',$repeatType);//已存在处理 创建副本
-		Hook::trigger("explorer.mkdirBefore",$new);
-		if(mk_dir($new,DEFAULT_PERRMISSIONS)){
-			chmod_path($new,DEFAULT_PERRMISSIONS);
-			Hook::trigger("explorer.mkdirAfter",$new);
+		if($this->_mkdir($new)){
 			show_json(LNG('create_success'),true,_DIR_OUT(iconv_app($new)) );
 		}else{
 			show_json(LNG('create_error'),false);
 		}
 	}
-
+	private function _mkdir($path){
+		if(!$GLOBALS['isRoot']){
+			//IIS6 解析漏洞  /a.php/2.jpg 得到解析
+			$temp = str_replace('\\','/',$path);
+			if(substr(rtrim($temp,'/'),-4) == '.php'){
+				show_json(LNG('no_permission_ext'),false);
+			}
+		}
+		Hook::trigger("explorer.mkdirBefore",$path);
+		if(mk_dir($path,DEFAULT_PERRMISSIONS)){
+			chmod_path($path,DEFAULT_PERRMISSIONS);
+			Hook::trigger("explorer.mkdirAfter",$path);
+			return true;
+		}
+		return false;
+	}
 	public function pathRname(){
 		$rnameTo=_DIR($this->in['rnameTo']);
 		if (file_exists_case($rnameTo)) {
@@ -964,9 +976,8 @@ class explorer extends Controller{
 			$unzipToAdd = $name;
 		}
 
-		//所在目录不可写
-		mk_dir($unzipTo);
-		if (!path_writeable($unzipTo)){
+		$this->_mkdir($unzipTo);
+		if (!path_writeable($unzipTo)){//所在目录不可写
 			show_json(LNG('no_permission_write'),false);
 		}
 		$unzipTo = $unzipTo.$unzipToAdd;
@@ -1007,7 +1018,15 @@ class explorer extends Controller{
 	}
 	//缩略图
 	public function image(){
-		if (filesize($this->path) <= 1024*50 ||
+		$thumbWidth = 250;
+		if(isset($this->in['thumbWidth'])){
+			$thumbWidth = intval($this->in['thumbWidth']);//自定义预览大图
+		}
+		if(substr($this->path,0,4) == 'http'){
+			header('Location: '.$this->in['path']);
+			exit;
+		}
+		if (@filesize($this->path) <= 1024*50 ||
 			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
 			file_put_out($this->path,false);
 			return;
@@ -1016,9 +1035,9 @@ class explorer extends Controller{
 			mk_dir(DATA_THUMB);
 		}
 		$image = $this->path;
-		$imageMd5  = @md5_file($image);//文件md5
+		$imageMd5  = @md5_file($image).'_'.$thumbWidth;//文件md5
 		if (strlen($imageMd5)<5) {
-			$imageMd5 = md5($image);
+			$imageMd5 = md5($image).'_'.$thumbWidth;
 		}
 		$imageThumb = DATA_THUMB.$imageMd5.'.png';
 		if (!file_exists($imageThumb)){//如果拼装成的url不存在则没有生成过
@@ -1026,7 +1045,7 @@ class explorer extends Controller{
 				$imageThumb=$this->path;
 			}else {
 				$cm = new ImageThumb($image,'file');
-				$cm->prorate($imageThumb,250,250);//生成等比例缩略图
+				$cm->prorate($imageThumb,$thumbWidth,$thumbWidth);//生成等比例缩略图
 			}
 		}
 		if (!file_exists($imageThumb) || 
@@ -1063,7 +1082,7 @@ class explorer extends Controller{
 		}
 		//下载
 		$savePath = _DIR(rawurldecode($this->in['savePath']));
-		mk_dir($savePath);
+		$this->_mkdir($savePath);
 		if (!$savePath || !path_writeable($savePath)){
 			show_json(LNG('no_permission_write'),false);
 		}
@@ -1078,7 +1097,7 @@ class explorer extends Controller{
 			$filename = $header['name'];
 		}
 
-		$saveFile = $savePath.$filename;
+		$saveFile = $savePath._DIR_CLEAR($filename);
 		if (!checkExt($saveFile)){//不允许的扩展名
 			$saveFile = $savePath.date('h:i:s').'.dat';
 		}
@@ -1136,7 +1155,7 @@ class explorer extends Controller{
 			$fullPath = _DIR_CLEAR(rawurldecode($this->in['fullPath']));
 			$fullPath = get_path_father($fullPath);
 			$fullPath = iconv_system($fullPath);
-			if (mk_dir($savePath.$fullPath)) {
+			if ($this->_mkdir($savePath.$fullPath)) {
 				$savePath = $savePath.$fullPath;
 			}
 		}
@@ -1162,10 +1181,12 @@ class explorer extends Controller{
 			$value['exists'] = intval(file_exists($thePath));
 			$value['metaInfo'] = 'path-self-share';
 			$value['menuType']  = "menu-share-path";
-			$value['aa'] = $thePath;
+			if(is_file($thePath)){
+				$value['size']  = get_filesize($thePath);;
+			}
 
 			//分享列表oexe
-			if(get_path_ext($value['name']) == 'oexe'){
+			if(get_path_ext($value['name']) == 'oexe' && is_file($thePath) ){
 				$json = json_decode(@file_get_contents($thePath),true);
 				if(is_array($json)) $value = array_merge($value,$json);
 			}
@@ -1225,7 +1246,7 @@ class explorer extends Controller{
 			}
 
 			//分享列表oexe
-			if(get_path_ext($val['name']) == 'oexe'){
+			if(get_path_ext($val['name']) == 'oexe' && is_file($thePath)){
 				$json = json_decode(@file_get_contents($thePath),true);
 				if(is_array($json)) $val = array_merge($val,$json);
 			}

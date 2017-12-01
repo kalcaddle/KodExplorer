@@ -8,8 +8,8 @@ class SSO{
 		$sessionID   = $_COOKIE[$sessionName]?$_COOKIE[$sessionName]:md5(uniqid());
 		$basicPath   = dirname(dirname(dirname(__FILE__))).'/';
 		$sessionPath = $basicPath.'data/session/';
-		if(file_exists($basicPath.'define.php')){
-			include($basicPath.'define.php');
+		if(file_exists($basicPath.'config/define.php')){
+			include($basicPath.'config/define.php');
 			$sessionPath = DATA_PATH.'session/';
 		}
 		if(!file_exists($sessionPath)){
@@ -78,12 +78,16 @@ class SSO{
 			if(strstr($appUrl,'/plugins/')){
 				$kodHost = substr($appUrl,0,strpos($appUrl,'/plugins/'));
 			}else{
-				$kodHost = $_SERVER['HTTP_REFERER'];
-				if(strstr($kodHost,'/index.php?')){
-					$kodHost = substr($kodHost,0,strpos($kodHost,'/index.php?'));
-				}else if(strstr($kodHost,'/?')){
-					$kodHost = substr($kodHost,0,strpos($kodHost,'/?'));
-				}
+			    if(isset($_COOKIE['APP_HOST'])){
+			        $kodHost = $_COOKIE['APP_HOST'];
+			    }else{
+    			    $kodHost = $_SERVER['HTTP_REFERER'];
+    				if(strstr($kodHost,'/index.php?')){
+    					$kodHost = substr($kodHost,0,strpos($kodHost,'/index.php?'));
+    				}else if(strstr($kodHost,'/?')){
+    					$kodHost = substr($kodHost,0,strpos($kodHost,'/?'));
+    				}
+			    }
 			}
 		}
 		$authUrl = rtrim($kodHost,'/').'/index.php?user/sso&app='.$appKey.'&'.$auth;
@@ -97,5 +101,3 @@ class SSO{
 		}
 	}
 }
-
-

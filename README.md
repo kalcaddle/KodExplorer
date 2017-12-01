@@ -15,6 +15,11 @@
 - [中文文档](http://kodcloud.com/#lang=zh_CN)
 - [Donate](https://www.paypal.me/kalcaddle)
 
+### Source code
+----
+- [github](https://github.com/kalcaddle/KodExplorer)
+- [gitee](https://gitee.com/kalcaddle/KODExplorer)
+
 # Features
 - Use experience like operating system, Rich context menu and toolbar, drag and drop, shortcut keys......
 - Available in more than 40 languages.
@@ -169,8 +174,10 @@ kod is made possible by the following open source projects.
 * ...
 
 
-
 # License
 kodcloud is issued under GPLv3.   license.[License](http://kodcloud.com/tools/licenses/license.txt)  
-Contact: kalcaddle#qq.com  
+Contact: warlee#kodcloud.com  
 Copyright (C) 2013 kodcloud.com  
+
+# 版权声明
+kodexplorer 使用 GPL v3 协议.

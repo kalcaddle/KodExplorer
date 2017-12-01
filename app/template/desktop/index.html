@@ -5,21 +5,24 @@
 	
 </head>
 <body style="overflow: hidden;" oncontextmenu="return core.contextmenu();" id="page-desktop">
-	<div class="full-background desktop" style="background-image:url('<?php echo $wall;?>');">
-		<img class="background" />
-	</div>
+	<?php echo '<style >.aero:before,.aero:after,.full-background{background-image:url('.$wall.')}</style>';?>
+	<div class="full-background desktop"><img class="background" /></div>
+
 	<?php include(TEMPLATE.'common/navbar.html');?>
 	<div class='bodymain drag-upload-box desktop'>
 		<div class="file-continer file-list-icon hidden"></div>
 	</div><!-- html5拖拽上传list -->
 
 	<a href="#" class="start"></a>
-	<div id="taskbar" style="display:block;"><div id="desktop"></div></div>
+	<div id="taskbar" style="display:block;" class="">
+		<div class="taskbar-background aero"></div>
+		<div id="desktop"></div>
+	</div>
 	<div class="taskbar-right">
  		<div class="copyright dropdown-toggle"><i class="icon-info-sign"></i></div>
 		<div class="tab-hide-all"></div>
 	</div>
-	<div id="menuwin">
+	<div id="menuwin" class="aero">
 		<div id="startmenu"></div>
 		<ul id="programs">
 			<li class='setting_help'><a href="#" onclick="core.setting('help');"><?php echo LNG('setting_help');?></a></li>
@@ -31,7 +34,7 @@
 		<ul id="links">
 			<li class="icon"></li>
 			<li><a href="#" onclick="core.explorer('<?php echo KOD_USER_SHARE.':'.$_SESSION['kodUser']['userID'].'/';?>','<?php echo LNG('my_share');?>');"><span><?php echo LNG('my_share');?></span></a></li>
-			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/picture','<?php echo LNG('my_picture');?>');"><span><?php echo LNG('my_picture');?></span></a></li>
+			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/pictures','<?php echo LNG('my_picture');?>');"><span><?php echo LNG('my_picture');?></span></a></li>
 			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/music','<?php echo LNG('my_music');?>');"><span><?php echo LNG('my_music');?></span></a></li>
 			<li><a href="#" onclick="core.explorer('<?php echo MYHOME;?>/download','<?php echo LNG('download');?>');"><span><?php echo LNG('download');?></span></a></li>
 			<li><div id="rightspliter"></div></li>

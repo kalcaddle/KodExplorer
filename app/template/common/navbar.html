@@ -2,7 +2,7 @@
 <div class="init-loading">
 	<div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
 </div>
-<div class="topbar">
+<div class="topbar aero">
 	<div class="content">
 		<button class="btn btn-wap-menu hidden"
 			data-toggle="collapse" data-target="#top-menu-left" 
@@ -45,7 +45,7 @@
 			<?php if($subMenu){?>
 			<div class="menu-group fl">
 				<a class="topbar-menu" id="topbar-submenu" 
-					data-toggle="dropdown" href="javascript:void(0);" title="<?php echo LNG('menu_sub_menu');?>">
+					data-toggle="dropdown" href="#" title="<?php echo LNG('menu_sub_menu');?>">
 					<i class="icon-th-large"></i>
 				</a>
 				<ul class="dropdown-menu topbar-submenu pull-left animated menuShow" role="menu" aria-labelledby="topbar-submenu">
@@ -79,24 +79,24 @@
 				<a href="#" id='topbar-user' data-toggle="dropdown" class="topbar-menu"><i class="font-icon icon-user"></i><?php echo $_SESSION['kodUser']['name'];?>&nbsp;<b class="caret"></b></a>
 				<ul class="dropdown-menu menu-topbar-user pull-right animated menuShow" role="menu" aria-labelledby="topbar-user">
 					<?php if($GLOBALS['isRoot']){ ?>
-					<li class="menu-system-setting"><a href="javascript:core.setting('system');"><i class="font-icon icon-cog"></i><?php echo LNG('system_setting');?></a></li>
+					<li class="menu-system-setting"><a href="#" onclick="core.setting('system');"><i class="font-icon icon-cog"></i><?php echo LNG('system_setting');?></a></li>
 					<?php } ?>
 
 					<?php if($GLOBALS['isRoot'] || $GLOBALS['auth']['systemMember.get']){ ?>
-					<li class="menu-system-group"><a href="javascript:core.setting('member');"><i class="font-icon icon-group"></i><?php echo LNG('setting_member');?></a></li>
+					<li class="menu-system-group"><a href="#" onclick="core.setting('member');"><i class="font-icon icon-group"></i><?php echo LNG('setting_member');?></a></li>
 					<?php } ?>
 					<?php if($GLOBALS['isRoot'] || $GLOBALS['auth']['pluginApp.index']){ ?>
 					<li class="menu-system-plugin">
-						<a href="javascript:void(0);" onclick="core.openWindowBig('./index.php?pluginApp/index','<?php echo LNG('PluginCenter');?>');"><i class="font-icon icon-puzzle-piece"></i><?php echo LNG('PluginCenter');?></a></li>
+						<a href="#" onclick="core.openWindowBig('./index.php?pluginApp/index','<?php echo LNG('PluginCenter');?>');"><i class="font-icon icon-puzzle-piece"></i><?php echo LNG('PluginCenter');?></a></li>
 					<li role="presentation" class="divider"></li> 
 					<?php } ?>
 	
 
-					<li class="menu-system-user"><a href="javascript:core.setting('user');"><i class="font-icon icon-user"></i><?php echo LNG('setting_user');?></a></li>
-					<li class="menu-system-theme"><a href="javascript:core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo LNG('setting_theme');?></a></li>
-					<li class="menu-system-full"><a href="javascript:core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo LNG('full_screen');?></a></li>
-					<li class="menu-system-help"><a href="javascript:core.setting('help');"><i class="font-icon icon-question"></i><?php echo LNG('setting_help');?></a></li>
-					<li class="menu-system-about"><a href="javascript:core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo LNG('setting_about');?></a></li>
+					<li class="menu-system-user"><a href="#" onclick="core.setting('user');"><i class="font-icon icon-user"></i><?php echo LNG('setting_user');?></a></li>
+					<li class="menu-system-theme"><a href="#" onclick="core.setting('theme');"><i class="font-icon icon-dashboard"></i><?php echo LNG('setting_theme');?></a></li>
+					<li class="menu-system-full"><a href="#" onclick="core.fullScreen();"><i class="font-icon icon-fullscreen"></i><?php echo LNG('full_screen');?></a></li>
+					<li class="menu-system-help"><a href="#" onclick="core.setting('help');"><i class="font-icon icon-question"></i><?php echo LNG('setting_help');?></a></li>
+					<li class="menu-system-about"><a href="#" onclick="core.setting('about');"><i class="font-icon icon-info-sign"></i><?php echo LNG('setting_about');?></a></li>
 					<li role="presentation" class="divider"></li>
 					<li class="menu-system-logout"><a href="./index.php?user/logout"><i class="font-icon icon-signout"></i><?php echo LNG('ui_logout');?></a></li>
 				</ul>

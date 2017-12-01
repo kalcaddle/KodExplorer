@@ -154,6 +154,9 @@ class KodArchive {
 		if( self::checkIfType($ext,'tar') ){
 			//TrOn(10);
 			if($part != '-1'){
+				//tar 默认都进行转码;
+				$indexPath  = unzip_pre_name($indexPath);
+				$pathRemove = unzip_pre_name($pathRemove);
 				$result = PclTarExtractList($file,array($indexPath),$dest,$pathRemove);
 			}else{
 				$result = PclTarExtract($file,$dest);

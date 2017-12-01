@@ -2,7 +2,7 @@
 	"id":"officeLive",
 	"name":"{{LNG.officeLive.meta.name}}",
 	"title":"{{LNG.officeLive.meta.title}}",
-	"version":"1.2",
+	"version":"1.21",
 	"category":"file",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"
@@ -57,7 +57,7 @@
 			"type":"tags",
 			"display":"{{LNG.Plugin.Config.fileExt}}",
 			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
-			"value":"doc,docx,docm,dot,dotx,dotm,rtf,xls,xlsx,xlt,xlsb,xlsm,csv,ppt,pptx,pps,ppsx,pptm,potm,ppam,potx,ppsm,mpp,vsd,vss,vst,vdx,vsx,vtx,odt,ods,odp,ott,ots,otp,wps,wpt",
+			"value":"doc,docx,docm,dot,dotx,dotm,rtf,xls,xlsx,xlt,xlsb,xlsm,csv,ppt,pptx,pps,ppsx,pptm,potm,ppam,potx,ppsm,odt,ods,odp,ott,ots,otp,wps,wpt",
 		},
 		"fileSort":{
 			"type":"number",

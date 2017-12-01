@@ -2,9 +2,9 @@
 	"id":"VLCPlayer",
 	"name":"VLC Player",
 	"title":"VLC 播放器",
-	"version":"1.1",
+	"version":"1.31",
 	"source":{
-		"icon":"{{pluginHost}}/static/images/icon.png"
+		"icon":"{{pluginHost}}static/images/icon.png"
 	},
 	"category":"media,file",
 	"description":"VLCPlayer mediafile player;",
@@ -21,7 +21,6 @@
 			"desc":"{{LNG.Plugin.config.authDesc}}",
 			"require":1
 		},
-
 		"fileExt":{
 			"type":"tags",
 			"display":"{{LNG.Plugin.Config.fileExt}}",

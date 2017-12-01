@@ -6,8 +6,9 @@ function checkExt($file){
 		return 0;
 	}
 	$notAllow = $GLOBALS['auth']['extNotAllow'];
-
-	$notAllow .= '|htaccess';//防破解安全处理
+	if(strstr($notAllow,'php')){
+		$notAllow .= '|htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm';
+	}
 	$extArr = explode('|',$notAllow);
 	foreach ($extArr as $current) {
 		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名
@@ -372,7 +373,12 @@ function user_logout(){
 	setcookie('kod_name', '', time()-3600);
 	setcookie('kodToken', '', time()-3600);
 	setcookie('X-CSRF-TOKEN','',time()-3600);
-	header('location:./index.php?user/login');
+
+	$url = './index.php?user/login';
+	if(ACT != 'logout'){ //不是主动退出则登陆后跳转到之前页面
+		$url .= '&link='.rawurlencode(this_url());
+	}
+	header('Location:'.$url);
 	exit;
 }
 

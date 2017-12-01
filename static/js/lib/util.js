@@ -1432,10 +1432,10 @@ var MaskView =  (function(){
 		var id = 'add-style-css-text';
 		var element = $('#'+id).get(0);
 		if(!element){
-		    element = document.createElement('style');
-		    element.id = 'add-style-css-text';
-    		element.type="text/css";
-    		head.appendChild(element);
+			element = document.createElement('style');
+			element.id = 'add-style-css-text';
+			element.type="text/css";
+			head.appendChild(element);
 		}
 		if (element.styleSheet!== undefined) {
 			element.styleSheet.cssText += cssText
@@ -1459,10 +1459,10 @@ var MaskView =  (function(){
 	}
 	//是否为ie ie6~11
 	$.isIE = function(){
-	    return !!(window.ActiveXObject || "ActiveXObject" in window);
+		return !!(window.ActiveXObject || "ActiveXObject" in window);
 	}
 	$.isIE8 = function(){
-		if($.isIE && parseInt($.browser.version) <=8 ){
+		if($.isIE() && parseInt($.browser.version) <=8 ){
 			return true;
 		}
 		return false;
@@ -1480,25 +1480,25 @@ var MaskView =  (function(){
 		return !!document.createElement('canvas').getContext;
 	}
 	$.supportCss3 = function(style){
-	    if(!style) style = 'box-shadow';
-        var prefix = ['webkit', 'Moz', 'ms', 'o'],
-            i,
-            humpString = [],
-            htmlStyle = document.documentElement.style,
-            _toHumb = function (string) {
-                return string.replace(/-(\w)/g, function ($0, $1) {
-                    return $1.toUpperCase();
-                });
-            };
-    
-        for (i in prefix){
-            humpString.push(_toHumb(prefix[i] + '-' + style));
-        }
-        humpString.push(_toHumb(style));
-        for (i in humpString){
-            if (humpString[i] in htmlStyle) return true;
-        }
-        return false;
+		if(!style) style = 'box-shadow';
+		var prefix = ['webkit', 'Moz', 'ms', 'o'],
+			i,
+			humpString = [],
+			htmlStyle = document.documentElement.style,
+			_toHumb = function (string) {
+				return string.replace(/-(\w)/g, function ($0, $1) {
+					return $1.toUpperCase();
+				});
+			};
+	
+		for (i in prefix){
+			humpString.push(_toHumb(prefix[i] + '-' + style));
+		}
+		humpString.push(_toHumb(style));
+		for (i in humpString){
+			if (humpString[i] in htmlStyle) return true;
+		}
+		return false;
 	}
 
 	//打印html
@@ -1970,6 +1970,121 @@ var functionHooks = new FunctionHooks();
 functionHooks.initEnv();
 
 
+
+/**
+ * iframe 兼容跨域通信组件
+ * @description MessengerJS, a common cross-document communicate solution.
+ * @author biqing kwok
+ * @version 2.0
+ * @license release under MIT license
+ * ---------------
+ * https://github.com/biqing/MessengerJS
+ * 
+ */
+window.Messenger = (function(){
+    // 消息前缀, 建议使用自己的项目名, 避免多项目之间的冲突
+    var prefix = "[PROJECT_NAME]",
+        supportPostMessage = 'postMessage' in window;
+
+    // Target 类, 消息对象
+    function Target(target, name){
+        var errMsg = '';
+        if(arguments.length < 2){
+            errMsg = 'target error - target and name are both requied';
+        } else if (typeof target != 'object'){
+            errMsg = 'target error - target itself must be window object';
+        } else if (typeof name != 'string'){
+            errMsg = 'target error - target name must be string type';
+        }
+        if(errMsg){
+            throw new Error(errMsg);
+        }
+        this.target = target;
+        this.name = name;
+    }
+
+    // 往 target 发送消息, 出于安全考虑, 发送消息会带上前缀
+    if ( supportPostMessage ){
+        // IE8+ 以及现代浏览器支持
+        Target.prototype.send = function(msg){
+            this.target.postMessage(prefix + msg, '*');
+        };
+    } else {
+        // 兼容IE 6/7
+        Target.prototype.send = function(msg){
+            var targetFunc = window.navigator[prefix + this.name];
+            if ( typeof targetFunc == 'function' ) {
+                targetFunc(prefix + msg, window);
+            } else {
+                throw new Error("target callback function is not defined");
+            }
+        };
+    }
+
+    // 信使类
+    // 创建Messenger实例时指定, 必须指定Messenger的名字, (可选)指定项目名, 以避免Mashup类应用中的冲突
+    // !注意: 父子页面中projectName必须保持一致, 否则无法匹配
+    function Messenger(messengerName, projectName){
+        this.targets = {};
+        this.name = messengerName;
+        this.listenFunc = [];
+        prefix = projectName || prefix;
+        this.initListen();
+    }
+
+    // 添加一个消息对象
+    Messenger.prototype.addTarget = function(target, name){
+        var targetObj = new Target(target, name);
+        this.targets[name] = targetObj;
+    };
+
+    // 初始化消息监听
+    Messenger.prototype.initListen = function(){
+        var self = this;
+        var generalCallback = function(msg){
+            if(typeof msg == 'object' && msg.data){
+                msg = msg.data;
+            }
+            // 剥离消息前缀
+            msg = msg.slice(prefix.length);
+            for(var i = 0; i < self.listenFunc.length; i++){
+                self.listenFunc[i](msg);
+            }
+        };
+        if ( supportPostMessage ){
+            if ( 'addEventListener' in document ) {
+                window.addEventListener('message', generalCallback, false);
+            } else if ( 'attachEvent' in document ) {
+                window.attachEvent('onmessage', generalCallback);
+            }
+        } else {
+            // 兼容IE 6/7
+            window.navigator[prefix + this.name] = generalCallback;
+        }
+    };
+    // 监听消息
+    Messenger.prototype.listen = function(callback){
+        this.listenFunc.push(callback);
+    };
+    // 注销监听
+    Messenger.prototype.clear = function(){
+        this.listenFunc = [];
+    };
+    // 广播消息
+    Messenger.prototype.send = function(msg){
+        var targets = this.targets,
+            target;
+        for(target in targets){
+            if(targets.hasOwnProperty(target)){
+                targets[target].send(msg);
+            }
+        }
+    };
+    return Messenger;
+})();
+
+
+
 //yyyy-mm-dd H:i:s or yy-mm-dd  to timestamp
 var strtotime = function(datetime){
 	var tmp_datetime = datetime.replace(/:/g,'-');   
@@ -2300,6 +2415,102 @@ var Base64 =  (function(){
 })();
 
 
+// 处理 emoji时有差异;
+var Base64Server =  (function(){
+	var encode = function (stringToEncode) {  
+		var encodeUTF8string = function (str) {
+			return encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+				function toSolidBytes (match, p1) {
+					return String.fromCharCode('0x' + p1)
+				});
+		}
+		if (typeof window !== 'undefined') {
+			if (typeof window.btoa !== 'undefined') {
+				return window.btoa(encodeUTF8string(stringToEncode));
+			}
+		} else {
+			return new Buffer(stringToEncode).toString('base64');
+		}
+		var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+		var o1,o2,o3,h1,h2,h3,h4,bits;
+		var i = 0;
+		var ac = 0;
+		var enc = '';
+		var tmpArr = [];
+		if (!stringToEncode) {
+			return stringToEncode
+		}
+		stringToEncode = encodeUTF8string(stringToEncode)
+		do {
+			o1 = stringToEncode.charCodeAt(i++);
+			o2 = stringToEncode.charCodeAt(i++);
+			o3 = stringToEncode.charCodeAt(i++);
+			bits = o1 << 16 | o2 << 8 | o3;
+			h1 = bits >> 18 & 0x3f;
+			h2 = bits >> 12 & 0x3f;
+			h3 = bits >> 6 & 0x3f;
+			h4 = bits & 0x3f;
+			tmpArr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+		} while (i < stringToEncode.length)
+	
+		enc = tmpArr.join('');
+		var r = stringToEncode.length % 3;
+		return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+	}  
+	// public method for decoding  
+	var decode = function (encodedData) {  
+		var decodeUTF8string = function (str) {
+		    return decodeURIComponent(str.split('').map(function (c) {
+		      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+		    }).join(''));
+		}
+		if (typeof window !== 'undefined') {
+			if (typeof window.atob !== 'undefined') {
+			  return decodeUTF8string(window.atob(encodedData))
+			}
+		} else {
+			return new Buffer(encodedData, 'base64').toString('utf-8')
+		}
+		var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+		var o1,o2,o3,h1,h2,h3,h4,bits;
+		var i = 0
+		var ac = 0
+		var dec = ''
+		var tmpArr = []
+
+		if (!encodedData) {
+			return encodedData
+		}
+		encodedData += ''
+		do {
+			h1 = b64.indexOf(encodedData.charAt(i++))
+			h2 = b64.indexOf(encodedData.charAt(i++))
+			h3 = b64.indexOf(encodedData.charAt(i++))
+			h4 = b64.indexOf(encodedData.charAt(i++))
+
+			bits = h1 << 18 | h2 << 12 | h3 << 6 | h4
+			o1 = bits >> 16 & 0xff
+			o2 = bits >> 8 & 0xff
+			o3 = bits & 0xff;
+
+			if (h3 === 64) {
+				tmpArr[ac++] = String.fromCharCode(o1)
+			} else if (h4 === 64) {
+				tmpArr[ac++] = String.fromCharCode(o1, o2)
+			} else {
+				tmpArr[ac++] = String.fromCharCode(o1, o2, o3)
+			}
+		} while (i < encodedData.length);
+		dec = tmpArr.join('')
+		return decodeUTF8string(dec.replace(/\0+$/, ''))
+	}
+	return {
+		encode:encode,
+		decode:decode
+	}
+})();
+
+
 var authCrypt = (function(){
 	var base64Encode = Base64Hex.encode;
 	var base64Decode = Base64Hex.decode;
@@ -2418,8 +2629,8 @@ var authCrypt = (function(){
 })();
 
 
-var base64Encode = Base64.encode;
-var base64Decode = Base64.decode;
+var base64Encode = Base64Server.encode;
+var base64Decode = Base64Server.decode;
 var htmlEncode=function(str){
 	var s = "";
 	if (!str || str.length == 0) return "";

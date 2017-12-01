@@ -2,7 +2,7 @@
 	"id":"yzOffice",
 	"name":"{{LNG.yzOffice.meta.name}}",
 	"title":"{{LNG.yzOffice.meta.title}}",
-	"version":"1.2",
+	"version":"1.23",
 	"category":"file",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"

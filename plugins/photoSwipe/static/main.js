@@ -1,4 +1,7 @@
 kodReady.push(function(){
+	if( !$.supportCanvas() ){
+		return;
+	}
 	kodApp.add({
 		name:"photoSwipe",
 		title:"photoSwipe Image",

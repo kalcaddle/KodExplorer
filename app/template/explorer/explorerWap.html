@@ -38,9 +38,9 @@
 			?>
 			<?php if($subMenu){?>
 			<div class="menu-group fl tool tool-submenu">
-				<div class="topbar-menu" id="topbar-submenu" data-toggle="dropdown">
-					<i class="icon-th-large"></i>
-				</div>
+				<button class="topbar-menu" id="topbar-submenu" data-toggle="dropdown">
+					<i class="icon-home"></i>
+				</button>
 				<ul class="dropdown-menu topbar-submenu pull-left animated menuShow" role="menu" aria-labelledby="topbar-submenu">
 					<?php echo $subMenu;?>
 				</ul>
@@ -49,20 +49,7 @@
 
 			<div class="title"><?php echo LNG('kod_name');?></div>
 			<div class="menu-group">
-				<div class="btn-list-icon"><i class="font-icon icon-th"></i></div>
-				<div class="tool tool-menu-right-btn"><i class="font-icon icon-ellipsis-vertical"></i></div>
-				<ul class="dropdown-menu tool-menu-right  pull-right animated menuShow" role="menu" >				
-					<li data-action="upload"><a href="javascript:void();">
-						<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?></a></li>
-					<li data-action="newfolder"><a href="javascript:void();">
-						<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('newfolder');?></a></li>
-					<li data-action="newfile"><a href="javascript:void();">
-						<i class="font-icon icon-file-text"></i><?php echo LNG('newfile');?></a></li>
-					<li data-action="past"><a href="javascript:void();">
-						<i class="font-icon icon-paste"></i><?php echo LNG('past');?></a></li>
-					<li data-action="search"><a href="javascript:void();">
-						<i class="font-icon icon-search"></i><?php echo LNG('search');?></a></li>
-				</ul>
+				<div class="btn-list-icon"><i class="font-icon icon-home"></i></div>
 			</div>
 		</div>
 
@@ -111,6 +98,22 @@
 		</div>
 		<?php include(TEMPLATE.'common/footer.html');?>
 	</div><!-- / frame-main end-->
+
+	<div class="toolbar-menu">
+		<button class="menu-plus tool tool-menu-right-btn" data-toggle="dropdown"></button>
+		<ul class="dropdown-menu tool-menu-right pull-right animated menuShow" role="menu" >
+			<li data-action="upload"><a href="javascript:void();">
+				<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?></a></li>
+			<li data-action="newfolder"><a href="javascript:void();">
+				<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('newfolder');?></a></li>
+			<li data-action="newfile"><a href="javascript:void();">
+				<i class="font-icon icon-file-text"></i><?php echo LNG('newfile');?></a></li>
+			<li data-action="past"><a href="javascript:void();">
+				<i class="font-icon icon-paste"></i><?php echo LNG('past');?></a></li>
+			<li data-action="search"><a href="javascript:void();">
+				<i class="font-icon icon-search"></i><?php echo LNG('search');?></a></li>
+		</ul>
+	</div>	
 	<script type="text/javascript" >
 		G.thisPath = "<?php echo clear_html($dir);?>";
 		seajs.use("<?php echo STATIC_JS;?>/src/explorerWap/main");

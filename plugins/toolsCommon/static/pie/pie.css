@@ -26,9 +26,9 @@ body div.topbar .content .title.topbar-menu{width:200px\9;}
 body .file-continer .file .item-select{width:12px;height:12px;}
 body .file-continer .file .item-select .item-check{font-size:10px;}
 
-
 body .dialog-no-title .aui-outer{border:1px solid #ddd !important;}
 body .dialog-no-title .aui-max,
 body .dialog-no-title .aui-min,
 body .dialog-no-title .aui-close{filter:none !important;}
 body .dialog-no-title .aui-title i{display:none;}
+body #messageTips{border:1px solid #ddd\9;}

@@ -3,6 +3,12 @@
 class yzOfficePlugin extends PluginBase{
 	function __construct(){
 		parent::__construct();
+
+		//IE8自动切换为普通模式
+		if( strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 8.0") ){
+			$this->getConfig();
+			$this->pluginConfig['preview'] = '0';
+		}
 	}
 	public function regiest(){
 		$this->hookRegiest(array(
@@ -69,10 +75,10 @@ class yzOfficePlugin extends PluginBase{
 	private function getObj(){
 		$path = $this->filePath($this->in['path']);
 		
-		require_once($this->pluginPath.'php/yzOffice.class.php');//文档分享预览
-		return  new yzOffice($this,$path);
-		// require_once($this->pluginPath.'php/yzOffice2.class.php');//官网用户demo
-		// return new yzOffice2($this,$path);
+// 		require_once($this->pluginPath.'php/yzOffice.class.php');//文档分享预览
+// 		return  new yzOffice($this,$path);
+		require_once($this->pluginPath.'php/yzOffice2.class.php');//官网用户demo
+		return new yzOffice2($this,$path);
 	}
 }
 

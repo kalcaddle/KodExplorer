@@ -25,6 +25,10 @@ $config['settings'] = array(
 if($config['systemOS'] == 'windows'){
 	$config['settings']['updloadThreads'] = 1;
 }
+// windows iis bin上传有限制
+if(strstr($_SERVER['SERVER_SOFTWARE'],'-IIS')){
+	$config['settings']['updloadBindary'] = 0;
+}
 
 $config['settings']['appType'] = array(
 	array('type' => 'tools','name' => 'app_group_tools','class' => 'icon-suitcase'),
@@ -59,7 +63,7 @@ $config['settingSystemDefault'] = array(
 	'rootListUser'		=> 0,			// 组织架构根节点展示群组内用户
 	'rootListGroup'		=> 0,			// 组织架构根节点展示子群组
 	'csrfProtect'		=> 0, 		 	// 开启csrf保护
-	'currentVersion'	=> KOD_VERSION,
+	'currentVersion'	=> KOD_VERSION
 );
 //初始化默认菜单配置
 $config['settingSystemDefault']['menu'] = array(

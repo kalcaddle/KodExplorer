@@ -72,15 +72,11 @@ class PluginBase{
 		}
 		return $icon;
 	}
-
 	final function filePath($path){
 		if(substr($path,0,4) == 'http'){
-			if(file_exists($path)){
-				show_tips('must be url;');
+			if(!request_url_safe($path)){
+				show_json(LNG('url error!'),false);
 			}
-			$path = _DIR_CLEAR($path);
-			$path = str_replace(':/','://',$path);
-
 			$cacheName = md5($path.'kodcloud').'.'.get_path_ext($path);
 			$cacheFile = TEMP_PATH.$this->pluginName.'/files/'.$cacheName;
 			mk_dir(get_path_father($cacheFile));

@@ -71,17 +71,6 @@ $config['checkCharset'] = 'ASCII,UTF-8,GB2312,GBK,BIG5,UTF-16,UCS-2,'.
 		'Unicode,EUC-KR,EUC-JP,SHIFT-JIS,EUCJP-WIN,SJIS-WIN,JIS,LATIN1';//文件打开自动检测编码
 $config['checkCharsetDefault'] = '';//if set,not check;
 
-if(!defined('HOST')){
-	define('HOST',get_host().'/');
-}
-define('WEB_ROOT',get_webroot(BASIC_PATH));
-define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));			//程序根目录
-define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));	//插件目录
-
-include(CONTROLLER_DIR.'util.php');
-include(BASIC_PATH.'config/setting.php');
-include(BASIC_PATH.'config/version.php');
-
 //when edit a file ;check charset and auto converto utf-8;
 if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['systemOS']='windows';
@@ -93,6 +82,21 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['systemOS']='linux';
 	$config['systemCharset']='utf-8';
 }
+
+// 部分反向代理导致获取不到url的问题优化
+if(isset($_COOKIE['APP_HOST'])){
+	define('HOST',$_COOKIE['HOST']);
+	define('APP_HOST',$_COOKIE['APP_HOST']);
+}
+if(!defined('HOST')){		define('HOST',get_host().'/');}
+if(!defined('WEB_ROOT')){	define('WEB_ROOT',get_webroot(BASIC_PATH));}
+if(!defined('APP_HOST')){	define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
+define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目录
+
+include(CONTROLLER_DIR.'util.php');
+include(BASIC_PATH.'config/setting.php');
+include(BASIC_PATH.'config/version.php');
+
 
 init_common();
 $config['autorun'] = array(
