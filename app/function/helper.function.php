@@ -6,9 +6,17 @@ function checkExt($file){
 		return 0;
 	}
 	$notAllow = $GLOBALS['auth']['extNotAllow'];
+
+	//'php|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm'
 	if(strstr($notAllow,'php')){
-		$notAllow .= '|htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm';
+		$notAllow .= 'php|phtml|phtm|htaccess|pwml';
 	}
+	if( strstr($notAllow,'|htm') || strstr($notAllow,'htm|') ){
+		$notAllow .= 'html|htm|shtml|shtm';
+	}
+	if( strstr($notAllow,'asp')){
+		$notAllow .= 'asp|aspx|ascx|jsp|pl';
+	}	
 	$extArr = explode('|',$notAllow);
 	foreach ($extArr as $current) {
 		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名
