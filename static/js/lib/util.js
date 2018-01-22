@@ -252,7 +252,9 @@ var Cookie = (function(){
 		var cookieArray=document.cookie.split("; ");
 		for (var i=0;i<cookieArray.length;i++){
 			var arr=cookieArray[i].split("=");
-			data[arr[0]] = unescape(arr[1]);
+			if( typeof(data[arr[0]]) == 'undefined' ){
+				data[arr[0]] = unescape(arr[1]);
+			}
 		}
 		return data;
 	}
@@ -650,10 +652,10 @@ var pathTools = (function(){
 		if(a==undefined || b==undefined){
 			return 0;
 		}
-		if(typeof(a) == "number" && typeof(b) == "number"){
+		if($.isNumeric(a) && $.isNumeric(b)){
+			a = parseFloat(a);b = parseFloat(b);
 			return a>b?1:(a==b?0:-1);
 		}
-
 		var re = /([0-9\.]+)/g,	// /(-?[0-9\.]+)/g,  负数 2016-11-09 2016-11-10歧义
 			x = a.toString().toLowerCase() || '',
 			y = b.toString().toLowerCase() || '',
