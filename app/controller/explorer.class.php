@@ -679,7 +679,7 @@ class explorer extends Controller{
 			}
 		}
 		$state = $error==0?true:false;
-		$info = $success.' success,'.$error.' error';
+		$info = $success.' '.LNG('success').', '.$error.' '.LNG('error');
 		if ($error==0) {
 			$info = LNG('remove_success');
 		}
