@@ -2,7 +2,7 @@
 	"id":"jPlayer",
 	"name":"jPlayer",
 	"title":"jPlayer",
-	"version":"1.2",
+	"version":"1.33",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png",
 		"screenshoot":[
@@ -29,7 +29,7 @@
 			"type":"tags",
 			"display":"{{LNG.Plugin.Config.fileExt}}",
 			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
-			"value":"mp3,wav,m4a,aac,oga,ogg,webma,mp4,m4v,flv,mov,f4v,ogv,webm,webmv",
+			"value":"mp3,wav,m4a,aac,oga,ogg,webma,mp4,m4v,flv,mov,f4v,ogv,webm,webmv,m3u8a,m3ua,flac,fla,rtmp,rtmpa",
 		},
 		"fileSort":{
 			"type":"number",

@@ -2,7 +2,7 @@ kodReady.push(function(){
     if(!$.supportCss3() || isWap()){//ie8 ie9
         return;
     }
-	if(_.get(window,'Config.pageApp') != 'desktop'){
+	if(lodash.get(window,'Config.pageApp') != 'desktop'){
 		return;
 	}
 	//加载时钟挂件

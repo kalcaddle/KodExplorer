@@ -163,27 +163,24 @@ class FileCache{
 	public static function load($file){//10000次需要4s 数据量差异不大。
 		if (!$file) return false;
 		$file = iconv_system($file);
-		$fileLock = $file.'.lock';
-		if ( (!file_exists($file) || filesize($file) == 0 ) && 
-			  !file_exists($fileLock) ){//并发下；正在写或删除
-			@file_put_contents($file,CONFIG_EXIT);
+		if ( !file_exists($file) ){
+			@file_put_contents($file,CONFIG_EXIT.'[]');
+			chmod_path($file,0777);
+			return array();
 		}
 
 		$str = file_read_safe($file,10.4);
-		if($str === false || strlen($str) == 0){
-			//服务器崩溃下文件不存在异常恢复
-			if( (!file_exists($file) || filesize($file) == 0 ) && 
-				file_exists($fileLock) &&
-				@filemtime($fileLock) > 1000 && 
-				time() - @filemtime($fileLock) > 10
-				){
-				@rename($fileLock,$file);
-			}
+		if (strlen($str) == 0 || 
+			strlen($str) == strlen(CONFIG_EXIT) ){
+			@file_put_contents($file,CONFIG_EXIT.'[]');
+			chmod_path($file,0777);
+			return array();
+		}
+		
+		if($str === false || strlen($str) < strlen(CONFIG_EXIT) ){
 			show_tips('[Error Code:1010] FileCache load error!'.$file);
 		}
-
-		$str = substr($str, strlen(CONFIG_EXIT));
-		$data= json_decode($str,true);
+		$data= json_decode(substr($str, strlen(CONFIG_EXIT)),true);
 		if (is_null($data)) $data = array();
 		return $data;
 	}
@@ -193,24 +190,22 @@ class FileCache{
 	public static function save($file,$data){//10000次需要6s
 		if (!$file) return false;
 		$file = iconv_system($file);
-		if (!file_exists($file)){
-			@touch($file);
+		if ( !file_exists($file) ){
+			@file_put_contents($file,CONFIG_EXIT);
+			chmod_path($file,0777);
 		}
-		chmod_path($file,0777);
+
 		if (!path_writeable($file)) {
 			show_tips(BASIC_PATH."<br/>".LNG('path_can_not_write_data'));
 		}
-
 		if(defined('JSON_PRETTY_PRINT')){
-			//$jsonStr = json_encode($data);
 			$jsonStr = json_encode($data,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 		}else{
 			$jsonStr = json_encode($data);
 		}
-		if(is_null($jsonStr)){//含有二进制或非utf8字符串对应检测
+		if(is_null($jsonStr) || strlen($jsonStr) == 0){//含有二进制或非utf8字符串对应检测
 			show_tips('json_encode error!');
 		}
-		$buffer = CONFIG_EXIT.$jsonStr;
-		return file_wirte_safe($file,$buffer,20.3);
+		return file_wirte_safe($file,CONFIG_EXIT.$jsonStr,20.3);
 	}
 }

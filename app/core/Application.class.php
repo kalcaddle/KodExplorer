@@ -50,17 +50,17 @@ class Application {
 		$classFile = CONTROLLER_DIR . $subDir.$class.'.class.php';
 		$className = $class;//.'Controller'
 		if (!file_exists_case($classFile)) {
-			show_tips($class.' controller not exists!');
+			show_tips($class.' controller '.LNG("not_exists"),APP_HOST,3);
 		}
 		if (!class_exists($className)) {
 		    include_once($classFile);
 		}
 		if (!class_exists($className)) {
-			show_tips($className.' class not exists');
+			show_tips($className.' class '.LNG("not_exists"),APP_HOST,3);
 		}
 		$instance = new $className();
 		if (!method_exists($instance, $function)) {
-			show_tips($function.' method not exists');
+			show_tips($function.' method '.LNG("not_exists"),APP_HOST,3);
 		}
 		return $instance -> $function();
 	}

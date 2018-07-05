@@ -39,12 +39,12 @@ class Hook{
 				$class = new $className();
 				if( method_exists($class,$functionName) ){
 					//return $class -> $functionName($args);
-					return call_user_func_array(array($class,$functionName), $args);
+					return @call_user_func_array(array($class,$functionName), $args);
 				}
 			}
 		}else{
 			if(function_exists($action)){
-				return call_user_func_array($action, $args);
+				return @call_user_func_array($action, $args);
 			}
 		}
 	}

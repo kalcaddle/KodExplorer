@@ -2,6 +2,7 @@
 
 //扩展名权限判断 有权限则返回1 不是true
 function checkExt($file){
+	if($GLOBALS['isRoot']) return 1;
 	if (strstr($file,'<') || strstr($file,'>') || $file=='') {
 		return 0;
 	}
@@ -148,12 +149,12 @@ function get_charset(&$str) {
 	$charsetGet = $charset;
 	if ($charset == 'cp936'){
 		// 有交叉，部分文件无法识别
-		if(charset_check($str,'gbk') && charset_check($str,'gbk','big5')){
-			$charset = 'gbk';
-		}else if(charset_check($str,'big5') && charset_check($str,'big5','gbk')){
-			$charset = 'big5';
-		}else if(charset_check($str,'ISO-8859-4')){
+		if(charset_check($str,'ISO-8859-4') && !charset_check($str,'gbk') && !charset_check($str,'big5')){
 			$charset = 'ISO-8859-4';
+		}elseif(charset_check($str,'gbk') && !charset_check($str,'big5')){
+			$charset = 'gbk';
+		}else if(charset_check($str,'big5')){
+			$charset = 'big5';
 		}
 	}else if ($charset == 'euc-cn'){
 		$charset = 'gbk';
@@ -165,8 +166,8 @@ function get_charset(&$str) {
 		$check = array(
 			'utf-8'       => $charset,
 			'utf-16'      => 'gbk',
-			'cp1252'      => 'utf-8',
 			'cp1251'      => 'utf-8',
+			'cp1252'      => 'utf-8'			
 		);
 		foreach($check as $key => $val){
 			if(charset_check($str,$key,$val)){
@@ -211,6 +212,7 @@ function check_list_dir(){
 function php_env_check(){
 	$error = '';
 	if(!function_exists('iconv')) $error.= '<li>'.LNG('php_env_error').' iconv</li>';
+	if(!function_exists('json_encode')) $error.= '<li>'.LNG('php_env_error').' json</li>';
 	if(!function_exists('curl_init')) $error.= '<li>'.LNG('php_env_error').' curl</li>';
 	if(!function_exists('mb_convert_encoding')) $error.= '<li>'.LNG('php_env_error').' mb_string</li>';
 	if(!function_exists('file_get_contents')) $error.='<li>'.LNG('php_env_error').' file_get_contents</li>';
@@ -383,7 +385,8 @@ function user_logout(){
 	setcookie('X-CSRF-TOKEN','',time()-3600);
 
 	$url = './index.php?user/login';
-	if(ACT != 'logout'){ //不是主动退出则登陆后跳转到之前页面
+	//之前界面维持，不是主动退出则登陆后跳转到之前页面
+	if(ACT != 'logout' && count($_GET)!=0 ){
 		$url .= '&link='.rawurlencode(this_url());
 	}
 	header('Location:'.$url);
@@ -484,5 +487,5 @@ function check_user_select($info){
 			return true;
 		}
 	}
-	return false;	
+	return false;
 }

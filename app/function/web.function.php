@@ -41,6 +41,12 @@ function get_url_link($url){
 	$port = (empty($res["port"]) || $res["port"] == '80')?'':':'.$res["port"];
 	return $res['scheme']."://".$res["host"].$port.$res['path'];
 }
+function get_url_root($url){
+	if(!$url) return "";
+	$res = parse_url($url);
+	$port = (empty($res["port"]) || $res["port"] == '80')?'':':'.$res["port"];
+	return $res['scheme']."://".$res["host"].$port.'/';
+}
 function get_url_domain($url){
 	if(!$url) return "";
 	$res = parse_url($url);
@@ -48,6 +54,11 @@ function get_url_domain($url){
 }
 
 function get_host() {
+	//兼容子目录反向代理:只能是前端js通过cookie传入到后端进行处理
+	if(isset($_COOKIE['HOST']) && isset($_COOKIE['APP_HOST'])){
+		return $_COOKIE['HOST'];
+	}
+
 	$protocol = (!empty($_SERVER['HTTPS'])
 				 && $_SERVER['HTTPS'] !== 'off'
 				 || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
@@ -96,7 +107,7 @@ function is_wap(){
 	if(!isset($_SERVER['HTTP_USER_AGENT'])){
 		return false;
 	} 
-	if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i', 
+	if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom|miui)/i', 
 		strtolower($_SERVER['HTTP_USER_AGENT']))){
 		return true;
 	}
@@ -266,6 +277,12 @@ function curl_progress_get($file,$uuid=''){
 // http://blog.csdn.net/havedream_one/article/details/52585331 
 // php7.1 curl上传中文路径文件失败问题？【暂时通过重命名方式解决】
 function url_request($url,$method='GET',$data=false,$headers=false,$options=false,$json=false,$timeout=3600){
+	if(!$url){
+		return array(
+			'data'		=> 'url error! url='.$url,
+			'code'		=> 0
+		);
+	}
 	ignore_timeout();
 	$ch = curl_init();
 	$upload = false;
@@ -312,11 +329,19 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 
 	// post数组或拼接的参数；不同方式服务器兼容性有所差异
 	// http://blog.csdn.net/havedream_one/article/details/52585331 
-	if ($data && is_array($headers) && $method != 'DOWNLOAD' &&
-		in_array('Content-Type: application/x-www-form-urlencoded',$headers)) {
-		$data = http_build_query($data);
+	// post默认用array发送;content-type为x-www-form-urlencoded时用key=1&key=2的形式
+	if (is_array($data) && is_array($headers) && $method != 'DOWNLOAD'){
+		foreach ($headers as $key) {
+			if(strstr($key,'x-www-form-urlencoded')){
+				$data = http_build_query($data);
+				break;
+			}
+		}
 	}
 	if($method == 'GET' && $data){
+		if(is_array($data)){
+			$data = http_build_query($data);
+		}
 		if(strstr($url,'?')){
 			$url = $url.'&'.$data;
 		}else{
@@ -429,7 +454,10 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 	);
 	return $return;
 }
-
+function curl_get_contents($url){
+	$data = url_request($url);
+	return $data['data'];
+}
 
 function get_headers_curl($url,$timeout=30,$depth=0,&$headers=array()){
 	if(!function_exists('curl_init')){
@@ -635,7 +663,7 @@ function stripslashes_deep($value){
 }
 
 function parse_url_route(){
-	$param = str_replace($_SERVER['SCRIPT_NAME'],"",$_SERVER['PHP_SELF']);
+	$param = str_replace($_SERVER['SCRIPT_NAME'],"",$_SERVER['SCRIPT_NAME']);
 	if($param && substr($param,0,1) == '/'){
 		$arr = explode('&',$param);
 		$arr[0] = ltrim($arr[0],'/');

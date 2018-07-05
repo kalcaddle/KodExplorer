@@ -1,6 +1,6 @@
 # KodExplorer
 
-[![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kodcloud.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kodcloud.com) [![Download](http://kodcloud.com/tools/version/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
+[![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kodcloud.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kodcloud.com) [![Download](http://api.kodcloud.com/?analyze/download)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
 
 > KodExplorer is a file manager for web. It is also a web code editor, which allows you to develop websites directly within the web browser.You can run KodExplorer either online or locally,on Linux, Windows or Mac based platforms. The only requirement is to have PHP 5 available.
 
@@ -11,8 +11,7 @@
 ### [Demo](http://demo.kodcloud.com/) [user: demo/demo]
 -----
 - [Change log](./ChangeLog.md)
-- [English Document](http://kodcloud.com#lang=en)
-- [中文文档](http://kodcloud.com/#lang=zh_CN)
+- [Document/开发文档](http://doc.kodcloud.com/)
 - [Donate](https://www.paypal.me/kalcaddle)
 
 ### Source code

@@ -43,8 +43,8 @@ define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限�
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;
  * 1. 需要先将data文件夹移到别的地方 例如将data文件夹拷贝到D:/
  * 2. 在config文件夹下新建define.php 新增一行 <?php define('DATA_PATH','D:/data/');
+ * 注意:路径不能写错;其次php需要有权限访问移动后的目录(设置了防跨站需要关闭)
  */
-
 if(file_exists(BASIC_PATH.'config/define.php')){
 	include(BASIC_PATH.'config/define.php');
 }
@@ -64,6 +64,7 @@ include(FUNCTION_DIR.'common.function.php');
 include(FUNCTION_DIR.'web.function.php');
 include(FUNCTION_DIR.'file.function.php');
 include(FUNCTION_DIR.'helper.function.php');
+include(CLASS_DIR.'I18n.class.php');
 
 $config['appStartTime'] = mtime();
 $config['appCharset']	= 'utf-8';//该程序整体统一编码
@@ -83,20 +84,24 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 	$config['systemCharset']='utf-8';
 }
 
-// 部分反向代理导致获取不到url的问题优化
+// 部分反向代理导致获取不到url的问题优化;忽略同域名http和https的情况
 if(isset($_COOKIE['APP_HOST'])){
-	define('HOST',$_COOKIE['HOST']);
-	define('APP_HOST',$_COOKIE['APP_HOST']);
+	if(get_url_domain($_COOKIE['HOST']) != get_url_domain($_COOKIE['APP_HOST'])){
+		define('HOST',$_COOKIE['HOST']);
+		define('APP_HOST',$_COOKIE['APP_HOST']);
+	}
 }
-if(!defined('HOST')){		define('HOST',get_host().'/');}
+if(!defined('HOST')){		define('HOST',rtrim(get_host(),'/').'/');}
 if(!defined('WEB_ROOT')){	define('WEB_ROOT',get_webroot(BASIC_PATH));}
 if(!defined('APP_HOST')){	define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
 define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目录
 
 include(CONTROLLER_DIR.'util.php');
-include(BASIC_PATH.'config/setting.php');
 include(BASIC_PATH.'config/version.php');
-
+include(BASIC_PATH.'config/setting.php');
+if(file_exists(CONTROLLER_DIR.'debug.class.php')){
+	include_once(CONTROLLER_DIR.'debug.class.php');
+}
 
 init_common();
 $config['autorun'] = array(

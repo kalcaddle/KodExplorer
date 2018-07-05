@@ -35,6 +35,9 @@ class user extends Controller{
 			$this->notCheckApp = array('pluginApp.to','api.view');
 		}
 		$this->config['forceWap'] = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
+		if( isset($_GET['forceWap']) ){
+			$this->config['forceWap'] = $_GET['forceWap'];
+		}
 	}
 
 	public function bindHook(){
@@ -62,7 +65,7 @@ class user extends Controller{
 			if (!is_array($user) || !isset($user['password'])) {
 				$this->logout();
 			}
-			if($this->_makeLoginToken($user) == $_COOKIE['kodToken']){
+			if($this->_makeLoginToken($user) === $_COOKIE['kodToken']){
 				@session_start();//re start
 				$_SESSION['kodLogin'] = true;
 				$_SESSION['kodUser']= $user;
@@ -207,8 +210,13 @@ class user extends Controller{
 		}
 		$this->login($error);
 	}
-
-	
+	public function accessToken(){
+		if($_SESSION['kodLogin'] === true){
+			show_json(access_token_get(),true);
+		}else{
+			show_json('not login!',false);
+		}
+	}
 
 	//临时文件访问
 	public function publicLink(){
@@ -240,8 +248,9 @@ class user extends Controller{
 			'userID'        => $this->user['userID'],
 			'webRoot'       => $GLOBALS['webRoot'],
 			'webHost'       => HOST,
-			'appHost'       => APP_HOST,
+			'appHost'       => APP_HOST,			
 			'staticPath'    => STATIC_PATH,
+			'appIndex'  	=> $_SERVER['SCRIPT_NAME'],
 			'basicPath'     => $basicPath,
 			'userPath'      => $userPath,
 			'groupPath'     => $groupPath,
@@ -274,9 +283,12 @@ class user extends Controller{
 			'KOD_USER_FAV'			=>	KOD_USER_FAV,
 			'KOD_GROUP_ROOT_SELF'	=>	KOD_GROUP_ROOT_SELF,
 			'KOD_GROUP_ROOT_ALL'	=>	KOD_GROUP_ROOT_ALL,
+			'ST'					=> $this->in['st'],
+			'ACT'					=> $this->in['act'],
 		);
 		if(isset($this->config['settingSystem']['versionHash'])){
 			$theConfig['versionHash'] = $this->config['settingSystem']['versionHash'];
+			$theConfig['versionHashUser'] = $this->config['settingSystem']['versionHashUser'];
 		}
 		if (!isset($GLOBALS['auth'])) {
 			$GLOBALS['auth'] = array();
@@ -288,7 +300,12 @@ class user extends Controller{
 		Hook::trigger('user.commonJs.insert',$this->in['st'],$this->in['act']);
 		echo 'AUTH='.json_encode($GLOBALS['auth']).';';
 		echo 'G='.json_encode($theConfig).';';
-		echo 'LNG='.json_encode(I18n::getAll()).';G.useTime='.$useTime.';';
+
+		$lang = json_encode_force(I18n::getAll());
+		if(!$lang){
+			$lang = '{}';
+		}
+		echo 'LNG='.$lang.';G.useTime='.$useTime.';';
 	}
 
 	/**
@@ -370,7 +387,7 @@ class user extends Controller{
 				count($param) != 2 || 
 				md5(base64_decode($param[0]).$api_token) != $param[1]
 				){
-				$this->_loginDisplay("Api param error!",false);
+				$this->_loginDisplay("API 接口参数错误!",false);
 			}
 			$this->in['name'] = urlencode(base64_decode($param[0]));
 			$apiLoginCheck = true;
@@ -387,10 +404,16 @@ class user extends Controller{
 
 		$name = rawurldecode($this->in['name']);
 		$password = rawurldecode($this->in['password']);
+
+		if($this->in['salt']){
+			$key = substr($password,0,5)."2&$%@(*@(djfhj1923";
+			$password = Mcrypt::decode(substr($password,5),$key);
+		}
+
 		$member = systemMember::loadData();
 		$user = $member->get('name',$name);
 		if($apiLoginCheck && $user){//api自动登陆
-		}else if ($user === false || md5($password)!=$user['password']){
+		}else if ($user === false || md5($password) !== $user['password']){
 			$this->_loginDisplay(LNG('password_error'),false);//$member->get()
 		}else if($user['status'] == 0){
 			$this->_loginDisplay(LNG('login_error_user_not_use'),false);

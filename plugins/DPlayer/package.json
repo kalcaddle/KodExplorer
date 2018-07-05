@@ -1,0 +1,38 @@
+{
+	"id":"DPlayer",
+	"name":"DPlayer播放器",
+	"title":"DPlayer播放器",
+	"version":"1.02",
+	"source":{
+		"icon":"{{pluginHost}}static/images/icon.png",
+	},
+	"category":"media,file",
+	"description":"DPlayer mediafile player;",
+	"keywords":"",
+	"auther":{
+		"copyright":"kodcloud.",
+		"homePage":"http://www.kodcloud.com",
+	},
+	"configItem":{
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		},
+		"fileSort":{
+			"type":"number",
+			"display":"{{LNG.Plugin.Config.fileSort}}",
+			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
+			"value":200,
+		},
+		"fileExt":{
+			"type":"tags",
+			"display":"{{LNG.Plugin.Config.fileExt}}",
+			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
+			//"value":"mp3,wav,m4a,aac,oga,ogg,webma,mp4,m4v,flv,mov,f4v,ogv,webm,webmv,mkv",
+			"value":"mp4,m4v,flv,mov,f4v,ogv,webm,webmv,mkv",
+		}		
+	}
+}

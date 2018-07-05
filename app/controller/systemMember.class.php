@@ -148,8 +148,11 @@ class systemMember extends Controller{
 			return $list;
 		}
 
+		//含有密码则不罗列
 		foreach($list as $key=>&$val){
-			unset($val['sharePassword']);
+			if($val['sharePassword']){
+				unset($list[$key]);
+			}
 		}
 		return $list;
 	}
@@ -206,6 +209,22 @@ class systemMember extends Controller{
 	}
 
 	/**
+	 * 获取用户列表数据,根据用户组筛选；默认输出所有用户
+	 */
+	public function getByName($name = '') {
+		if(!$name){
+			$name = $this->in['name'];
+		}
+		$result = $this->sql->get(array('name',$name));
+		if(is_array($result) && count($result)>0){
+			$arr = array_values($result);
+			unset($arr[0]['password']);
+			show_json($arr[0]);
+		}
+		show_json(LNG("not_exists"),false);
+	}
+
+	/**
 	 * 用户添加
 	 * systemMember/add&name=warlee&password=123&sizeMax=0&groupInfo={"0":"read","10":"write"}&role=default
 	 */
@@ -226,7 +245,7 @@ class systemMember extends Controller{
 			show_json(LNG('systemMember_group_error'),false);
 		}
 		if($this->sql->get(array('name',$name))){
-			show_json(LNG('error_repeat'),false);
+			show_json(LNG('error_repeat'),false,$name);
 		}
 
 		//非系统管理员，不能添加系统管理员
@@ -258,6 +277,7 @@ class systemMember extends Controller{
 			$userInfo = array(
 				'userID'	=>  $userID,
 				'name'      =>  $val,
+				'nickName'	=>  $this->in['nickName'],
 				'password'  =>  md5($password),
 				'role'      =>  $this->in['role'],
 				'config'    =>  array('sizeMax' => floatval($this->in['sizeMax']),//M
@@ -282,21 +302,25 @@ class systemMember extends Controller{
     			unset($userInfo['homePath']);
     		}
 			if ($this->sql->set($userID,$userInfo)) {
-				$this->_initDir($userInfo['path']);
+				$this->initDir($userInfo['path']);
 			}else{
 				$errorArr[] = $val;
 			}
 		}
 
 		$success = count($userArray)-count($errorArr);
-		$show = " success:$success";
+		$msg = LNG('success');
+		if(count($errorArr) > 0 ){
+			$msg = LNG('word_success').' : '.$success.',  ';//部分失败
+			if($success == 0 ){
+				$msg = LNG('error_repeat');
+			}
+			$msg .= LNG('word_error').' : '.count($errorArr);
+		}
 		if($success==count($userArray)){
-			show_json(LNG('success').$show,true,$success);
-		}else if($success!=0){//部分失败
-			$errorInfo = " error:".count($errorArr);
-			show_json(LNG('success').$show.$errorInfo,false,implode("\n",$errorArr));
+			show_json($msg,true,$success);
 		}else{
-			show_json(LNG('error_repeat'),false);
+			show_json($msg,false,implode("\n",$errorArr));
 		}
 	}
 
@@ -337,7 +361,7 @@ class systemMember extends Controller{
 		}
 
 		$this->in['name'] = rawurlencode($theName);//还原
-		$editArr = array('name','role','password','groupInfo','homePath','status','sizeMax');
+		$editArr = array('name','nickName','role','password','groupInfo','homePath','status','sizeMax');
 		foreach ($editArr as $key) {
 			if(!isset($this->in[$key])) continue;            
 			$userInfo[$key] = rawurldecode($this->in[$key]);
@@ -402,6 +426,12 @@ class systemMember extends Controller{
 					$status = intval($this->in['param']);
 					$this->sql->set(array('userID',$userID),array('status',$status)); 
 					break;
+				case 'spaceSet'://批量设置用户空间大小
+					$value = intval($this->in['param']);
+					$userInfo = $this->sql->get($userID);
+					$userInfo['config']['sizeMax'] = $value;
+					$this->sql->set($userID,$userInfo);
+					break;
 				case 'roleSet'://设置权限组
 					$role = $this->in['param'];
 					//非系统管理员，不能将别人设置为系统管理员
@@ -431,8 +461,8 @@ class systemMember extends Controller{
 					$userInfo = $this->sql->get($userID);
 					foreach ($groupArr as $key => $value) {
 						$userInfo['groupInfo'][$key] = $value;
-					}                   
-					$this->sql->set($userID,$userInfo);   
+					}
+					$this->sql->set($userID,$userInfo);
 				default:break;
 			}
 		}
@@ -444,7 +474,7 @@ class systemMember extends Controller{
 		$list = $sql->get();
 		foreach ($list as $id => &$info) {//创建用户目录及初始化
 			$path = make_path($info['name']);
-			$this->_initDir($path);
+			$this->initDir($path);
 			$info['path'] = $path;
 			$info['createTime'] = time();
 		}
@@ -470,7 +500,7 @@ class systemMember extends Controller{
 	/**
 	 *初始化用户数据和配置。
 	 */    
-	private function _initDir($path){
+	public function initDir($path){
 		$userFolder = array('home','recycle_kod','data');
 		$homeFolders = explode(',',$this->config['settingSystem']['newUserFolder']);
 		$rootPath = USER_PATH.$path.'/';

@@ -22,7 +22,10 @@
 				foreach ($config['settingSystem']['menu'] as $key=>$value) {
 					if ($value['use']!='1') continue;
 					$has = ST==$value['name']?'this':'';
-					$target = " target='".$value['target']."'" ;
+					$target = " target='_self'" ;
+					if($value['target']=='1' || $value['target'] == '_blank'){
+						$target = " target='_blank'" ;
+					}
 					$name = rawurldecode($value['name']);
 					if(LNG('ui_'.$name) != 'ui_'.$name){
 						$name = "<i class='font-icon menu-".$name."'></i><span>".LNG('ui_'.$name).'</span>';
@@ -76,7 +79,14 @@
 			<!-- 全局设置语言则不再显示 -->
 			
 			<div class="menu-group">
-				<a href="#" id='topbar-user' data-toggle="dropdown" class="topbar-menu"><i class="font-icon icon-user"></i><?php echo $_SESSION['kodUser']['name'];?>&nbsp;<b class="caret"></b></a>
+				<a href="#" id='topbar-user' data-toggle="dropdown" class="topbar-menu">
+					<i class="font-icon icon-user"></i>
+					<?php 
+						$user = $_SESSION['kodUser'];
+						echo $user['nickName']?$user['nickName']:$user['name'];
+					?>&nbsp;
+					<b class="caret"></b>
+				</a>
 				<ul class="dropdown-menu menu-topbar-user pull-right animated menuShow" role="menu" aria-labelledby="topbar-user">
 					<?php if($GLOBALS['isRoot']){ ?>
 					<li class="menu-system-setting"><a href="#" onclick="core.setting('system');"><i class="font-icon icon-cog"></i><?php echo LNG('system_setting');?></a></li>

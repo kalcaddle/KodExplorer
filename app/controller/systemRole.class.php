@@ -41,7 +41,8 @@ class systemRole extends Controller{
 	 */
 	public function add(){
 		$role = $this->_initData();
-		$role['roleID'] = $this->sql->getMaxId().'';
+		$roleId = $role['roleID'] = $this->sql->getMaxId().'';
+		$this->_checkExist( $this->sql->get(),array('name',$role['name']),$roleId );
 		if ($this->sql->set($role['roleID'],$role)) {
 			show_json(LNG('success'),true,$role['roleID']);
 		}
@@ -54,6 +55,7 @@ class systemRole extends Controller{
 	public function edit(){
 		$role = $this->_initData();
 		$roleId = $this->in['roleID'];
+		$this->_checkExist( $this->sql->get(),array('name',$role['name']),$roleId );
 		if ($this->sql->set($roleId,$role)){
 			show_json(LNG('success'),true,$roleId);
 		}
@@ -94,6 +96,8 @@ class systemRole extends Controller{
 				$roleId = $sql->getMaxId().'';
 				$roleArr = json_decode($this->in['role_arr'],true);
 				if(!is_array($roleArr)) show_json(LNG('error'),false);
+				if(!trim($roleArr['name'])) show_json(LNG("data_not_full"),false);
+				$this->_checkExist( $sql->get(),array('name',$roleArr['name']),$roleId);
 				if ($sql->set($roleId,$roleArr)) {
 					show_json(array($roleId),true,$sql->get());
 				}
@@ -103,6 +107,8 @@ class systemRole extends Controller{
 				$roleId = $this->in['roleID'];
 				$roleArr = json_decode($this->in['role_arr'],true);
 				if(!is_array($roleArr)) show_json(LNG('error'),false);
+				if(!trim($roleArr['name'])) show_json(LNG("data_not_full"),false);
+				$this->_checkExist( $sql->get(),array('name',$roleArr['name']),$roleId);
 				if ($sql->set($roleId,$roleArr)){
 					show_json(LNG('success'),true,$sql->get());
 				}
@@ -119,6 +125,20 @@ class systemRole extends Controller{
 				show_json(LNG('error'),false);
 				break;
 			default:break;
+		}
+	}
+
+	//检测是否存在
+	private function _checkExist($data,$find,$checkID){
+		$findData = array();
+		foreach ($data as $key => $val) {
+			if ($val[$find[0]] == $find[1]) {
+				$findData[$key] = $data[$key];
+			}
+		}
+		if(is_array($findData) && count($findData)>0  ){
+			$key = array_keys($findData);$key=$key[0];
+			if($key != $checkID) show_json(LNG("error_repeat"),false);
 		}
 	}
 

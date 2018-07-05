@@ -24,22 +24,13 @@ a:hover{color:#f30;}
 .title .logo i{color:#aaddff;font-weight: 400;}
 .title .info{text-align: center;font-size: 14px;color:#aaddff;padding-top:20px;text-shadow:#75A1F0 0 0 3px;font-weight: 400;} 
 .msg{color: #f96;text-align: center;margin-bottom: -10px;padding-top: 10px;}
-.common-footer{
-	color:#999;text-align: center;width: 100%;
-	background:#eee;padding: 10px;
-	position: absolute;
-	margin-top: 20px;
-	bottom: 0px;
-	font-size: 10px;
-}
-
 
 .loginbox{
 	background:none; 
 	margin: 20% auto 0;
 	width: 350px;
 	border-radius: 4px;
-	overflow: hidden;
+	overflow: hidden;z-index: 100;
 	box-shadow: 0 -5px 30px rgba(0,0,0,0.6);
 }
 .loginbox .success{padding:10px;color: #3c763d;background-color: #dff0d8;border:#d6e9c6 1px solid;}
@@ -57,6 +48,7 @@ a:hover{color:#f30;}
 .background{
 	position:absolute;overflow: hidden;z-index: -10;
 	background: url() no-repeat center center/cover;
+	background-color:#ddd;
 	width:100%;height: 100%;
 	right: 0px;top: 0px; bottom: 0px;left: 0px;
 }
@@ -164,7 +156,6 @@ div .form{
 	border-bottom-left-radius: 2px;
 	border-top-left-radius: 2px;
 }
-.inputs .check-code{margin-bottom: 0;}
 .inputs .check-code input{
 	width:127px;color:#666;
 	border-radius: 2px 0 0 2px;
@@ -203,8 +194,9 @@ div .actions #submit{
 	border: 1px solid #217ef2;
 }
 .common-footer {
+	text-align: center;width: 100%;font-size: 10px;
 	background: rgba(0,0,0,0.01);color: #fff;
-	position: relative;margin-top:100px;padding-top: 20px;
+	position: fixed;margin-top:100px;padding:10px;bottom:0px;z-index:-1;
 	background-image:linear-gradient(to bottom,rgba(0,0,0,0.3),rgba(0,0,0,0.01));
 }
 

@@ -20,6 +20,10 @@ class app extends Controller{
 	}
 
 	public function initApp(){
+		//为空则不初始化桌面
+		if(!$this->config['settingSystem']['desktopFolder']){
+			return;
+		}
 		$list = $this->sql->get();
 		$newUserApp = $this->config['settingSystem']['newUserApp'];
 		$default = explode(',',$newUserApp);

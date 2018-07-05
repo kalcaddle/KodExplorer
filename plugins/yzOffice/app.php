@@ -1,5 +1,10 @@
 <?php
-
+/*
+* @link http://kodcloud.com/
+* @author warlee | e-mail:kodcloud@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kodcloud.com/tools/license/license.txt
+*/
 class yzOfficePlugin extends PluginBase{
 	function __construct(){
 		parent::__construct();
@@ -31,6 +36,10 @@ class yzOfficePlugin extends PluginBase{
 
 		//获取页面
 		$result = $app->task['steps'][count($app->task['steps']) - 1]['result'];
+		if( !is_array($result['data']) ){
+			$app->clearChche();
+			show_tips($result);
+		}
 		$html = $result['data'][0];
 		$pageFile = $app->cachePath.md5($html).'.'.get_path_ext($html);
 		if(!file_exists($pageFile)){
@@ -50,8 +59,9 @@ class yzOfficePlugin extends PluginBase{
 		//替换内容
 		$config = $this->getConfig();
 		$pagePath = get_path_father($html);
-		$pageID = rtrim(get_path_this($html),'.html').'.files/';
-		$urlTo = $pagePath.$pageID;
+		$pageID = rtrim(get_path_this($html),'.html').'.files';
+		$urlTo = $pagePath.'/'.$pageID.'/';
+		//show_json(array($pageID,$pagePath,$urlTo),false);
 		if($config['cacheFile']){ //始终使用缓存
 			$urlTo = $this->pluginApi.'getFile&path='.rawurlencode($this->in['path']).'&file='.rawurlencode($urlTo);
 		}
@@ -74,10 +84,17 @@ class yzOfficePlugin extends PluginBase{
 	}
 	private function getObj(){
 		$path = $this->filePath($this->in['path']);
+		if(filesize($path) > 1024*1024*2){
+			//show_tips("由于永中官方接口限制,<br/>暂不支持大于2M的文件在线预览！");
+		}
+		//文档分享预览; http://yozodoc.com/
+		// require_once($this->pluginPath.'php/yzOffice.class.php');
+		// return  new yzOffice($this,$path);
 		
-// 		require_once($this->pluginPath.'php/yzOffice.class.php');//文档分享预览
-// 		return  new yzOffice($this,$path);
-		require_once($this->pluginPath.'php/yzOffice2.class.php');//官网用户demo
+		//官网用户demo;
+		//http://www.yozodcs.com/examples.html     2M上传限制;
+		//http://dcs.yozosoft.com/examples.html
+		require_once($this->pluginPath.'php/yzOffice2.class.php');
 		return new yzOffice2($this,$path);
 	}
 }

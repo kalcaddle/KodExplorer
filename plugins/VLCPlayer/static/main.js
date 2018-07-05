@@ -4,7 +4,7 @@ kodReady.push(function(){
 		title:LNG['Plugin.default.VLCPlayer'],
 		ext:"{{config.fileExt}}",
 		sort:"{{config.fileSort}}",
-		icon:'{{pluginHost}}/static/images/icon.png',
+		icon:'{{pluginHost}}static/images/icon.png',
 		callback:function(path,ext){
 			if(isWap()){//ios不支持文件下载
 				window.open(core.path2url(path));

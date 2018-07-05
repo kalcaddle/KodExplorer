@@ -2,7 +2,7 @@
 	"id":"officeLive",
 	"name":"{{LNG.officeLive.meta.name}}",
 	"title":"{{LNG.officeLive.meta.title}}",
-	"version":"1.21",
+	"version":"1.22",
 	"category":"file",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"

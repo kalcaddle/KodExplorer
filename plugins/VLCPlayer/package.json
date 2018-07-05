@@ -2,7 +2,7 @@
 	"id":"VLCPlayer",
 	"name":"VLC Player",
 	"title":"VLC 播放器",
-	"version":"1.31",
+	"version":"1.32",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"
 	},

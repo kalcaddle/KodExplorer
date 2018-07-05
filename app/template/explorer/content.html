@@ -70,7 +70,7 @@
 						
 						<button data-action='download' class="btn btn-default" type="button">
 							<i class="font-icon icon-download"></i><?php echo LNG('download');?>
-						</button>					        				        
+						</button>
 					</div>
 					<span class='msg'><?php echo LNG('path_loading');?></span>
 					<div class="clear"></div>
@@ -81,48 +81,80 @@
 					<!-- 回收站tool -->
 					<div class="kod-toolbar kod-toolbar-recycle btn-group btn-group-sm hidden fl-left">
 						<button data-action='recycle-clear' class="btn btn-default" type="button">
-				        	<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('recycle_clear');?>
-				        </button>
+							<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('recycle_clear');?>
+						</button>
 					</div>
 
 					<!-- 分享 tool -->
-					<div class="kod-toolbar kod-toolbar-share btn-group btn-group-sm hidden fl-left">
-						<button data-action='refresh' class="btn btn-default" type="button">
-				        	<i class="font-icon icon-refresh"></i><?php echo LNG('refresh');?>
-				        </button>
+					<div class="kod-toolbar kod-toolbar-share hidden fl-left">
+						<button data-action='refresh' class="btn btn-sm btn-default fl-left" type="button">
+							<i class="font-icon icon-refresh"></i><?php echo LNG('refresh');?>
+						</button>
+						<div class="select-button-show-share btn-group btn-group-sm fl-left ml-10 mr-10 hidden">
+							<button data-action='remove' class="btn btn-default" type="button">
+								<i class="font-icon icon-remove"></i><?php echo LNG('share_remove');?>
+							</button>
+							<button data-action='shareEdit' class="btn btn-default" type="button">
+								<i class="font-icon icon-edit"></i><?php echo LNG('share_edit');?>
+							</button>
+							<button data-action='shareOpenWindow' class="btn btn-default" type="button">
+								<i class="font-icon icon-link"></i><?php echo LNG('share_open_page');?>
+							</button>
+						</div>
 					</div>
 
 					<!-- 文件功能 -->
 					<div class="kod-toolbar kod-toolbar-path fl-left">
-						<div class="btn-group btn-group-sm fl-left mr-10">
+						<div class="select-button-default btn-group btn-group-sm fl-left mr-10">
 							<button data-action='newfolder' class="btn btn-default" type="button">
-					        	<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('newfolder');?>
-					        </button>
-					        <button data-action='newfile' class="btn btn-default tool-path-newfile" type="button">
-					        	<i class="font-icon icon-caret-down"></i>
-					        </button>
+								<i class="font-icon icon-folder-close-alt"></i><?php echo LNG('newfolder');?>
+							</button>
+							<button data-action='newfile' class="btn btn-default tool-path-newfile" type="button">
+								<i class="font-icon icon-caret-down"></i>
+							</button>
 						</div>
 
-						<div class="btn-group btn-group-sm fl-left mr-10">
+						<div class="select-button-default btn-group btn-group-sm fl-left mr-10">
 							<button data-action='upload' class="btn btn-default" type="button">
-					        	<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?>
-					        </button>
-					        <button data-action='upload-more' class="btn btn-default tool-path-upload" type="button">
-					        	<i class="font-icon icon-caret-down"></i>
-					        </button>
+								<i class="font-icon icon-cloud-upload"></i><?php echo LNG('upload');?>
+							</button>
+							<button data-action='upload-more' class="btn btn-default tool-path-upload" type="button">
+								<i class="font-icon icon-caret-down"></i>
+							</button>
 						</div>
 
-					    <button type="button" class="btn btn-default btn-sm toolbar-path-more fl-left mr-10">
-					    	<i class="font-icon icon-ellipsis-horizontal"></i>
-					    	<?php echo LNG('button_more');?>&nbsp;<span class="caret"></span>
-					    </button>
+						<div class="select-button-show btn-group btn-group-sm fl-left ml-10 mr-10 hidden">
+							<button data-action='share' class="btn btn-default" type="button">
+								<i class="font-icon icon-share"></i><?php echo LNG('share');?>
+							</button>
+							<button data-action='download' class="btn btn-default" type="button">
+								<i class="font-icon icon-download"></i><?php echo LNG('download');?>
+							</button>
+							<button data-action='remove' class="btn btn-default" type="button">
+								<i class="font-icon icon-remove"></i><?php echo LNG('remove');?>
+							</button>
+							<button data-action='rname' class="btn btn-default" type="button">
+								<i class="font-icon icon-rename"></i><?php echo LNG('rename');?>
+							</button>
+
+							<button data-action='copy' class="btn btn-default" type="button">
+								<i class="font-icon icon-copy"></i><?php echo LNG('copy');?>
+							</button>
+							<button data-action='cute' class="btn btn-default" type="button">
+								<i class="font-icon icon-cute"></i><?php echo LNG('cute');?>
+							</button>
+							<button type="button" class="btn btn-default btn-sm toolbar-path-more fl-left mr-10">
+								<i class="font-icon icon-ellipsis-horizontal"></i>
+								<?php echo LNG('button_more');?>&nbsp;<span class="caret"></span>
+							</button>
+						</div>
 
 						<div class="group-space-use fl-left hidden"></div>
 						<div class="admin-real-path hidden fl-left">
 							<button type="button" class="btn btn-default btn-sm dialog-goto-path ml-10"  title="<?php echo LNG('open_the_path');?>">
 								<i class="font-icon icon-folder-open"></i>
 							</button>
-		                </div>
+						</div>
 						<span class='msg fl-left'><?php echo LNG('path_loading');?></span>
 						<div class="clear"></div>
 					</div>
@@ -155,12 +187,12 @@
 					</div>
 					<div class="set-icon-size">
 						<span class="dropdown-toggle" data-toggle="dropdown">
-					    	<i class="font-icon icon-zoom-in"></i>
-					    </span>
-					    <ul class="dropdown-menu set-icon-size-slider animated menuShow">
-						    <div class="slider-bg"></div>
-						    <div class="slider-handle"></div>
-					    </ul>
+							<i class="font-icon icon-zoom-in"></i>
+						</span>
+						<ul class="dropdown-menu set-icon-size-slider animated menuShow">
+							<div class="slider-bg"></div>
+							<div class="slider-handle"></div>
+						</ul>
 					</div>
 				</div>
 				<div style="clear:both"></div>

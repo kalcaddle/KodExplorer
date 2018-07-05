@@ -7,7 +7,7 @@ return array(
 	'yzOffice.config.cacheFile'			=> "开启缓存",
 	'yzOffice.config.cacheFileDesc'		=> "开启后,office解析生成的图片等文件存储于本服务器;",
 	'yzOffice.config.preview'			=> "预览模式",
-	'yzOffice.config.previewDesc'		=> "普通模式,复杂排班的内容会转为图片;",
+	'yzOffice.config.previewDesc'		=> "普通模式,复杂排版的内容会转为图片;",
 	'yzOffice.config.previewNormal'		=> "普通模式",
 	'yzOffice.config.previewHight'		=> "高清模式",
 

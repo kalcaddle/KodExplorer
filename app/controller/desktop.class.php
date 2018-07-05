@@ -14,7 +14,7 @@ class desktop extends Controller{
 		$wap = is_wap() && (!isset($_COOKIE['forceWap']) || $_COOKIE['forceWap'] == '1');
 		$desktopApps = include(DATA_PATH.'system/desktop_app.php');
 		$wall = $this->config['user']['wall'];
-		if(strlen($wall)<3){
+		if( !strstr($wall,'/') ){
 			$wall = STATIC_PATH.'images/wall_page/'.$wall.'.jpg';
 		}
 

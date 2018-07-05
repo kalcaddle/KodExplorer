@@ -72,14 +72,14 @@ class editor extends Controller{
 			if (!path_readable($filepath)){
 				show_json(LNG('no_permission_read_all'),false);
 			}
-			if (filesize($filepath) >= 1024*1024*40){
+			if (filesize($filepath) >= 1024*1024*20){
 				show_json(LNG('edit_too_big'),false);
 			}
 		}
 		
 		$fileContents=file_get_contents($filepath);//文件内容
 		//echo $fileContents;exit;
-		if(isset($this->in['charset'])){
+		if(isset($this->in['charset']) && $this->in['charset']){
 			$charset = strtolower($this->in['charset']);
 		}else{
 			$charset = get_charset($fileContents);
@@ -95,20 +95,9 @@ class editor extends Controller{
 			'name'		=> iconv_app(get_path_this($displayName)),
 			'filename'	=> $displayName,
 			'charset'	=> $charset,
-			'base64'	=> false,
-			'content'	=> $fileContents
+			'base64'	=> true,// 部分防火墙编辑文件误判问题处理
+			'content'	=> base64_encode($fileContents)
 		);
-		// 部分防火墙编辑文件误判问题处理
-		//if(!json_encode(array("data"=>$fileContents))){
-			$data['content'] = base64_encode($fileContents);
-			$data['base64']  = true;
-		//}
-		
-		// $data['size_before'] = filesize($filepath);
-		// $data['size_after'] = strlen($fileContents);
-		// $data['hex_before'] = bin2hex(file_get_contents($filepath));
-		// $data['hex_after'] = bin2hex($fileContents);
-		// $data['content_before'] = $fileContents;
 		show_json($data);
 	}
 	public function fileSave(){

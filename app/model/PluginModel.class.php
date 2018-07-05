@@ -94,8 +94,10 @@ class pluginModel{
 		$pluginList = &$this->config['settingSystem']['pluginList'];
 		if(is_array($pluginList[$app])){
 			if($open){
+				$config  = $this->getConfig($app);
+				$default = $this->getConfigDefault($app);
+				$config  = array_merge($default,$config);//保存初始配置;兼容新增默认配置
 				Hook::apply($app.'Plugin.regiest');
-				$config = $this->getConfig($app,true);
 				$this->setConfig($app,$config);
 			}
 			$pluginList[$app]['status'] = $open;
@@ -120,18 +122,17 @@ class pluginModel{
 		return $result;
 	}
 
-
 	public function getPackageJson($app){
 		return Hook::apply($app.'Plugin.appPackage');
 	}
-	public function getConfig($app,$force = false){
+	public function getConfig($app){
 		$result = array();
 		$pluginList = &$this->config['settingSystem']['pluginList'];
 		if( isset($pluginList[$app]) && 
 			is_array($pluginList[$app]['config']) ){
 			$result = $pluginList[$app]['config'];
 		}
-		if(!$result  || $force){
+		if(!$result){
 			$result = $this->getConfigDefault($app);
 		}
 		return $result;

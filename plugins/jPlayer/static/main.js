@@ -4,13 +4,13 @@ kodReady.push(function(){
 			wap:{//移动端
 				music:['mp3','m4a','aac'],
 				movie:['mp4','m4v','mov']
-			},			
+			},
 			ie:{
 				music:['mp3','m4a','aac'],
 				movie:['mp4','m4v','mov' ,  'flv','f4v']
 			},
 			chrome:{//default chrome,firefox,edge
-				music:['mp3','wav','aac',	'm4a','oga','ogg','webma'],
+				music:['mp3','wav','aac',	'm4a','oga','ogg','webma','flac'],
 				movie:['mp4','m4v','mov',	'f4v','flv','ogv','webm','webmv']
 			}
 			//safari 已经禁用了flash
@@ -24,30 +24,6 @@ kodReady.push(function(){
 		return res.music.join(',') + ',' + res.movie.join(',');
 	}
 	//'mp3,wav,m4a,aac,oga,ogg,webma,mp4,m4v,flv,mov,f4v,ogv,webm,webmv'
-
-	kodApp.add({
-		name:"jPlayer",
-		title:LNG['Plugin.default.jPlayer'],
-		ext:playerSupport(),
-		//ext:"{{config.fileExt}}",
-		sort:"{{config.fileSort}}",
-		icon:'{{pluginHost}}/static/images/icon.png',
-		callback:function(path,ext){
-			if(isWap()){//ios不支持文件下载
-				window.open(core.path2url(path));
-				return;
-			}
-			var list = [{
-				url:core.path2url(path),
-				name:urlDecode(core.pathThis(path)),//zip内文件播放
-				ext:ext
-			}];
-			loadMyPlayer(function(player){
-				player.play(list);
-			});
-		}
-	});
-
 
 	var myPlayer;
 	var loadMyPlayer = function(callback){
@@ -66,14 +42,52 @@ kodReady.push(function(){
 			});
 		}
 	};
+
+	kodApp.add({
+		name:"jPlayer",
+		title:LNG['Plugin.default.jPlayer'],
+		ext:playerSupport(),
+		//ext:"{{config.fileExt}}",
+		sort:"{{config.fileSort}}",
+		icon:'{{pluginHost}}static/images/icon.png',
+		callback:function(path,ext){
+			var music = ['mp3','wav','aac','m4a','oga','ogg','webma','m3u8a','m3ua','flac'];
+			if(isWap() && $.inArray(ext, music) == -1 ){//wap 不是音乐则新窗口打开
+				return window.open(core.path2url(path));
+			}
+			var list = [{
+				url:core.path2url(path),
+				name:urlDecode(core.pathThis(path)),//zip内文件播放
+				ext:ext
+			}];
+
+			if(isWap() && !window.jplayerInit){
+				window.jplayerInit = true;
+				$(".jPlayer-music .play-list .remove").trigger("click");
+				$.addStyle('.music-player-dialog{visibility:visible;}');
+			}
+			loadMyPlayer(function(player){
+				player.play(list);
+			});
+		}
+	});
+
+	// 移动端安卓首次打开播放器不自动播放问题处理；
+	if(isWap()){
+		$.addStyle('.music-player-dialog{visibility:hidden;}');
+		loadMyPlayer(function(player){
+			player.play([{url:"",name:"",ext:"mp3"}]);
+		});
+	}
+
 	//音效播放绑定
 	Hook.bind('playSound',function(url){
 		loadMyPlayer(function(player){
 			player.playSound(url);
 		});
 	});
-	
 
+	
 	//多选含有音乐右键菜单
 	var menuOpt = {
 		'play-media':{
@@ -85,14 +99,14 @@ kodReady.push(function(){
 				if (ui.fileLight.fileListSelect().length <1) return;
 				var list = [];//选中单个&多个都可以播放
 				ui.fileLight.fileListSelect().each(function(index){
-					var pathtype = ui.fileLight.type($(this));
-					if ( kodApp.appSupportCheck('jwplayer',pathtype) ) {
+					var ext = ui.fileLight.type($(this));
+					if ( kodApp.appSupportCheck('jPlayer',ext) ) {
 						var path = ui.fileLight.path($(this));
 						var url = core.path2url(path,false);
 						list.push({
 							url:url,
 							name:core.pathThis(path),
-							ext:pathtype
+							ext:ext
 						});
 					}
 				});

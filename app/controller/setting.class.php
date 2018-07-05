@@ -32,8 +32,10 @@ class setting extends Controller{
 			case 'theme':
 			case 'wall':
 				show_json(array(
-					'settingAll'	=> $this->config['settingAll'],
-					'user'			=> $this->config['user']
+					'settingAll'		=> $this->config['settingAll'],
+					'user'				=> $this->config['user'],
+					'wallpageDesktop'	=> $this->config['settingSystem']['wallpageDesktop'],
+					'wallpageLogin'		=> $this->config['settingSystem']['wallpageLogin'],
 				));
 				break;
 			case 'system':
@@ -41,7 +43,6 @@ class setting extends Controller{
 					if(isset($this->in['env_check'])){
 						show_json(php_env_check());
 					}
-
 					$result = $this->config['settingSystem'];
 					unset($result['systemPassword']);
 					show_json($result,true);
@@ -100,8 +101,8 @@ class setting extends Controller{
 		$sql = systemMember::loadData();
 		$user_arr = $sql->get();
 		foreach ($user_arr as $key => $user) {
-			$userPath = USER_PATH.$user['path']."/";
-			$pathArr = array(
+			$userPath = iconv_system(USER_PATH.$user['path']."/");
+			$pathArr  = array(
 				$userPath.'data/temp',
 				$userPath.'data/share_temp',
 				$userPath.'recycle_kod'

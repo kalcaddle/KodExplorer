@@ -24,7 +24,7 @@ class PluginBase{
 
 		$this->pluginName = str_replace('Plugin','',get_class($this));
 		$this->pluginPath = PLUGIN_DIR.$this->pluginName.'/';
-		$this->pluginApi  = APP_HOST.'index.php?pluginApp/to/'.$this->pluginName.'/';
+		$this->pluginApi  = rtrim(APP_HOST,'/').'/index.php?pluginApp/to/'.$this->pluginName.'/';
 		$this->pluginHost = $this->config['settings']['pluginHost'].$this->pluginName.'/';
 		$this->pluginHostDefault = PLUGIN_HOST.$this->pluginName.'/';
 		$this->pluginLangArr = $this->initLang();
@@ -35,6 +35,7 @@ class PluginBase{
 		$this->setConfig(array());
 	}
 	public function install(){}
+	public function update(){}
 	public function unInstall(){}
 
 
@@ -123,6 +124,32 @@ class PluginBase{
 		$this->packageData = $result;
 		return $result;
 	}
+	
+	/**
+	 * 获取package.json中的数据;通过key获取，支持auther.copyright 多级获取
+	 * @param  [type] $key [description]
+	 * @return [type]      [description]
+	 */
+	public function packageInfoGet($key){
+		$data = $this->appPackage();
+		$result = null;
+		$keyArr = explode('.',$key);
+		for ($i = 0; $i < count($keyArr); $i++) {
+			if($i == 0){
+				$result = $data[$keyArr[$i]];
+				continue;
+			}
+			if(is_array($result)){
+				$result = $result[$keyArr[$i]];
+			}else{
+				return null;
+			}
+		}
+		return $result;
+	}
+	public function packageVersion(){return $this->packageInfoGet('version');}
+	public function packageTitle(){return $this->packageInfoGet('title');}
+	public function packageCopyright(){return $this->packageInfoGet('auther.copyright');}
 
 	private function parseFile($file){
 		$content = file_get_contents($file);

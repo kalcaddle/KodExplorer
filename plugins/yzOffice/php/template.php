@@ -3,7 +3,7 @@
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=no" />
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/common.css" type="text/css">
-	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/font-awesome/css/font-awesome.css" type="text/css">
+	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
 	<title><?php echo $fileName;?></title>
 	<style>
 		body {margin: 0;font-family: "Helvetica Neue Light", "Segoe UI Semilight", sans-serif;}
@@ -68,7 +68,7 @@
 	</div>
 	<div id="MyViewerDiv"></div>
 </body>
-<script src="<?php echo STATIC_PATH;?>js/lib/jquery-1.8.0.min.js"></script>
+	<script src="<?php echo STATIC_PATH;?>js/lib/jquery-1.8.0.min.js"></script>
 	<script src="<?php echo STATIC_PATH;?>js/lib/jquery-lib.js"></script>
 	<script src="<?php echo STATIC_PATH;?>js/lib/util.js"></script>
 

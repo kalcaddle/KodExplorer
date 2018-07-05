@@ -1,0 +1,26 @@
+{
+	"id":"imageExif",
+	"name":"{{LNG.imageExif.meta.name}}",
+	"title":"{{LNG.imageExif.meta.title}}",
+	"version":"1.2",
+	"category":"media",
+	"source":{
+		"className":"font-icon icon-info bg-blue-7"
+	},
+	"description":"{{LNG.imageExif.meta.desc}}",
+
+	"auther":{
+		"copyright":"kodcloud",
+		"homePage":"http://kodcloud.com"
+	},
+	"configItem":{
+		"formStyle":{"className":"form-box-title-right"},
+		"pluginAuth":{
+			"type":"userSelect",
+			"value":"all:1",
+			"display":"{{LNG.Plugin.config.auth}}",
+			"desc":"{{LNG.Plugin.config.authDesc}}",
+			"require":1
+		}
+	}
+}

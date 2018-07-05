@@ -3,6 +3,11 @@ define(function(require, exports) {
 	    if(path.substr(0,4) == 'http'){
 			return path;
 		}
+		//gif 预览
+		if(core.pathExt(path) == 'gif'){
+			return core.path2url(path);
+		}
+		
 		var imageThumb = G.appHost+'explorer/image';
 		if(G.sid){
 			imageThumb = G.appHost+'share/image&user='+G.user+'&sid='+G.sid;
@@ -92,17 +97,27 @@ define(function(require, exports) {
 	}
 
 	var options = {
-		history: false,
+		// history: false,
 		focus: true,
 		index: 0,
 		bgOpacity:0.8,
 		maxSpreadZoom:5,
 		closeOnScroll:false,
-		shareEl: false,
+
+		shareEl: true,
+		shareButtons: [
+			//{id:'facebook', label:'Facebook', url:'https://www.facebook.com/sharer/sharer.php?u={{url}}'},
+			{id:'open', label:LNG.menu_open_window, url:'{{raw_image_url}}', download:false},
+		],
 
 		showHideOpacity:false,
 		showAnimationDuration: 300,
 		hideAnimationDuration: 300,
+		fullscreenEl : true,
+
+		// captionEl : false,		
+		// tapToClose : false,
+		// tapToToggleControls : true,
 		getThumbBoundsFn: function(index) {
 			var item = itemsArr[index];
 			if(!item || !item.$dom || item.$dom.length == 0){//目录切换后没有原图

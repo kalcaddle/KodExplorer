@@ -4,7 +4,10 @@
 	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $config['user']['theme'];?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
 	
   </head>
-  <body <?php echo $codeThemeBlack;?>>
+<body <?php echo $codeThemeBlack;?>>
+	<div class="init-loading">
+		<div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div>
+	</div>
 	<div class="edit-main" style="height: 100%;" oncontextmenu="return core.contextmenu();">
 		<div class="tools">
 			<div class="left top-toolbar">
@@ -49,7 +52,8 @@
 				</div>
 			</div>
 			<div class="edit-body">
-				<div class="introduction">
+				<div class="introduction hidden">
+					<button class="btn btn-default font-icon icon-remove close-item"></button>
 					<?php include(LANGUAGE_PATH.I18n::getType().'/edit.html');?>
 					<div style="clear:both"></div>
 				</div>
@@ -57,6 +61,7 @@
 				<div class="bottom-toolbar hidden">
 					<a class="toolbar-menu menu-view-goto-line editor_position" href="javascript:;">0:0</a>
 					<a class="file-mode" href="javascript:;">text</a>
+					<a class="toolbar-menu menu-view-file-charset " href="javascript:;">UTF-8</a>
 					<a class="toolbar-menu menuViewTab config-tab" href="javascript:;">Tabs:4</a>
 					<a class="toolbar-menu menu-view-setting config" href="javascript:;"><i class="font-icon icon-cog"></i></a>
 					<div style="clear:both"></div>

@@ -20,6 +20,7 @@ define(function(require, exports) {
 			ico:core.icon(ico),
 			title:'player',
 			// top:'25%',
+			disableTab:true,
 			width:size.width,
 			height:size.height,
 			content:template,
@@ -38,7 +39,7 @@ define(function(require, exports) {
 	var getPlayerType = function(ext){
 		if (ext =='music' ) return MUSIC;
 		if (ext == undefined) ext = 'mp3';
-		if (inArray(['mp3','wav','aac',	'm4a','oga','ogg','webma'],ext)) {
+		if (inArray(['mp3','wav','aac',	'm4a','oga','ogg','webma','m3u8a','m3ua','flac'],ext)) {
 			return MUSIC;
 		}else {
 			return MOVIE;
@@ -72,6 +73,7 @@ define(function(require, exports) {
 			'webm': 'webmv',
 			'webmv':'webmv',
 			'flv' : 'flv',
+			'fla' : 'flv',
 			'f4v' : 'flv',
 
 			'f4a' : 'flv',
@@ -115,11 +117,7 @@ define(function(require, exports) {
 		}
 
 		//delay start play;
-		player.jPlayer("setMedia",media);
-		setTimeout(function () {      
-			player.jPlayer("play");
-		},150);
-
+		player.jPlayer("setMedia",media).jPlayer("play");;
 		jPlayerBindControl($playerBox);
 		setTimeout(function(){
 			var name = $playerBox.parents('.dialog-simple').find('.aui-title-bar').attr('id');
@@ -220,7 +218,7 @@ define(function(require, exports) {
 			}
 		}
 		var remove = function(index){
-			playList.remove(index);
+			playList.splice(index,1);
 			playIndex(index);
 			updateView(true);
 		}
@@ -328,6 +326,9 @@ define(function(require, exports) {
 	})();
 	
 	var readyPlay = function(list){
+		if( !$.isArray(list) || list.length == 0){
+			Tips.tips(LNG.error,false);
+		}
 		var playerType = getPlayerType(list[0]['ext']);
 		if(playerType == MOVIE){
 			require.async([

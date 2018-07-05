@@ -6,8 +6,20 @@
 	<div class="init-loading"><div><img src="<?php echo STATIC_PATH;?>images/common/loading_simple.gif"/></div></div>
 	<div class="panel-menu">
 		<div class="panel-hd">
-			<span class="my-avator"> <img src="<?php echo STATIC_PATH;?>images/common/pic.jpg"> </span>
-			<div><h3 class="name"><?php echo $_SESSION['kodUser']['name'];?></h3></div>
+			<span class="my-avator"> 
+			<?php
+				$avatar = STATIC_PATH.'images/common/pic.jpg';
+				$name   = $_SESSION['kodUser']['name'];
+				if($_SESSION['kodUser']['avatar']){
+					$avatar = $_SESSION['kodUser']['avatar'];
+				}
+				if($_SESSION['kodUser']['nickName']){
+					$name = $_SESSION['kodUser']['nickName'];
+				}
+				echo '<img src="'.$avatar.'"/>';
+			?>
+			</span>
+			<div><h3 class="name"><?php echo $name;?></h3></div>
 		</div>
 		<ul class="left-menu-path"></ul>
 	</div>
@@ -24,7 +36,10 @@
 				foreach ($config['settingSystem']['menu'] as $key=>$value) {
 					if ($value['use']!='1') continue;
 					$has = ST==$value['name']?'this':'';
-					$target = " target='".$value['target']."'" ;
+					$target = " target='_self'" ;
+					if($value['target']=='1' || $value['target'] == '_blank'){
+						$target = " target='_blank'" ;
+					}
 					$name = $value['name'];
 					if(LNG('ui_'.$name) != 'ui_'.$name){
 						$name = "<i class='font-icon menu-".$value['name']."'></i><span>".LNG('ui_'.$name).'</span>';
@@ -66,6 +81,11 @@
 				<div class="action-menu" data-action="action-copy">
 					<span class="content">
 						<i class="font-icon icon-copy"></i><?php echo LNG('copy');?>
+					</span>
+				</div>
+				<div class="action-menu" data-action="action-cute">
+					<span class="content">
+						<i class="font-icon icon-cut"></i><?php echo LNG('cute');?>
 					</span>
 				</div>
 				<div class='action-menu' data-action="action-rname">
@@ -113,7 +133,7 @@
 			<li data-action="search"><a href="javascript:void();">
 				<i class="font-icon icon-search"></i><?php echo LNG('search');?></a></li>
 		</ul>
-	</div>	
+	</div>
 	<script type="text/javascript" >
 		G.thisPath = "<?php echo clear_html($dir);?>";
 		seajs.use("<?php echo STATIC_JS;?>/src/explorerWap/main");

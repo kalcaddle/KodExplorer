@@ -11,6 +11,8 @@
 @ignore_user_abort(true);
 @set_time_limit(3600*2);//set_time_limit(0)  1day
 @ini_set('memory_limit','2028M');//2G;
+@ini_set("display_errors","off");//on off
+@error_reporting(0);// 0
 include('./../../../app/api/sso.class.php');
 SSO::sessionAuth('AdminerAccess','check=roleID&value=1');
 class AdminerSoftware extends Adminer {

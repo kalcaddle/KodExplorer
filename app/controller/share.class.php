@@ -63,12 +63,15 @@ class share extends Controller{
 		//密码检测
 		if ($shareInfo['sharePassword']=='') return;
 		if (!isset($this->in['password'])){
-			if ($_SESSION['password_'.$this->in['sid']]==$shareInfo['sharePassword']) return;
+			if ($_SESSION['password_'.$this->in['sid']]==$shareInfo['sharePassword']){
+				return;
+			}
 			$this->_error('password');
 		}else{
 			if ($this->in['password'] == $shareInfo['sharePassword']) {
 				session_start();
 				$_SESSION['password_'.$this->in['sid']]=$shareInfo['sharePassword'];
+				session_write_close();
 				show_json('success');
 			}else{
 				show_json(LNG('share_error_password'),false);
@@ -215,6 +218,7 @@ class share extends Controller{
 			'webHost'       => HOST,
 			'appHost'       => APP_HOST,
 			'staticPath'    => STATIC_PATH,
+			'appIndex'  	=> $_SERVER['SCRIPT_NAME'],
 			'version'       => KOD_VERSION,
 			'versionDesc'   => $versionDesc,
 			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
@@ -240,6 +244,8 @@ class share extends Controller{
 			'KOD_USER_FAV'			=>	KOD_USER_FAV,
 			'KOD_GROUP_ROOT_SELF'	=>	KOD_GROUP_ROOT_SELF,
 			'KOD_GROUP_ROOT_ALL'	=>	KOD_GROUP_ROOT_ALL,
+			'ST'					=> $this->in['st'],
+			'ACT'					=> $this->in['act'],
 		);
 
 		$userConfig = $GLOBALS['config']['settingDefault'];
@@ -251,6 +257,7 @@ class share extends Controller{
 
 		if(isset($this->config['settingSystem']['versionHash'])){
 			$theConfig['versionHash'] = $this->config['settingSystem']['versionHash'];
+			$theConfig['versionHashUser'] = $this->config['settingSystem']['versionHashUser'];
 		}
 		$theConfig['userConfig'] = $userConfig;
 		$useTime = mtime() - $GLOBALS['config']['appStartTime'];
@@ -260,7 +267,11 @@ class share extends Controller{
 		Hook::trigger('user.commonJs.insert',$this->in['st'],$this->in['act']);
 		echo 'AUTH=[];';
 		echo 'G='.json_encode($theConfig).';';
-		echo 'LNG='.json_encode(I18n::getAll()).';G.useTime='.$useTime.';';
+		$lang = json_encode_force(I18n::getAll());
+		if(!$lang){
+			$lang = '{}';
+		}
+		echo 'LNG='.$lang.';G.useTime='.$useTime.';';
 	}
 
 
@@ -523,16 +534,12 @@ class share extends Controller{
 		}
 		$data = array(
 			'ext'		=> get_path_ext($displayName),
-			'name'      => iconv_app(get_path_this($displayName)),
+			'name'		=> iconv_app(get_path_this($displayName)),
 			'filename'	=> $displayName,
 			'charset'	=> $charset,
-			'base64'	=> false,
-			'content'	=> $fileContents
-		);
-		if(!json_encode(array("data"=>$fileContents))){
-			$data['content'] = base64_encode($fileContents);
-			$data['base64']  = true;
-		}
+			'base64'	=> true,// 部分防火墙编辑文件误判问题处理
+			'content'	=> base64_encode($fileContents)
+		);		
 		show_json($data);
 	}
 	
@@ -546,7 +553,8 @@ class share extends Controller{
 			exit;
 		}
 		if (@filesize($this->path) <= 1024*50 ||
-			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
+			!function_exists('imagecolorallocate') ||
+			get_path_ext($this->path) == 'gif') {//小于50k、不支持gd库、gif图 不再生成缩略图
 			file_put_out($this->path,false);
 			return;
 		}

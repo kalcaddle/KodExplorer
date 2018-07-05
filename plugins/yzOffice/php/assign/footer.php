@@ -5,8 +5,10 @@
 		// document.ondragstart = funcNull;
 		if(	!window.datas && 
 			$('.excel-tab-title').length == 0){//没有目录
-			$('.navbar-inverse').css('opacity',0);
+			//$('.navbar-inverse').css('opacity',0);
 		}
+		$(document).ready(function(){
+		})
 	</script>
-	<div class='powerby'>永中DCS</div>
+	<div class='powerby'>yozo DCS</div>
 </html>

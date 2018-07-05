@@ -29,7 +29,7 @@ class explorer extends Controller{
 	public function index(){
 		$dir = '';
 		if(isset($this->in['path']) && $this->in['path'] !=''){
-			$dir = _DIR_CLEAR($_GET['path']);
+			$dir = _DIR_CLEAR($this->in['path']);
 			$dir = rtrim($dir,'/').'/';
 		}
 		$this->assign('dir',$dir);
@@ -81,6 +81,10 @@ class explorer extends Controller{
 				isset($this->in['viewPage'])){
 				$data['downloadPath'] = _make_file_proxy($file);
 			}
+			//所在部门，下载权限检测
+			if($GLOBALS['kodPathRoleGroupAuth'] && !$GLOBALS['kodPathRoleGroupAuth']['explorer.fileDownload']){
+				unset($data['downloadPath']);
+			}
 			if($data['size'] < 100*1024|| isset($this->in['getMd5'])){//100kb
 				$data['fileMd5'] = @md5_file($file);
 			}else{
@@ -130,6 +134,10 @@ class explorer extends Controller{
 			$repeatType = $this->in['repeat_type'];
 		}
 		$new= rtrim($this->path,'/');
+		$parent = get_path_father($this->path);
+		if(!file_exists($parent)){
+			mk_dir($parent);
+		}
 		$new = get_filename_auto($new,'',$repeatType);//已存在处理 创建副本
 		Hook::trigger("explorer.mkfileBefore",$new);
 		if(@touch($new)){
@@ -285,22 +293,21 @@ class explorer extends Controller{
 		}
 	}
 
-	//用户根目录
+	//部门根目录
 	private function _selfGroupLoad(&$root){
 		foreach ($root as $key => $value) {
-			if($value['name'] == 'share'){
+			if($value['name'] == $GLOBALS['config']['settingSystem']['groupShareFolder']){
 				$root[$key] = array(
-					'name'		=> LNG('group_share'),
-					'menuType'  => "menu-folder folder-box",
-					'ext' 		=> "folder-share",
-					'isParent'	=> true,
+					'name'			=> LNG('group_share'),
+					'menuType'  	=> "menu-folder folder-box",
+					'ext' 			=> "folder-share",
 					'isReadable'	=> true,
 					'isWriteable'	=> true,
 
-					'path' 		=> KOD_GROUP_PATH.':'.$GLOBALS['kodPathId'].'/share/',
-					'type'      => 'folder',
-					'open'      => false,
-					'isParent'  => false
+					'path' 			=> $value['path'],
+					'type'      	=> 'folder',
+					'open'      	=> false,
+					'isParent'  	=> $value['isParent']
 				);
 				break;
 			}
@@ -404,7 +411,6 @@ class explorer extends Controller{
 					'isParent'  => count($project)>0?true:false)
 			);
 			show_json($treeData);
-			return;
 		}
 		$checkFile = ($app == 'editor'?true:false);
 		$fav = $this->_treeFav($app);
@@ -526,6 +532,13 @@ class explorer extends Controller{
 		show_json($result);
 	}
 
+	private function _rootListGroup(){
+		return $this->config['settingSystem']['rootListGroup'] == 1;
+	}
+	private function _rootListUser(){
+		return $this->config['settingSystem']['rootListUser'] == 1;
+	}
+
 	//session记录用户可以管理的组织；继承关系
 	private function _groupTree($nodeId){//获取组织架构的用户和子组织；为空则获取根目录
 		$groupSql = systemGroup::loadData();
@@ -533,11 +546,11 @@ class explorer extends Controller{
 		$groupList = $this->_makeNodeList($groups);
 
 		//根群组不显示子群组
-		if( $nodeId == '1' && !$this->config['settingSystem']['rootListGroup']){
+		if( $nodeId == '1' && !$this->_rootListGroup() ){
 			$groupList = array();
 		}
 		//根群组不显示用户
-		if( $nodeId == '1' &&  !$this->config['settingSystem']['rootListUser']){
+		if( $nodeId == '1' || !$this->_rootListUser() ){
 			return $groupList;
 		}
 
@@ -589,8 +602,10 @@ class explorer extends Controller{
 				$treeIcon = 'group-self';
 			}
 			$hasChildren = true;
-			$userList = systemMember::userAtGroup($val['groupID']);
-
+			$userList = array();
+			if( $this->_rootListUser() ){
+				$userList = systemMember::userAtGroup($val['groupID']);
+			}
 			if(count($userList)==0 && $val['children']==''){
 				$hasChildren = false;
 			}
@@ -888,7 +903,7 @@ class explorer extends Controller{
 		
 		Hook::trigger("explorer.pathRemoveBefore",$path,false);
 		del_file($path);
-		Hook::trigger("explorer.pathRemoveAfter",$path);
+		//Hook::trigger("explorer.pathRemoveAfter",$path);
 	}
 	public function zipDownload(){
 		$userTemp = iconv_system(USER_TEMP);
@@ -1027,7 +1042,8 @@ class explorer extends Controller{
 			exit;
 		}
 		if (@filesize($this->path) <= 1024*50 ||
-			!function_exists('imagecolorallocate') ) {//小于50k或者不支持gd库 不再生成缩略图
+			!function_exists('imagecolorallocate') ||
+			get_path_ext($this->path) == 'gif') {//小于50k、不支持gd库、gif图 不再生成缩略图
 			file_put_out($this->path,false);
 			return;
 		}
@@ -1155,9 +1171,11 @@ class explorer extends Controller{
 			$fullPath = _DIR_CLEAR(rawurldecode($this->in['fullPath']));
 			$fullPath = get_path_father($fullPath);
 			$fullPath = iconv_system($fullPath);
-			if ($this->_mkdir($savePath.$fullPath)) {
-				$savePath = $savePath.$fullPath;
-			}
+			$savePath = $savePath.$fullPath;
+			mk_dir($savePath);
+			// if ($this->_mkdir($savePath.$fullPath)) {
+			// 	$savePath = $savePath.$fullPath;
+			// }
 		}
 		//分片上传
 		$repeatAction = $this->config['user']['fileRepeat'];
@@ -1170,7 +1188,12 @@ class explorer extends Controller{
 	//分享根目录
 	private function _pathShare(&$list){
 		$arr = explode(',',$GLOBALS['kodPathId']);
-		$shareList = systemMember::userShareList($arr[0]);
+		
+		//不展示用户时;屏蔽获取其他人分享列表
+		if( $arr[0] != $_SESSION['kodUser']['userID'] && !$this->_rootListUser()){
+			return;
+		}
+		$shareList = systemMember::userShareList($arr[0]);	
 		$beforeShareId = $GLOBALS['kodPathIdShare'];
 		foreach ($shareList as $key => $value) {
 			$thePath = _DIR(KOD_USER_SHARE.':'.$arr[0].'/'.$value['name']);

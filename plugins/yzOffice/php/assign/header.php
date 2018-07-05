@@ -11,8 +11,11 @@
 	}
 	.powerby{text-align: center;font-size:12px;color:#ccc;}
 	div.word-body, .ppt-body{background:#f9f9f9;}
-	div.word-page{border-bottom:1px solid #d9d9d9;box-shadow:0 1px 6px #ccc;}
+	div.word-page{border-bottom:1px solid #d9d9d9;box-shadow:0 1px 6px #ccc; max-width: 845px;}
+	div.word-page .word-content{max-width: 85%;}}
 	div.navbar{display:none;}
+	body.fullScreen div.word-page{max-width: 100%;border: none;}
+
 	
 	body > div,body > hr{display:none;}
 	body div.container-fluid,
@@ -43,7 +46,7 @@
 	}
 	div.navbar-inverse .nav>li>a {color: #666;text-shadow: none;}
 	div.navbar-inverse .brand{color: #666;text-shadow: none;width:40%;margin-left:0px;}
-
+	div.changePage{color:#888;}
 
 	div.navbar .nav{position: static;}
 	.nav.word-tab-title .dropdown.word-tab-title-li{position:absolute;left:0px;}
@@ -87,6 +90,21 @@
 			background-color: #d4ecff;
 		}
 	}
+	#btnPrint{filter: invert(60%);}
+	#zoom{display:none !important;}
+
+	.changePage .pageUp:after{content: "";font-family: FontAwesome;}
+	.changePage .pageDown:after {content: "";font-family: FontAwesome;}
+	.changePage .pageUp,.changePage .pageDown{font-size:16px;background:transparent !important;color:#888;text-decoration: none;}
+	.changePage .pageUp:hover,.changePage .pageDown:hover{background:#444;}
+	
+
+	@media print {
+		body .powerby{display:none !important;}
+		body #zoom{display:none !important;}
+		body #btnPrint{filter: invert(60%);}
+	}
+
 
 	/*word*/
 	@media (max-width: 743px) {

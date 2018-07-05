@@ -88,7 +88,7 @@ class systemGroup extends Controller{
 			)
 		);
 		$this->sql->reset($default);
-		$this->_initDir($default[0]['path']);
+		$this->initDir($default[0]['path']);
 	}
 	//删除 path id
 	public static function _filterList($list,$filter_key = 'path'){
@@ -118,9 +118,9 @@ class systemGroup extends Controller{
 		$groupID = $this->sql->getMaxId().'';
 		$groupName = rawurldecode($this->in['name']);
 		$groupInfo = array(
-			'groupID'  =>  $groupID,
+			'groupID'   =>  $groupID,
 			'name'      =>  $groupName,
-			'parentID' =>  $this->in['parentID'],
+			'parentID'  =>  $this->in['parentID'],
 			'children'  =>  '',
 			'config'    =>  array('sizeMax' => floatval($this->in['sizeMax']),//G
 								  'sizeUse' => floatval(1024*1024)),//总大小，目前使用大小
@@ -142,7 +142,7 @@ class systemGroup extends Controller{
 		}
 		$this->_parentChildChange($groupInfo,true);//更新父节点
 		if ($this->sql->set($groupID,$groupInfo)) {
-			$this->_initDir($groupInfo['path']);
+			$this->initDir($groupInfo['path']);
 			show_json(LNG('success'));
 		}
 		show_json(LNG('error'),false);
@@ -170,7 +170,8 @@ class systemGroup extends Controller{
 			$this->in['parentID']!=$groupInfo['parentID']){//父节点变更
 
 			$childChange = explode(',',$groupInfo['children']);
-			if(in_array($this->in['parentID'],$childChange)){//不能移动到子节点；死循环
+			if( in_array($this->in['parentID'],$childChange) 
+				|| $this->in['parentID'] == $this->in['groupID']){//不能移动到子节点；死循环
 				show_json(LNG('current_has_parent'),false);
 			}
 			self::spaceChange($this->in['groupID']);//重置用户使用空间
@@ -204,9 +205,9 @@ class systemGroup extends Controller{
 		$groupInfo = $this->sql->get($this->in['groupID']);
 		$this->_parentChildChange($groupInfo,false);//向所有父节点，删除包含此节点的children
 		$this->sql->set(//将该节点的子节点的父节点设置为根目录
-				array('parentID',$groupInfo["groupID"]),
-				array('parentID','1')
-				);
+			array('parentID',$groupInfo["groupID"]),
+			array('parentID','1')
+		);
 		systemMember::groupRemoveUserUpdate($groupInfo["groupID"]);//用户所在组变更
 		$this->sql->remove($this->in['groupID']);
 
@@ -263,12 +264,9 @@ class systemGroup extends Controller{
 	/**
 	 *初始化用户数据和配置。
 	 */
-	private function _initDir($path){
+	public function initDir($path){
 		$root = array('home','data');
 		$newGroupFolder = $this->config['settingSystem']['newGroupFolder'];
-		if(!is_array($newGroupFolder)){
-			$newGroupFolder = $this->config['settingSystemDefault']['newGroupFolder'];
-		}
 		$home = explode(',',$newGroupFolder);
 		$path = GROUP_PATH.$path.'/';
 		foreach ($root as $dir) {

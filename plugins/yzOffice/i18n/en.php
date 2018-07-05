@@ -7,7 +7,7 @@ return array(
 	'yzOffice.config.cacheFile'			=> "Open the cache",
 	'yzOffice.config.cacheFileDesc'		=> "After Opened,Office parsing generated images and other files stored in the server;",
 	'yzOffice.config.preview'			=> "Preview mode",
-	'yzOffice.config.previewDesc'		=> "Normal mode, complex scheduling content will be converted into pictures;",
+	'yzOffice.config.previewDesc'		=> "Normal mode, the contents of complex layout will be converted to pictures;",
 	'yzOffice.config.previewNormal'		=> "Normal mode",
 	'yzOffice.config.previewHight'		=> "HD mode",
 

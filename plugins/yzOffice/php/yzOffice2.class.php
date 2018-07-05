@@ -1,5 +1,10 @@
 <?php
-
+/*
+* @link http://kodcloud.com/
+* @author warlee | e-mail:kodcloud@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kodcloud.com/tools/license/license.txt
+*/
 //官网用户demo
 //http://www.yozodcs.com/examples.html
 class yzOffice2{
@@ -8,9 +13,26 @@ class yzOffice2{
 	public $filePath;
 	public $task;
 	public $taskFile;
-	public function __construct($plugin,$filePath){
+	public $api;
+	public function __construct($plugin,$filePath,$oldVersion=true){
 		$this->plugin = $plugin;
 		$this->filePath = $filePath;
+
+		if($oldVersion){
+			//旧版本;http://dcs.yozosoft.com/examples.html
+			$this->api = array(
+				'upload'	=> 'http://dcs.yozosoft.com/testUpload',
+				'convert'	=> 'http://dcs.yozosoft.com/convert',
+			);
+		}else{
+			//新版本，加入了文件上传2M的限制; http://dcs.yozosoft.com/examples.html
+			$this->api = array(
+				'upload'	=> "http://www.yozodcs.com/testUpload",
+				'convert'	=> "http://www.yozodcs.com/convert",
+			);
+		}
+		
+
 		if($filePath === -1) return;
 		if(!$filePath || !file_exists($filePath)){
 			show_json('path '.LNG('error'),false);
@@ -26,6 +48,7 @@ class yzOffice2{
 			$this->task = is_array($task_has)?$task_has:false;
 		}
 		//show_json($this->upload(),false);
+		//show_json($this->convert("90ef3480-e446-463e-8372-4438fab0367f\/ios系统体验苹果ppt模板.pptx"));
 	}
 	public function runTask(){
 		$task = array(
@@ -99,7 +122,7 @@ class yzOffice2{
 		$config = $this->plugin->getConfig();
 		$ext  = get_path_ext($this->filePath);
 		$mode = $config['preview'];
-		if(in_array($ext,array("xls","xlsb","xlsx","xlt","xlsm","csv"))){
+		if(in_array($ext,array("xls","xlsb","xlsx","xlt","xlsm","csv",'ppt','pptx'))){
 			$mode = '1';//excle不支持高清模式，自动切换
 		}
 		return $mode;
@@ -108,26 +131,27 @@ class yzOffice2{
 	//非高清预览【返回上传后直接转换过的文件】
 	public function upload(){
 		ignore_timeout();
-		$api = "http://www.yozodcs.com/testUpload";
 		$post = array(
 			"file"			=> "@".$this->filePath,
 			"convertType"	=> $this->convertMode()
 		);
 		curl_progress_bind($this->filePath,$this->task['taskUuid']);//上传进度监听id
-		$result = url_request($api,'POST',$post,false,false,true,3600);
+		$result = url_request($this->api['upload'],'POST',$post,false,false,true,3600);
 		if(is_array($result) && $result['data']){
 			return $result;
 		}
 		return false;
 	}
-	public function convert(){
-		$api = "http://www.yozodcs.com/convert";
-		$headers = array("Content-Type: application/x-www-form-urlencoded");
+	public function convert($tempFile=false){
+		$headers = array("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
+		$tempFile = $tempFile?$tempFile:$this->task['steps'][0]['result']['data'];
 		$post = array(
-			"inputDir"		=> $this->task['steps'][0]['result']['data'],
-			"convertType"	=> $this->convertMode()
+			"inputDir"		=> $tempFile,
+			"convertType"	=> $this->convertMode(),
+			"isAsync"		=> 0,
 		);
-		$result = url_request($api,'POST',$post,$headers,false,true,3600);
+		$post = http_build_query($post);//post默认用array发送;content-type为x-www-form-urlencoded时用key=1&key=2的形式
+		$result = url_request($this->api['convert'],'POST',$post,$headers,false,true,3600);
 		if(is_array($result) && is_array($result['data'])){
 			return $result;
 		}
@@ -143,7 +167,8 @@ class yzOffice2{
 	}
 	public function getFile($file){
 		ignore_timeout();
-		$cacheFile = $this->cachePath.md5($file.'file').'.'.get_path_ext($file);
+		$ext = unzip_filter_ext(get_path_ext($file));
+		$cacheFile = $this->cachePath.md5($file.'file').'.'.$ext;
 		if(file_exists($cacheFile)){
 			file_put_out($cacheFile,false);
 			return;

@@ -1,6 +1,10 @@
 <?php
-
-
+/*
+* @link http://kodcloud.com/
+* @author warlee | e-mail:kodcloud@qq.com
+* @copyright warlee 2014.(Shanghai)Co.,Ltd
+* @license http://kodcloud.com/tools/license/license.txt
+*/
 require_once(dirname(dirname(__FILE__)).'/function/web.function.php');
 class SSO{
 	static private function init(){
@@ -34,7 +38,7 @@ class SSO{
 		@session_write_close();
 		unset($_SESSION);
 		@session_start();
-		if(!$_SESSION['kodSSO']){
+		if(!isset($_SESSION['kodSSO']) || !$_SESSION['kodSSO']){
 			@session_save_path($sessionSavePath);//session path
 			@session_start();
 			$_SESSION['kodSSO'] = true;

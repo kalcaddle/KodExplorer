@@ -4,12 +4,7 @@
 </head>
 
 <body>
-	<?php 
-		$arr = array(8);
-		$get = $arr[mt_rand(0,count($arr)-1)];
-		$image = STATIC_PATH."images/wall_page/".$get.".jpg";
-		echo '<style type="text/css">.aero:before,.aero:after,.background{background-image:url('.$image.')}</style>';
-	?>
+	<?php echo pageBackground();?>
 	<div class="background"></div>
 	<div class="loginbox box-install aero" >
 		<div class="title">
@@ -32,7 +27,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="form" style="padding: 10px 20px;">
+		<div class="form" style="padding: 10px 20px 40px 20px;">
 			<h3><?php echo LNG('php_env_check');?></h3>
 			<?php
 	            $error = php_env_check();

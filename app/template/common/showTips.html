@@ -1,0 +1,85 @@
+<?php include(TEMPLATE.'common/header.html');?>
+	<title><?php echo $title;?></title>
+	<script type="text/javascript" src="<?php echo STATIC_PATH;?>js/lib/jquery-1.8.0.min.js?ver=<?php echo KOD_VERSION;?>"></script>
+	<style type="text/css">
+		body{background-color:#f0f2f5;}
+		body a,body a:hover{color: #1890ff;}
+		.body-panel{
+			width:70%;margin:10% auto 5% auto;
+			font-size: 13px;
+			color:#666;
+			background:#fff;border-radius:4px;
+			padding-top:50px;padding-bottom:100px;
+			box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+		}
+		.body-panel .check-result{text-align: center;color:#000;}
+		.body-panel .check-result .icon{width:70px;height:70px;line-height:70px;font-size:30px;}
+		.check-result-title{font-size: 24px;line-height: 32px;margin:20px 0;}
+		.check-result-desc{
+			color: #333;
+			margin: 0 0 20px 0;
+			background: #fafafa;
+			font-size: 16px;
+			width: 80%;
+			margin: 0 auto;
+			border-radius: 2px;
+			padding: 24px 40px;
+			text-align: left;
+		}
+		.error-info{border-left: 5px solid #1890ff;padding-left: 10px;}
+		.location-to{padding: 10px 0;color: #888;font-size: 13px;font-style: italic;}
+		.icon{
+		    font-family: FontAwesome;
+		    display: inline-block;
+		    width: 20px;
+		    height: 20px;
+		    background: rgba(0, 0, 0, 0.02);
+		    text-align: center;
+		    color: #666;
+		    border-radius: 50%;
+		    line-height: 20px;
+		    font-size: 12px;
+		}
+    	.icon.icon-loading{
+    		-webkit-animation: moveCircleLoopRight 1.4s infinite linear;
+			animation: moveCircleLoopRight 1.4s infinite linear;
+    	}
+		.icon.icon-loading:before{content:"\f110";}
+		.icon.icon-success{background:#52c41a;color:#fff;}
+		.icon.icon-success:before{content:"\f00c";}
+		.icon.icon-error{background:#f5222d;color:#fff;}
+		.icon.icon-error:before{content:"\f00d";}
+	</style>
+</head>
+
+
+<body>
+	<div class="body-panel">
+		<div class="check-result">
+			<!-- <div class="icon icon-error"></div> -->
+			<div class="check-result-title"><?php echo $title;?></div>
+			<div class="check-result-desc">
+				<span class="error-info"><?php echo $message;?></span>
+				<div class="location-to"><?php echo $info;?></div>
+			</div>
+		</div>
+	</div>
+
+	<?php if($url){ ?>
+	<script>
+		var timeout = parseInt("<?php echo $time;?>");
+		var link = "<?php echo $url;?>";
+		var loop = setInterval(function(){
+			timeout --;
+			var info = timeout + "s 后自动跳转, <a href='"+link+"'>立即跳转</a>";
+			$('.location-to').html(info);
+			if(timeout<=0){
+				clearInterval(loop);
+				window.location.href = link;
+			}
+		},1000);
+	</script>
+	<?php } ?>
+
+</body>
+</html>

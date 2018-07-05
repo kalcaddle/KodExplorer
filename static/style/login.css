@@ -24,7 +24,7 @@ a{text-decoration:none;color: #adf;}
 	position: fixed;left:45%;top:40%;font-size:1.25em;z-index: 999999;width: auto;
 }
 .init-loading div{
-	padding: 20px;background:#000;opacity:0.6;
+	padding: 20px;background:#fff;opacity:0.7;
 	margin: 0 auto;
 	color: #FFF;border-radius: 6px;	
 	text-align: center;line-height: 30px;
@@ -40,6 +40,7 @@ a{text-decoration:none;color: #adf;}
 	background-size: cover;
 	right: 0px;top: 0px; bottom: 0px;left: 0px;
 }
+
 .aero{}
 .aero:before{
 	position: absolute;
@@ -121,7 +122,6 @@ a{text-decoration:none;color: #adf;}
 	border-bottom-left-radius: 2px;
 	border-top-left-radius: 2px;
 }
-.inputs .check-code{margin-bottom: 0;}
 .inputs .check-code input{
 	width:127px;color:#666;
 	border-radius: 2px 0 0 2px;

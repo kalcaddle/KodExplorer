@@ -6,6 +6,9 @@
 * @license http://kodcloud.com/tools/license/license.txt
 */
 
+if(!isset($config['appStartTime'])){
+	$config['appStartTime'] = mtime();
+}
 
 function myAutoloader($name) {
 	$find = array(
@@ -120,7 +123,7 @@ function filter_html($html){
 
 
 function in_array_not_case($needle, $haystack) {
-    return in_array(strtolower($needle),array_map('strtolower',$haystack));
+	return in_array(strtolower($needle),array_map('strtolower',$haystack));
 }
 
 /**
@@ -244,6 +247,11 @@ if (!function_exists('gzdecode')) {
 	}
 }
 
+function xml2json($decodeXml){
+	$data = simplexml_load_string($decodeXml,'SimpleXMLElement', LIBXML_NOCDATA);
+	return json_decode(json_encode($data),true);
+}
+
 /**
  * 二维数组按照指定的键值进行排序，
  * 
@@ -257,18 +265,11 @@ if (!function_exists('gzdecode')) {
  * $out = array_sort_by($array,'price');
  */
 function array_sort_by($records, $field, $reverse=false){
-    $hash = array();
-    foreach($records as $record){
-        $hash[$record[$field]] = $record;
-    }
-    ($reverse)? krsort($hash) : ksort($hash);
-    
-    $records = array();
-    foreach($hash as $record){
-        $records []= $record;
-    }
-    return $records;
-} 
+	$reverse = $reverse?SORT_DESC:SORT_ASC;
+	array_multisort(array_column($records,$field),$reverse,$records);
+	return $records;
+}
+
 /**
  * 遍历数组，对每个元素调用 $callback，假如返回值不为假值，则直接返回该返回值；
  * 假如每次 $callback 都返回假值，最终返回 false
@@ -323,6 +324,43 @@ function array_get_index($arr,$index){
    }
 }
 
+function array_field_values($arr,$field){
+   $result = array();
+	foreach ($arr as $val) {
+		if(is_array($val) && isset($val[$field])){
+			$result[] = $val[$field];
+		}		
+	}
+	return $result;
+}
+
+// 删除数组某个值
+function array_remove_value($array, $value){
+	$isNumericArray = true;
+	foreach ($array as $key => $item) {
+		if ($item === $value) {
+			if (!is_int($key)) {
+				$isNumericArray = false;
+			}
+			unset($array[$key]);
+		}
+	}
+	if ($isNumericArray) {
+		$array = array_values($array);
+	}
+	return $array;
+}
+
+// 获取数组key最大的值
+function array_key_max($array){
+	if(count($array)==0){
+		return 1;
+	}
+	$idArr = array_keys($array);
+	rsort($idArr,SORT_NUMERIC);//id从高到底
+	return intval($idArr[0]);
+}
+
 //set_error_handler('errorHandler',E_ERROR|E_PARSE|E_CORE_ERROR|E_COMPILE_ERROR|E_USER_ERROR);
 register_shutdown_function('fatalErrorHandler');
 function errorHandler($err_type,$errstr,$errfile,$errline){
@@ -360,14 +398,14 @@ function show_tips($message,$url= '', $time = 3,$title = ''){
 	ob_get_clean();
 	header('Content-Type: text/html; charset=utf-8');
 	$goto = "content='$time;url=$url'";
-	$info = "Auto jump after {$time}s, <a href='$url'>Click Here</a>";
+	$info = "{$time}s 后自动跳转, <a href='$url'>立即跳转</a>";
 	if ($url == "") {
 		$goto = "";
 		$info = "";
 	} //是否自动跳转
 
 	if($title == ''){
-		$title = "警告 (Warning!)";
+		$title = "出错了！";
 	}
 	
 	if(is_array($message) || is_object($message)){
@@ -376,7 +414,11 @@ function show_tips($message,$url= '', $time = 3,$title = ''){
 		$message = "<pre>".$message.'</pre>';
 	}else{
 		$message = filter_html(nl2br($message));
-	}	
+	}
+	if(file_exists(TEMPLATE.'common/showTips.html')){
+		include(TEMPLATE.'common/showTips.html');
+		exit;
+	}
 	echo<<<END
 <html>
 	<meta http-equiv='refresh' $goto charset="utf-8">
@@ -502,6 +544,7 @@ function json_space_clear($str){
 }
 
 function json_decode_force($str){
+	$str = trim($str,'﻿');
 	$str = json_comment_clear($str);
 	$str = json_space_clear($str);
 
@@ -520,7 +563,9 @@ function json_encode_force($json){
 		$jsonStr = json_encode($json);
 	}
 	if($jsonStr === false){
-		$jsonStr = __json_encode($json);
+		include_once(dirname(__FILE__)."/others/JSON.php");
+		$parse = new Services_JSON();
+		$jsonStr =  $parse->encode($json);
 	}
 	return $jsonStr;
 }
@@ -531,6 +576,9 @@ function json_encode_force($json){
  * @params {array} 返回的数据集合
  */
 function show_json($data,$code = true,$info=''){
+	if($GLOBALS['SHOW_JSON_RETURN']){
+		return;
+	}
 	$useTime = mtime() - $GLOBALS['config']['appStartTime'];
 	$result = array('code'=>$code,'use_time'=>$useTime,'data'=>$data);
 	if(defined("GLOBAL_DEBUG") && GLOBAL_DEBUG==1){
@@ -540,16 +588,28 @@ function show_json($data,$code = true,$info=''){
 		$result['info'] = $info;
 	}
 	ob_end_clean();
-	header("X-Powered-By: kodExplorer.");
-	header('Content-Type: application/json; charset=utf-8');
-
+	if(!headers_sent()){
+		header("X-Powered-By: kodExplorer.");
+		header('Content-Type: application/json; charset=utf-8'); 
+	}
+	if(class_exists('Hook')){
+		$temp = Hook::trigger("show_json",$result);
+		if(is_array($temp)){
+			$result = $temp;
+		}
+	}
 	$json = json_encode_force($result);
 	if(isset($_GET['callback'])){
+		if(!preg_match("/^[0-9a-zA-Z_.]+$/",$_GET['callback'])){
+			die("calllback error!");
+		}
 		echo $_GET['callback'].'('.$json.');';
 	}else{
 		echo $json;
 	}
-	exit;
+	if(!isset($GLOBALS['SHOW_JSON_EXIT']) || !$GLOBALS['SHOW_JSON_EXIT']){
+		exit;
+	}
 }
 
 function show_trace(){
@@ -561,13 +621,12 @@ function show_trace(){
 	exit;
 }
 
-
-
 function str2hex($string){
 	$hex='';
-	for ($i=0; $i < strlen($string); $i++){
-		$hex .= dechex(ord($string[$i]));
+	for($i=0;$i<strlen($string);$i++){
+		$hex .= sprintf('%02s',dechex(ord($string[$i])));
 	}
+	$hex = strtoupper($hex);
 	return $hex;
 }
 
@@ -580,65 +639,19 @@ function hex2str($hex){
 }
 
 if(!function_exists('json_encode')){
+	include_once(dirname(__FILE__)."/others/JSON.php");
 	function json_encode($data){
-		__json_encode($data);
+		$json = new Services_JSON();
+		return $json->encode($data);
 	}
-}
-function __json_encode( $data ) {
-	if( is_array($data) || is_object($data) ) { 
-		$islist = is_array($data) && ( empty($data) || array_keys($data) === range(0,count($data)-1) ); 
-		if( $islist ) { 
-			$json = '[' . implode(',', array_map('__json_encode', $data) ) . ']'; 
-		} else { 
-			$items = Array(); 
-			foreach( $data as $key => $value ) { 
-				$items[] = __json_encode("$key") . ':' . __json_encode($value); 
-			}
-			$json = '{' . implode(',', $items) . '}'; 
-		} 
-	} else if( is_string($data) ) { 
-		$string = addcslashes($data, "\\\"\n\r\t/" . chr(8) . chr(12));
-		$json    = ''; 
-		$len    = strlen($string); 
-		# Convert UTF-8 to Hexadecimal Codepoints. 
-		for( $i = 0; $i < $len; $i++ ) { 
-			$char = $string[$i]; 
-			$c1 = ord($char); 
-			
-			# Single byte; 
-			if( $c1 <128 ) { 
-				$json .= ($c1 > 31) ? $char : sprintf("\\u%04x", $c1); 
-				continue; 
-			}
-			
-			# Double byte 
-			$c2 = ord($string[++$i]); 
-			if ( ($c1 & 32) === 0 ) { 
-				$json .= sprintf("\\u%04x", ($c1 - 192) * 64 + $c2 - 128); 
-				continue; 
-			}
-			
-			# Triple 
-			$c3 = ord($string[++$i]); 
-			if( ($c1 & 16) === 0 ) { 
-				$json .= sprintf("\\u%04x", (($c1 - 224) <<12) + (($c2 - 128) << 6) + ($c3 - 128)); 
-				continue; 
-			}
-				
-			# Quadruple 
-			$c4 = ord($string[++$i]); 
-			if( ($c1 & 8 ) === 0 ) { 
-				$u = (($c1 & 15) << 2) + (($c2>>4) & 3) - 1;
-				$w1 = (54<<10) + ($u<<6) + (($c2 & 15) << 2) + (($c3>>4) & 3); 
-				$w2 = (55<<10) + (($c3 & 15)<<6) + ($c4-128); 
-				$json .= sprintf("\\u%04x\\u%04x", $w1, $w2); 
-			}
-		} 
-		$json = '"'.addcslashes($data, "\"").'"';
-	} else { 
-		$json = strtolower(var_export( $data, true )); 
-	} 
-	return $json; 
+	function json_decode($json_data,$toarray =false) {
+		$json = new Services_JSON();
+		$array = $json->decode($json_data);
+		if ($toarray) {
+			$array = obj2array($array);
+		}
+		return $array;
+	}
 }
 
 /**

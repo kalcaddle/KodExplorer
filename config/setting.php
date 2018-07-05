@@ -11,7 +11,7 @@ $config['settings'] = array(
 	'downloadUrlTime'	=> 0,			 //下载地址生效时间，按秒计算，0代表不限制
 	'apiLoginTonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'updloadChunkSize'	=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
-	'updloadThreads'	=> 5,			 //上传并发数;部分低配服务器上传失败则将此设置为1
+	'updloadThreads'	=> 10,			 //上传并发数;部分低配服务器上传失败则将此设置为1
 	'updloadBindary'	=> 1,			 //以二进制方式上传;后端服务器以php://input接收;0则为传统方式上传
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
 	'httpSendFile'		=> false,		 //调用webserver下载 http://www.laruence.com/2012/05/02/2613.html; 
@@ -39,8 +39,8 @@ $config['settings']['appType'] = array(
 	array('type' => 'others','name' => 'app_group_others','class' => 'icon-ellipsis-horizontal'),
 );
 $config['defaultPlugins'] = array(
-	'adminer','googleDocs','jPlayer','officeLive','simpleClock','VLCPlayer',//'pdfjs',
-	'photoSwipe','picasa','yzOffice','zipView','toolsCommon'
+	'adminer','DPlayer','imageExif','jPlayer','officeLive','photoSwipe','picasa',//'pdfjs',
+	'simpleClock','toolsCommon','VLCPlayer','webodf','yzOffice','zipView'
 );
 
 
@@ -57,13 +57,17 @@ $config['settingSystemDefault'] = array(
 	'newUserApp'		=> "trello,一起写office,微信,365日历,石墨文档,ProcessOn,计算器,icloud,OfficeConverter",
 	'newUserFolder'		=> "document,desktop,pictures,music",
 	'newGroupFolder'	=> "share,doc,pictures",	//新建分组默认建立文件夹
+	'groupShareFolder'	=> "share",
 	
 	'desktopFolder'		=> 'desktop',	// 桌面文件夹别名
 	'versionType'		=> "A",			// 版本
 	'rootListUser'		=> 0,			// 组织架构根节点展示群组内用户
 	'rootListGroup'		=> 0,			// 组织架构根节点展示子群组
 	'csrfProtect'		=> 0, 		 	// 开启csrf保护
-	'currentVersion'	=> KOD_VERSION
+	'currentVersion'	=> KOD_VERSION,
+
+	'wallpageDesktop'	=> "1,2,3,4,5,6,7,8,9,10,11,12,13",
+	'wallpageLogin'		=> "2,3,6,8,9,11,12",
 );
 //初始化默认菜单配置
 $config['settingSystemDefault']['menu'] = array(
@@ -97,7 +101,8 @@ $config['editorDefault'] = array(
 	"softTab"		=> 1,
 	"displayChar"	=> 0,		//是否显示特殊字符
 	"fontFamily"	=> "Menlo",	//字体
-	"keyboardType"	=> "ace"	//ace vim emacs
+	"keyboardType"	=> "ace",	//ace vim emacs
+	"autoSave"		=> 0,		//自动保存
 );
 
 
@@ -152,8 +157,7 @@ $config['settingAll'] = array(
 	
 	'themeall'		=> "mac,win10,win7,metro,metro_green,metro_purple,metro_pink,metro_orange,alpha_image,alpha_image_sun,alpha_image_sky,diy",
 	'codethemeall'	=> "chrome,clouds,crimson_editor,eclipse,github,kuroir,solarized_light,tomorrow,xcode,ambiance,monokai,idle_fingers,pastel_on_dark,solarized_dark,twilight,tomorrow_night_blue,tomorrow_night_eighties",
-	'codefontall'	=> 'Source Code Pro,Consolas,Courier,DejaVu Sans Mono,Liberation Mono,Menlo,Monaco,Monospace',
-	'wallall'		=> "1,2,3,4,5,6,7,8,9,10,11,12,13"
+	'codefontall'	=> 'Source Code Pro,Consolas,Courier,DejaVu Sans Mono,Liberation Mono,Menlo,Monaco,Monospace'
 );
 
 
@@ -174,11 +178,11 @@ $config['roleSetting'] = array(
 	'setting'	=> array('set','systemSetting','phpInfo','systemTools'),
 	'fav'		=> array('add','del','edit'),
 
-	'systemMember'	=> array('get','add','edit','doAction'),
+	'systemMember'	=> array('get','add','edit','doAction','getByName'),
 	'systemGroup'	=> array('get','add','del','edit'),
 	'systemRole'	=> array('add','del','edit','roleGroupAction'),
 	//不开放此功能【避免扩展名修改，导致系统安全问题】
-	'pluginApp'		=> array('index','appList','changeStatus','setConfig','unInstall')
+	'pluginApp'		=> array('index','appList','changeStatus','setConfig','install','unInstall')
 );
 
 $config['pathRoleDefine'] = array(

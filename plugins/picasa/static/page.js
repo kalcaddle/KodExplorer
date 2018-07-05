@@ -3,6 +3,11 @@ define(function(require, exports) {
 		if(path.substr(0,4) == 'http'){
 			return path;
 		}
+		//gif 预览
+		if(core.pathExt(path) == 'gif'){
+			return core.path2url(path);
+		}
+		
 		var imageThumb = G.appHost+'explorer/image';
 		if(G.sid){
 			imageThumb = G.appHost+'share/image&user='+G.user+'&sid='+G.sid;
