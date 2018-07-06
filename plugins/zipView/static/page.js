@@ -44,8 +44,7 @@ define(function(require, exports) {
 	}
 	var menuAdd = function(){
 		if (!core.authCheck('explorer.zip')) {
-			$('.context-menu-list .zip').addClass('hidden');
-			//option.zip = false;
+			return;
 		}
 
 		$.contextMenu.menuAdd({zip:option.zip},'.menu-more',false,'.clone');

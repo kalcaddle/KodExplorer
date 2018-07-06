@@ -52,6 +52,11 @@ function get_url_domain($url){
 	$res = parse_url($url);
 	return $res["host"];
 }
+function get_url_scheme($url){
+	if(!$url) return "";
+	$res = parse_url($url);
+	return $res['scheme'];
+}
 
 function get_host() {
 	//兼容子目录反向代理:只能是前端js通过cookie传入到后端进行处理
@@ -77,23 +82,7 @@ function this_url(){
 	$url = get_host().$_SERVER['REQUEST_URI'];
 	return $url;
 }
-function reset_path($str){
-	return str_replace('\\','/',$str);
-}
-function get_webroot($app_path=''){
-	$index='index.php';
-	$self_file  = reset_path($_SERVER['SCRIPT_NAME']);
-	if($app_path == ''){
-		$index_path = reset_path($_SERVER['SCRIPT_FILENAME']);
-		$app_path = substr($index_path,0,strrpos($index_path,'/'));
-		$index = substr($index_path,1+strrpos($index_path,'/'));
-	}
-	$webRoot = str_replace($self_file,'',$app_path.$index).'/';
-	if (substr($webRoot,-(strlen($index)+1)) == $index.'/') {//解决部分主机不兼容问题
-		$webRoot = reset_path($_SERVER['DOCUMENT_ROOT']).'/';
-	}
-	return $webRoot;
-}
+
 function ua_has($str){
 	if(!isset($_SERVER['HTTP_USER_AGENT'])){
 		return false;

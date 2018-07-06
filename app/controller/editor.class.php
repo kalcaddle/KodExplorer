@@ -10,7 +10,7 @@ class editor extends Controller{
 	function __construct()    {
 		parent::__construct();
 	}
-
+	
 	// 多文件编辑器
 	public function index(){
 		$this->themeSet();

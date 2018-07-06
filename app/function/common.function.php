@@ -410,7 +410,7 @@ function show_tips($message,$url= '', $time = 3,$title = ''){
 	
 	if(is_array($message) || is_object($message)){
 		$message = json_encode_force($message);
-		$message = nl2br(htmlspecialchars($message));
+		$message = htmlspecialchars($message);
 		$message = "<pre>".$message.'</pre>';
 	}else{
 		$message = filter_html(nl2br($message));

@@ -111,7 +111,7 @@ return array(
     "system_role_read"               => "Chỉ đọc",
     "system_role_write"              => "Có thể đọc và viết",
     "system_setting_root_path"       => "truy cập root",
-    "system_setting_root_path_desc"  => "Chỉ có một người quản trị hệ thống có thể truy cập vào tất cả các thư mục, các nhóm nhân quyền khác của người sử dụng chỉ có thể xem thư mục người dùng của mình. Nếu bạn muốn bật hoặc tắt<br/>truy cập quản trị vào thư mục khác, bạn có thể thay đổi các thông số php open_basedir chống cross-site,<a href=\"https://www.google.com.hk/search?&q=php+open_basedir\" target=\"_blank\">thiết</a>",,
+    "system_setting_root_path_desc"  => "Chỉ có một người quản trị hệ thống có thể truy cập vào tất cả các thư mục, các nhóm nhân quyền khác của người sử dụng chỉ có thể xem thư mục người dùng của mình. Nếu bạn muốn bật hoặc tắt<br/>truy cập quản trị vào thư mục khác, bạn có thể thay đổi các thông số php open_basedir chống cross-site,<a href=\"https://www.google.com.hk/search?&q=php+open_basedir\" target=\"_blank\">thiết</a>",
     "system_group_role_title"        => "Quản lý vai trò của cơ quan chức năng",
     "system_group_role_remove"       => "OK để xóa vai trò của bộ phận",
     "system_group_role_style"        => "phong cách",

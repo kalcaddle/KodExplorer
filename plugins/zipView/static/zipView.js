@@ -519,10 +519,6 @@ define(function(require, exports) {
 			}
 			var fileUrl = appOption.apiList+'&path='+urlEncode(path);
 			currentFileUrl = fileUrl;
-			if (typeof(G.sharePage) != 'undefined' && G.sid) {
-				kodApp.openUnknow(path);
-				return;
-			}
 			$.ajax({
 				url:fileUrl,
 				dataType:'json',

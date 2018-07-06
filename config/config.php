@@ -86,13 +86,18 @@ if (strtoupper(substr(PHP_OS, 0,3)) === 'WIN') {
 
 // 部分反向代理导致获取不到url的问题优化;忽略同域名http和https的情况
 if(isset($_COOKIE['APP_HOST'])){
-	if(get_url_domain($_COOKIE['HOST']) != get_url_domain($_COOKIE['APP_HOST'])){
+	if( get_url_domain($_COOKIE['HOST']) != get_url_domain($_COOKIE['APP_HOST']) ||
+	    get_url_scheme($_COOKIE['HOST']) == get_url_scheme($_COOKIE['APP_HOST']) ){
 		define('HOST',$_COOKIE['HOST']);
 		define('APP_HOST',$_COOKIE['APP_HOST']);
 	}
 }
+function webroot_path(){
+    $file = str_replace('\\','/',__FILE__);
+    return str_replace('config/config.php','',$file);
+}
 if(!defined('HOST')){		define('HOST',rtrim(get_host(),'/').'/');}
-if(!defined('WEB_ROOT')){	define('WEB_ROOT',get_webroot(BASIC_PATH));}
+if(!defined('WEB_ROOT')){	define('WEB_ROOT',webroot_path() );}
 if(!defined('APP_HOST')){	define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
 define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目录
 

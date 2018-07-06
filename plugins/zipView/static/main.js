@@ -13,6 +13,11 @@ kodReady.push(function(){
 		sort:"{{config.fileSort}}",
 		icon:"{{pluginHost}}static/images/icon.png",
 		callback:function(path,ext){
+			//分享内容暂不支持查看内容
+			if (typeof(G.sharePage) != 'undefined' && G.sid) {
+				kodApp.openUnknow(path);
+				return;
+			}
 			var appOption = {
 				filePath:path,
 				apiUnzip:G.appHost+"explorer/unzip",
