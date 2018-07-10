@@ -10,6 +10,7 @@
 define('ARCHIVE_LIB',dirname(__FILE__).'/archiveLib/');
 define('PCLZIP_TEMPORARY_DIR',TEMP_PATH);
 define('PCLTAR_TEMPORARY_DIR',TEMP_PATH);
+define('PCLZIP_SEPARATOR',';@@@,');//压缩多个文件，组成字符串分割
 mk_dir(TEMP_PATH);
 
 require ARCHIVE_LIB.'pclerror.lib.php';

@@ -79,8 +79,24 @@ function get_host() {
 }
 // current request url
 function this_url(){
-	$url = get_host().$_SERVER['REQUEST_URI'];
+	$url = rtrim(get_host(),'/').'/'.ltrim($_SERVER['REQUEST_URI'],'/');
 	return $url;
+}
+
+//解决部分主机不兼容问题
+function webroot_path($basic_path){
+	$webRoot = str_replace($_SERVER['SCRIPT_NAME'],'',$_SERVER['SCRIPT_FILENAME']);
+	$webRoot = rtrim(str_replace(array('\\','\/\/','\\\\'),'/',$webRoot),'/').'/';
+	if( substr($basic_path,0,strlen($webRoot)) == $webRoot ){
+		return $webRoot;
+	}
+
+	$webRoot = $_SERVER['DOCUMENT_ROOT'];
+	$webRoot = rtrim(str_replace(array('\\','\/\/','\\\\'),'/',$webRoot),'/').'/';
+	if( substr($basic_path,0,strlen($webRoot)) == $webRoot ){
+		return $webRoot;
+	}
+	return $basic_path;
 }
 
 function ua_has($str){

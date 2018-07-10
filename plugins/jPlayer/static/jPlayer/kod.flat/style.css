@@ -580,7 +580,7 @@ div.dialog-simple.music-player-dialog.my-jPlayer .aui-main{min-height: 400px;}
 	height: 12px;
 	position: absolute;
 	background: #bce1ff;
-	background: rgba(255, 255, 255, 0.8);
+	background: rgba(255, 255, 255, 0.95);
 	border-radius: 50%;
 	right: -10px;
 	top: -5px;

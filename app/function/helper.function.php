@@ -242,13 +242,8 @@ function php_env_check(){
 	return $error;
 }
 
-
-function init_common(){
-	$GLOBALS['in'] = parse_incoming();
-	if(!file_exists(DATA_PATH)){
-		show_tips("data 目录不存在!\n\n(检查 DATA_PATH);");
-	}
-
+//提前判断版本是否一致；
+function check_cache(){
 	//检查是否更新失效
 	$content = file_get_contents(BASIC_PATH.'config/version.php');
 	$result  = match($content,"'KOD_VERSION','(.*)'");
@@ -257,7 +252,13 @@ function init_common(){
 			请关闭缓存，或稍后1分钟刷新页面再试！
 			<a href='http://www.tuicool.com/articles/QVjeu2i' target='_blank'>了解详情</a>");
 	}
+}
 
+function init_common(){
+	$GLOBALS['in'] = parse_incoming();
+	if(!file_exists(DATA_PATH)){
+		show_tips("data 目录不存在!\n\n(检查 DATA_PATH);");
+	}
 	// session path create and check
 	$errorTips = "[Error Code:1002] 目录权限错误！请设置程序目录及所有子目录为读写状态，
 				linux 运行如下指令：

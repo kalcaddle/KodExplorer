@@ -80,9 +80,22 @@ function updateClear(){
 	del_dir(THE_DATA_PATH.'session');
 	mk_dir(THE_DATA_PATH.'session');
 	mk_dir(THE_DATA_PATH.'temp/thumb');
-	
+
 	updateApps();
 	updateSystemSetting();
+	check_version_ok();
+	@del_file(BASIC_PATH.'app/controller/util.php');
+	@del_file(BASIC_PATH.'README.md');
+}
+function check_version_ok(){
+	//检查是否更新失效
+	$content = file_get_contents(BASIC_PATH.'config/version.php');
+	$result  = match($content,"'KOD_VERSION','(.*)'");
+	if($result != KOD_VERSION){
+		show_tips("您服务器开启了php缓存,文件更新尚未生效;
+			请关闭缓存，或稍后1分钟刷新页面再试！
+			<a href='http://www.tuicool.com/articles/QVjeu2i' target='_blank'>了解详情</a>");
+	}
 }
 
 //APP更新覆盖

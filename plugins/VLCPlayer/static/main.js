@@ -25,7 +25,7 @@ kodReady.push(function(){
 
 			setTimeout(function() {
 				var vlc = getVLC("vlc");
-				if(!vlc.playlist){
+				if(!vlc || !vlc.playlist){
 					dialog.DOM.wrap.find('.error-tips').removeClass('hidden');
 				}
 				dialog._clickMax();

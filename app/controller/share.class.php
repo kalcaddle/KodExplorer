@@ -262,7 +262,7 @@ class share extends Controller{
 		$theConfig['userConfig'] = $userConfig;
 		$useTime = mtime() - $GLOBALS['config']['appStartTime'];
 
-		header("Content-Type: application/javascript");
+		header("Content-Type: application/javascript; charset=utf-8");
 		echo 'if(typeof(kodReady)=="undefined"){kodReady=[];}';
 		Hook::trigger('user.commonJs.insert',$this->in['st'],$this->in['act']);
 		echo 'AUTH=[];';

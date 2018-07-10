@@ -65,6 +65,8 @@ include(FUNCTION_DIR.'web.function.php');
 include(FUNCTION_DIR.'file.function.php');
 include(FUNCTION_DIR.'helper.function.php');
 include(CLASS_DIR.'I18n.class.php');
+include(BASIC_PATH.'config/version.php');
+check_cache();
 
 $config['appStartTime'] = mtime();
 $config['appCharset']	= 'utf-8';//该程序整体统一编码
@@ -92,17 +94,12 @@ if(isset($_COOKIE['APP_HOST'])){
 		define('APP_HOST',$_COOKIE['APP_HOST']);
 	}
 }
-function webroot_path(){
-    $file = str_replace('\\','/',__FILE__);
-    return str_replace('config/config.php','',$file);
-}
 if(!defined('HOST')){		define('HOST',rtrim(get_host(),'/').'/');}
-if(!defined('WEB_ROOT')){	define('WEB_ROOT',webroot_path() );}
+if(!defined('WEB_ROOT')){	define('WEB_ROOT',webroot_path(BASIC_PATH) );}
 if(!defined('APP_HOST')){	define('APP_HOST',HOST.str_replace(WEB_ROOT,'',BASIC_PATH));} //程序根目录
 define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目录
 
-include(CONTROLLER_DIR.'util.php');
-include(BASIC_PATH.'config/version.php');
+include(CONTROLLER_DIR.'utils.php');
 include(BASIC_PATH.'config/setting.php');
 if(file_exists(CONTROLLER_DIR.'debug.class.php')){
 	include_once(CONTROLLER_DIR.'debug.class.php');

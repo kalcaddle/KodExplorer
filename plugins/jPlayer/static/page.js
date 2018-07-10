@@ -174,7 +174,6 @@ define(function(require, exports) {
 						if(playCurrent != find){
 							playIndex(find);
 						}
-						return false;
 					}
 					continue;
 				}

@@ -12,7 +12,7 @@ $config['settings'] = array(
 	'apiLoginTonken'	=> '',			 //设定则认为开启服务端api通信登陆，同时作为加密密匙
 	'updloadChunkSize'	=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
 	'updloadThreads'	=> 10,			 //上传并发数;部分低配服务器上传失败则将此设置为1
-	'updloadBindary'	=> 1,			 //以二进制方式上传;后端服务器以php://input接收;0则为传统方式上传
+	'updloadBindary'	=> 0,			 //1:以二进制方式上传;后端服务器以php://input接收;0则为传统方式上传
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
 	'httpSendFile'		=> false,		 //调用webserver下载 http://www.laruence.com/2012/05/02/2613.html; 
 										 //https://www.lovelucy.info/x-sendfile-in-nginx.html

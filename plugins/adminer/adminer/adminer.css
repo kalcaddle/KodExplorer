@@ -145,7 +145,6 @@ thead th, thead td {
     vertical-align:middle;
     font-weight:bold;
     white-space:nowrap;
-    border-right:1px solid #34495e;
     background:#34495e;
     color:#FFFFFF;  
     padding-right:10px;
@@ -735,3 +734,4 @@ h2, h3 {
 .js .checkable .checked th {
     background: #2196f3;
 }
+.footer > div{padding-left:10px;}

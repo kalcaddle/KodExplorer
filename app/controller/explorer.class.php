@@ -966,7 +966,7 @@ class explorer extends Controller{
 		$result = KodArchive::create($zipname,$files);
 		Hook::trigger("explorer.zipAfter",$zipname);
 		if ($result == 0) {
-			show_json("Create error!",false);
+			show_json("压缩失败!",false);
 		}
 		$info = LNG('zip_success').LNG('size').":".size_format(filesize($zipname));
 		if ($zipPath=='') {
