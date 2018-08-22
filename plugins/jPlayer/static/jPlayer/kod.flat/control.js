@@ -56,6 +56,12 @@ var jPlayerConfigInit = function($player,config){
 			}catch(e){};
 		},
 		error: function(current) {
+			if( current.jPlayer.error.type == 'e_no_solution' && 
+				current.jPlayer.error.context.indexOf("solution:'flash'") === 1){
+				$(".jPlayer-container").css({"text-align": "center"});
+				$(".jPlayer-container").html('Flash插件被屏蔽，请在运行后播放');
+				return;
+			}
 			if(current.jPlayer.error.type != $.jPlayer.error.FLASH){
 				//Tips.tips(LNG.unknow_file_tips+'('+current.jPlayer.error.type+')',false);
 			}

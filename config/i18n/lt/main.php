@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Pamiršote administratoriaus slaptažodį: <br/> Prašome prisijungti serverio ištrinti <b>./data/system/install.lock</b> naujo; <br/><br/> Ne administratorius Pamiršote slaptažodį: <br/> Prašome susisiekti su administratoriumi, kad iš naujo!",
     "copyright_desc"                 => "Kodexplorer yra labai pripažintas interneto dokumentų valdymo sistemos, jūs galite naudoti ją vidaus dokumentų valdymo ar dalijamasi, taip pat gali būti naudojamas ant svetainę valdymo serveris, pakeisti ftp, net webIDE tiesiogiai internetu plėtrą. Jūs taip pat galite užprogramuoti antrą plėtrą integruoti į savo esamas sistemas tai.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "\"Mango\" debesis • Explorer \"",

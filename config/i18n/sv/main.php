@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Glömt administratörslösenord: <br/> Logga server bort <b>./data/system/install.lock</b> återställa; <br/><br/> Icke-administratör du glömt ditt lösenord: <br/> Kontakta administratören för att återställa!",
     "copyright_desc"                 => "Kodexplorer är en bejublad bana dokumenthanteringssystem, du kan använda den för interna dokumenthantering eller delad, kan även användas på webbplatsen administrationsservern, byt Ftp, även som webIDE direkt på nätet utveckling. Du kan även programmera andra utveckling för att integrera detta i befintliga system.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright ©<a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a>All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango moln • Explorer",

@@ -264,6 +264,10 @@ class systemMember extends Controller{
 		}else{
 			$userArray[] = $name;
 		}
+		$nickName = $name;
+		if(isset($this->in['nickName'])){
+			$nickName = trim(rawurldecode($this->in['nickName']));
+		}
 
 
 		//批量添加
@@ -277,7 +281,7 @@ class systemMember extends Controller{
 			$userInfo = array(
 				'userID'	=>  $userID,
 				'name'      =>  $val,
-				'nickName'	=>  $this->in['nickName'],
+				'nickName'	=>  $nickName,
 				'password'  =>  md5($password),
 				'role'      =>  $this->in['role'],
 				'config'    =>  array('sizeMax' => floatval($this->in['sizeMax']),//M

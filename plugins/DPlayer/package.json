@@ -2,7 +2,7 @@
 	"id":"DPlayer",
 	"name":"DPlayer播放器",
 	"title":"DPlayer播放器",
-	"version":"1.02",
+	"version":"1.04",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png",
 	},
@@ -21,6 +21,13 @@
 			"desc":"{{LNG.Plugin.config.authDesc}}",
 			"require":1
 		},
+		"subtitle":{
+			"type":"switch",
+			"display":"自动加载字幕",
+			"desc":"字幕需要放在视频文件同位置,与视频文件同名并追加.vtt",
+			"value":"0"
+		},
+		"step001":"<hr/>",
 		"fileSort":{
 			"type":"number",
 			"display":"{{LNG.Plugin.Config.fileSort}}",
@@ -33,6 +40,6 @@
 			"desc":"{{LNG.Plugin.Config.fileExtDesc}}",
 			//"value":"mp3,wav,m4a,aac,oga,ogg,webma,mp4,m4v,flv,mov,f4v,ogv,webm,webmv,mkv",
 			"value":"mp4,m4v,flv,mov,f4v,ogv,webm,webmv,mkv",
-		}		
+		}
 	}
 }

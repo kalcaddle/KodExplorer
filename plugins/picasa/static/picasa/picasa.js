@@ -439,7 +439,9 @@ Picasa.prototype = {
 		});
 		$('#PV_Btn_Open').die("click").bind('click',function(e){
 			try{
-				window.open($('#PV_Picture').attr('src'));
+				//var imageLink = $('#PV_Picture').attr('src');
+				var imageLink = myPicasa.arrItems[myPicasa.currentNo][4];
+				window.open(imageLink);
 			}catch(e){}
 		});
 

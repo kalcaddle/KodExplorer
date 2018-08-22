@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "نسيت كلمة مرور المسؤول: <br/> الرجاء تسجيل الخادم حذف <b>./data/system/install.lock</b> إعادة تعيين. <br/><br/> غير مسؤول نسيت كلمة المرور: <br/> الرجاء الاتصال بمسؤول لإعادة تعيين!",
     "copyright_desc"                 => "Kodexplorer هو نظام إدارة الوثائق على شبكة الإنترنت نالت استحسانا كبيرا، ويمكن استخدامه لإدارة وثيقة داخلية أو مشتركة، ويمكن أيضا أن تستخدم على خادم إدارة المواقع استبدال بروتوكول نقل الملفات، وحتى webIDE تطوير الإنترنت مباشرة. يمكنك أيضا برمجة التطور الثاني لدمج هذا في النظم الموجودة لديك.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "المانجو سحابة • مستكشف",

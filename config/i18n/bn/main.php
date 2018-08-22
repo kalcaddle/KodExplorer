@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "অ্যাডমিনিস্ট্রেটরের পাসওয়ার্ড ভুলে গেছেন: <br/> সার্ভার লগ ইন করুন রিসেট <b>./data/system/install.lock</b> মুছে ফেলা; <br/><br/> অ প্রশাসক পাসওয়ার্ড ভুলে গেছেন: <br/> রিসেট করতে প্রশাসকের সাথে যোগাযোগ করুন!",
     "copyright_desc"                 => "Kodexplorer একটি অত্যন্ত প্রশংসিত ওয়েব ডকুমেন্ট ম্যানেজমেন্ট সিস্টেম, আপনি এমনকি webIDE সরাসরি অনলাইনে উন্নয়ন, অভ্যন্তরীণ নথি ব্যবস্থাপনা বা ভাগ, এছাড়াও সাইট ম্যানেজমেন্ট সার্ভার ব্যবহার করা যায় জন্য এটি ব্যবহার, FTP প্রতিস্থাপন করতে পারেন. এছাড়াও আপনি দ্বিতীয় উন্নয়ন প্রোগ্রাম আপনার বিদ্যমান সিস্টেমের মধ্যে এই সংহত করতে পারেন.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "আম মেঘ • এক্সপ্লোরার",

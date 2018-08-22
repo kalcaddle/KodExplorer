@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "ลืมรหัสผ่านผู้ดูแลระบบ: <br/> กรุณาเข้าสู่ระบบเซิร์ฟเวอร์ลบ <b>./data/system/install.lock</b> รีเซ็ต; <br/><br/> ไม่ใช่ผู้ดูแลลืมรหัสผ่าน: <br/> กรุณาติดต่อผู้ดูแลระบบเพื่อรีเซ็ต!",
     "copyright_desc"                 => "Kodexplorer เป็นระบบการจัดการเอกสารเว็บสะเทือนใจคุณสามารถใช้มันสำหรับการจัดการเอกสารภายในหรือใช้ร่วมกันนอกจากนี้ยังสามารถนำมาใช้ในการจัดการเซิร์ฟเวอร์เว็บไซต์แทนที่ FTP, แม้ในขณะที่การพัฒนา webIDE ออนไลน์ได้โดยตรง นอกจากนี้คุณยังสามารถตั้งโปรแกรมการพัฒนาที่สองนี้จะบูรณาการเข้ากับระบบที่มีอยู่",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "มะม่วงเมฆ• Explorer ที่",

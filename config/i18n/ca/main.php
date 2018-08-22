@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Heu oblidat la contrasenya de l&#39;administrador: <br/> Si us plau, ingressi servidor eliminar <b>./data/system/install.lock</b> restablir; <br/><br/> No oblidat la contrasenya d&#39;administrador: <br/> Si us plau, poseu-vos en contacte amb l&#39;administrador per restablir!",
     "copyright_desc"                 => "Kodexplorer és un sistema de gestió de documents web altament aclamat, es pot utilitzar per a la gestió de documents interns o compartit, també es pot utilitzar al servidor de gestió del lloc, reemplaci ftp, així com el desenvolupament webIDE directament en línia. També pot programar el segon desenvolupament per integrar aquest principi en els seus sistemes existents.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango núvol • Explorador",

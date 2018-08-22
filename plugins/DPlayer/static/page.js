@@ -9,7 +9,7 @@ define(function(require, exports) {
 			'ogg' : 'oga',
 		};
 		var type = typeArr[vedioInfo.ext] || vedioInfo.ext;
-		new DPlayer({
+		var playerOption = {
 			container:$target.get(0),
 			preload: 'none',
 			theme:'#f60',
@@ -20,11 +20,7 @@ define(function(require, exports) {
 			video: {
 				url:vedioInfo.url,
 				type:type
-			},
-			// 默认加载同名文件字幕;暂时只支持vtt格式  http://dplayer.js.org/#/home?id=options
-			// subtitle:{
-			// 	url:core.path2url(vedioInfo.path+'.vtt')
-			// },
+			},			
 			danmaku: {
 				id:md5(vedioInfo.url),
 				api:'https://api.prprpr.me/dplayer/'
@@ -35,7 +31,14 @@ define(function(require, exports) {
 					link: 'https://kodcloud.com/'
 				}
 			]
-		});
+		};
+		if(window.DplayerSubtitle){
+			// 默认加载同名文件字幕;暂时只支持vtt格式  http://dplayer.js.org/#/home?id=options
+			playerOption.subtitle = {
+				url:core.path2url(vedioInfo.path+'.vtt')
+			}
+		}
+		new DPlayer(playerOption);
 	}
 	var createDialog = function(title,ext){
 		var size  = {width:'70%',height:'60%'};

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "管理員忘記密碼: <br/>請登陸服務器刪除<b>./data/system/install.lock</b>後重置; <br/><br/>非管理員忘記密碼: <br/>請聯繫管理員重置！",
     "copyright_desc"                 => "Kodexplorer是一款備受好評的web文檔管理系統，你可以用它來做內部文檔管理或共享、也可以用來管理服務器上的網站，取代Ftp，甚至可以當作webIDE直接在線開發。同時你也可以將此程序二次開發整合到你現有的系統。",
     "copyright_contact"              => "授權或定制請聯繫QQ:<a href=\"http://wpa.qq.com/msgrd?v=3&uin=3532208565&site=qq&menu=yes\" target=\"_blank\">3532208565</a><a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">問題反饋</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "可道云•資源管理器",

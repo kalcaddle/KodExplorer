@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Lupa Password Administrator: <br/> Harap masuk server yang menghapus <b>./data/system/install.lock</b> ulang; <br/><br/> Non-administrator Lupa Password: <br/> Silahkan hubungi administrator untuk me-reset!",
     "copyright_desc"                 => "Kodexplorer adalah sistem manajemen dokumen web sangat diakui, Anda dapat menggunakannya untuk manajemen dokumen internal atau bersama, juga dapat digunakan pada server situs manajemen, menggantikan FTP, bahkan saat webIDE langsung pembangunan online. Anda juga dapat memprogram pembangunan kedua untuk mengintegrasikan ini ke dalam sistem yang ada.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango cloud • Explorer",

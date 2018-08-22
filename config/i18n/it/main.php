@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Hai dimenticato la password di amministratore: <br/> Si prega di log del server eliminare <b>./data/system/install.lock</b> resettare; <br/><br/> Non amministratore Forgot Password: <br/> Si prega di contattare l&#39;amministratore per ripristinare!",
     "copyright_desc"                 => "Kodexplorer è un sistema di gestione dei documenti web acclamato, è possibile utilizzarlo per la gestione dei documenti interni o in comune, può essere utilizzato anche sul server di gestione del sito, sostituire FTP, anche se webIDE sviluppo direttamente online. È inoltre possibile programmare il secondo sviluppo di integrare questo in sistemi esistenti.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango nuvola • Explorer",

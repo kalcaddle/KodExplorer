@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Elfelejtett adminisztrátori jelszó: <br/> Kérjük jelentkezzen szerver törli <b>./data/system/install.lock</b> vissza; <br/><br/> Nem rendszergazdai Elfelejtett jelszó: <br/> Kérjük, lépjen kapcsolatba a rendszergazda gombot!",
     "copyright_desc"                 => "Kodexplorer egy nagysikerű webes dokumentumkezelő rendszer, akkor csak a belső dokumentumkezelő vagy megosztott, is fel lehet használni a site menedzsment szerver, cserélje ki az FTP, még akkor is, webIDE közvetlenül online fejlődését. Azt is lehet programozni a második fejlesztési integrálni ezt a meglévő rendszerekkel.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango felhő • Explorer",

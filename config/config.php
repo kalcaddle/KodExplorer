@@ -7,6 +7,7 @@
 */
 
 define('GLOBAL_DEBUG',0);//0 or 1
+define('GLOBAL_DEBUG_HOOK',0);//0 or 1
 @date_default_timezone_set(@date_default_timezone_get());
 @set_time_limit(1200);//20min pathInfoMuti,search,upload,download...
 @ini_set("max_execution_time",1200);
@@ -101,6 +102,9 @@ define('PLUGIN_HOST',APP_HOST.str_replace(BASIC_PATH,'',PLUGIN_DIR));//插件目
 
 include(CONTROLLER_DIR.'utils.php');
 include(BASIC_PATH.'config/setting.php');
+if (file_exists(BASIC_PATH.'config/setting_user.php')) {
+	include_once(BASIC_PATH.'config/setting_user.php');
+}
 if(file_exists(CONTROLLER_DIR.'debug.class.php')){
 	include_once(CONTROLLER_DIR.'debug.class.php');
 }

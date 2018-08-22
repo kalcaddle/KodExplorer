@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Passwort Administrator-Passwort: <br/> Bitte melden Sie sich Server löschen <b>./data/system/install.lock</b> zurückgesetzt; <br/><br/> Nicht-Administrator Passwort vergessen: <br/> Bitte kontaktieren Sie den Administrator zurücksetzen!",
     "copyright_desc"                 => "Kodexplorer ist ein hoch gelobten Web-Dokumenten-Management-System, können Sie es für die interne Dokumentenmanagement nutzen können oder gemeinsam genutzt, können auch auf der Site-Management-Server verwendet werden, ersetzen FTP-, auch als webIDE online Entwicklung. Sie können auch die zweite Entwicklung programmieren diese in Ihre bestehenden Systeme zu integrieren.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango Wolke • Explorer",

@@ -2,7 +2,7 @@
 	"id":"picasa",
 	"name":"{{LNG.Plugin.default.picasa}}",
 	"title":"",
-	"version":"1.21",
+	"version":"1.22",
 	"source":{
 		"className":"x-item-file x-jpg",
 		"screenshoot":[

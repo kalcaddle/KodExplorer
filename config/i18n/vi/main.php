@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Quên Administrator Password: <br/> Hãy đăng nhập máy chủ xóa <b>./data/system/install.lock</b> thiết lập lại; <br/><br/> Non-quản trị viên Quên mật khẩu: <br/> Hãy liên hệ với người quản trị để thiết lập lại!",
     "copyright_desc"                 => "Kodexplorer là một hệ thống quản lý tài liệu web rất hoan nghênh, bạn có thể sử dụng nó để quản lý tài liệu nội bộ hoặc chia sẻ, cũng có thể được sử dụng trên các máy chủ quản lý trang web, thay thế Ftp, thậm chí như webIDE phát triển trực tiếp trực tuyến. Bạn cũng có thể lập trình phát triển thứ hai để hội nhập này vào các hệ thống hiện tại của bạn.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango đám mây • Explorer",

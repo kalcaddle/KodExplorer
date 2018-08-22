@@ -164,7 +164,7 @@ div .form{
 	cursor: pointer;
 	margin-left: -6px;
 	position: relative;
-	top: -1px;
+	top: 0px;
 	width: 85px;
 	height: 33px;
 	border-radius: 0 2px 2px 0;

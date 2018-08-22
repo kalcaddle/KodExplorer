@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Забыли пароль администратора: <br/> Пожалуйста , войдите на сервер и удалите файл <b>./data/system/install.lock</b>для сброса пароля; <br/><br/> Обычный пользователь: <br/> Пожалуйста, обратитесь к администратору, чтобы сбросить пароль.",
     "copyright_desc"                 => "KodExplorer - это система управления веб-документами. Вы можете использовать её для внутреннего или совместного управления документами, на сервере для управления сайтом, замены FTP, и даже webIDE для интерактивного режима разработки. Вы также можете интегрировать её в другие системы.",
     "copyright_contact"              => "Свяжитесь с нами: <a href=\"mailto:kodcloud@qq.com\">kodcloud@qq.com</a><a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Обратная связь</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> Все права защищены.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Онлайн проводник",

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Zapomniałeś hasło administratora: <br/> serwer Zaloguj usuwać <b>./data/system/install.lock</b> zresetować; <br/><br/> Nieadministratorzy Przypomnienie hasła: <br/> Proszę skontaktować się z administratorem, aby zresetować!",
     "copyright_desc"                 => "Kodexplorer jest wysoko ceniony system zarządzania dokumentami internetowej, można użyć go do wewnętrznego zarządzania dokumentami lub współdzielone, może być również używany na serwerze zarządzania miejscu wymienić FTP, nawet webIDE bezpośrednio rozwoju online. Można również zaprogramować drugi rozwoju zintegrować to z istniejącymi systemami.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango Chmura • Explorer",

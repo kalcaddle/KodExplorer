@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Administrator Password a uitat: <br/> Vă rugăm să vă conectați serverul șterge <b>./data/system/install.lock</b> reset; <br/><br/> Non-administrator Ai uitat parola: <br/> Vă rugăm să contactați administratorul pentru a reseta!",
     "copyright_desc"                 => "Kodexplorer este un sistem de management al documentelor web extrem de apreciat, îl puteți utiliza pentru gestionarea documentelor interne sau partajat, poate fi utilizat și pe serverul de management al site-ului, înlocuiți Ftp, chiar ca webIDE de dezvoltare direct online. De asemenea, puteți programa a doua de dezvoltare pentru a integra acest lucru în sistemele existente.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango nor • Explorer",

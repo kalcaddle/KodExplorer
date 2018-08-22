@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "අමතකද පරිපාලක මුරපදය: <br/> සේවාදායකය නැවත සකස් <b>./data/system/install.lock</b> මකා ලොග් වන්න; <br/><br/> නොවන පරිපාලක මුරපදය අමතකද: <br/> නැවත සකස් කිරීමට පරිපාලක සම්බන්ධ කරන්න!",
     "copyright_desc"                 => "Kodexplorer වූ කීර්තිමත්ම වෙබ් ලේඛන කළමනාකරණ පද්ධතිය, ඔබ එය අභ්යන්තර ලේඛනයක් කළමනාකරණය සඳහා, පවා webIDE සෘජුවම සංවර්ධනය භාවිතා කළ හැකි හෝ දායකත්වය, වෙබ් අඩවිය කළමනාකරණ සේවාදායකය මත භාවිතා කල හැක, FTP වෙනුවට. ඔබ ද ඔබගේ දැනට පවතින පද්ධති තුළට මෙම ඒකාබද්ධ කිරීමට දෙවැනි සංවර්ධන වැඩසටහන හැක.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "කතුහිමිකම ©<a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a>සියලු හිමිකම් ඇවිරිණි.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "KodExplorer විසින් තල්ලු",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "අඹ වලාකුළක් • එක්ස්ප්ලෝරර්",

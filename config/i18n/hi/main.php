@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "प्रशासक पासवर्ड भूल: <br/> सर्वर लॉग इन करें रीसेट <b>./data/system/install.lock</b> हटाना; <br/><br/> गैर-व्यवस्थापक पासवर्ड भूल: <br/> रीसेट करने के लिए व्यवस्थापक से संपर्क करें!",
     "copyright_desc"                 => "Kodexplorer एक अत्यधिक प्रशंसित वेब दस्तावेज़ प्रबंधन प्रणाली है, तो आप भी webIDE सीधे ऑनलाइन विकास के रूप में, आंतरिक दस्तावेज़ प्रबंधन या साझा, भी इस साइट प्रबंधन सर्वर पर इस्तेमाल किया जा सकता है के लिए इसका इस्तेमाल, FTP जगह ले सकता है। तुम भी दूसरा विकास कार्यक्रम के लिए अपने मौजूदा सिस्टम में इस एकीकृत कर सकते हैं।",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "कॉपीराइट ©<a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a>सभी अधिकार सुरक्षित।",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "KodExplorer द्वारा संचालित",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "मैंगो बादल • एक्सप्लोरर",

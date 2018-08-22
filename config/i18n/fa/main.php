@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "را فراموش کرده اید رمز عبور: <br/> لطفا سرور وارد شوید حذف <b>./data/system/install.lock</b> تنظیم مجدد؛ <br/><br/> غیر مدیر فراموشی رمز عبور: <br/> لطفا با مدیریت تماس برای تنظیم مجدد!",
     "copyright_desc"                 => "Kodexplorer یک سیستم مدیریت اسناد وب بسیار تحسین است، شما می توانید آن را برای مدیریت اسناد داخلی یا به اشتراک گذاشته، همچنین می توانید بر روی سرور مدیریت سایت استفاده می شود استفاده کنید، جایگزین FTP، حتی به عنوان webIDE مستقیم توسعه آنلاین. شما همچنین می توانید توسعه دوم برنامه به ادغام این به سیستم های موجود خود را.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "انبه ابر • اکسپلورر",

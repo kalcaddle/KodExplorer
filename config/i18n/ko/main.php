@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "관리자 암호를 잊어 버렸 : <br/> 다시 <b>./data/system/install.lock</b> 삭제 서버에 로그인하십시오; <br/><br/> 비 관리자가 비밀번호를 잊어 버렸 : <br/> 재설정하려면 관리자에게 문의하시기 바랍니다!",
     "copyright_desc"                 => "Kodexplorer는 당신도 webIDE 온라인으로 직접 개발로, FTP를 교체, 내부 문서 관리 또는 공유, 또한 사이트 관리 서버에서 사용할 수 있습니다에 대 한 사용할 수 있습니다, 높은 평가를 받고 웹 문서 관리 시스템입니다. 또한 기존 시스템에이를 통합하는 두 번째 개발을 프로그래밍 할 수 있습니다.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "망고 클라우드 • 탐색기",

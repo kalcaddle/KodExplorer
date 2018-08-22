@@ -532,3 +532,11 @@ body div.dialog-simple .aui-close:active {
 .dialog-copyright .dialog-copyright-content .content p{text-indent: 2em;color: #333;margin-bottom: 30px;}
 .dialog-copyright .dialog-copyright-content .content div{text-align: center;padding-bottom: 5px;}
 
+
+
+/* 
+.title {background: rgba(0,0,0,0.5);}
+.form {background: rgba(0,0,0,0.3);}
+.inputs div .font-icon {border: 1px solid rgba(255, 255, 255, 0.1);background: rgba(255, 255, 255, 0.3);}
+.loginbox {border:1px solid rgba(255,255,255,0.1);box-shadow: 0px 20px 60px rgba(255,255,255,0.3);} 
+*/

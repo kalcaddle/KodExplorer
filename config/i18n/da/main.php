@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Glemt Administrator Password: <br/> Du skal logge server slette <b>./data/system/install.lock</b> nulstille; <br/><br/> Ikke-administrator Glemt Kodeord: <br/> Kontakt administratoren for at nulstille!",
     "copyright_desc"                 => "Kodexplorer er et meget roste web dokument management system, du kan bruge det til intern dokumenthåndtering eller delt, kan også bruges på sitet management server, udskifte Ftp, ligesom webIDE direkte online udvikling. Du kan også programmere den anden udvikling for at integrere dette i dine eksisterende systemer.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango cloud • Explorer",

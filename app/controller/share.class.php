@@ -383,7 +383,7 @@ class share extends Controller{
 		$ext= trim($this->in['ext']);
 		$list = path_search(
 			$this->path,
-			iconv_system(rawurldecode($this->in['search'])),
+			rawurldecode($this->in['search']),
 			$isContent,$ext,$isCase);
 		
 		show_json(_DIR_OUT($list));

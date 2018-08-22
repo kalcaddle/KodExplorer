@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Забули пароль адміністратора: <br/> Будь ласка , увійдіть сервер видалити <b>./data/system/install.lock</b> скидання; <br/><br/> Non-адміністратора Забули пароль: <br/> Будь ласка, зверніться до адміністратора, щоб скинути!",
     "copyright_desc"                 => "Kodexplorer є високо оцінений система управління веб-документ, ви можете використовувати його для внутрішнього управління документами або спільно, можуть також використовуватися на сервері управління сайтом, замінити Ftp, навіть webIDE безпосередньо в інтерактивному режимі розробки. Ви також можете запрограмувати друге розвиток, щоб інтегрувати це в існуючі системи.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Манго хмара • Провідник",

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Забравена Administrator Password: <br/> Моля, влезте сървъра изтриване <b>./data/system/install.lock</b> нулиране; <br/><br/> Non-администратор Забравена парола: <br/> Моля, свържете се с администратора, за да изчисти!",
     "copyright_desc"                 => "Kodexplorer е силно аплодирана система за управление на уеб документ, можете да го използвате за вътрешно управление на документи или споделена, може да се използва и върху сървъра за управление на сайта, на мястото на Ftp, дори като webIDE директно онлайн развитие. Можете също така да програмирате втория развитие да включи този в съществуващите си системи.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango облак • Explorer",

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Forgot Administrator Password: <br/> Please log into the server and delete <b>./data/system/install.lock</b> reset; <br/><br/> Non-administrator Forgot Password: <br/> Please contact the administrator to reset!",
     "copyright_desc"                 => "Kodexplorer is a highly acclaimed web document management system that you can use for internal document management or sharing. It can also be used to manage web sites on the server, replace Ftp, and even be developed directly as web IDE. At the same time you can also secondary development of this program integrated into your existing system.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Kod online explorer",

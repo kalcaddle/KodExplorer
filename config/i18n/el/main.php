@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Ξεχάσατε τον κωδικό πρόσβασης διαχειριστή: <br/> Παρακαλούμε συνδεθείτε διακομιστής διαγράψετε <b>./data/system/install.lock</b> επαναφορά? <br/><br/> Μη-διαχειριστής Ξεχάσατε τον κωδικό: <br/> Παρακαλείστε να επικοινωνήσετε με το διαχειριστή για να επαναφέρετε!",
     "copyright_desc"                 => "Kodexplorer είναι ένα εγκωμιαστικές σύστημα διαχείρισης εγγράφων web, μπορείτε να το χρησιμοποιήσετε για την εσωτερική διαχείριση των εγγράφων ή κοινόχρηστο, μπορεί επίσης να χρησιμοποιηθεί στο διακομιστή διαχείρισης ιστοσελίδα, αντικαταστήστε FTP, ακόμη και ως webIDE απευθείας σύνδεση ανάπτυξη. Μπορείτε επίσης να προγραμματίσετε τη δεύτερη εξέλιξη να ενσωματώσουν αυτό σε υπάρχοντα συστήματα σας.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango σύννεφο • Explorer",

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Wachtwoord Administrator-wachtwoord: <br/> Gelieve server log verwijderen <b>./data/system/install.lock</b> resetten; <br/><br/> Non-administrator Wachtwoord vergeten: <br/> Neem contact op met de beheerder om opnieuw in te stellen!",
     "copyright_desc"                 => "Kodexplorer is een zeer gewaardeerde web document management systeem, je kunt het gebruiken voor interne management document of gedeeld, kan ook gebruikt worden op de site management server, vervangt FTP, zelfs als webIDE direct online ontwikkeling. U kunt ook de tweede ontwikkeling programmeren om deze te integreren in uw bestaande systemen.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango cloud • Explorer",

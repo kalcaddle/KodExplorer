@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Administrator Parolni unutdingizmi: <br/> qayta o&#39;rnatish <b>./data/system/install.lock</b> o&#39;chirish serverini kiring; <br/><br/> Non-administrator Parolni unutdingizmi: <br/> qayta o&#39;rnatish uchun boshqaruvchisiga murojaat qiling!",
     "copyright_desc"                 => "Kodexplorer siz ham webIDE bevosita onlayn rivojlantirish, FTP o'rniga, ichki hujjat boshqarish yoki birgalikda, shuningdek, sayt boshqarish serverida foydalanish mumkin uchun foydalanishingiz mumkin, juda tan veb hujjat boshqarish sistemasidir. Bundan tashqari, mavjud tizimlar, bu integratsiya qilish uchun ikkinchi rivojlanishini dasturlashingiz mumkin.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright ©<a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a>barcha huquqlar himoyalangan.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "KodExplorer by",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango bulut • Explorer",

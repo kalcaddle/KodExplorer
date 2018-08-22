@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Zapomněli heslo správce: <br/> Prosím přihlašte serveru smazat <b>./data/system/install.lock</b> resetovat; <br/><br/> Non-správce Zapomněli jste heslo: <br/> Obraťte se na správce resetovat!",
     "copyright_desc"                 => "Kodexplorer je vysoce uznávaný systém pro správu dokumentů web, můžete jej použít pro vnitřní správu dokumentů nebo sdílená, lze použít také na serveru pro správu webu, nahradí FTP, i když webIDE přímo on-line rozvoje. Můžete také naprogramovat druhý rozvoje integrovat toto do vašich stávajících systémů.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango cloud • Explorer",

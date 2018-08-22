@@ -235,6 +235,7 @@ a.button:focus { outline: none;}
 .x-eps {background-image: url("../../images/file_icon/icon_file/eps.png");}
 .x-epub {background-image: url("../../images/file_icon/icon_file/epub.png");}
 .x-exe {background-image: url("../../images/file_icon/icon_file/exe.png");}
+.x-eml {background-image: url("../../images/file_icon/icon_file/eml.png");}
 .x-f {background-image: url("../../images/file_icon/icon_file/f.png");}
 .x-file {background-image: url("../../images/file_icon/icon_file/file.png");}
 .x-fla {background-image: url("../../images/file_icon/icon_file/fla.png");}
@@ -259,6 +260,7 @@ a.button:focus { outline: none;}
 .x-makefile {background-image: url("../../images/file_icon/icon_file/makefile.png");}
 .x-mdb {background-image: url("../../images/file_icon/icon_file/mdb.png");}
 .x-mdf {background-image: url("../../images/file_icon/icon_file/mdf.png");}
+.x-mhtml {background-image: url("../../images/file_icon/icon_file/mhtml.png");}
 .x-mht {background-image: url("../../images/file_icon/icon_file/mht.png");}
 .x-midi {background-image: url("../../images/file_icon/icon_file/midi.png");}
 .x-mpp {background-image: url("../../images/file_icon/icon_file/mpp.png");}
@@ -1485,6 +1487,440 @@ table th, table td, table thead:first-child tr:first-child th {padding:0;border:
 .do-search-box .search-result .file-item .result-item .line{display:inline-block;margin-left:7px;padding-right:4px;width:32px;color:#aaa;text-align:right;font-weight:800}
 .do-search-box .search-result .file-item .result-item .search-info{color:#444;font-family:Menlo,Consolas,source-code-pro,Monaco,'Liberation Mono','Ubuntu Mono',Courier,'Helvetica Neue','Microsoft Yahei','微软雅黑','Lantinghei SC',STXihei,WenQuanYi,sans-serif}
 .do-search-box .search-result .file-item.open .file-info .switch .icon-caret-right:before{content:"\f0d7"}
+
+
+
+
+
+
+
+.dialog-copyright,.share-dialog,.check-version-dialog {min-width: 400px;}
+.dialog-copyright.dialog-simple .aui-outer,
+.share-dialog.dialog-simple .aui-outer,
+.check-version-dialog.dialog-simple .aui-outer {
+  overflow: inherit;
+  box-shadow: 0 0px 60px rgba(0, 0, 0, 0.4);
+  /*border:1px solid #ccc;border:1px solid rgba(0,0,0,0.2);*/
+  border-radius: 5px;
+  border: none;
+}
+.dialog-copyright.dialog-simple .aui-outer,
+.share-dialog.dialog-simple .aui-outer,
+.check-version-dialog.dialog-simple .aui-outer,
+.dialog-copyright.dialog-simple .aui-outer.dialog-mouse-in,
+.share-dialog.dialog-simple .aui-outer.dialog-mouse-in,
+.check-version-dialog.dialog-simple .aui-outer.dialog-mouse-in {
+  border: none;
+}
+.dialog-copyright.dialog-simple .aui-outer .aui-main,
+.share-dialog.dialog-simple .aui-outer .aui-main,
+.check-version-dialog.dialog-simple .aui-outer .aui-main,
+.dialog-copyright.dialog-simple .aui-outer.dialog-mouse-in .aui-main,
+.share-dialog.dialog-simple .aui-outer.dialog-mouse-in .aui-main,
+.check-version-dialog.dialog-simple .aui-outer.dialog-mouse-in .aui-main {
+  border: none;
+}
+.dialog-copyright.dialog-simple .aui-outer .aui-header,
+.share-dialog.dialog-simple .aui-outer .aui-header,
+.check-version-dialog.dialog-simple .aui-outer .aui-header,
+.dialog-copyright.dialog-simple .aui-outer.dialog-mouse-in .aui-header,
+.share-dialog.dialog-simple .aui-outer.dialog-mouse-in .aui-header,
+.check-version-dialog.dialog-simple .aui-outer.dialog-mouse-in .aui-header {
+  border: none;
+}
+.dialog-copyright.dialog-simple .aui-header,
+.share-dialog.dialog-simple .aui-header,
+.check-version-dialog.dialog-simple .aui-header {
+  background: transparent;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  border: none;
+}
+.dialog-copyright.dialog-simple .aui-nw,
+.share-dialog.dialog-simple .aui-nw,
+.check-version-dialog.dialog-simple .aui-nw,
+.dialog-copyright.dialog-simple .aui-n,
+.share-dialog.dialog-simple .aui-n,
+.check-version-dialog.dialog-simple .aui-n,
+.dialog-copyright.dialog-simple .aui-ne,
+.share-dialog.dialog-simple .aui-ne,
+.check-version-dialog.dialog-simple .aui-ne,
+.dialog-copyright.dialog-simple .aui-w,
+.share-dialog.dialog-simple .aui-w,
+.check-version-dialog.dialog-simple .aui-w,
+.dialog-copyright.dialog-simple .aui-e,
+.share-dialog.dialog-simple .aui-e,
+.check-version-dialog.dialog-simple .aui-e,
+.dialog-copyright.dialog-simple .aui-sw,
+.share-dialog.dialog-simple .aui-sw,
+.check-version-dialog.dialog-simple .aui-sw,
+.dialog-copyright.dialog-simple .aui-s,
+.share-dialog.dialog-simple .aui-s,
+.check-version-dialog.dialog-simple .aui-s,
+.dialog-copyright.dialog-simple .aui-se,
+.share-dialog.dialog-simple .aui-se,
+.check-version-dialog.dialog-simple .aui-se {
+  height: 0px;
+  width: 0px;
+  background: none;
+}
+.dialog-copyright.dialog-simple .aui-inner,
+.share-dialog.dialog-simple .aui-inner,
+.check-version-dialog.dialog-simple .aui-inner {
+  border: none;
+  background: none;
+}
+.dialog-copyright.dialog-simple .aui-title,
+.share-dialog.dialog-simple .aui-title,
+.check-version-dialog.dialog-simple .aui-title {
+  opacity: 0.01;
+  filter: alpha(opacity=1);
+  top: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+.dialog-copyright.dialog-simple .aui-min,
+.share-dialog.dialog-simple .aui-min,
+.check-version-dialog.dialog-simple .aui-min,
+.dialog-copyright.dialog-simple .aui-max,
+.share-dialog.dialog-simple .aui-max,
+.check-version-dialog.dialog-simple .aui-max {
+  display: none;
+}
+.dialog-copyright.dialog-simple .aui-title-bar,
+.share-dialog.dialog-simple .aui-title-bar,
+.check-version-dialog.dialog-simple .aui-title-bar {
+  bottom: 0px;
+  overflow: hidden;
+  height: 100px;
+  position: absolute;
+  margin-top: -120px;
+  top: 120px;
+  margin-left: 0px;
+  border-radius: 4px;
+}
+.dialog-copyright.dialog-simple .aui-close,
+.share-dialog.dialog-simple .aui-close,
+.check-version-dialog.dialog-simple .aui-close {
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  background: rgba(0, 0, 0, 0.5);
+  width: 100px;
+  height: 100px;
+  top: -50px;
+  right: -50px;
+  border-radius: 50px;
+  text-align: left;
+  font-size: 20px;
+  z-index: 100;
+  padding: 0;
+}
+.dialog-copyright.dialog-simple .aui-close:hover,
+.share-dialog.dialog-simple .aui-close:hover,
+.check-version-dialog.dialog-simple .aui-close:hover {
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+.dialog-copyright.dialog-simple .aui-close:active,
+.share-dialog.dialog-simple .aui-close:active,
+.check-version-dialog.dialog-simple .aui-close:active {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.dialog-copyright.dialog-simple .aui-close::before,
+.share-dialog.dialog-simple .aui-close::before,
+.check-version-dialog.dialog-simple .aui-close::before {
+  padding-left: 22px;
+  line-height: 140px;
+}
+.dialog-copyright .aui-footer,
+.share-dialog .aui-footer,
+.check-version-dialog .aui-footer {
+  display: none;
+}
+.check-version-dialog .update-box {
+  margin-top: 0px;
+}
+.pathinfo .input-group-btn .open-window {
+  margin-right: -1px;
+  border-radius: 0px;
+}
+.dialog-copyright .dialog-copyright-content,
+.check-version-dialog .aui-content {
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  /* Chrome all / Safari all */
+  -moz-user-select: text;
+  /* Firefox all */
+  -ms-user-select: text;
+  /* IE 10+ */
+  -o-user-select: text;
+  user-select: text;
+  width: auto;
+  border-radius: 6px;
+  min-width: 400px;
+  -webkit-box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.4);
+  border: 1px solid #ccc \9;
+  padding-bottom: 30px;
+  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
+}
+.dialog-copyright .dialog-copyright-content .title,
+.check-version-dialog .aui-content .title {
+  width: 100%;
+  background: #6699cc url("../../images/common/login.png");
+  height: 150px;
+  padding-top: 0px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.dialog-copyright .dialog-copyright-content .title .logo,
+.check-version-dialog .aui-content .title .logo {
+  text-align: center;
+  font-size: 35px;
+  width: 100%;
+  padding-top: 40px;
+  color: #aaddff;
+  -webkit-box-reflect: below -13px -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.2)));
+  background-image: -webkit-linear-gradient(92deg, #FFFFFF, #14A1FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: hue 6s 100 linear;
+}
+.dialog-copyright .dialog-copyright-content .title .logo i,
+.check-version-dialog .aui-content .title .logo i {
+  color: #aaddff;
+  font-weight: 400;
+  margin-right: 10px;
+}
+.dialog-copyright .dialog-copyright-content .title .info,
+.check-version-dialog .aui-content .title .info {
+  text-align: right;
+  font-size: 1.15em;
+  color: #aaddff;
+  padding-right: 14px;
+  padding-top: 30px;
+}
+.dialog-copyright .dialog-copyright-content .content,
+.check-version-dialog .aui-content .content {
+  padding: 20px;
+}
+.dialog-copyright .dialog-copyright-content .content p,
+.check-version-dialog .aui-content .content p {
+  text-indent: 2em;
+  color: #333;
+  margin-bottom: 30px;
+}
+.dialog-copyright .dialog-copyright-content .content a,
+.check-version-dialog .aui-content .content a {
+  padding-right: 5px;
+}
+.dialog-copyright .dialog-copyright-content .content div,
+.check-version-dialog .aui-content .content div {
+  text-align: center;
+  padding-bottom: 5px;
+}
+.check-version-dialog.dialog-simple .aui-title-bar {
+  margin-top: -120px;
+}
+.share-dialog .content-box {
+  -webkit-box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid #ccc \9;
+  width: auto;
+}
+.share-dialog .content-box .title {
+  width: 100%;
+  color: #fff;
+  height: 100px;
+  border-radius: 5px 5px 0 0;
+  background: #6699cc url('../../images/common/login.png');
+}
+.share-dialog .content-box .titleinfo {
+  text-align: center;
+  font-size: 35px;
+  height: 60px;
+  overflow: hidden;
+  line-height: 80px;
+}
+.share-dialog .content-box .titleinfo i {
+  color: #dff;
+  font-size: 30px;
+  padding-right: 10px;
+}
+.share-dialog .content-box .share-view-info {
+  width: 200px;
+  margin: 0 auto;
+  margin-top: 0px;
+  padding: 1px 5px;
+  text-align: center;
+  border-radius: 17px;
+  background: #117eaf;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.share-dialog .content-box .content-info {
+  padding: 30px 20px;
+}
+.share-dialog .content-box .content-info .share-more {
+  margin: 10px 0 10px 90px;
+}
+.share-dialog .content-box .content-info .share-setting-more {
+  border-top: 1px solid #eee;
+  background: #f8f8f8;
+  border-radius: 4px;
+  padding: 25px 0 15px 0;
+  margin-top: -22px;
+}
+.share-dialog .content-box .content-info .input-line {
+  margin: 6px 0 8px 0;
+  position: relative;
+}
+.share-dialog .content-box .content-info .input-line .input-title {
+  display: block;
+  width: 80px;
+  padding-top: 4px;
+  float: left;
+  height: 30px;
+  padding-right: 10px;
+  text-align: right;
+  clear: both;
+}
+.share-dialog .content-box .content-info .input-line input[type="text"] {
+  border: 1px solid #ddd;
+  background: #fff;
+  outline: none;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08);
+  -ms-transition: all ease-in-out 0.168s;
+  -webkit-transition: all ease-in-out 0.168s;
+  -moz-transition: all ease-in-out 0.168s;
+  -o-transition: all ease-in-out 0.168s;
+  transition: all ease-in-out 0.168s;
+  height: 32px;
+  line-height: 30px;
+  padding: 0px 5px;
+  width: 150px;
+  margin-right: 10px;
+  float: left;
+  border-radius: 3px;
+}
+.share-dialog .content-box .content-info .input-line input[type="text"]:focus {
+  border-color: #75A1F0;
+  outline: none;
+  /*box-shadow: 0 0 4px @focus-color;*/
+  box-shadow: 0 0 0 3px rgba(117, 161, 240, 0.3);
+}
+.share-dialog .content-box .content-info .input-line label {
+  margin-top: 8px;
+  margin-right: 10px;
+}
+.share-dialog .content-box .content-info .input-line label input {
+  margin: 0 5px 5px 0;
+}
+.share-dialog .content-box .content-info .input-line .desc {
+  font-size: 1em;
+  color: #bbb;
+  font-style: normal;
+  padding-left: 0px;
+  line-height: 30px;
+}
+.share-dialog .content-box .content-info .input-line .desc.label {
+  line-height: 20px;
+  margin-top: 5px;
+  padding: 2px 6px;
+}
+.share-dialog .content-box .content-info .input-line .share-name {
+  width: 215px;
+  margin-right: 10px;
+}
+.share-dialog .content-box .content-info .input-line .share-url {
+  margin-right: 0;
+  border-radius: 3px 0 0 3px;
+  width: 150px !important;
+  height: 33px;
+}
+.share-dialog .content-box .content-info .input-line .input-group-btn {
+  float: left;
+}
+.share-dialog .content-box .content-info .input-line .dropdown-toggle {
+  margin-left: -5px;
+  border-radius: 0 3px 3px 0;
+}
+.share-dialog .content-box .content-info .input-line .input-group-btn .btn {
+  margin-left: -5px;
+}
+.share-dialog .content-box .content-info .input-line .input-group-btn .btn.copy {
+  margin-left: -12px;
+  color: #03A9F4;
+}
+.share-dialog .content-box .content-info .input-line .share-copy {
+  width: 60px;
+  border-radius: 0px;
+  margin-left: -7px;
+}
+.share-dialog .content-box .content-info .input-line.select-path input[type="text"] {
+  width: 155px;
+}
+.share-dialog .content-box .content-info .input-line.select-path a.select-btn {
+  margin-left: -14px;
+  padding: 5px 8px 5px;
+  font-size: 15px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.share-dialog .content-box .content-info .share-others {
+  margin: -8px 0 -8px 0;
+}
+.share-dialog .content-box .share-action {
+  border-top: 1px solid #eee;
+  background: #f8f8f8;
+  height: 60px;
+  border-radius: 0 0 4px 4px;
+}
+.share-dialog .content-box .share-action button {
+  float: right;
+  margin: 10px 20px 10px 0px;
+  outline: 0;
+}
+.share-dialog .content-box .share-action .share-qrcode-button {
+  color: #ccc;
+  font-size: 30px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.share-dialog .content-box .share-action .share-qrcode-button:hover {
+  background: #eee;
+  color: #03A9F4;
+}
+.share-dialog .content-box .share-action .share-remove-button,
+.share-dialog .content-box .share-action .remove-button {
+  float: right;
+  margin-top: 18px;
+  color: #888;
+  margin-right: 20px;
+  font-size: 14px;
+}
+.share-dialog .content-box .share-action .share-remove-button:hover,
+.share-dialog .content-box .share-action .remove-button:hover {
+  color: #f30;
+}
+.share-dialog .aui-title-bar.dialog-menu{width:100%;}
+.file-list-list.icon .file .meta-info {top: 8px;}
+
+
+
 
 
 /*config.css*/

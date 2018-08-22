@@ -54,9 +54,14 @@ class pluginModel{
 
 	public function checkAuth($app){
 		$pluginList = $this->loadData();
-		if( !isset($pluginList[$app]) || !$pluginList[$app]['status']){
+		if( !isset($pluginList[$app]) || 
+			!$pluginList[$app]['status']){
 			show_tips("Not exist or disabled!");
 		}
+		if( !isset($pluginList[$app]['config']['pluginAuth']) ){
+			return true;
+		}
+
 		$auth = $pluginList[$app]['config']['pluginAuth'];
 		if(plugin_check_auth($app,$auth)){
 			return true;

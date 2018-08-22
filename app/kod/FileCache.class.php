@@ -169,7 +169,11 @@ class FileCache{
 			return array();
 		}
 
-		$str = file_read_safe($file,10.4);
+		$str = file_read_safe($file,10.5);
+		if( $str === false || $str === 0 || $str === -1){
+			echo('[Error Code:1010] FileCache load error!'.$file);exit;
+		}
+
 		if (strlen($str) == 0 || 
 			strlen($str) == strlen(CONFIG_EXIT) ){
 			@file_put_contents($file,CONFIG_EXIT.'[]');
@@ -178,7 +182,7 @@ class FileCache{
 		}
 		
 		if($str === false || strlen($str) < strlen(CONFIG_EXIT) ){
-			show_tips('[Error Code:1010] FileCache load error!'.$file);
+			show_tips('[Error Code:1011] FileCache data error!'.$file);
 		}
 		$data= json_decode(substr($str, strlen(CONFIG_EXIT)),true);
 		if (is_null($data)) $data = array();
@@ -191,7 +195,7 @@ class FileCache{
 		if (!$file) return false;
 		$file = iconv_system($file);
 		if ( !file_exists($file) ){
-			@file_put_contents($file,CONFIG_EXIT);
+			@file_put_contents($file,CONFIG_EXIT.'[]');
 			chmod_path($file,0777);
 		}
 
@@ -206,6 +210,11 @@ class FileCache{
 		if(is_null($jsonStr) || strlen($jsonStr) == 0){//含有二进制或非utf8字符串对应检测
 			show_tips('json_encode error!');
 		}
-		return file_wirte_safe($file,CONFIG_EXIT.$jsonStr,20.3);
+		
+		$result = file_wirte_safe($file,CONFIG_EXIT.$jsonStr,10.5);
+		if($result === false){
+			show_tips('[Error Code:1012] FileCache save error!'.$file);
+		}
+		return $result;
 	}
 }

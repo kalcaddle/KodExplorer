@@ -52,7 +52,7 @@ kodReady.push(function(){
 		icon:'{{pluginHost}}static/images/icon.png',
 		callback:function(path,ext){
 			var music = ['mp3','wav','aac','m4a','oga','ogg','webma','m3u8a','m3ua','flac'];
-			if(isWap() && $.inArray(ext, music) == -1 ){//wap 不是音乐则新窗口打开
+			if(isWap() && $.inArray(ext, music) == -1  && G.ACT != 'file' ){ //移动端，非视频文件分享页面用跳转方式打开
 				return window.open(core.path2url(path));
 			}
 			var list = [{
@@ -75,9 +75,9 @@ kodReady.push(function(){
 	// 移动端安卓首次打开播放器不自动播放问题处理；
 	if(isWap()){
 		$.addStyle('.music-player-dialog{visibility:hidden;}');
-		loadMyPlayer(function(player){
-			player.play([{url:"",name:"",ext:"mp3"}]);
-		});
+		// loadMyPlayer(function(player){
+		// 	player.play([{url:"",name:"",ext:"mp3"}]);
+		// });
 	}
 
 	//音效播放绑定

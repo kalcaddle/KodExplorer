@@ -527,6 +527,10 @@ define(function(require, exports) {
 				},
 				error:core.ajaxError,
 				success:function(data){
+					if(!data.code && data.data == '0'){
+						Tips.close("出错了！未识别的压缩文件格式；<br/> 请检查该文件是否为压缩文件或者是否损坏。",false);
+						return 
+					}
 					Tips.close(data);
 					if(data.code){
 						var name = urlDecode(core.pathThis(path));

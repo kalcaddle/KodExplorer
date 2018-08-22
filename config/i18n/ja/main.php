@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "管理者パスワードを忘れた場合： <br/>サーバーがリセット<b>./data/system/install.lock</b>削除ログインしてください。 <br/><br/>非管理者がパスワードを忘れました： <br/>リセットするには、管理者に連絡してください！",
     "copyright_desc"                 => "KodexplorerはあなたもwebIDEオンラインで直接開発として、FTPを交換し、内部文書の管理や共有、また、サイト管理サーバ上で使用することができるためにそれを使用することができ、非常に評価の高いウェブ文書管理システムです。また、あなたの既存のシステムにこれを統合する2番目の開発をプログラムすることができます。",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "マンゴークラウド•エクスプローラ",

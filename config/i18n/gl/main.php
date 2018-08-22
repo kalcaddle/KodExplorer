@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Esqueceches o contrasinal de administrador: <br/> Entra servidor eliminar <b>./data/system/install.lock</b> axustar; <br/><br/> Non administrador Esqueceches o contrasinal: <br/> Póñase en contacto co seu administrador para axustar!",
     "copyright_desc"                 => "Kodexplorer é un sistema de xestión de documentos web altamente aclamado, pode usalo para xestión de documentos internos ou compartido, tamén se pode usar no servidor de xestión do web, substitúe FTP, incluso como webIDE desenvolvemento directamente en liña. Tamén pode programar o segundo desenvolvemento para integrar iso nos seus sistemas existentes.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "Mango nube • Explorador",

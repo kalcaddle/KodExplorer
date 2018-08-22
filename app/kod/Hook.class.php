@@ -62,7 +62,7 @@ class Hook{
 				'once' 	 => $once,
 				'times'	 => 0
 			);
-		}		
+		}
 	}
 	static public function once($event,$action) {
 		self::bind($event,$action,true);
@@ -79,17 +79,35 @@ class Hook{
 		}
 	}
 	static public function trigger($event) {
-		$actions = @self::$events[$event];
+		$events = self::$events;
+		if( !isset($events[$event]) ){
+			return;
+		}
+		$actions = $events[$event];
+		$result  = false;
 		if(is_array($actions) && count($actions) >= 1) {
 			$args = func_get_args();
 			array_shift($args);
-			foreach ($actions as &$action) {
+			for ($i=0; $i < count($actions); $i++) {
+				$action = $actions[$i];
 				if( $action['once'] && $action['times'] > 1){
 					continue;
 				}
-				$action['times'] = $action['times'] + 1;
-				
+
+				if(defined("GLOBAL_DEBUG_HOOK") && GLOBAL_DEBUG_HOOK){
+					write_log($event.'==>start: '.$action['action'],'hook-trigger');
+				}
+
+				self::$events[$event][$i]['times'] = $action['times'] + 1;
 				$res = self::apply($action['action'],$args);
+
+				if(defined("GLOBAL_DEBUG_HOOK") && GLOBAL_DEBUG_HOOK){
+					write_log($event.'==>end['.$action['times'].']: '.$action['action'],'hook-trigger');
+				}
+				//避免循环调用
+				if( $action['times'] >= 5000){
+					show_json("ERROR,Too many trigger on:".$event.'==>'.$action['action'],fasle);
+				}
 				if(!is_null($res)){
 					$result = $res;
 				}

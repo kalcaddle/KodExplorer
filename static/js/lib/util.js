@@ -1945,6 +1945,14 @@ var MaskView =  (function(){
  * alert.hook("alert",window,function(){console.log(arguments);});
  * kodApp.open.hook("open",kodApp,function(){});
  * String.prototype.slice.hook("slice",String.prototype,function(){});
+ * 
+ * 
+ * WebSocket.hook("WebSocket",window,{
+ * 		before:function(){
+ * 			arguments[0] && arguments[0] = arguments[0].replace("http","ws");
+ * 			return arguments;
+ * 		}
+ * });
  *
  * hookFunc支持hook前执行；hook后执行；  如果参数是函数则默认为hook前执行；如果为对象则分别配置hook前、hook后执行
  * {before:function,after:function} //
@@ -1995,16 +2003,40 @@ function FunctionHooks(){
 					return '';
 				}
 				try{
-					eval('_context[_funcName] = function '+_funcName+'(){\n'+
-						'var args = Array.prototype.slice.call(arguments,0);\n'+
-						'var obj = this;\n'+
-						'args = hookFuncBefore.apply(obj,args);\n'+
-						'if(args === "hookReturn"){return;}\n'+
-						'if(args === undefined){args = arguments;}\n'+
-						'var result = _context[_realFunc].apply(obj,args);\n'+
-						'if(hookFuncAfter){return hookFuncAfter.apply(result);}\n'+
-						'else{return result;}\n'+
-						'};');
+					eval(
+						'_context[_funcName] = function '+_funcName+'(){\
+							var args = Array.prototype.slice.call(arguments,0);\
+							var obj = this;\
+							args = hookFuncBefore.apply(obj,args);\
+							if(args === "hookReturn"){\
+								return;\
+							}\
+							if(args === undefined){\
+								args = arguments;\
+							}\
+							var result = false,func = _context[_realFunc];\
+							if( func.prototype && func.prototype.constructor &&\
+                                func.prototype.constructor.toString().indexOf("{ [native code] }") != -1 ){\
+								switch( args.length ){\
+									case 0:new func();break;\
+									case 1:new func(args[0]);break;\
+									case 2:new func(args[0],args[1]);break;\
+									case 3:new func(args[0],args[1],args[2]);break;\
+									case 4:new func(args[0],args[1],args[2],args[3]);break;\
+									case 5:new func(args[0],args[1],args[2],args[3],args[4]);break;\
+									case 6:new func(args[0],args[1],args[2],args[3],args[4],args[5]);break;\
+									default:new func(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);break;\
+								}\
+							}else{\
+								result = func.apply(obj,args);\
+							}\
+							if(hookFuncAfter){\
+								return hookFuncAfter.apply(result);\
+							}else{\
+								return result;\
+							}\
+						};'
+					);
 					_context[_funcName].prototype.isHooked = true;
 					return true;
 				}catch (e){
@@ -2043,7 +2075,6 @@ function FunctionHooks(){
 }
 var functionHooks = new FunctionHooks();
 functionHooks.initEnv();
-
 
 
 /**

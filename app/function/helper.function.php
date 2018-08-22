@@ -6,19 +6,19 @@ function checkExt($file){
 	if (strstr($file,'<') || strstr($file,'>') || $file=='') {
 		return 0;
 	}
-	$notAllow = $GLOBALS['auth']['extNotAllow'];
-
+	
 	//'php|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm'
-	if(strstr($notAllow,'php')){
-		$notAllow .= 'php|phtml|phtm|htaccess|pwml';
-	}
-	if( strstr($notAllow,'|htm') || strstr($notAllow,'htm|') ){
-		$notAllow .= 'html|htm|shtml|shtm';
-	}
-	if( strstr($notAllow,'asp')){
-		$notAllow .= 'asp|aspx|ascx|jsp|pl';
-	}	
+	$notAllow = strtolower($GLOBALS['auth']['extNotAllow']);
 	$extArr = explode('|',$notAllow);
+	if(in_array('asp',$extArr)){
+		$extArr = array_merge($extArr,array('aspx','ascx','pwml'));
+	}
+	if(in_array('php',$extArr)){
+		$extArr = array_merge($extArr,array('phtml','phtm','htaccess','pwml'));
+	}
+	if(in_array('htm',$extArr) || in_array('html',$extArr)){
+		$extArr = array_merge($extArr,array('html','shtml','shtm','html'));
+	}
 	foreach ($extArr as $current) {
 		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名
 			return 0;
@@ -351,12 +351,6 @@ function init_setting(){
 		$roleGroup = FileCache::load($roleGroupFile);
 	}
 	$GLOBALS['config']['pathRoleGroup'] = $roleGroup;
-	
-	//load user config
-	$settingUser = BASIC_PATH.'config/setting_user.php';
-	if (file_exists($settingUser)) {
-		include($settingUser);
-	}
 
 	if(is_array($GLOBALS['L'])){
 		I18n::set($GLOBALS['L']);

@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "நிர்வாகி கடவுச்சொல் மறந்துவிட்டதா: <br/> சர்வர் தயவு செய்து புகுபதிகை செய்க <b>./data/system/install.lock</b> மீட்டமைக்க அழித்தல்; <br/><br/> நிர்வாகி அல்லாத கடவுச்சொல் மறந்து விட்டீர்களா: <br/> மீட்டமைக்க நிர்வாகியைத் தொடர்பு கொள்ளவும்!",
     "copyright_desc"                 => "Kodexplorer நீங்கள் அதை உள் ஆவணம் மேலாண்மை அல்லது பகிர்வு, மேலும் தளத்தில் மேலாண்மை சர்வரில் பயன்படுத்த முடியும் கூட webIDE நேரடியாக ஆன்லைன் வளர்ச்சி என, பயன்படுத்த முடியும் Ftp பதிலாக, ஒரு மிகவும் பாராட்டப்பட்ட வலை ஆவணம் மேலாண்மை அமைப்பு உள்ளது. நீங்கள் உங்கள் இருக்கும் அமைப்புகள் இந்த ஒருங்கிணைக்க இரண்டாவது வளர்ச்சி நிரல் முடியும்.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "KodExplorer",
     "kod_name_desc"                  => "மா மேகம் • எக்ஸ்ப்ளோரர்",

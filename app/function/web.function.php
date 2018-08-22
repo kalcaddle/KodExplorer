@@ -60,7 +60,7 @@ function get_url_scheme($url){
 
 function get_host() {
 	//兼容子目录反向代理:只能是前端js通过cookie传入到后端进行处理
-	if(isset($_COOKIE['HOST']) && isset($_COOKIE['APP_HOST'])){
+	if(defined('GLOBAL_DEBUG') && isset($_COOKIE['HOST']) && isset($_COOKIE['APP_HOST'])){
 		return $_COOKIE['HOST'];
 	}
 
@@ -357,6 +357,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 	curl_setopt($ch, CURLOPT_HEADER,1);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 	curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);

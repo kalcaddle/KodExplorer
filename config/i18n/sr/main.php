@@ -305,7 +305,7 @@ return array(
     "forget_password_tips"           => "Заборавио Администратор Пассворд: <br/> Молимо вас пријавите сервер обрисати <b>./дата/систем/инсталл.лоцк</b> ресет; <br/><br/> Нон-администратор Форгот Пассворд: <br/> Контактирајте администратора за ресет!",
     "copyright_desc"                 => "Кодекплорер је високо признање систем за управљање веб документ, можете га користити за унутрашњу управљање документима или заједнички, могу се користити и на серверу за управљање сајт, заменити ФТП-а, чак и вебИДЕ онлајн развој. Такође можете програмирати други развој да се интегрише ово у постојеће системе.",
     "copyright_contact"              => "Contact us:kodcloud@qq.com  <a>.</a> <a href=\"javascript:core.openWindow('http://bbs.kodcloud.com/');\">Feedback</a>",
-    "copyright_info"                 => "Copyright © <a href=\"http://kodcloud.com/\" target=\"_blank\">kodcloud.com</a> All rights reserved.",
+    "copyright_info"                 => "Copyright © <a href=\"https://kodcloud.com/?kodref=%s\" target=\"_blank\">kodcloud.com</a>.",
     "copyright_pre"                  => "Powered by KodExplorer",
     "kod_name"                       => "КодЕкплорер",
     "kod_name_desc"                  => "Манго облак • Екплорер",
