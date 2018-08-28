@@ -1396,12 +1396,25 @@ function upload_chunk($uploadFile,$tempPath,$savePath){
 	$tempFilePre = $tempPath.md5($savePath).'.part';
 	if(kod_move_uploaded_file($uploadFile, $tempFilePre.$chunk)){
 		$done = true;
-		for($index = 0; $index<$chunks; $index++ ){
+	
+		//优化分片存在判断；当分片太多时,每个分片都全量判断,会占用服务器资源及影响上传速度;
+		$fromIndex    = 0;
+		$existMaxFile = $tempFilePre.'.max';//记录连续存在文件的最大序号
+		if(file_exists($existMaxFile)){
+			$fromIndex = intval(file_get_contents($fromIndex));
+		}else{
+			file_put_contents($existMaxFile,$fromIndex);
+		}
+		for($index = $fromIndex; $index<$chunks; $index++ ){
 			if (!file_exists($tempFilePre.$index)) {
+				if($index-1 > $fromIndex){
+					file_put_contents($existMaxFile,$index-1);
+				}
 				$done = false;
 				break;
 			}
 		}
+		
 		if (!$done){
 			show_json('upload_success',true);
 		}else{
@@ -1430,6 +1443,7 @@ function upload_chunk($uploadFile,$tempPath,$savePath){
 				fclose($out);
 			}
 		}
+		unlink($existMaxFile);
 		$res = rename($savePathTemp,$savePath);
 		if( isset($in['size']) && filesize($savePath) != $in['size'] ){
 			unlink($savePath);

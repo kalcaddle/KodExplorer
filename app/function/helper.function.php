@@ -263,22 +263,23 @@ function init_common(){
 	$errorTips = "[Error Code:1002] 目录权限错误！请设置程序目录及所有子目录为读写状态，
 				linux 运行如下指令：
 				<pre>su -c 'setenforce 0'\nchmod -R 777 ".BASIC_PATH.'</pre>';
-	//检查session是否存在
-	if( !file_exists(KOD_SESSION) ||
-		!file_exists(KOD_SESSION.'index.html')){
-		mk_dir(KOD_SESSION);
-		touch(KOD_SESSION.'index.html');
-		if(!file_exists(KOD_SESSION.'index.html') ){
+	if( !defined('SESSION_PATH_DEFAULT') ){
+		//检查session是否存在
+		if( !file_exists(KOD_SESSION) ||
+			!file_exists(KOD_SESSION.'index.html')){
+			mk_dir(KOD_SESSION);
+			touch(KOD_SESSION.'index.html');
+			if(!file_exists(KOD_SESSION.'index.html') ){
+				show_tips($errorTips);
+			}
+		}
+		//检查目录权限
+		if( !is_writable(KOD_SESSION) || 
+			!is_writable(KOD_SESSION.'index.html') || 
+			!is_writable(DATA_PATH.'system/apps.php') ||
+			!is_writable(DATA_PATH)){
 			show_tips($errorTips);
 		}
-	}
-
-	//检查目录权限
-	if( !is_writable(KOD_SESSION) || 
-		!is_writable(KOD_SESSION.'index.html') || 
-		!is_writable(DATA_PATH.'system/apps.php') ||
-		!is_writable(DATA_PATH)){
-		show_tips($errorTips);
 	}
 	
 	//version check update 

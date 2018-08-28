@@ -13,11 +13,11 @@ define('PCLTAR_TEMPORARY_DIR',TEMP_PATH);
 define('PCLZIP_SEPARATOR',';@@@,');//压缩多个文件，组成字符串分割
 mk_dir(TEMP_PATH);
 
-require ARCHIVE_LIB.'pclerror.lib.php';
-require ARCHIVE_LIB.'pcltrace.lib.php';
-require ARCHIVE_LIB.'pcltar.lib.php';
-require ARCHIVE_LIB.'pclzip.class.php';
-require ARCHIVE_LIB.'kodRarArchive.class.php';
+require_once ARCHIVE_LIB.'pclerror.lib.php';
+require_once ARCHIVE_LIB.'pcltrace.lib.php';
+require_once ARCHIVE_LIB.'pcltar.lib.php';
+require_once ARCHIVE_LIB.'pclzip.class.php';
+require_once ARCHIVE_LIB.'kodRarArchive.class.php';
 
 
 class KodArchive {
@@ -165,7 +165,7 @@ class KodArchive {
 			}
 			//TrDisplay();exit;
 			return array('code'=>$result,'data'=>PclErrorString(true));
-		}else if( self::checkIfType($ext,'rar') ){
+		}else if( self::checkIfType($ext,'rar')){ // || $ext == 'zip' 
 			return kodRarArchive::extract($file,$dest,$ext,$partName);
 		}else{
 			$zip = new PclZip($file);

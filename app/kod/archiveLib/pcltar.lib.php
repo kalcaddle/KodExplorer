@@ -1818,7 +1818,7 @@ if (!defined("PCL_TAR"))
 		$v_binary_data_last = pack("a1a100a6a2a32a32a8a8a155a12", $v_typeflag, $v_linkname, $v_magic, $v_version, $v_uname, $v_gname, $v_devmajor, $v_devminor, $v_prefix, "");
 
 
-		var_dump($v_reduce_filename, $v_perms, $v_uid, $v_gid, $v_prefix,111);
+		//var_dump($v_reduce_filename, $v_perms, $v_uid, $v_gid, $v_prefix,111);
 
 		// ----- Calculate the checksum
 		$v_checksum = 0;

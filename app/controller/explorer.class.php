@@ -502,7 +502,7 @@ class explorer extends Controller{
 		);
 
 		//编辑器简化树目录
-		if($app == 'editor'){
+		if($app == 'editor' || defined("KODFILE")){
 			unset($treeData['myGroup']);
 			unset($treeData['group']);
 			unset($treeData['public']);
@@ -511,7 +511,7 @@ class explorer extends Controller{
 				$listWeb  = $this->_path(_DIR(WEB_ROOT),$checkFile,true);
 				$web = array_merge($listWeb['folderList'],$listWeb['fileList']);
 				$treeData['webroot'] = array(
-					'name'      => "webroot",
+					'name'      => get_path_this(WEB_ROOT),
 					'menuType'  => "menu-tree-root",
 					'ext' 		=> "folder",
 					'children'  => $web,

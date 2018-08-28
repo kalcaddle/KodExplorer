@@ -565,7 +565,6 @@ body{overflow-x: hidden;}
 }
 
 
-.frame-main{position: absolute;left: 0;width:100%;bottom:0;top:0px;}
 .menu-open .panel-menu{left:0;}
 .frame-main .panel-mask{
 	z-index: 50;display:none;

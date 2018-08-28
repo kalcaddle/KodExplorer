@@ -49,14 +49,14 @@ define(function(require, exports) {
 					treeNode.iconSkin = treeNode.tree_icon;
 
 					$("#" + treeNode.tId + "_span").addClass('name');
-					var tree_icon = treeNode.tree_icon;
+					var treeIcon = treeNode.tree_icon;
 					if(treeNode.ext){
-						tree_icon = treeNode.ext;
+						treeIcon = treeNode.ext;
 					}else if(!treeNode.tree_icon){
-						tree_icon = treeNode.type;
+						treeIcon = treeNode.type;
 					}
 					icoObj.before(switchObj)
-						.before('<span id="'+treeNode.tId +'_my_ico"  class="tree_icon button">'+core.iconSmall(tree_icon)+'</span>')
+						.before('<span id="'+treeNode.tId +'_my_ico"  class="tree_icon button">'+core.iconSmall(treeIcon)+'</span>')
 						.remove();
 
 					if(treeNode.ext!=undefined){//如果是文件则用自定义图标
@@ -68,10 +68,13 @@ define(function(require, exports) {
 						 + (spaceWidth * treeNode.level)+ "px'></span>";
 						switchObj.before(spaceStr);
 					}
-
-
+					var size = pathTools.fileSize(treeNode.size);
+					if(treeIcon == 'folder'){
+						//size = ' - ';
+						size = pathInfoData(treeNode).sizeFriendly;
+					}
 					var info = '<span class="time">'+date(LNG.time_type,treeNode.mtime)+'</span>';
-					info += '<span class="size">'+pathTools.fileSize(treeNode.size)+'</span>';
+					info += '<span class="size">'+size+'</span>';
 					info += '<span class="menu-item-parent icon-ellipsis-vertical"></span>';
 					$("#" + treeNode.tId + "_span").after(info);
 
@@ -311,6 +314,13 @@ define(function(require, exports) {
 				folderSizeCell.size += parseInt(node.size);
 			}
 		}
+		var archiveSize = function(data){
+			var totalSize = 0;
+			for (var i = 0; i < data.length; i++) {
+				totalSize += parseInt(data[i].size);
+			}
+			return totalSize;
+		}
 
 		var zipFileDownload = function(tree,node){
 			var filePath = tree.setting.filePath;
@@ -503,6 +513,7 @@ define(function(require, exports) {
 				type:'folder',
 				path:'',
 				index:'-1',
+				size:archiveSize(data),
 				menuType:'menu-zip-list-folder'
 			}
 			$.fn.zTree.init($("#"+treeID),setting,treeData);
