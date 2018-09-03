@@ -173,14 +173,24 @@ class systemMember extends Controller{
 		if(isset($groupInfo[$groupID])){
 			return $groupInfo[$groupID];
 		}
+
+		$role = false;
+		$plist = array();
 		foreach ($groupInfo as $key => $value) {//
 			$group = systemGroup::getInfo($key);//测试组，是否在用户所在组的子组
 			$arr = explode(',',$group['children']);
 			if (in_array($groupID,$arr)) {
-				return $groupInfo[$key];
+				//return $groupInfo[$key];	// 找到最近的父级部门,而非第一个
+				if(empty($plist)){
+					$plist = $arr;
+					$role = $groupInfo[$key];
+				}else if(in_array($group['groupID'], $plist)){
+					$plist = $arr;
+					$role = $groupInfo[$key];
+				}
 			}
 		}
-		return false;
+		return $role;
 	}
 
 	//删除 path id

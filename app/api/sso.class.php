@@ -5,7 +5,9 @@
 * @copyright warlee 2014.(Shanghai)Co.,Ltd
 * @license http://kodcloud.com/tools/license/license.txt
 */
-require_once(dirname(dirname(__FILE__)).'/function/web.function.php');
+if(!function_exists('get_client_ip')){
+    require_once(dirname(dirname(__FILE__)).'/function/web.function.php');
+}
 class SSO{
 	static private function init(){
 		$sessionName = 'KOD_SESSION_SSO';
