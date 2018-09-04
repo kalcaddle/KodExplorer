@@ -14,15 +14,18 @@ class explorer extends Controller{
 		$this->user = $_SESSION['kodUser'];
 		if (isset($this->in['path'])) {
 			//游客访问别人zip，解压到**目录；入口不检测权限
-			$pathNotCheck = array("explorer.unzip");
-			$pathNotCheckFlag = in_array(ST.'.'.ACT,$pathNotCheck);
-			if($pathNotCheckFlag){
+			if( ST.'.'.ACT == "explorer.unzip" ){
+				if($this->in['pathTo']){
+					_DIR($this->in['pathTo']);
+				}else{
+					_DIR($this->in['path']);
+				}
+				$GLOBALS['kodPathAuthCheck'] = true;
+			}
+			if( ST.'.'.ACT == "explorer.unzipList" ){
 				$GLOBALS['kodPathAuthCheck'] = true;
 			}
 			$this->path = _DIR($this->in['path']);
-			if($pathNotCheckFlag){
-				$GLOBALS['kodPathAuthCheck'] = false;
-			}
 			$this->_checkSystemPath();
 		}
 	}
