@@ -163,7 +163,7 @@ class FileCache{
 	public static function load($file){//10000次需要4s 数据量差异不大。
 		if (!$file) return false;
 		$file = iconv_system($file);
-		if ( !file_exists($file) ){
+		if ( !file_exists($file) || filesize($file) == 0 ){
 			@file_put_contents($file,CONFIG_EXIT.'[]');
 			chmod_path($file,0777);
 			return array();
@@ -171,7 +171,7 @@ class FileCache{
 
 		$str = file_read_safe($file,10.5);
 		if( $str === false || $str === 0 || $str === -1){
-			echo('[Error Code:1010] FileCache load error!'.$file);exit;
+			show_tips('[Error Code:1011] FileCache data error!'.$file);
 		}
 
 		if (strlen($str) == 0 || 
