@@ -713,7 +713,7 @@ var pathTools = (function(){
 				}
 			}
 		}
-		return 0;
+		return a>b?1:(a==b?0:-1);//test,test123 情况用原始对比
 	}
 
 	return {
