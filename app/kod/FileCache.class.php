@@ -163,7 +163,7 @@ class FileCache{
 	public static function load($file){//10000次需要4s 数据量差异不大。
 		if (!$file) return false;
 		$file = iconv_system($file);
-		if ( !file_exists($file) || filesize($file) == 0 ){
+		if ( !file_exists($file) ){
 			@file_put_contents($file,CONFIG_EXIT.'[]');
 			chmod_path($file,0777);
 			return array();

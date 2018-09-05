@@ -34,7 +34,7 @@ function updateCheck(){
 	//from <=3.23 to 3.30
 	if( file_exists(THE_DATA_PATH.'system/member.php') && 
 		!file_exists(THE_DATA_PATH.'system/system_member.php')){
-		new UpdateToV330();
+		new updateToV330();
 	}
 
 	//from [3.30~3.36] //还原用户目录
@@ -230,6 +230,17 @@ class Update3To400{
 		}
 	}
 	function initUser($userPath){
+		$checkFile = array(
+			$userPath.'config.php',
+			$userPath.'fav.php',
+			$userPath.'share.php'
+		);
+		foreach ($checkFile as $item) {
+			if(file_exists($item) && filesize($item) == 0 ){
+				@unlink($item);
+			}
+		}
+
 		$this->parseFile($userPath.'config.php');
 		$this->parseFile($userPath.'editor_config.php');
 		$this->parseFile($userPath.'share.php',true);
@@ -458,6 +469,18 @@ class updateToV330{
 			mk_dir($user_path.'home/desktop');
 			mk_dir($user_path.'home/document');
 			mk_dir($user_path.'home/pictures');
+		}
+
+		$userPath = $user_path.'data/';
+		$checkFile = array(
+			$userPath.'config.php',
+			$userPath.'fav.php',
+			$userPath.'share.php'
+		);
+		foreach ($checkFile as $item) {
+			if(file_exists($item) && filesize($item) == 0 ){
+				@unlink($item);
+			}
 		}
 		mk_dir($user_path.'recycle');
 		if(!is_array($data) || count($data)<4){
