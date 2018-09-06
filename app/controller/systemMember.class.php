@@ -274,7 +274,7 @@ class systemMember extends Controller{
 		}else{
 			$userArray[] = $name;
 		}
-		$nickName = $name;
+		$nickName = 0;
 		if(isset($this->in['nickName'])){
 			$nickName = trim(rawurldecode($this->in['nickName']));
 		}
@@ -291,7 +291,7 @@ class systemMember extends Controller{
 			$userInfo = array(
 				'userID'	=>  $userID,
 				'name'      =>  $val,
-				'nickName'	=>  $nickName,
+				'nickName'	=>  $nickName ? $nickName : $val,
 				'password'  =>  md5($password),
 				'role'      =>  $this->in['role'],
 				'config'    =>  array('sizeMax' => floatval($this->in['sizeMax']),//M

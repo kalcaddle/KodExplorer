@@ -1,4 +1,7 @@
 define(function(require, exports) {
+	if(!core.authCheck('explorer.fileDownload')){
+		$(".context-menu-list .open-browser").remove();
+	}
 	var menuAction = function(action,option){
 		//console.log(action,option);
 		var zip = function(fileType){

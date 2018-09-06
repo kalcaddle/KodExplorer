@@ -2,7 +2,7 @@
 	"id":"zipView",
 	"name":"{{LNG.Plugin.default.zipView}}",
 	"title":"",
-	"version":"1.32",
+	"version":"1.34",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png",
 		"screenshoot":[
@@ -34,7 +34,7 @@
 			"type":"number",
 			"display":"{{LNG.Plugin.Config.fileSort}}",
 			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
-			"value":10,
+			"value":10
 		}
 	}
 }
