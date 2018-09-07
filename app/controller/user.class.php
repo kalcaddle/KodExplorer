@@ -261,6 +261,7 @@ class user extends Controller{
 				'updloadChunkSize'	=> file_upload_size(),
 				'updloadThreads'	=> $this->config['settings']['updloadThreads'],
 				'updloadBindary'	=> $this->config['settings']['updloadBindary'],
+				'uploadCheckChunk'	=> $this->config['settings']['uploadCheckChunk'],
 
 				'paramRewrite'		=> $this->config['settings']['paramRewrite'],
 				'pluginServer'		=> $this->config['settings']['pluginServer'],
