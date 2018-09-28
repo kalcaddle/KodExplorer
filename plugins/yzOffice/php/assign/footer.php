@@ -8,6 +8,9 @@
 			//$('.navbar-inverse').css('opacity',0);
 		}
 		$(document).ready(function(){
+			if($(".nav-collapse").length == 1){
+				$('body').addClass("body-excle");
+			}
 		})
 	</script>
 	<div class='powerby'>yozo DCS</div>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A simple jQuery plugin for picking provinces, cities and districts of China.">
+    <meta name="author" content="Tao Shi">
+    <title>city-picker</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+    <link href="./css/city-picker.css" rel="stylesheet">
+</head>
+<style>
+    body{
+        font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", 微软雅黑, "Lantinghei SC", STXihei;
+        font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+</style>
+<body>
+
+<!-- header -->
+<header class="navbar navbar-static-top docs-header" id="top">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-target="#navbar-collapse-1" data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <nav class="collapse navbar-collapse" id="navbar-collapse-1" role="navigation">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://tshi0912.github.io/city-picker/" target="_blank">Docs</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+    
+<!-- Content -->
+<div class="container" style="margin-bottom:300px;">
+    <h1 class="page-header" id="getting-started">使用说明</h1>
+    <pre class="prettyprint">
+&lt;script src=&quot;/path/to/city-picker.data.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/path/to/city-picker.js&quot;&gt;&lt;/script&gt;
+
+&lt;input readonly id="city-picker1" type="text" placeholder="请选择省/市" data-level="[province|city|district]" data-simple="true" &gt;
+
+$('#city-picker1').citypicker();
+</pre>
+
+    <h3>自定义初始数据</h3>
+    <pre class="prettyprint">&lt;div style="position: relative;"&gt;&lt;!-- container --&gt;
+  &lt;input readonly type="text" data-toggle="city-picker" value="北京市/北京市/海淀区"&gt;
+&lt;/div&gt;</pre>
+    <h5>Demo:</h5>
+    <form class="form-inline">
+        <div style="position: relative;">
+            <input class="form-control" readonly type="text" data-toggle="city-picker" value="北京市/北京市/海淀区">
+        </div>
+    </form>
+
+    <h3>定义选择到层级</h3>
+    <pre class="prettyprint">&lt;div style="position: relative;"&gt;&lt;!-- container --&gt;
+  &lt;input readonly type="text" data-toggle="city-picker" placeholder="请选择省/市" data-level="province" &gt;
+&lt;/div&gt;</pre>
+    <h5>Demo:</h5>
+    <form class="form-inline">
+        <div style="position: relative;">
+            <input class="form-control" readonly type="text" data-toggle="city-picker" data-level="province"
+                   placeholder="请选择省份">
+        </div>
+    </form>
+
+    <h3>精简版地址</h3>
+    <pre class="prettyprint">&lt;div style="position: relative;"&gt;&lt;!-- container --&gt;
+  &lt;input readonly type="text" data-toggle="city-picker" data-simple="true" &gt;
+&lt;/div&gt;</pre>
+    <h5>Demo:</h5>
+    <form class="form-inline">
+        <div style="position: relative;">
+            <input class="form-control" readonly type="text" data-toggle="city-picker" data-simple="true"   placeholder="请选择省份">
+        </div>
+    </form>
+</div>
+
+
+<!-- Scripts -->
+<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.js"></script>
+<script src="./city-picker.data.js"></script>
+<script src="./city-picker.js"></script>
+<script>
+    $(function () {
+        $('#city-picker1').citypicker();
+    });
+</script>
+</body>
+</html>

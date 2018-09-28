@@ -166,6 +166,7 @@
 				current.preview = current.cal.data('colorpicker').livePreview;
 				$(document).bind('mouseup', current, upSelector);
 				$(document).bind('mousemove', current, moveSelector);
+				$(document).bind('mousedown', current, moveSelector);
 			},
 			moveSelector = function (ev) {
 				change.apply(
@@ -186,6 +187,7 @@
 				fillHexFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				$(document).unbind('mouseup', upSelector);
 				$(document).unbind('mousemove', moveSelector);
+				$(document).unbind('mousedown', moveSelector);
 				return false;
 			},
 			enterSubmit = function (ev) {

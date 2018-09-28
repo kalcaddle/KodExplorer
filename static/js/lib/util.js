@@ -15,7 +15,13 @@ var timeFloat = function(){
 	var time = (new Date()).valueOf();
 	return time/1000;
 }
-var urlEncode = encodeURIComponent;
+var urlEncode = function(str){
+	try {
+		return encodeURIComponent(str);
+	} catch (e) {
+		return str;
+	}
+};
 var urlDecode = function(str){
 	try {
 		return decodeURIComponent(str);
@@ -719,6 +725,7 @@ var pathTools = (function(){
 	return {
 		fileSize:fileSize,
 		strSort:strSort,
+		strSortChina:strSortChina,
 		pathThis:pathThis
 	}
 })();
@@ -851,9 +858,11 @@ var Tips =  (function(){
 		msg+= "&nbsp;&nbsp; <img src='"+staticPath+"images/common/loading_circle.gif'/>";
 
 		var self = _init(true,msg,code);
-		self.stop(true,true)
+		try{
+			self.stop(true,true)
 			.css({'opacity':'0','top':-self.height()})
 			.animate({opacity:1,top:0},inTime,0);
+		}catch(e){};
 	};
 	var close = function(msg,code){
 		if (typeof(msg) == 'object'){
@@ -1516,6 +1525,23 @@ var MaskView =  (function(){
 			document.body.removeChild(ifr);
 		}
 	}
+
+	//将html内容添加到沙盒中，不破坏父页面样式及方法
+	$.iframeHtml = function($parent,content){
+		var tpl = '<iframe src="about:blank" style="width:100%;height:100%;border:0px;display:block!important;"></iframe>';
+		$($parent).html(tpl);
+		var iframeDom = $($parent).find('iframe').get(0);
+		if (!iframeDom.tagName || "iframe" != iframeDom.tagName.toLowerCase()) {
+			$($parent).html(content);
+			return;
+		}
+		var dom = iframeDom.contentWindow.document;
+		try {
+			dom.open(), dom.write(content), dom.close()
+		} catch (d) {
+			$($parent).html(content);
+		}
+	}
 	$.printLink = function(link){
 		var $iframe = $('#page-print');
 		if ($iframe.length > 0) {
@@ -1542,6 +1568,38 @@ var MaskView =  (function(){
 		}
 		return false;
 	}
+	$.isMobleSafari = function(){
+		var ua = navigator.userAgent;
+		// IOS系统;不是Chrome;开头必须为Mozilla;结尾需为：Safari/xxx.xx
+		if (/ OS \d/.test(ua)  && 
+			!~ua.indexOf('CriOS') &&
+			!ua.indexOf('Mozilla') &&
+			/Safari\/[\d\.]+$/.test(ua)
+			) {
+			return true;
+		}
+		return false;
+	}
+	
+	var u = navigator.userAgent;
+	$.browserIS = {
+		ie:!!(window.ActiveXObject || "ActiveXObject" in window), //ie;ie6~11
+		ie8:this.ie && parseInt($.browser.version) <=8,//ie8
+
+		trident: u.indexOf('Trident') > -1, //IE内核 
+		presto: u.indexOf('Presto') > -1, //opera内核 
+		webKit:u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核 
+		gecko:u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,//火狐内核 
+		mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端  
+		ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端  
+		android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1, //android终端 
+		iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone
+		iPad: u.indexOf('iPad') > -1, //是否iPad 
+		webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部 
+		weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+		qq: u.match(/\sQQ/i) == " qq" //是否QQ  
+	};
+
 
 	$.supportUploadFolder = function(){
 		if(isWap()){
@@ -1617,6 +1675,16 @@ var MaskView =  (function(){
 				});
 			});
 			return this;
+		},
+		offsetWindow:function(){
+			var info = $(this).get(0).getBoundingClientRect();
+			return {
+				top:info.top,
+				left:info.left,
+
+				bottom:$(window).height() - info.top - $(this).outerHeight(),
+				right: $(window).width() - info.left - $(this).outerWidth(),
+			}
 		},
 
 		myDbclick:function(callback){
@@ -1938,6 +2006,103 @@ var MaskView =  (function(){
 
 })(jQuery);
 
+/**
+ * worker运行代码
+ * https://www.html5rocks.com/zh/tutorials/workers/basics/#toc-usecases
+ * 
+ * work:   function|string    异步执行的代码;必须为函数或者函数的代码; 
+ *         worker只支持访问navigator,location,XMLHttpRequest,setTimeout
+ * 
+ * param:  work函数传入的参数;
+ * callback: function  回调函数
+ * alias:   对象或数组;work中的依赖；通过源码方式注入
+ *		['trim','core.pathFather','core.pathClear',{'urlEncode':window.urlEncode,'rtrim':0}] //数组时字符串对应window能访问的函数
+ *		{'urlEncode':window.urlEncode,'rtrim':0};// 值为真时则 value为value.toString();
+
+eg:
+var fab = function(n){
+	return n<2?n:arguments.callee(n-1)+arguments.callee(n-2);
+}
+WorkerRun(fab,20,console.log);
+
+WorkerRun(function(n){
+	console.log(n);
+	return core.pathFather(n);
+},'/a/b//c/d/e.txt',function(data){
+	console.log(222,data);
+},['trim','rtrim','core.pathFather','core.pathClear']);
+
+ */
+
+var WorkerRun = function(work,param,callback,alias){
+	if( typeof(Worker) == "undefined" ){
+		setTimeout(function(){
+			callback(work(param));
+		},0);
+		return;
+	}
+	
+	//生成worker内部依赖的代码;
+	var makeAliasCode = function(obj){
+		if(!obj) return "";
+		var source = "";
+		var set = {};
+		if( !obj.hasOwnProperty(0) ){//全为对象
+			obj = [obj];
+		}
+		var makeItem = function(key,value){
+			var property = window;
+			var keyArr = key.split('.');
+			if(typeof(value) == 'string'){
+				value = '"'+value+'"';//支持引入变量
+			}else if(typeof(value) == 'object'){
+				value = JSON.stringify(value);
+			}
+			for (var i = 0; i < keyArr.length; i++) {
+				property = property[keyArr[i]];
+				var objKey = key.split('.').splice(0,i).join('.');
+				if(objKey && !set[objKey]){
+					set[objKey] = true;
+					source += 'var '+objKey+'={};\n';
+				}
+				if(i == keyArr.length - 1){
+					var needVar = key.indexOf('.') == -1?"var ":"";
+					value = value || property;				
+					source += needVar+key+'='+value.toString()+';\n';
+				}
+			}
+		}
+		for (var i=0;i<=obj.length;i++) {
+			var item = obj[i];
+			if(typeof(item) == 'string'){
+				makeItem(item);
+				continue;
+			}
+			for (var key in item) {
+				makeItem(key,item[key]);
+			}
+		}
+		return source;
+	};
+
+	var source = (typeof(work) == 'function') ? work.toString():work;
+	source  = "var workFunction = ("+source+");\n";
+	source += makeAliasCode(alias);
+	source += 'onmessage=function(e){postMessage(workFunction(e.data));}';
+
+	var blob = new Blob([source],{type:"text/javascript"});
+	var blobURL = URL.createObjectURL(blob);
+	var worker = new Worker(blobURL);
+	worker.onmessage = function(e){
+		callback(e.data);
+	};
+	worker.onerror = function(event) {
+		console.info(event.filename, event.lineno, event.message,[event,source]);
+	};
+	worker.postMessage(param);
+	worker.close = worker.terminate;
+	return worker;
+}
 
 /**
  * FunctionHooks;
@@ -2189,6 +2354,23 @@ window.Messenger = (function(){
 	return Messenger;
 })();
 
+var __json = function(obj){
+    var cache = [];
+    var result = JSON.stringify(obj, function(key, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                return;
+            }
+            cache.push(value);
+        }
+        if (typeof value === 'function') {
+            return '[function]';
+        }
+        return value;
+    });
+    cache = null;
+    return JSON.parse(result);
+}
 
 
 //yyyy-mm-dd H:i:s or yy-mm-dd  to timestamp

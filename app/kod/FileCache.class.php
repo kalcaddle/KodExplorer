@@ -171,7 +171,7 @@ class FileCache{
 
 		$str = file_read_safe($file,10.5);
 		if( $str === false || $str === 0 || $str === -1){
-			show_tips('[Error Code:1011] FileCache data error!'.$file);
+			show_tips('[Error Code:1010] FileCache data read error!<br/>'.get_path_this($file));
 		}
 
 		if (strlen($str) == 0 || 
@@ -182,7 +182,7 @@ class FileCache{
 		}
 		
 		if($str === false || strlen($str) < strlen(CONFIG_EXIT) ){
-			show_tips('[Error Code:1011] FileCache data error!'.$file);
+			show_tips('[Error Code:1011] FileCache data error!<br/>'.get_path_this($file));
 		}
 		$data= json_decode(substr($str, strlen(CONFIG_EXIT)),true);
 		if (is_null($data)) $data = array();
@@ -208,12 +208,12 @@ class FileCache{
 			$jsonStr = json_encode($data);
 		}
 		if(is_null($jsonStr) || strlen($jsonStr) == 0){//含有二进制或非utf8字符串对应检测
-			show_tips('json_encode error!');
+			show_tips('[Error Code:1013] json_encode error!<br/>'.get_path_this($file));
 		}
 		
 		$result = file_wirte_safe($file,CONFIG_EXIT.$jsonStr,10.5);
 		if($result === false){
-			show_tips('[Error Code:1012] FileCache save error!'.$file);
+			show_tips('[Error Code:1012] FileCache save error!<br/>'.get_path_this($file));
 		}
 		return $result;
 	}

@@ -238,7 +238,7 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 				$search.addClass('hidden');
 				$edit_body.css('bottom',0);
 			}
-			Editor.current() && Editor.current().resize();
+			Editor && Editor.current() && Editor.current().resize();
 		}
 		this.setEditor = function(appSpace,editor) {
 			var $search = $('.search-content');
@@ -248,7 +248,7 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 			this.resetEditorHeight(true);
 			appSpace.searchBox = this;
 			this.editor = editor;
-			Editor.current() && Editor.current().resize();
+			Editor && Editor.current() && Editor.current().resize();
 		};
 		this.$initElements = function(sb) {
 			this.searchBox = sb.querySelector(".ace_search_form");

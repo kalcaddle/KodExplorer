@@ -266,7 +266,7 @@ class share extends Controller{
 		header("Content-Type: application/javascript; charset=utf-8");
 		echo 'if(typeof(kodReady)=="undefined"){kodReady=[];}';
 		Hook::trigger('user.commonJs.insert',$this->in['st'],$this->in['act']);
-		echo 'AUTH=[];';
+		echo ';AUTH=[];';
 		echo 'G='.json_encode($theConfig).';';
 		$lang = json_encode_force(I18n::getAll());
 		if(!$lang){

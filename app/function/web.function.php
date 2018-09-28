@@ -361,6 +361,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 	curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($ch, CURLOPT_SSLVERSION,1);//1|5|6; http://t.cn/RZy5nXF
 	curl_setopt($ch, CURLOPT_TIMEOUT,$timeout);
 	curl_setopt($ch, CURLOPT_REFERER,get_url_link($url));
 	curl_setopt($ch, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36');
@@ -383,7 +384,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 			curl_setopt($ch, CURLOPT_NOPROGRESS, false);
 			curl_setopt($ch, CURLOPT_PROGRESSFUNCTION,'curl_progress_set');
 
-			curl_setopt($ch,CURLOPT_HTTPGET,1);
+			curl_setopt($ch, CURLOPT_HTTPGET,1);
 			curl_setopt($ch, CURLOPT_HEADER,0);//不输出头
 			curl_setopt($ch, CURLOPT_FILE, $fp);
 			//CURLOPT_RETURNTRANSFER 必须放在CURLOPT_FILE前面;否则出问题

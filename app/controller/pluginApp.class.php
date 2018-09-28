@@ -40,7 +40,11 @@ class pluginApp extends Controller{
 				}
 				show_tips("出错了！插件未开启，或您没有{$app}插件的权限");
 			}
+			Hook::trigger("pluginRun.before",$app.'Plugin.'.$action);
+			Hook::trigger($app.'Plugin.'.$action.'.before');
 			Hook::apply($app.'Plugin.'.$action);
+			Hook::trigger($app.'Plugin.'.$action.'.after');
+			Hook::trigger("pluginRun.after",$app.'Plugin.'.$action);
 		}
 	}
 

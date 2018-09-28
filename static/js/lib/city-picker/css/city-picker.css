@@ -1,0 +1,192 @@
+.city-picker-input, .city-picker-input[readonly] {
+    background: #fff;
+    color: rgba(0,0,0,0.001);
+    border-radius: 0px;
+    box-shadow: none;
+
+    display: none !important;
+}
+.city-picker-span {
+    position: relative;
+    display: inline-block;
+    background: #fdfdfd;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    outline: 0;
+    padding: 0 8px;
+    min-width: 150px;
+    color: #ccc;
+    cursor: pointer;
+
+    width:auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.city-picker-dropdown{background:#fff;}
+.city-picker-dropdown.position-top{
+    padding-bottom: 40px;
+}
+.city-picker-dropdown.position-top .city-select-tab {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    padding: 0px 15px 9px 15px;
+    border-top: 1px solid #dfe2e5;
+    border-bottom: none;
+}
+.city-picker-dropdown.position-top .city-select-tab  >  a{
+    margin-top: -1px;margin-bottom:0;
+}
+.city-picker-dropdown.position-top .city-select-tab  >  a.active {
+    border-radius: 0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #fff;
+}
+
+
+.city-picker-span > .placeholder {
+    color: #aaa;
+}
+.city-picker-span > .arrow {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    width: 10px;
+    margin-top: -3px;
+    height: 5px;
+}
+.city-picker-span.focus,
+.city-picker-span.open {
+    /* border-color: #46A4FF;
+    box-shadow: 1px 1px 5px rgba(70,165,255,0.2); */
+    box-shadow: 0px -1px 5px rgba(0,0,0,0.1);
+}
+
+
+.city-picker-span.open > .arrow {
+    background-position: -10px -10px;
+}
+span.city-picker-span:hover {
+    border-color: #46A4FF;
+}
+
+.city-picker-span > .title > span {
+    color: #333;
+    padding: 2px 4px;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+.city-picker-span > .title > span:hover {
+    background-color:#def;
+    color:#46A4FF;
+}
+.city-picker-dropdown {
+    position: absolute;
+    width: 420px;
+    left: -9999px;
+    top: -9999px;
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    z-index: 999999;
+    display: none;
+    min-width: 330px;
+    border: 1px solid #d6d7d7;
+    border-radius: 2px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.2);
+    overflow: hidden;
+}
+.city-select-wrap {
+}
+.city-select-tab {
+    border-bottom: 1px solid #dfe2e5;
+    background: #f5f5f5;
+    font-size: 13px;
+    padding: 8px 15px 0 15px;
+}
+.city-select-tab > a {
+    display: inline-block;
+    padding: 4px 20px;
+    border: 1px solid transparent;
+    color: #777;
+    text-align: center;
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: -1px;
+}
+.city-select-tab > a:hover{
+    color: #46A4FF;
+}
+
+.city-select-tab > a.active {
+    background: #fff;
+    color: #46A4FF;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border: 1px solid #ddd;
+    border-bottom: 1px solid #fff;
+}
+
+.city-select-content {
+    width: 100%;
+    min-height: 10px;
+    background-color: #fff;
+    padding: 10px 15px;
+	box-sizing: border-box;
+}
+.city-select {
+    font-size: 13px;
+}
+.city-select dl {
+    line-height: 2;
+    clear: both;
+    padding: 3px 0;
+    margin: 0;
+    border-bottom: 1px dotted #eee;
+}
+.city-select dl:last-child {
+    border: none;
+}
+
+.city-select dt {
+    position: absolute;
+    width: 2.5em;
+    font-weight: 500;
+    text-align: right;
+    line-height: 2;
+}
+.city-select dd {
+    margin-left: 0;
+    line-height: 2;
+}
+.city-select.province dd {
+    margin-left: 3em;
+}
+.city-select a {
+    display: inline-block;
+    padding: 0 10px;
+    outline: 0;
+    text-decoration: none;
+    white-space: nowrap;
+    margin-right: 2px;margin-bottom: 1px;
+    text-decoration: none;
+    color: #666;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.city-select a:hover,
+.city-select a:focus {
+    background-color: #def;
+    border-radius: 2px;
+    color: #46A4FF;
+}
+.city-select a.active {
+    background-color: #46A4FF;
+    color: #fff;
+    border-radius: 2px;
+}

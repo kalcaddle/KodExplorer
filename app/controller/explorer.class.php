@@ -984,12 +984,14 @@ class explorer extends Controller{
 		if($checkSpaceChange){Hook::trigger("explorer.zipBefore",$zipname);}
 		$result = KodArchive::create($zipname,$files);
 		if($checkSpaceChange){Hook::trigger("explorer.zipAfter",$zipname);}
-		if ($result == 0) {
-			show_json("压缩失败!",false);
-		}
-		$info = LNG('zip_success').LNG('size').":".size_format(filesize($zipname));
+
 		if ($zipPath=='') {
-			show_json($info,true,_DIR_OUT(iconv_app($zipname)) );
+			if(file_exists($zipname)){
+				$info = LNG('zip_success').LNG('size').":".size_format(filesize($zipname));
+				show_json($info,true,_DIR_OUT(iconv_app($zipname)) );
+			}else{
+				show_json(LNG.error,false);
+			}
 		}else{
 			return iconv_app($zipname);
 		}

@@ -649,6 +649,10 @@ function recursion_dir($path,&$dir,&$file,$deepest=-1,$deep=0){
 	closedir($dh);
 	return true;
 }
+function dir_list($path){
+	recursion_dir($path,$dirs,$files);
+	return array_merge($dirs,$files);
+}
 
 /**
  * 借用临时文件方式对读写文件进行锁定标记
@@ -735,6 +739,9 @@ function file_read_safe($file,$timeout = 5){
 		$result = @fread($fp, filesize($file));
 		flock($fp,LOCK_UN);
 		fclose($fp);
+		if(filesize($file) == 0){
+			return '';
+		}
 		return $result;
 	}else{
 		flock($fp,LOCK_UN);fclose($fp);
@@ -776,7 +783,6 @@ function file_wirte_safe($file,$buffer,$timeout=5){
 	}
 }
 
-
 /*
  * $search 为包含的字符串
  * is_content 表示是否搜索文件内容;默认不搜索
@@ -816,7 +822,7 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
 			}
 		}else{
 			$path_this = get_path_this($f);
-			if ($strpos($path_this,$search) !== false){//搜索文件名;
+			if ($strpos($path_this,iconv_system($search)) !== false){//搜索文件名;
 				$result['fileList'][] = file_info($f);
 				$result_num ++;
 			}
@@ -825,7 +831,7 @@ function path_search($path,$search,$is_content=false,$file_ext='',$is_case=false
 	if (!$is_content && $file_ext == '' ) {//没有指定搜索文件内容，且没有限定扩展名，才搜索文件夹
 		foreach($dirs as $f){
 			$path_this = get_path_this($f);
-			if ($strpos($path_this,$search) !== false){
+			if ($strpos($path_this,iconv_system($search)) !== false){
 				$result['folderList'][]= array(
 					'name'  => iconv_app(get_path_this($f)),
 					'path'  => iconv_app($f)
@@ -851,9 +857,7 @@ function file_search($path,$search,$is_case){
 		unset($content);
 		return false;
 	}
-
 	$charset = get_charset($content);
-
 	//搜索关键字为纯英文则直接搜索；含有中文则转为utf8再搜索，为兼容其他文件编码格式
 	$notAscii = preg_match("/[\x7f-\xff]/", $search);
 	if($notAscii && !in_array($charset,array('utf-8','ascii'))){
@@ -879,7 +883,6 @@ function file_search($path,$search,$is_case){
 		}
 	}
 
-	
 	$arr_line = array();
 	$pose = 0;
 	while ( $pose !== false) {
@@ -892,7 +895,6 @@ function file_search($path,$search,$is_case){
 		}
 	}
 	$arr_line[] = $file_size;//文件只有一行而且没有换行，则构造虚拟换行
-
 	$result = array();//  [2,10,22,45,60]  [20,30,40,50,55]
 	$len_search = count($arr_search);
 	$len_line 	= count($arr_line);
@@ -1308,8 +1310,13 @@ function check_upload($error){
 //拍照上传
 function updload_ios_check($fileName,$in){
 	if(!is_wap()) return $fileName;
-	if($fileName == "image.jpg" || $fileName == "image.jpeg"){
-		return date('YmdHis',time()).'-'.rand_string(4,1).'.jpg';
+	$time = strtotime($in['lastModifiedDate']);
+	$time = $time ? $time : time();
+	$beforeName = strtolower($fileName);
+	if($beforeName == "image.jpg" || $beforeName == "image.jpeg"){
+		$fileName =  date('Ymd',$time).'_'.$in['size'].'.jpg';
+	}else if($beforeName == "capturedvideo.mov"){
+		$fileName =  date('Ymd',$time).'_'.$in['size'].'.mov';
 	}
 	return $fileName;
 }
@@ -1369,22 +1376,48 @@ function upload($path,$tempPath,$repeatAction='replace'){
 	}
 }
 
+
+/**
+ * 简易文件hash获取;替代md5_file;
+ * md5(文件头6字节+中间6字节+结尾6字节)
+ */
+function file_hash_simple($file){
+	$fileSize    = filesize($file);
+	$sliceLength = 6;
+	if($fileSize <= $sliceLength){
+		$sliceString = file_get_contents($file);
+	}else{
+		$fp = fopen($file,'r');
+		$sliceString = fread($fp,$sliceLength);
+		fseek($fp,($fileSize-$sliceLength)/2);
+		$sliceString .= fread($fp,$sliceLength);
+		fseek($fp,$fileSize-$sliceLength);
+		$sliceString .= fread($fp,$sliceLength);
+		fclose($fp);
+	}
+	$hash = $fileSize;
+	for ($i=0; $i < strlen($sliceString); $i++) { 
+		$hash = $hash.",".ord($sliceString[$i]);
+	}
+	return md5($hash);
+}
+
 function upload_chunk($uploadFile,$tempPath,$savePath){
 	global $in;
 	$chunk = isset($in["chunk"]) ? intval($in["chunk"]) : 0;
 	$chunks = isset($in["chunks"]) ? intval($in["chunks"]) : 1;
 	$check_md5 = isset($in["check_md5"]) ? $in["check_md5"] : false;
 
-	//if(mt_rand(0, 100) < 50) die("server error".$chunk); //分片失败重传
+	//if(mt_rand(0, 100) > 10) die("server error".$chunk); //模拟失败
 	//文件分块检测是否已上传，已上传则忽略；断点续传
 	if($check_md5 !== false){
 		$chunk_file_pre = $tempPath.md5($savePath).'.part';
 		$chunk_file = $chunk_file_pre.$chunk;
-		if( file_exists($chunk_file) && md5_file($chunk_file) == $check_md5){
+		if( file_exists($chunk_file) && file_hash_simple($chunk_file) == $check_md5){
 			$arr = array();
 			for($index = 0; $index<$chunks; $index++ ){
 				if(file_exists($chunk_file_pre.$index)){
-					$arr['part_'.$index] = md5_file($chunk_file_pre.$index);
+					$arr['part_'.$index] = file_hash_simple($chunk_file_pre.$index);
 				}
 			}
 			show_json('success',true,$arr);

@@ -13,7 +13,7 @@ $config['settings'] = array(
 	'updloadChunkSize'	=> 1024*1024*0.4,//0.4M;分片上传大小设定;需要小于php.ini上传限制的大小
 	'updloadThreads'	=> 10,			 //上传并发数;部分低配服务器上传失败则将此设置为1
 	'updloadBindary'	=> 0,			 //1:以二进制方式上传;后端服务器以php://input接收;0则为传统方式上传
-	'uploadCheckChunk'	=> false,		 //开关断点续传，一个文件上传一半时中断，同一个文件再次上传到同一个位置时会接着之前的进度上传。开启后会一定程度影响上传速度。
+	'uploadCheckChunk'	=> true,		 //开关断点续传，一个文件上传一半时中断，同一个文件再次上传到同一个位置时会接着之前的进度上传。
 	'paramRewrite'		=> false,		 //开启url 去除? 直接跟参数
 	'httpSendFile'		=> false,		 //调用webserver下载 http://www.laruence.com/2012/05/02/2613.html; 
 										 //https://www.lovelucy.info/x-sendfile-in-nginx.html

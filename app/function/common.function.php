@@ -621,16 +621,24 @@ function show_trace(){
 	exit;
 }
 
+function file_sub_str($file,$start=0,$len=0){
+    $fp = fopen($file,'r');
+    fseek($fp,$start);
+    $res = fread($fp,$len);
+    fclose($fp);
+    return $res;
+}
 function str2hex($string){
 	$hex='';
 	for($i=0;$i<strlen($string);$i++){
-		$hex .= sprintf('%02s',dechex(ord($string[$i])));
+		$hex .= sprintf('%02s ',dechex(ord($string[$i])));
 	}
 	$hex = strtoupper($hex);
 	return $hex;
 }
 
 function hex2str($hex){
+	$hex = str_replace(" ",'',$hex);
 	$string='';
 	for ($i=0; $i < strlen($hex)-1; $i+=2){
 		$string .= chr(hexdec($hex[$i].$hex[$i+1]));
@@ -788,84 +796,60 @@ function msubstr($str, $start = 0, $length, $charset = "utf-8", $suffix = true){
 	$slice = join("", array_slice($match[0], $start, $length));
 	if ($suffix) return $slice . "…";
 	return $slice;
-} 
+}
 
-
-/**
- * 获取变量的名字
- * eg hello="123" 获取ss字符串
- */
-function get_var_name(&$aVar){
-	foreach($GLOBALS as $key => $var) {
-		if ($aVar == $GLOBALS[$key] && $key != "argc") {
-			return $key;
-		} 
-	} 
-} 
 // -----------------变量调试-------------------
 /**
  * 格式化输出变量，或者对象
  * 
- * @param mixed $var 
- * @param boolean $exit 
+ * @param args; 
+ * 默认自动退出；最后一个参数为false时不退出
  */
-function pr($var, $exit = false){
+
+function pr_replace_callback($matches){
+	return "\n".str_repeat(" ",strlen($matches[1])*2).$matches[2];
+}
+function pr(){
 	ob_start();
 	$style = '<style>
-	pre#debug{margin:10px;font-size:14px;color:#222;font-family:Consolas ;line-height:1.2em;background:#f6f6f6;border-left:5px solid #444;padding:5px;width:95%;word-break:break-all;}
+	pre#debug{margin:10px;font-size:14px;color:#222;font-family:Consolas ;line-height:1.2em;background:#f6f6f6;
+		border-left:5px solid #444;padding:10px;width:95%;word-break:break-all;white-space:pre-wrap;word-wrap: break-word;}
 	pre#debug b{font-weight:400;}
-	#debug #debug_str{color:#E75B22;}
-	#debug #debug_keywords{font-weight:800;color:00f;}
-	#debug #debug_tag1{color:#22f;}
-	#debug #debug_tag2{color:#f33;font-weight:800;}
-	#debug #debug_var{color:#33f;}
-	#debug #debug_var_str{color:#f00;}
+	#debug #debug_keywords{font-weight:200;color:#888;}
+	#debug #debug_tag{color:#222 !important;}
+	#debug #debug_var{color:#f60;}
+	#debug #debug_var_str,#debug #debug_var_str #debug_keywords{color:#f44336;}
 	#debug #debug_set{color:#0C9CAE;}</style>';
-	if (is_array($var)) {
-		print_r($var);
-	} else if (is_object($var)) {
-		echo get_class($var) . " Object";
-	} else if (is_resource($var)) {
-		echo (string)$var;
-	} else {
-		echo var_dump($var);
-	} 
-	$out = ob_get_clean(); //缓冲输出给$out 变量	
-	$out = preg_replace('/"(.*)"/', '<b id="debug_var_str">"' . '\\1' . '"</b>', $out); //高亮字符串变量
-	$out = preg_replace('/=\>(.*)/', '=>' . '<b id="debug_str">' . '\\1' . '</b>', $out); //高亮=>后面的值
-	$out = preg_replace('/\[(.*)\]/', '<b id="debug_tag1">[</b><b id="debug_var">' . '\\1' . '</b><b id="debug_tag1">]</b>', $out); //高亮变量
-	$from = array('    ', '(', ')', '=>');
-	$to = array('  ', '<b id="debug_tag2">(</i>', '<b id="debug_tag2">)</b>', '<b id="debug_set">=></b>');
-	$out = str_replace($from, $to, $out);
 
-	$keywords = array('Array', 'int', 'string', 'class', 'object', 'null'); //关键字高亮
+	ob_start();
+	$arg = func_get_args();
+	$num = func_num_args();
+	$exit = true;
+	for ($i=0; $i < $num; $i++) {
+		if($i == $num-1 && $arg[$i] == true){
+			$exit = false;
+		}
+		var_dump($arg[$i]);
+	}
+	$out = ob_get_clean(); //缓冲输出给$out 变量
+	$out = preg_replace('/=\>\n\s+/',' => ',$out); //高亮=>后面的值
+	$out = preg_replace_callback('/\n(\s*)([\}\[])/','pr_replace_callback',$out); //高亮=>后面的值
+
+	$out = preg_replace('/"(.*)"/','<b id="debug_var_str">"\\1"</b>', $out); //高亮字符串变量
+	$out = preg_replace('/\[(.*)\]/','<b id="debug_tag">[</b><b id="debug_var">\\1</b><b id="debug_tag">]</b>', $out); //高亮变量
+	$out = preg_replace('/\((.*)\)/','<b id="debug_tag">(</b><b id="debug_var">\\1</b><b id="debug_tag">)</b>', $out); //高亮变量
+	$out = str_replace(array('=>',"\n\n"), array('<b id="debug_set">=></b>',"\n"), $out);
+	$keywords = array('array','int','string','class','object','null','float','bool'); //关键字高亮
 	$keywords_to = $keywords;
 	foreach($keywords as $key => $val) {
 		$keywords_to[$key] = '<b id="debug_keywords">' . $val . '</b>';
-	} 
+	}
 	$out = str_replace($keywords, $keywords_to, $out);
-	$out = str_replace("\n\n", "\n", $out);
-	echo $style . '<pre id="debug"><b id="debug_keywords">' . get_var_name($var) . '</b> = ' . $out . '</pre>';
+	echo $style.'<pre id="debug">'.$out.'</pre>';
 	if ($exit) exit; //为真则退出
-} 
-
-/**
- * 调试输出变量，对象的值。
- * 参数任意个(任意类型的变量)
- * 
- * @return echo 
- */
-function debug_out(){
-	$avg_num = func_num_args();
-	$avg_list = func_get_args();
-	ob_start();
-	for($i = 0; $i < $avg_num; $i++) {
-		pr($avg_list[$i]);
-	} 
-	$out = ob_get_clean();
-	echo $out;
-	exit;
 }
+function dump(){call_user_func('pr',func_get_args());}
+function debug_out(){call_user_func('pr',func_get_args());}
 
 /**
  * 取$from~$to范围内的随机数

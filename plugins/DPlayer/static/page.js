@@ -21,10 +21,10 @@ define(function(require, exports) {
 				url:vedioInfo.url,
 				type:type
 			},			
-			danmaku: {
-				id:md5(vedioInfo.url),
-				api:'https://api.prprpr.me/dplayer/'
-			},
+			// danmaku: {
+			// 	id:md5(vedioInfo.url),
+			// 	api:'https://api.prprpr.me/dplayer/'
+			// },
 			contextmenu: [
 				{
 					text: 'kodcloud官网',
