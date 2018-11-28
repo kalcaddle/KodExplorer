@@ -14,12 +14,15 @@ class userShare extends Controller{
 	/**
 	 * 获取
 	 */
-	public function get() {
+	public function get($ret = 0) {
 		$list = $this->sql->get();
 		foreach($list as $key=>&$val){
 			//unset($val['sharePassword']);
 		}
-		return $list;
+		if($ret){
+			return $list;
+		}
+		show_json($list, true);
 	}
 
 	//检测该目录是否已被共享
@@ -29,7 +32,7 @@ class userShare extends Controller{
 		if (!$shareInfo) {
 			show_json('',false);//没有找到
 		}else{
-			show_json($shareInfo,true,$this->get());
+			show_json($shareInfo,true,$this->get(1));
 		}
 	}
 
@@ -76,7 +79,7 @@ class userShare extends Controller{
 				$infoNew[$key] = $val;
 			}
 			if($this->sql->set($this->in['sid'],$infoNew)){
-				show_json($infoNew,true,$this->get());
+				show_json($infoNew,true,$this->get(1));
 			}
 			show_json(LNG('error'),false);
 		}else{//插入
@@ -87,7 +90,7 @@ class userShare extends Controller{
 			}
 			$shareInfo['sid'] = $newId;
 			if($this->sql->set($newId,$shareInfo)){
-				show_json($shareInfo,true,$this->get());
+				show_json($shareInfo,true,$this->get(1));
 			}
 			show_json(LNG('error'),false);
 		}
@@ -102,6 +105,6 @@ class userShare extends Controller{
 		foreach ($list as $val) {
 			$this->sql->remove($val['path']);
 		}
-		show_json(LNG('success'),true,$this->get());
+		show_json(LNG('success'),true,$this->get(1));
 	}
 }

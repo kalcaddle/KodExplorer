@@ -3921,7 +3921,7 @@
             $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
             
             // ----- Decompress the file
-            $v_file_content = @gzinflate($v_buffer);
+            $v_file_content = gzinflate($v_buffer);
             unset($v_buffer);
             if ($v_file_content === FALSE) {
   
@@ -4254,7 +4254,7 @@
           $v_data = @fread($this->zip_fd, $p_entry['compressed_size']);
           
           // ----- Decompress the file
-          if (($p_string = @gzinflate($v_data)) === FALSE) {
+          if (($p_string = gzinflate($v_data)) === FALSE) {
               // TBC
           }
         }
@@ -4321,8 +4321,6 @@
     // ----- Check signature
     if ($v_data['id'] != 0x04034b50)
     {
-        pr($p_header,$v_data,0x04034b50,str2hex($v_binary_data));
-      
       // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_BAD_FORMAT, 'privReadFileHeader:Invalid archive structure');
 
@@ -4411,18 +4409,68 @@
   //zip64 footer:extra data;add by warlee;
   //64位文件头读取处理
   function readZip64ExtraData(&$p_header){
+    $size   = filesize($this->zipname);
+    //不符合zip64 的大于4G的文件处理；溢出寻找标记头；
+    if(!$this->zip64 && $size >= 0xFFFFFFFF){
+      $zip  = fopen($this->zipname,'rb');
+      $from = $p_header['offset'];
+      while($from < $size){
+        fseek($zip,$from);
+        $sign = unpack('Vid',@fread($zip, 4));
+        //pr($from,$sign,0x04034b50);
+        if($sign['id'] == 0x04034b50){
+          $p_header['offset'] = $from;
+          break;
+        }else{
+          $from = $from + 0xFFFFFFFF + 1;//
+        }
+      }
+
+      //mac下压缩大于4G的文件
+      $from = 4+26+$p_header['compressed_size']+$p_header['filename_len']+$p_header['extra_len']+$p_header['comment_len']+20;
+      $add  = 0;
+      while($from < $size){
+        fseek($zip,$from);
+        $sign = unpack("Vid",@fread($zip, 4));
+        // pr($from,$p_header,str2hex(file_sub_str($this->zipname,$from,50)) );
+        if($sign['id'] == 0x04034b50 || $sign['id'] == 0x02014b50 || $sign['id'] == 0x06054b50){
+          $p_header['size'] += $add;
+          $p_header['compressed_size'] += $add;
+          break;
+        }else{
+          $add += 0xFFFFFFFF + 1;
+          $from += $add;//
+        }
+      }
+      fclose($zip);
+    }
+
     if(!$this->zip64 || !$p_header['extra']){
       return;
+    };
+    //pr(strlen($p_header['extra']),str2hex($p_header['extra']));
+    $p_extra_data = unpack('va/vb/Psize/Pcompressed_size/Poffset',$p_header['extra']);//2+2+8+8+8
+    if(strlen($p_header['extra']) < 28){
+        $p_extra_data = unpack('va/vb/Psize/Pcompressed_size',$p_header['extra']);
+        $p_extra_data['offset'] = 0;
     }
-    $p_extra_data = unpack('va/vb/Psize/Pcompressed_size/Poffset/Vx',$p_header['extra']);
+    if(strlen($p_header['extra']) < 20){//变长
+        $p_extra_data = unpack('va/vb/Psize',$p_header['extra']);
+        $p_extra_data['compressed_size'] = 0;
+        $p_extra_data['offset'] = 0;
+    }
+    
     //01 为zip64扩展数据标记
-    if($p_extra_data['a'] != 0x01){
+    if(!$p_extra_data || $p_extra_data['a'] != 0x01){
+        if($p_header['size'] >= 0xFFFFFFFF){//兼容非zip64 文件超过4G的文件情况
+          $this->privReadEndCentralDirZip4G($p_header);//校正偏移量;n*0xFFFFFFFF
+        }
     	return;
     }
     if($p_header['offset'] == 0xffffffff){
         //var_dump(str2hex($v_binary_data),$p_header,str2hex($p_header['extra']),$p_extra_data);
     }
-    if($p_header['compressed_size'] == 0xffffffff){
+    if($p_header['compressed_size'] == 0xffffffff && $p_extra_data['compressed_size'] > 0 ){
         $p_header['compressed_size'] = $p_extra_data['compressed_size'];
     }
     //适配特殊情况; 顺序适配
@@ -4734,12 +4782,36 @@
     if($v_data['offset'] == 0xFFFFFFFF){
         return $this->privReadEndCentralDirZip64($p_central_dir,$v_data);
     }
+    if($v_size >= 0xFFFFFFFF){
+      //兼容非zip64 压缩超过4G的文件情况
+      return $this->privReadEndCentralDirZip4G($p_central_dir);
+    }
+
     // TBC
     //for(reset($p_central_dir); $key = key($p_central_dir); next($p_central_dir)) {
     //}
 
     // ----- Return
     return $v_result;
+  }
+  //超过4G的文件；通过溢出查找偏移位置
+  function privReadEndCentralDirZip4G(&$p_central_dir){
+    $zip = fopen($this->zipname,'rb');
+    $from   = $p_central_dir['offset'];
+    $size   = filesize($this->zipname);
+    while($from < $size){
+      fseek($zip,$from);
+      $sign = unpack('Vid',@fread($zip, 4));
+      //debug_out($from,$sign,0x02014b50);
+      if($sign['id'] == 0x02014b50){
+        $p_central_dir['offset'] = $from;
+        break;
+      }else{
+        $from = $from + 0xFFFFFFFF + 1;//
+      }
+    }
+    fclose($zip);
+    return 1;
   }
   
     // zip64 support;

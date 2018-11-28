@@ -59,7 +59,7 @@ class yzOfficePlugin extends PluginBase{
 		//替换内容
 		$config = $this->getConfig();
 		$pagePath = get_path_father($html);
-		$pageID = rtrim(get_path_this($html),'.html').'.files';
+		$pageID = $this->str_rtrim(get_path_this($html),'.html').'.files';
 		$urlTo = $pagePath.'/'.$pageID.'/';
 		//show_json(array($pageID,$pagePath,$urlTo),false);
 		if($config['cacheFile']){ //始终使用缓存
@@ -71,6 +71,13 @@ class yzOfficePlugin extends PluginBase{
 		include('php/assign/header.php');
 		echo $content;
 		include('php/assign/footer.php');
+	}
+	private function str_rtrim($str,$remove){
+		if(!$str || !$remove) return false;
+		while(substr($str,-strlen($remove)) == $remove){
+			$str = substr($str,0,-strlen($remove));
+		}
+		return $str;
 	}
 
 

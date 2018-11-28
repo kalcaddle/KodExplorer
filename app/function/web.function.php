@@ -292,7 +292,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 	$ch = curl_init();
 	$upload = false;
 	if(is_array($data)){//上传检测并兼容
-		foreach($data as $key => &$value){
+		foreach($data as $key => $value){
 			if(!is_string($value) || substr($value,0,1) !== "@"){
 				continue;
 			}
@@ -305,9 +305,9 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 				unset($data['curlUploadName']);
 			}
 			if (class_exists('\CURLFile')){
-				$value = new CURLFile(realpath($path),$mime,$filename);
+				$data[$key] = new CURLFile(realpath($path),$mime,$filename);
 			}else{
-				$value = "@".realpath($path).";type=".$mime.";filename=".$filename;
+				$data[$key] = "@".realpath($path).";type=".$mime.";filename=".$filename;
 			}
 			//有update且method为PUT
 			if($method == 'PUT'){

@@ -274,6 +274,7 @@ class user extends Controller{
 			'selfShare'		=> systemMember::userShareList($this->user['userID']),
 			'userConfig' 	=> $this->config['user'],
 			'accessToken'	=> access_token_get(),
+			'versionEnv'	=> base64_encode(serverInfo()),
 
 			//虚拟目录
 			'KOD_GROUP_PATH'		=>	KOD_GROUP_PATH,
@@ -444,6 +445,9 @@ class user extends Controller{
 	}
 	private function _loginDisplay($msg,$success){
 		if(isset($this->in['isAjax'])){
+			if(isset($this->in['getToken']) && $success){
+				show_json(access_token_get(),true);
+			}
 			show_json($msg,$success);
 		}else{
 			if($success){

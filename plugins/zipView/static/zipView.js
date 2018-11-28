@@ -333,9 +333,10 @@ define(function(require, exports) {
 				//ext = 'unknow';
 			}
 			//文件太大，提示解压后
-			if(node.size >= 1024*1024*200){
+			if(node.size >= 1024*1024*300){
 				Tips.tips(LNG.zipview_file_big,'warning');
 				ext = 'unknow';
+				return;
 			}
 			kodApp.setLastOpenTarget($('#'+node.tId));
 			kodApp.open(node.path,ext,app);

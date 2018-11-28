@@ -51,6 +51,9 @@ function iconv_system($str){
 	return $result;
 }
 function iconv_to($str,$from,$to){
+	if (strtolower($from) == strtolower($to)){
+		return $str;
+	}
 	if (!function_exists('iconv')){
 		return $str;
 	}
@@ -1328,6 +1331,7 @@ function updload_ios_check($fileName,$in){
  * post上传：base64Upload=1;file=base64str;name=filename
  */
 function upload($path,$tempPath,$repeatAction='replace'){
+	ignore_timeout();
 	global $in;
 	$fileInput = 'file';
 	$fileName = "";
@@ -1365,10 +1369,6 @@ function upload($path,$tempPath,$repeatAction='replace'){
 		return upload_chunk($uploadFile,$tempPath,$savePath);
 	}
 	if(kod_move_uploaded_file($uploadFile,$savePath)){
-		if( isset($in['size']) && filesize($savePath) != $in['size'] ){
-			unlink($savePath);
-			show_json('move_error',false);
-		}
 		Hook::trigger('uploadFileAfter',$savePath);
 		show_json('upload_success',true,iconv_app(_DIR_OUT($savePath)));
 	}else {
@@ -1478,10 +1478,6 @@ function upload_chunk($uploadFile,$tempPath,$savePath){
 		}
 		unlink($existMaxFile);
 		$res = rename($savePathTemp,$savePath);
-		if( isset($in['size']) && filesize($savePath) != $in['size'] ){
-			unlink($savePath);
-			show_json('move_error',false);
-		}
 		if(!$res){
 			unlink($savePath);
 			$res = rename($savePathTemp,$savePath);

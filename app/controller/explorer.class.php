@@ -979,7 +979,7 @@ class explorer extends Controller{
 			$pathThisName=get_path_this(get_path_father($files[0]));
 		}
 		$zipname = $basicPath.$namePre.$pathThisName.'.'.$fileType;
-		$zipname = get_filename_auto($zipname,'',$this->config['user']['fileRepeat']);
+		$zipname = get_filename_auto($zipname,'','rename');//已存在重命名
 
 		if($checkSpaceChange){Hook::trigger("explorer.zipBefore",$zipname);}
 		$result = KodArchive::create($zipname,$files);

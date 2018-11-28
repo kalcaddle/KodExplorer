@@ -110,7 +110,6 @@ class pluginModel{
 		$this->saveData();
 	}
 
-
 	public function getConfigDefault($app){
 		$result = array();
 		$json = $this->getPackageJson($app);

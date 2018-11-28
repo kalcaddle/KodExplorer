@@ -9,11 +9,15 @@
 // ZipArchive 解压缩
 class kodZipArchive{
 	static $listCache = array();
-    static function support(){
-		if(!defined("ZIP_ARCHIVE_LOCAL")){
-			return false;
+    static function support($type=''){
+        $result = false; 
+        if($type == 'extract' && defined("ZIP_ARCHIVE_LOCAL")){// 只允许创建压缩文件用系统调用
+            $result = true;
+        }
+		if(!class_exists('ZipArchive')){
+			$result = false;
 		}
-        return class_exists('ZipArchive');
+		return $result;
     }
     static function listContent($file){
 		$file_hash = hash_path($file);
@@ -126,6 +130,7 @@ class kodZipArchive{
 			$list = array($val);
 			if(is_dir($val)){
 				$list = dir_list($val);
+				$list[] = $val;
 			}
 			foreach ($list as $item) {
 				$addName = zip_pre_name(str_replace($removePathPre,'',$item));

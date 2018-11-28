@@ -87,14 +87,13 @@ class KodArchive {
 				$result = $appResult['data'];
 			}
 		}else{//默认zip
-            if(kodZipArchive::support()){
+            if(kodZipArchive::support('list')){
                 $result = kodZipArchive::listContent($file);
             }else{
                 $zip = new PclZip($file);
                 $result = $zip->listContent();
             }
 		}
-		
 		if($result){
 			//编码转换
 			$charset = unzip_charset_get($result);
@@ -102,7 +101,7 @@ class KodArchive {
 			for ($i=0; $i < count($result); $i++) {
 				//不允许相对路径
 				$result[$i]['filename'] = str_replace(array('../','..\\'),"_",$result[$i]['filename']);
-				$charset = get_charset($result[$i]['filename']);
+				// $charset = get_charset($result[$i]['filename']);
 				if($output){
 					$result[$i]['filename'] = iconv_to($result[$i]['filename'],$charset,'utf-8');
 					unset($result[$i]['stored_filename']);
@@ -171,7 +170,7 @@ class KodArchive {
 			return array('code'=>$result,'data'=>PclErrorString(true));
 		}else if( self::checkIfType($ext,'rar')){ // || $ext == 'zip' 
 			return kodRarArchive::extract($file,$dest,$ext,$partName);
-		}else if(kodZipArchive::support()){
+		}else if(kodZipArchive::support('extract')){
             return kodZipArchive::extract($file,$dest,$partName);
 		}else{
 			$zip = new PclZip($file);
@@ -296,7 +295,7 @@ class KodArchive {
 		$ext = get_path_ext($file);
 		$result = false;
 		if( self::checkIfType($ext,'zip') ){
-		    if(kodZipArchive::support()){
+		    if(kodZipArchive::support('add')){
                 return kodZipArchive::create($file,$files);
             }
 			$archive = new PclZip($file);

@@ -18,7 +18,7 @@ $config['settings'] = array(
 	'httpSendFile'		=> false,		 //调用webserver下载 http://www.laruence.com/2012/05/02/2613.html; 
 										 //https://www.lovelucy.info/x-sendfile-in-nginx.html
 	
-	'pluginServer'		=> "https://api.kodcloud.com/?",
+	'pluginServer'		=> "http://api.kodcloud.com/?",
 	'staticPath'		=> "./static/",	//静态文件目录,可以配置到cdn;
 	'pluginHost'		=> PLUGIN_HOST  //静态文件目录
 );
@@ -76,6 +76,10 @@ $config['settingSystemDefault']['menu'] = array(
 	array('name'=>'explorer','type'=>'system','url'=>'index.php?explorer','target'=>'_self','use'=>'1'),
 	array('name'=>'editor','type'=>'system','url'=>'index.php?editor','target'=>'_self','use'=>'1')
 );
+if( strstr(I18n::defaultLang(),'zh') || strstr(I18n::getType(),'zh') ){
+	$config['settingSystemDefault']['newGroupFolder'] = "share,文档,图片资料,视频资料";
+	$config['settingSystemDefault']['newUserFolder'] = "我的文档,图片,视频,音乐";
+}
 
 //新用户初始化默认配置
 $config['settingDefault'] = array(

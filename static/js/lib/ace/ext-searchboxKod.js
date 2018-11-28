@@ -161,8 +161,8 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 				</div>\
 			</div>\
 			<div class="ace_search_action">\
-				<button type="button" action="findNext" class="ace_searchbtn next"><i class="font-icon icon-angle-left"></i></button>\
-				<button type="button" action="findPrev" class="ace_searchbtn prev"><i class="font-icon icon-angle-right"></i></button>\
+				<button type="button" action="findPrev" class="ace_searchbtn prev"><i class="font-icon icon-angle-left"></i></button>\
+				<button type="button" action="findNext" class="ace_searchbtn next"><i class="font-icon icon-angle-right"></i></button>\
 				<button type="button" action="findAll" class="ace_searchbtn" title="Alt-Enter">All</button>\
 			</div>\
 		</div>\
@@ -278,10 +278,14 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 			event.addListener(sb, "click", function(e) {
 				var t = e.target || e.srcElement;
 				var action = t.getAttribute("action");
-				if (action && _this[action])
+				if(!action){
+					action = $(e.target).parent().attr('action');
+				}
+				if (action && _this[action]){
 					_this[action]();
-				else if (_this.$searchBarKb.commands[action])
+				}else if (_this.$searchBarKb.commands[action]){
 					_this.$searchBarKb.commands[action].exec(_this);
+				}
 				event.stopPropagation(e);
 			});
 

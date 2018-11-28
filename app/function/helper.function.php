@@ -41,21 +41,21 @@ function zip_pre_name($fileName,$toCharset=false){
 		$toCharset = 'utf-8';
 		$clientLanugage = I18n::defaultLang();
 		$langType = I18n::getType();
-		if(client_is_windows() && (
+		if( client_is_windows() && (
 			$clientLanugage =='zh-CN' || 
 			$clientLanugage =='zh-TW' || 
 			$langType =='zh-CN' ||
-			$langType =='zh-TW')
-			){
+			$langType =='zh-TW' )
+		){
 			$toCharset = "gbk";//压缩或者打包下载压缩时文件名采用的编码
 		}
 	}
 
-	//write_log("zip:".$charset.';'.$toCharset.';'.$fileName,'zip');
 	$result = iconv_to($fileName,$charset,$toCharset);
 	if(!$result){
 		$result = $fileName;
 	}
+	//write_log("zip:".$charset.'=>'.$toCharset.';'.$fileName.'=>'.$result,'zip');
 	return $result;
 }
 
@@ -108,6 +108,35 @@ function unzip_charset_get($list){
 	}
 	$GLOBALS['unzipFileCharsetGet'] = $keys[0];
 	return $keys[0];
+}
+
+/**
+ * 服务器相关环境
+ * 检测环境是否支持升级版本
+ */
+function serverInfo(){
+	$lib = array(
+		"sqlit3"=>intval( class_exists('SQLite3') ),
+		"sqlit" =>intval( extension_loaded('sqlite') ),
+		"curl"	=>intval( function_exists('curl_init') ),
+		"pdo"	=>intval( class_exists('PDO') ),
+		"mysqli"=>intval( extension_loaded('mysqli') ),
+		"mysql"	=>intval( extension_loaded('mysql') ),
+	);
+	$libStr = "";
+	foreach($lib as $key=>$val){
+		$libStr .= $key.'='.$val.';';
+	}
+	$system = explode(" ", php_uname());
+	$env = array(
+		"sys"   => strtolower($system[0]),
+		"php"	=> floatval(PHP_VERSION),
+		"server"=> $_SERVER['SERVER_SOFTWARE'],
+		"lib"	=> $libStr,
+		"info"	=> php_uname().';phpv='.PHP_VERSION,
+	);
+	$result = str_replace("\/","@",json_encode($env));
+	return $result;
 }
 
 function charset_check(&$str,$check,$tempCharset='utf-8'){
@@ -384,6 +413,10 @@ function user_logout(){
 	//之前界面维持，不是主动退出则登陆后跳转到之前页面
 	if(ACT != 'logout' && count($_GET)!=0 ){
 		$url .= '&link='.rawurlencode(this_url());
+	}
+	//移动端；接口请求时退出
+	if(isset($_REQUEST['HTTP_X_PLATFORM'])){
+		show_json('login error!',10001);
 	}
 	header('Location:'.$url);
 	exit;
