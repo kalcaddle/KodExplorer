@@ -76,10 +76,11 @@
 	<script type="text/javascript">
 		G.shareInfo = {
 			path:"<?php echo $_GET['path'];?>",
-			name:"<?php echo $name;?>",
+			name:"<?php echo get_path_this($_GET['path']);?>",
 			mtime:0,
 			size:0
 		}
+		<?php if(ST.'.'.ACT == 'explorer.fileView'){echo "G.shareInfo.view = true;";}?>
 		G['accessToken'] = "<?php echo access_token_get();?>";
 		seajs.config({
 			base: "<?php echo STATIC_PATH;?>js/",

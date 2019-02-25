@@ -30,6 +30,10 @@ if($config['systemOS'] == 'windows'){
 if(strstr($_SERVER['SERVER_SOFTWARE'],'-IIS')){
 	$config['settings']['updloadBindary'] = 0;
 }
+//自适应https
+if(substr(APP_HOST,0,8) == 'https://'){
+    $config['settings']['pluginServer'] = str_replace("http://",'https://',$config['settings']['pluginServer']);
+}
 
 $config['settings']['appType'] = array(
 	array('type' => 'tools','name' => 'app_group_tools','class' => 'icon-suitcase'),

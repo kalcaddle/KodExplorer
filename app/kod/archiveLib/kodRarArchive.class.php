@@ -243,11 +243,12 @@ class kodRarArchive {
 
 // 不允许双引号
 function escapeShell($param){
+	return escapeshellarg($param);
 	//$param = escapeshellarg($param);
 	$os = strtoupper(substr(PHP_OS, 0,3));
 	if ( $os != 'WIN' && $os != 'DAR') {//linux
 		$param = str_replace('!','\!',$param);
 	}
 	$param = rtrim($param,"\\");
-	return '"'.str_replace(array('"',"\0"),'_',$param).'"';
+	return '"'.str_replace(array('"',"\0",'`'),'_',$param).'"';
 }

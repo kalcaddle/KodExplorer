@@ -917,7 +917,7 @@ class explorer extends Controller{
 		file_put_out($this->path,true);
 	}
 	//文件下载后删除,用于文件夹下载
-	public function fileDownloadRemove(){
+	public function fileDownloadRemove(){ 
 		$path = get_path_this(_DIR_CLEAR($this->in['path']));
 		$path = iconv_system(USER_TEMP.$path);
 		$fileName = substr(get_path_this($path),10);//前10个字符为随机前缀
@@ -1167,6 +1167,11 @@ class explorer extends Controller{
 	//通用预览
 	public function fileView(){
 		Hook::trigger("explorer.fileViewStart",$this->path);
+		if(!isset($this->in['path'])){
+			show_tips('参数错误!');
+		}
+		$this->tpl = TEMPLATE.'api/';
+		$this->display('view.html');
 	}
 	//通用保存
 	public function fileSave(){

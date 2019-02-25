@@ -657,83 +657,14 @@ function dir_list($path){
 	return array_merge($dirs,$files);
 }
 
-/**
- * 借用临时文件方式对读写文件进行锁定标记
- * 
- * fopen mode: http://www.w3school.com.cn/php/func_filesystem_fopen.asp
- * flock mode: http://www.w3school.com.cn/php/func_filesystem_flock.asp
- */
-function file_lock($file,$open=true,$type='read',$timeout=5){
-	clearstatcache();
-	$lockFile  = $file.'.'.$type.'.lock';
-	$lockRead  = $file.'.read.lock';
-	$lockWrite = $file.'.write.lock';
-	if(!$open){
-		@unlink($lockFile);
-		clearstatcache();
-		return;
-	}
-
-	$startTime = microtime(true);
-	do{
-		clearstatcache();
-		$canLock = true;
-		if( $type=='read' ){
-			if( file_exists($lockWrite) ){
-				$canLock = false;
-			}
-		}else if( $type=='write' ){
-			if( file_exists($lockWrite) || file_exists($lockRead) ){
-				$canLock = false;
-			}
-		}
-		if(!$canLock){
-			usleep(mt_rand(10, 50) * 1000);//10~50ms;
-		}
-	} while((!$canLock) && ((microtime(true) - $startTime) < $timeout ));
-	$result = false;
-	if($canLock){
-		$result = file_put_contents($lockFile,time(),LOCK_EX);
-		clearstatcache();
-		$result = $result && file_exists($lockFile);
-		//if(!$result){write_log($_GET['action'].';file not exists','test2');}
-	}
-	return $result;
-}
-
 // 安全读取文件，避免并发下读取数据为空
-function file_read_safe1($file,$timeout = 5){
-	if(file_lock($file,true,'read',$timeout)){
-		$fp = @fopen($file, 'r');
-		if(!$fp || !flock($fp, LOCK_EX)) return false;
-		$result = fread($fp, filesize($file));
-		flock($fp,LOCK_UN);fclose($fp);
-
-		file_lock($file,false,'read');
-		return $result;
-	}
-	return false;
-}
-// 安全读取文件，避免并发下读取数据为空
-function file_wirte_safe1($file,$buffer,$timeout=5){
-	if(file_lock($file,true,'write',$timeout)){
-		$result = @file_put_contents($file,$buffer,LOCK_EX);
-		file_lock($file,false,'write');
-		return $result;
-	}
-	return false;
-}
-
-
-// 安全读取文件，避免并发下读取数据为空
-function file_read_safe($file,$timeout = 5){
-	//return file_read_safe1($file,$timeout);
+function file_read_safe($file,$timeout = 3){
 	if(!$file || !file_exists($file)) return false;
 	$fp = @fopen($file, 'r');
 	if(!$fp) return false;
 	$startTime = microtime(true);
 	do{
-		$locked = flock($fp, LOCK_EX|LOCK_NB);//LOCK_EX|LOCK_NB 
+		$locked = flock($fp, LOCK_SH);//LOCK_EX|LOCK_NB 
 		if(!$locked){
 			usleep(mt_rand(1, 50) * 1000);//1~50ms;
 		}
@@ -753,8 +684,7 @@ function file_read_safe($file,$timeout = 5){
 }
 
 // 安全读取文件，避免并发下读取数据为空
-function file_wirte_safe($file,$buffer,$timeout=5){
-	//return file_wirte_safe1($file,$buffer,$timeout);
+function file_wirte_safe($file,$buffer,$timeout=3){
 	clearstatcache();
 	if(strlen($file) == 0 || !$file || !file_exists($file)) return false;
 	$fp = fopen($file,'r+');
@@ -1069,21 +999,11 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	}
 
 	$mime = get_file_mime(get_path_ext($filename));
-	$filenameOutput = rawurlencode(iconv_app($filename));
 	if ($download === -1 && !mime_support($mime)){
 		$download = true;
 	}
-	$headerName = $filenameOutput;
-	if(ua_has("Chrome") && !ua_has('Edge')){ //chrome下载
-		$filenameOutput = '"'.$filenameOutput.'"';
-	}
-	if(!is_wap()){
-		$headerName.=";filename*=utf-8''".$filenameOutput;
-	}
-	if( ua_has("Safari") && !ua_has('Edge')){//safari 中文下载问题
-		$headerName = rawurldecode($filenameOutput);
-	}
-	//var_dump($headerName,$filenameOutput,$_SERVER['HTTP_USER_AGENT']);exit;
+	$headerName = rawurlencode(iconv_app($filename));
+	$headerName = '"'.$headerName."\"; filename*=utf-8''".$headerName;
 	if ($download) {
 		header('Content-Type: application/octet-stream');
 		header('Content-Transfer-Encoding: binary');

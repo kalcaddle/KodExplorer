@@ -646,90 +646,83 @@ var pathTools = (function(){
 		}
 	};
 
-	var strSortChina = function(a,b){
-		var arr = '0123456789零一二三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟万';//
+	/**
+	 * 5000项
+	 * sort:a==b?0:(a>b?1:-1)			0.004s
+	 * pathTools.strSort(a,b) 			5.0s
+	 * a.localeCompare(b)				6.0s
+	 * 
+	 * ['3',"1",'2','21','我','月',"二", "四","一","三",'安','巴士','秦','a','b','z','1.a','2.b','3.d','23.f']
+	 * ['1.595','1.52e7','1.58e3']
+	 * 参考
+	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
+	 */
+	var strSort = function(a,b){
+		if($.isNumeric(a) && $.isNumeric(b)){
+			a = parseFloat(a);b = parseFloat(b);
+			return a==b?0:(a>b?1:-1);
+		}
+		/*
+		//时间戳排序;耗时操作 为兼容国外时间  ['10-12-2008','10-11-2008','10-11-2007','10-12-2007']
+		var aDate = (new Date(a)).getTime(),bDate = aDate ? (new Date(b)).getTime() : null;
+		if (bDate){
+			return aDate==bDate?0:(aDate>bDate?1:-1);
+		}
+		*/		
+		var substrNumber = function(str,from){
+			res = '';
+			for (var i = from; i < str.length; i++) {
+				var char = str.charAt(i);
+				if($.isNumeric(char) || char == '.'){
+					res += char+'';
+				}else{
+					break;
+				}				
+			}
+			return parseFloat(res);
+		}
+		var arr = '零一二三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟万';//
 		for (var i=0;i<Math.max(a.length,b.length);i++){
-			if (a.charAt(i) != b.charAt(i)){
-				var aIndex = arr.indexOf(a.charAt(i));
-				var bIndex = arr.indexOf(b.charAt(i));
-				if(aIndex!=-1 && bIndex!=-1){//有该字符
-					if(aIndex>bIndex){
-						return 1;
-					}else if(aIndex<bIndex){
-						return -1;
-					}else{
-						return 0;
-					}
-				}else{//字符比较
-					if(a.charAt(i)>b.charAt(i)){
-						return 1;
-					}else if(a.charAt(i)<b.charAt(i)){
-						return -1;
-					}else{
-						return 0;
-					}
+			var aChar = a.charAt(i),bChar = b.charAt(i);
+			//连续数字时比较数值;
+			if($.isNumeric(aChar) && $.isNumeric(bChar)){
+				var aNum = substrNumber(a,i),bNum = substrNumber(b,i);
+				if(aNum==bNum){
+					i += aNum.toString().length-1;
+					continue;
 				}
+				return aNum>bNum?1:-1;
+			}
+			if( aChar.charCodeAt() < 255 && bChar.charCodeAt() < 255){
+				if(aChar==bChar) continue;
+				return aChar>bChar?1:-1;
+			}
+			var aIndex = arr.indexOf(aChar);
+			var bIndex = arr.indexOf(bChar);
+			if( aIndex!=-1 && bIndex!=-1 ){//有该字符
+				if(aIndex==bIndex) continue;
+				return (aIndex>bIndex?1:-1);
+			}else{
+				//英文字符排在中文字符前
+				if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
+					if(bChar==bChar) continue;
+					return aChar>bChar?1:-1;
+				}
+				//中文数字排在所有汉字前
+				if(aIndex !=-1 ) return -1;
+				if(bIndex !=-1 ) return 1;
+				return aChar.localeCompare(bChar);//中文按拼音进行排序
 			}
 		}
 		return 0;
-	}
-	//字符串排序函数 ；222>111,bbb>aaa; bbb(1).txt>bbb(0).txt [bbb(100).txt>bbb(55).txt]
-	//https://github.com/overset/javascript-natural-sort/blob/master/speed-tests.html
-	var strSort = function(a,b){
-		if(a==undefined || b==undefined){
-			return 0;
-		}
-		if($.isNumeric(a) && $.isNumeric(b)){
-			a = parseFloat(a);b = parseFloat(b);
-			return a>b?1:(a==b?0:-1);
-		}
-		var re = /([0-9\.]+)/g,	// /(-?[0-9\.]+)/g,  负数 2016-11-09 2016-11-10歧义
-			x = a.toString().toLowerCase() || '',
-			y = b.toString().toLowerCase() || '',
-			nC = String.fromCharCode(0),
-			xN = x.replace( re, nC + '$1' + nC ).split(nC),
-			yN = y.replace( re, nC + '$1' + nC ).split(nC),
-			xD = (new Date(x)).getTime(),
-			yD = xD ? (new Date(y)).getTime() : null;
-
-		if ( yD ){//时间戳排序
-			if ( xD < yD ){
-				return -1;
-			}else if ( xD > yD ){
-				return 1;
-			}
-		}
-		for( var cLoc = 0, numS = Math.max(xN.length, yN.length); cLoc < numS; cLoc++ ) {
-			oFxNcL = parseFloat(xN[cLoc]) || xN[cLoc];
-			oFyNcL = parseFloat(yN[cLoc]) || yN[cLoc];
-			if(oFxNcL== oFyNcL){
-				continue;
-			}
-			if(typeof(oFxNcL) == 'string' && typeof(oFyNcL)== 'string'){
-				//自定义字符大小顺序
-				var resultCurrent = strSortChina(oFxNcL,oFyNcL);
-				if(resultCurrent!=0){
-					return resultCurrent;
-				}
-			}else{
-				if (oFxNcL < oFyNcL){
-					return -1;
-				}else if (oFxNcL > oFyNcL){
-					return 1;
-				}
-			}
-		}
-		return a>b?1:(a==b?0:-1);//test,test123 情况用原始对比
 	}
 
 	return {
 		fileSize:fileSize,
 		strSort:strSort,
-		strSortChina:strSortChina,
 		pathThis:pathThis
 	}
 })();
-
 
 
 //是否在数组中。

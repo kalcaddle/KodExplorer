@@ -133,7 +133,7 @@ function serverInfo(){
 		"php"	=> floatval(PHP_VERSION),
 		"server"=> $_SERVER['SERVER_SOFTWARE'],
 		"lib"	=> $libStr,
-		"info"	=> php_uname().';phpv='.PHP_VERSION,
+		"info"	=> php_uname().';php='.PHP_VERSION,
 	);
 	$result = str_replace("\/","@",json_encode($env));
 	return $result;

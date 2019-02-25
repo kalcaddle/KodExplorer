@@ -567,7 +567,6 @@ define(function(require, exports) {
 				{'core.pathClear':coreCode.pathClear},
 				{'core.pathThis':coreCode.pathThis},
 				{'core.pathExt':coreCode.pathExt},
-				{strSortChina:pathTools.strSortChina},
 				{makeTree:makeTree,treeDataSort:treeDataSort,currentFileUrl:currentFileUrl}
 			]);
 		}

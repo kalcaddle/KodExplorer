@@ -1,7 +1,6 @@
 <script type="text/javascript" src="<?php echo STATIC_PATH;?>js/lib/seajs/sea.js?ver=<?php echo KOD_VERSION;?>"></script>
 <?php
 	//commonjs
-	Hook::trigger('templateCommonFooter');
 	if(ST == 'share' || isset($GLOBALS['loadCommonJs'])){
 		if(isset($_GET['user'])){
 			$userInfo = '&user='.clear_html($_GET['user']).'&sid='.clear_html($_GET['sid']);
@@ -45,3 +44,4 @@
 		]
 	});
 </script>
+<?php Hook::trigger('templateCommonFooter');?>

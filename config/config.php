@@ -108,7 +108,6 @@ if (file_exists(BASIC_PATH.'config/setting_user.php')) {
 if(file_exists(CONTROLLER_DIR.'debug.class.php')){
 	include_once(CONTROLLER_DIR.'debug.class.php');
 }
-
 init_common();
 $config['autorun'] = array(
 	array('controller'=>'user','function'=>'loginCheck'),

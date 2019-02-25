@@ -33,7 +33,7 @@
 	            $error = php_env_check();
 	            $login = LNG('login');
 	            if ($error=='') {
-	            	echo '<div class="success"><h4>Successful!</h4>';
+	            	echo '<div class="success">';
 	            }else{
 	            	echo '<div class="error"><h4>error:</h4>'.$error."<br/>";
 	            	$login = LNG('php_env_error_ignore');

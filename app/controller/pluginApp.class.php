@@ -30,7 +30,7 @@ class pluginApp extends Controller{
 				if(!$_SESSION['kodLogin']){
 					show_tips("出错了！您尚未登录",APP_HOST,3);
 				}
-				show_tips("出错了！插件未开启，或您没有{$app}插件的权限");
+				show_tips("出错了！插件未开启，或您没有{$app}插件的权限!");
 			}
 
 			$appConfig = $model->getConfig($app);
@@ -63,7 +63,7 @@ class pluginApp extends Controller{
 			return false;
 		}
 		$share = KOD_USER_SHARE;
-		if(substr($this->in['path'],0,strlen($share)) == $share){
+		if(substr(urldecode($this->in['path']),0,strlen($share)) == $share){
 			return true;
 		}
 		return false;
@@ -197,6 +197,7 @@ class pluginApp extends Controller{
 			"versionHash"	=> $this->config['settingSystem']['versionHash'],
 			"systemOS"		=> $this->config['systemOS'],
 			"phpVersion"	=> PHP_VERSION,
+			"channel"		=> INSTALL_CHANNEL,	
 			"lang"			=> I18n::getType()
 		);
 		$info = url_request($api,'POST',$param);

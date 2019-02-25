@@ -139,7 +139,7 @@ class user extends Controller{
 			$GLOBALS['isRoot'] = 0;
 		}
 
-		define('DESKTOP_FOLDER',$this->config['settingSystemDefault']['desktopFolder']);
+		define('DESKTOP_FOLDER',$this->config['settingSystem']['desktopFolder']);
 		$this->config['user']  = FileCache::load(USER.'data/config.php');
 
 		if(!is_array($this->config['user'])){
@@ -309,6 +309,22 @@ class user extends Controller{
 		}
 		echo 'LNG='.$lang.';G.useTime='.$useTime.';';
 	}
+	public function appConfig(){
+		$theConfig = array(
+			'lang'          => I18n::getType(),			
+			'isRoot'        => $GLOBALS['isRoot'],
+			'userID'        => $this->user['userID'],
+			'myhome'        => MYHOME,
+			'settings'		=> array(
+				'updloadChunkSize'	=> file_upload_size(),
+				'updloadThreads'	=> $this->config['settings']['updloadThreads'],
+				'uploadCheckChunk'	=> $this->config['settings']['uploadCheckChunk'],
+			),
+			'version'       => KOD_VERSION,
+			// 'userConfig' 	=> $this->config['user'],
+		);
+		show_json($theConfig);
+	}
 
 	/**
 	 * 登录view
@@ -425,7 +441,7 @@ class user extends Controller{
 
 		//首次登陆，初始化app 没有最后登录时间
 		$this->_loginSuccess($user);//登陆成功
-		if($user['lastLogin'] == ''){
+		if(!$user['lastLogin']){
 			$app = init_controller('app');
 			$app->initApp($user);
 		}

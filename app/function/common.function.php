@@ -93,16 +93,17 @@ function str_trim($str,$remove){
 	return str_rtrim(str_ltrim($str,$remove),$remove);
 }
 function str_ltrim($str,$remove){
-	if(!$str || !$remove) return false;
+	if(!$str || !$remove) return $str;
 	while(substr($str,0,strlen($remove)) == $remove){
 		$str = substr($str,strlen($remove));
 	}
 	return $str;
 }
 function str_rtrim($str,$remove){
-	if(!$str || !$remove) return false;
+	if(!$str || !$remove) return $str;
 	while(substr($str,-strlen($remove)) == $remove){
 		$str = substr($str,0,-strlen($remove));
+		echo $str;
 	}
 	return $str;
 }

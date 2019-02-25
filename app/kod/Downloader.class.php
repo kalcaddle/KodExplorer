@@ -22,19 +22,18 @@ class Downloader {
 		if(!$url){
 			return array('code'=>false,'data'=>'url error!');
 		}
-
 		//默认下载方式if not support range
 		if(!$fileHeader['supportRange'] || 
 			$fileHeader['length'] == 0 ){
-			@unlink($saveTemp);
-			@unlink($saveFile);
+			@unlink($saveTemp);@unlink($saveFile);
 			$result = self::fileDownloadFopen($url,$saveFile,$fileHeader['length']);
 			if($result['code']) {
 				return $result;
 			}else{
-				@unlink($saveTemp);
-				@unlink($saveFile);
-				return self::fileDownloadCurl($url,$saveFile,false,0,$fileHeader['length']);
+				@unlink($saveTemp);@unlink($saveFile);
+				$result = self::fileDownloadCurl($url,$saveFile,false,0,$fileHeader['length']);
+				@unlink($saveTemp);@unlink($saveFile);
+				return $result;
 			}
 		}
 
@@ -106,7 +105,7 @@ class Downloader {
 			if($headerSize != 0 && $filesize != $headerSize){
 			    return array('code'=>false,'data'=>'file size error');
 			}
-			
+			self::checkGzip($fileTemp);
 			if(!@rename($fileTemp,$fileName)){
 				usleep(round(rand(0,1000)*50));//0.01~10ms
 				@unlink($fileName);
@@ -152,6 +151,7 @@ class Downloader {
 			}
 			
 			if($res && filesize($fileTemp) != 0){
+				self::checkGzip($fileTemp);
 				if(!@rename($fileTemp,$fileName)){
 					@unlink($fileName);
 					$res = @rename($fileTemp,$fileName);
@@ -165,5 +165,16 @@ class Downloader {
 		}else{
 			return array('code'=>false,'data'=>'file create error');
 		}
+	}
+
+	static function checkGzip($file){
+		$char = "\x1f\x8b";
+		$str  = file_sub_str($file,0,2);
+		if($char != $str) return;
+
+		ob_start();   
+		readgzfile($file);   
+		$out = ob_get_clean();
+		file_put_contents($file,$out);
 	}
 }

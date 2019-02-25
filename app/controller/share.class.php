@@ -249,6 +249,10 @@ class share extends Controller{
 			'ACT'					=> $this->in['act'],
 		);
 
+		if(ST.''.ACT == 'explorer.fileView'){
+			unset($theConfig['sharePage']);
+		}
+
 		$userConfig = $GLOBALS['config']['settingDefault'];
 		if(isset($this->in['user'])){
 			$member = systemMember::loadData();
