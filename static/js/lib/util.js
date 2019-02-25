@@ -658,6 +658,8 @@ var pathTools = (function(){
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
 	 */
 	var strSort = function(a,b){
+		if(a == undefined ) return 1;
+		if(b == undefined ) return -1;
 		if($.isNumeric(a) && $.isNumeric(b)){
 			a = parseFloat(a);b = parseFloat(b);
 			return a==b?0:(a>b?1:-1);
@@ -705,7 +707,7 @@ var pathTools = (function(){
 			}else{
 				//英文字符排在中文字符前
 				if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
-					if(bChar==bChar) continue;
+					if(aChar==bChar) continue;
 					return aChar>bChar?1:-1;
 				}
 				//中文数字排在所有汉字前
