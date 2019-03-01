@@ -593,7 +593,7 @@ class user extends Controller{
 	}
 	public function checkCode() {
 		session_start();//re start
-		$captcha = new MyCaptcha(mt_rand(3,4));
+		$captcha = new MyCaptcha(4);
 		$_SESSION['checkCode'] = $captcha->getString();
 	}
 

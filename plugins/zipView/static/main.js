@@ -6,6 +6,18 @@ kodReady.push(function(){
 		}
 		return url;
 	}
+
+	//测试 替换分享链接地址；
+	// Hook.bind('explorer.path.share.uiInitStart',function(){
+	// 	G.appHostTemp = G.appHost;
+	// 	G.appHost = "http://test.com/";
+	// 	console.log(G.appHost);
+	// });
+	// Hook.bind('explorer.path.share.uiInit',function(){
+	// 	G.appHost = G.appHostTemp;
+	// });
+
+
 	kodApp.add({
 		name:"zipView",
 		title:"{{LNG.Plugin.default.zipView}}",

@@ -80,7 +80,7 @@
 			mtime:0,
 			size:0
 		}
-		<?php if(ST.'.'.ACT == 'explorer.fileView'){echo "G.shareInfo.view = true;";}?>
+		<?php if(ST.'.'.ACT == 'explorer.fileView'){echo "G.shareInfo.view = true;G.sharePage=undefined;";}?> 
 		G['accessToken'] = "<?php echo access_token_get();?>";
 		seajs.config({
 			base: "<?php echo STATIC_PATH;?>js/",

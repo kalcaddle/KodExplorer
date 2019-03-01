@@ -31,15 +31,15 @@ class systemMember extends Controller{
 	/**
 	 * 空间使用变更
 	 * @param  [type] $theId   [userID or groupID]
-	 * @param  [type] $Sizeadd [变更的大小  sizeMax G为单位   sizeUse Byte为单位]
+	 * @param  [type] $sizeAdd [变更的大小  sizeMax G为单位   sizeUse Byte为单位]
 	 */
-	public static function spaceChange($theId,$Sizeadd=false){
+	public static function spaceChange($theId,$sizeAdd=false){
 		$sql = self::loadData();
 		$info = $sql->get($theId);
 		if(!is_array($info)){
 			show_json(LNG('data_not_full'),false);
 		}
-		if($Sizeadd===false){//重置用户空间；避免覆盖、解压等导致的问题
+		if($sizeAdd===false){//重置用户空间；避免覆盖、解压等导致的问题
 			$pathinfo = _path_info_more(iconv_system(USER_PATH.$info['path'].'/'));
 			$currentUse  = $pathinfo['size'];
 			if(isset($info['homePath']) && file_exists(iconv_system($info['homePath']))){
@@ -47,7 +47,7 @@ class systemMember extends Controller{
 				$currentUse  += $pathinfo['size'];
 			}
 		}else{
-			$currentUse = floatval($info['config']['sizeUse'])+floatval($Sizeadd);
+			$currentUse = floatval($info['config']['sizeUse'])+floatval($sizeAdd);
 		}		
 		$info['config']['sizeUse'] = $currentUse<0?0:$currentUse;
 		$sql->set($theId,$info);

@@ -11,7 +11,7 @@ define(function(require, exports) {
 		var unZip = function(createFolder){
 			if(!ui.path.checkSystemPath()) return;
 			var oprate = ui.path.pathOperate;
-			ui.pathOperate.unZip(ui.path.makeParam().path,ui.f5,createFolder);
+			oprate.unZip(ui.path.makeParam().path,ui.f5,createFolder);
 		};
 		switch(action){
 			case 'zip-zip': zip();break;

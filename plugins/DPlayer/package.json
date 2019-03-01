@@ -2,7 +2,7 @@
 	"id":"DPlayer",
 	"name":"DPlayer播放器",
 	"title":"DPlayer播放器",
-	"version":"1.05",
+	"version":"1.07",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png",
 	},

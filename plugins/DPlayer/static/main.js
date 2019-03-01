@@ -25,6 +25,11 @@ kodReady.push(function(){
 	});
 	window.DplayerSubtitle = parseInt("{{config.subtitle}}");
 
+	//临时兼容4.38及以前版本；APP预览txt校验权限失败问题;
+	if (G.ACT + '.' + G.ST == 'view.api' && !G.user){
+		G.sharePage = undefined;
+		$.addStyle('.ace_editor{font-size:13px !important;}');
+	}
 
 	/**
 	 * 临时修复文件夹右键新窗口打开异常问题；<=4.32

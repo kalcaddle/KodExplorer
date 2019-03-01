@@ -999,6 +999,9 @@ class explorer extends Controller{
 	public function unzip(){
 		ignore_timeout();
 		$path = $this->path;
+		if(!file_exists($path)){
+			show_json(LNG("not_exists"),false);
+		}
 		$name = get_path_this($path);
 		$name = substr($name,0,strrpos($name,'.'));
 		$ext  = get_path_ext($path);
