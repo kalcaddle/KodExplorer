@@ -138,8 +138,11 @@ class user extends Controller{
 			$GLOBALS['webRoot'] = '';//从服务器开始到用户目录
 			$GLOBALS['isRoot'] = 0;
 		}
-
-		define('DESKTOP_FOLDER',$this->config['settingSystem']['desktopFolder']);
+		$desktop = $this->config['settingSystem']['desktopFolder'];
+		if(isset($this->config['settingSystemDefault']['desktopFolder'])){
+			$desktop = $this->config['settingSystemDefault']['desktopFolder'];
+		}
+		define('DESKTOP_FOLDER',$desktop);
 		$this->config['user']  = FileCache::load(USER.'data/config.php');
 
 		if(!is_array($this->config['user'])){
