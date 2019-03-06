@@ -25,7 +25,9 @@ function updateCheck(){
 	if(!file_exists(THE_DATA_PATH.'system/install.lock')){
 		if(UPDATE_DEV){
 			echo 'not install!';exit;
-		}else{
+		}
+		//从2.x 升级
+		if( !file_exists(THE_DATA_PATH.'system/member.php') ){
 			return;
 		}
 	}
@@ -35,6 +37,7 @@ function updateCheck(){
 	if( file_exists(THE_DATA_PATH.'system/member.php') && 
 		!file_exists(THE_DATA_PATH.'system/system_member.php')){
 		new updateToV330();
+		new Update3To400();
 	}
 
 	//from [3.30~3.36] //还原用户目录

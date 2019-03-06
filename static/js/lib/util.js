@@ -662,22 +662,23 @@ var pathTools = (function(){
 	 * var aDate = (new Date(a)).getTime(),bDate = aDate ? (new Date(b)).getTime() : null;
 	 * if (bDate){return aDate==bDate?0:(aDate>bDate?1:-1);}
 	 */
-	var isNumeric = function(string){
-		return !isNaN(parseFloat(string)) && isFinite(string)
-	}
-	var substrNumber = function(str,from){
-		res = '';
-		for (var i = from; i < str.length; i++) {
-			var char = str.charAt(i);
-			if(isNumeric(char) || char == '.'){
-				res += char+'';
-			}else{
-				break;
-			}				
-		}
-		return parseFloat(res);
-	}
 	var strSort = function(a,b){
+		var isNumeric = function(str){
+			return !isNaN(parseFloat(str)) && isFinite(str);
+		}
+		var substrNumber = function(str,from){
+			res = '';
+			for (var i = from; i < str.length; i++) {
+				var char = str.charAt(i);
+				if(isNumeric(char) || char == '.'){
+					res += char+'';
+				}else{
+					break;
+				}
+			}
+			return parseFloat(res);
+		}
+		
 		if(isNumeric(a) && isNumeric(b)){
 			a = parseFloat(a);
 			b = parseFloat(b);
@@ -707,7 +708,6 @@ var pathTools = (function(){
 				if(aIndex==bIndex) continue;
 				return (aIndex>bIndex?1:-1);
 			}else{
-				//英文字符排在中文字符前
 				if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
 					if(aChar == bChar) continue;
 					return aChar>bChar?1:-1;

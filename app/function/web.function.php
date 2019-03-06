@@ -58,20 +58,22 @@ function get_url_scheme($url){
 	return $res['scheme'];
 }
 
+function http_type(){
+	if( (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+		(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') ||
+		$_SERVER['SERVER_PORT'] === 443 
+		){
+		return 'https';
+	}
+	return 'http';
+}
+
 function get_host() {
 	//兼容子目录反向代理:只能是前端js通过cookie传入到后端进行处理
 	if(defined('GLOBAL_DEBUG') && isset($_COOKIE['HOST']) && isset($_COOKIE['APP_HOST'])){
 		return $_COOKIE['HOST'];
 	}
-
-	$protocol = (!empty($_SERVER['HTTPS'])
-				 && $_SERVER['HTTPS'] !== 'off'
-				 || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
-
-	if( isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
-		strlen($_SERVER['HTTP_X_FORWARDED_PROTO']) > 0 ){
-		$protocol = $_SERVER['HTTP_X_FORWARDED_PROTO'].'://';
-	}
+	$protocol = http_type().'://';
 	$url_host = $_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT']=='80' ? '' : ':'.$_SERVER['SERVER_PORT']);
 	$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $url_host;
 	$host = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $host;//proxy
@@ -121,6 +123,24 @@ function is_wap(){
 		return true;
 	}
 	return false;
+}
+
+/**
+ * 终止并完成http请求；客户端终止等待完成请求
+ * 后续代码可以继续运行；例如日志、统计等代码；后续输出将不再生效；
+ */
+function http_close(){
+	ignore_timeout(0);
+	if(function_exists('fastcgi_finish_request')) {
+		fastcgi_finish_request();
+	} else {
+		header("Connection: close");
+		header("Content-Length: ".ob_get_length());
+		ob_start();
+		echo str_pad('',1024*5);
+		ob_end_flush();
+		flush();		
+	}
 }
 
 function parse_headers($raw_headers){
@@ -535,85 +555,69 @@ function request_url_safe($url){
 
 // url header data
 function url_header($url){
-	$name = '';$length=0;
 	$header = get_headers_curl($url);//curl优先
 	if(is_array($header)){
 		$header['ACTION_BY'] = 'get_headers_curl';
 	}else{
 		$header = @get_headers($url,true);
 	}
-
 	if (!$header) return false; 
-	if(isset($header['Content-Length'])){
-		if(is_array($header['Content-Length'])){
-			$length = array_pop($header['Content-Length']);
-		}else{
-			$length = $header['Content-Length'];
-		}
-	}
 
-	//301跳转
-	$fileUrl = $url;
-	$location = 'Location';
-	if(!isset($header['Location']) && 
-		isset($header['location'])){
-		$location = 'location';
+	//加入小写header值;兼容各种不统一的情况
+	$header['———'] = '————————————';//分隔
+	foreach ($header as $key => $value) {
+		$header[strtolower($key)] = $value;
 	}
-	if(isset($header[$location])){
-		if(is_string($header[$location])){
-			$fileUrl = $header[$location];
-		}else if(is_array($header[$location])  && count($header[$location])>0 ){
-			$fileUrl = $header[$location][count($header[$location])-1];
-		}
-	}
-
-	if(isset($header['Content-Disposition'])){
-		if(is_array($header['Content-Disposition'])){
-			$dis = array_pop($header['Content-Disposition']);
-		}else{
-			$dis = $header['Content-Disposition'];
-		}
-		$i = strpos($dis,"filename=");
-		if($i!== false){
-			$name = substr($dis,$i+9);
-			$j = strpos($name,"; ");//多个参数，
-			if($j!== false){
-				$name = substr($name,0,$j);
+	$checkArr = array(
+		'content-length'		=> 0, 
+		'location'				=> $url,//301调整
+		'content-disposition'	=> '',
+	);
+	//处理多次跳转的情况
+	foreach ($checkArr as $key=>$val) {
+		if(isset($header[$key])){
+			$checkArr[$key] = $header[$key];
+			if(is_array($header[$key])  && count($header[$key])>0){
+				$checkArr[$key] = $header[$key][count($header[$key])-1];
 			}
-			$name = trim($name,'"');
 		}
-	}	
-	if(isset($header['X-OutFileName'])){
-		$name = $header['X-OutFileName'];
+	}
+	$name 	= $checkArr['content-disposition'];
+	$length = $checkArr['content-length'];
+	$fileUrl= $checkArr['location'];
+	if($name){
+		preg_match('/filename\s*=\s*"*(.*)"*?/',$name,$match);
+		if(count($match) == 2){
+			$name = $match[1];
+		}else{
+			$name = '';
+		}
 	}
 	if(!$name){
 		$name = get_path_this($fileUrl);
-		if (stripos($name,'?')) $name = substr($name,0,stripos($name,'?'));
-		if (!$name) $name = 'index.html';
-
-		$firstName = get_path_this($url);
-		if( get_path_ext($firstName) == get_path_ext($name) ){
-			$name = $firstName;
-		}
+		if (strstr($name,'=')) $name = substr($name,strrpos($name,'=')+1);
+		if (!$name) $name = 'file.data';
 	}
-	$name = rawurldecode($name);
+	if(isset($header['x-outfilename'])){
+		$name = $header['x-outfilename'];
+	}
+	$name = rawurldecode(trim($name,'"'));
 	$name = str_replace(array('/','\\'),'-',$name);//safe;
-	$supportRange = isset($header["Accept-Ranges"])?true:false;
-
+	$supportRange = isset($header["accept-ranges"])?true:false;
 	if(!request_url_safe($fileUrl)){
 		$fileUrl = "";
 	}
 	$result = array(
 		'url' 		=> $fileUrl,
 		'length' 	=> $length,
-		'name' 		=> trim($name,'"'),
-		'supportRange' =>$supportRange && ($length!=0),
+		'name' 		=> $name,
+		'supportRange' => $supportRange && ($length!=0),
 		'all'		=> $header,
 	);
 	if(!function_exists('curl_init')){
 		$result['supportRange'] = false;
 	}
-	//debug_out($url,$header,$result);
+	//pr($url,$result);
 	return $result;
 }
 
