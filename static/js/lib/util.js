@@ -656,38 +656,40 @@ var pathTools = (function(){
 	 * ['1.595','1.52e7','1.58e3']
 	 * 参考
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
+	 * 
+	 * 耗时：暂不加入如下排序支持
+	 * 时间戳排序;耗时操作 为兼容国外时间  ['10-12-2008','10-11-2008','10-11-2007','10-12-2007']
+	 * var aDate = (new Date(a)).getTime(),bDate = aDate ? (new Date(b)).getTime() : null;
+	 * if (bDate){return aDate==bDate?0:(aDate>bDate?1:-1);}
 	 */
+	var isNumeric = function(string){
+		return !isNaN(parseFloat(string)) && isFinite(string)
+	}
+	var substrNumber = function(str,from){
+		res = '';
+		for (var i = from; i < str.length; i++) {
+			var char = str.charAt(i);
+			if(isNumeric(char) || char == '.'){
+				res += char+'';
+			}else{
+				break;
+			}				
+		}
+		return parseFloat(res);
+	}
 	var strSort = function(a,b){
-		if(a == undefined ) return 1;
-		if(b == undefined ) return -1;
-		if($.isNumeric(a) && $.isNumeric(b)){
-			a = parseFloat(a);b = parseFloat(b);
+		if(isNumeric(a) && isNumeric(b)){
+			a = parseFloat(a);
+			b = parseFloat(b);
 			return a==b?0:(a>b?1:-1);
 		}
-		/*
-		//时间戳排序;耗时操作 为兼容国外时间  ['10-12-2008','10-11-2008','10-11-2007','10-12-2007']
-		var aDate = (new Date(a)).getTime(),bDate = aDate ? (new Date(b)).getTime() : null;
-		if (bDate){
-			return aDate==bDate?0:(aDate>bDate?1:-1);
-		}
-		*/		
-		var substrNumber = function(str,from){
-			res = '';
-			for (var i = from; i < str.length; i++) {
-				var char = str.charAt(i);
-				if($.isNumeric(char) || char == '.'){
-					res += char+'';
-				}else{
-					break;
-				}				
-			}
-			return parseFloat(res);
-		}
+		if(a == undefined || b == undefined) return 0;
 		var arr = '零一二三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟万';//
 		for (var i=0;i<Math.max(a.length,b.length);i++){
 			var aChar = a.charAt(i),bChar = b.charAt(i);
+			if(aChar == bChar) continue;
 			//连续数字时比较数值;
-			if($.isNumeric(aChar) && $.isNumeric(bChar)){
+			if(isNumeric(aChar) && isNumeric(bChar)){
 				var aNum = substrNumber(a,i),bNum = substrNumber(b,i);
 				if(aNum==bNum){
 					i += aNum.toString().length-1;
@@ -707,7 +709,7 @@ var pathTools = (function(){
 			}else{
 				//英文字符排在中文字符前
 				if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
-					if(aChar==bChar) continue;
+					if(aChar == bChar) continue;
 					return aChar>bChar?1:-1;
 				}
 				//中文数字排在所有汉字前
