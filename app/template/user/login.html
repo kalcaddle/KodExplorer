@@ -12,7 +12,7 @@
 		<div class="title">
 			<div class="logo"><i class="icon-cloud"></i><?php echo strip_tags(LNG('kod_name'));?></div>
 			<div class='info'><?php echo LNG('kod_name_desc');?></div>
-			<?php if(count($config['settingAll']['language']) > 1){ ?>
+			<?php if(!isset($config['settings']['language'])){ ?>
 			<div class="menu-group">
 				<a id='footer-language' data-toggle="dropdown" href="javascript:void(0);" class="topbar-menu">
 					<i class='font-icon icon-flag'></i>Language<b class="caret"></b>

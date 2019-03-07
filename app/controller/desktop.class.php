@@ -18,6 +18,7 @@ class desktop extends Controller{
 			$wall = STATIC_PATH.'images/wall_page/'.$wall.'.jpg';
 		}
 
+		$wall = str_replace('&amp;','&',$wall);
 		$desktop = iconv_system(HOME.DESKTOP_FOLDER.'/');
 		if($GLOBALS['isRoot'] == 1){
 			$desktop = iconv_system(MYHOME.DESKTOP_FOLDER.'/');
