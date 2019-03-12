@@ -45,22 +45,21 @@ class Application {
 	 * @param $class , controller类名。
 	 * @param $function , 方法名
 	 */
-	public function appRun($class,$function){
+	public function appRun($className,$function){
 		$subDir = $this -> subDir ? $this -> subDir . '/' : '';
-		$classFile = CONTROLLER_DIR . $subDir.$class.'.class.php';
-		$className = $class;//.'Controller'
+		$classFile = CONTROLLER_DIR . $subDir.$className.'.class.php';
+		Hook::filter('Application.appRun',$classFile);
 		if (!file_exists_case($classFile)) {
-			show_tips($class.' controller '.LNG("not_exists"),APP_HOST,3);
+			show_tips($className.' controller '.LNG("not_exists"),APP_HOST,5);
 		}
+		
+		include_once($classFile);
 		if (!class_exists($className)) {
-		    include_once($classFile);
-		}
-		if (!class_exists($className)) {
-			show_tips($className.' class '.LNG("not_exists"),APP_HOST,3);
+			show_tips($className.' class '.LNG("not_exists"),APP_HOST,5);
 		}
 		$instance = new $className();
 		if (!method_exists($instance, $function)) {
-			show_tips($function.' method '.LNG("not_exists"),APP_HOST,3);
+			show_tips($function.' method '.LNG("not_exists"),APP_HOST,5);
 		}
 		return $instance -> $function();
 	}
