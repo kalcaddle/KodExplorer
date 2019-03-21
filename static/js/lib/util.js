@@ -652,8 +652,11 @@ var pathTools = (function(){
 	 * pathTools.strSort(a,b) 			5.0s
 	 * a.localeCompare(b)				6.0s
 	 * 
-	 * ['3',"1",'2','21','我','月',"二", "四","一","三",'安','巴士','秦','a','b','z','1.a','2.b','3.d','23.f']
-	 * ['1.595','1.52e7','1.58e3']
+	 * ['3',"1",'2','21','我','月',"二", "四","一","三",'安','巴士','秦','a','b','z','1.a','2.b','3.d','23.f','1语文']
+	 * ['5a','1a','10a','11a'] 		按数字大小排序
+	 * ['1.595','1.52e7','1.58e3']	科学技术法排序
+	 * ['B1','a1','b2f',"A2"]		按大小写无关排序，小写小于大写; ==> ['a1',"A2",'b2f','B1']
+	 * 
 	 * 参考
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
 	 * 
@@ -688,7 +691,7 @@ var pathTools = (function(){
 		var arr = '零一二三四五六七八九十百千万壹贰叁肆伍陆柒捌玖拾佰仟万';//
 		for (var i=0;i<Math.max(a.length,b.length);i++){
 			var aChar = a.charAt(i),bChar = b.charAt(i);
-			if(aChar == bChar) continue;
+			if(aChar == bChar && !isNumeric(aChar) ) continue; //相等且不为数字
 			//连续数字时比较数值;
 			if(isNumeric(aChar) && isNumeric(bChar)){
 				var aNum = substrNumber(a,i),bNum = substrNumber(b,i);
@@ -698,25 +701,29 @@ var pathTools = (function(){
 				}
 				return aNum>bNum?1:-1;
 			}
-			if( aChar.charCodeAt() < 255 && bChar.charCodeAt() < 255){
-				if(aChar==bChar) continue;
+			if(aChar == bChar) continue;
+			
+			//字符和汉字(字符小于汉字)、字符和字符(小写英文小于大写英文,a<A<b<B )
+			if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
+				if( aChar.charCodeAt() < 255 && bChar.charCodeAt() < 255){
+					// a<A; ansi比较需要反置; 自行实现，避免localeCompare比较不同平台不一致问题 
+					var aCharI = aChar.toLowerCase(),bCharI = bChar.toLowerCase();
+					if(aCharI == bCharI) return aCharI>bCharI?-1:1;
+					return aCharI>bCharI?1:-1;
+				}
 				return aChar>bChar?1:-1;
 			}
+
+			//纯中文情况
 			var aIndex = arr.indexOf(aChar);
 			var bIndex = arr.indexOf(bChar);
-			if( aIndex!=-1 && bIndex!=-1 ){//有该字符
-				if(aIndex==bIndex) continue;
+			if( aIndex!=-1 && bIndex!=-1 ){//中文数字
 				return (aIndex>bIndex?1:-1);
-			}else{
-				if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
-					if(aChar == bChar) continue;
-					return aChar>bChar?1:-1;
-				}
-				//中文数字排在所有汉字前
-				if(aIndex !=-1 ) return -1;
-				if(bIndex !=-1 ) return 1;
-				return aChar.localeCompare(bChar);//中文按拼音进行排序
 			}
+			//中文数字排在所有汉字前
+			if(aIndex !=-1 ) return -1;
+			if(bIndex !=-1 ) return 1;
+			return aChar.localeCompare(bChar);//中文按拼音排序; 不支持词语多音字处理:北京/长沙/长高/重量/重庆
 		}
 		return 0;
 	}

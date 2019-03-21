@@ -55,6 +55,11 @@ class yzOfficePlugin extends PluginBase{
 		}else{
 			$content = file_get_contents($pageFile);
 		}
+		if(strstr($content,'location.href = ')){
+			$app->clearChche();
+			show_tips("请求转换异常，请重试！");
+		}
+		
 
 		//替换内容
 		$config = $this->getConfig();

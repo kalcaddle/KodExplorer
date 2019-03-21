@@ -17,21 +17,11 @@ class yzOffice2{
 	public function __construct($plugin,$filePath,$oldVersion=true){
 		$this->plugin = $plugin;
 		$this->filePath = $filePath;
-
-		if($oldVersion){
-			//旧版本;http://dcs.yozosoft.com/examples.html
-			$this->api = array(
-				'upload'	=> 'http://dcs.yozosoft.com/testUpload',
-				'convert'	=> 'http://dcs.yozosoft.com/convert',
-			);
-		}else{
-			//新版本，加入了文件上传2M的限制; http://dcs.yozosoft.com/examples.html
-			$this->api = array(
-				'upload'	=> "http://www.yozodcs.com/testUpload",
-				'convert'	=> "http://www.yozodcs.com/convert",
-			);
-		}
-		
+		//新版本，加入了文件上传2M的限制; http://dcs.yozosoft.com/examples.html
+		$this->api = array(
+			'upload'	=> "http://www.yozodcs.com/testUpload",
+			'convert'	=> "http://www.yozodcs.com/convert",
+		);
 
 		if($filePath === -1) return;
 		if(!$filePath || !file_exists($filePath)){
@@ -48,7 +38,6 @@ class yzOffice2{
 			$this->task = is_array($task_has)?$task_has:false;
 		}
 		//show_json($this->upload(),false);
-		//show_json($this->convert("90ef3480-e446-463e-8372-4438fab0367f\/ios系统体验苹果ppt模板.pptx"));
 	}
 	public function runTask(){
 		$task = array(
@@ -161,7 +150,6 @@ class yzOffice2{
 	public function clearChche(){
 		del_dir($this->cachePath);
 	}
-
 	public function uploadProcess(){
 		return curl_progress_get($this->filePath,$this->task['taskUuid']);
 	}
@@ -180,4 +168,3 @@ class yzOffice2{
 		}
 	}
 }
-
