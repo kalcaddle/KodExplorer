@@ -25,7 +25,7 @@ class yzOffice2{
 
 		if($filePath === -1) return;
 		if(!$filePath || !file_exists($filePath)){
-			show_json('path '.LNG('error'),false);
+			show_json('path '.LNG('not_exist'),false);
 		}
 
 		$config = $plugin->getConfig();
@@ -119,7 +119,6 @@ class yzOffice2{
 
 	//非高清预览【返回上传后直接转换过的文件】
 	public function upload(){
-		ignore_timeout();
 		$post = array(
 			"file"			=> "@".$this->filePath,
 			"convertType"	=> $this->convertMode()
@@ -134,13 +133,16 @@ class yzOffice2{
 	public function convert($tempFile=false){
 		$headers = array("Content-Type: application/x-www-form-urlencoded; charset=UTF-8");
 		$tempFile = $tempFile?$tempFile:$this->task['steps'][0]['result']['data'];
+		if(!$tempFile){
+			show_json("操作失败: ".$this->task['steps'][0]['result']['message'],false,$this->task);
+		}
 		$post = array(
 			"inputDir"		=> $tempFile,
 			"convertType"	=> $this->convertMode(),
 			"isAsync"		=> 0,
 		);
-		$post = http_build_query($post);//post默认用array发送;content-type为x-www-form-urlencoded时用key=1&key=2的形式
-		$result = url_request($this->api['convert'],'POST',$post,$headers,false,true,3600);
+		$post   = http_build_query($post);//post默认用array发送;content-type为x-www-form-urlencoded时用key=1&key=2的形式
+		$result = url_request($this->api['convert'],'POST',$post,$headers,false,true,5);
 		if(is_array($result) && is_array($result['data'])){
 			return $result;
 		}

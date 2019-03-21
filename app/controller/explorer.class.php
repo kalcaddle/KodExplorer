@@ -432,7 +432,13 @@ class explorer extends Controller{
 		if(systemMember::userAuthGroup(1) == false){
 			$publicPath = KOD_GROUP_SHARE.':1/';//不在公共组则只能读取公共组共享目录
 		}
+		$GLOBALS['kodPathAuthCheck'] = true;
 		$listPublic = $this->_path(_DIR($publicPath),$checkFile,true);
+		if($publicPath == KOD_GROUP_PATH.':1/'){
+			if(!path_group_can_read('1')){
+				$listPublic=array("folderList"=>array(),'fileList'=>array());
+			}
+		}
 		$listRoot  = $this->_path(_DIR(MYHOME),$checkFile,true);
 		if ($checkFile) {//编辑器
 			$root = array_merge($listRoot['folderList'],$listRoot['fileList']);
@@ -774,6 +780,7 @@ class explorer extends Controller{
 		if (!path_writeable($this->path)) show_json(LNG('no_permission_write'),false);
 		$success=0;$error=0;$data = array();
 		foreach ($clipboard as $val) {
+			path_can_copy_move($val['path'],$this->in['path']);
 			$pathCopy = _DIR($val['path']);
 			$filename = get_path_this($pathCopy);
 			$autoPath = get_filename_auto($pathPast.$filename,'',$this->config['user']['fileRepeat']);
@@ -804,6 +811,7 @@ class explorer extends Controller{
 		if (!path_writeable($this->path)) show_json(LNG('no_permission_write'),false);
 		$success=0;$error=0;$data = array();
 		foreach ($clipboard as $val) {
+			path_can_copy_move($val['path'],$this->in['path']);
 			$pathCopy = _DIR($val['path']);
 			_DIR($this->in['path']);//重置pathType等数据
 			$filename = get_path_this($pathCopy);

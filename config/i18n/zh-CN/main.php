@@ -126,7 +126,7 @@ return array(
     "role_type_name_write"           => "写入",
     "role_type_name_write:add"       => "创建文件(夹),压缩解压文件",
     "role_type_name_write:edit"      => "编辑保存文件",
-    "role_type_name_write:change"    => "重命名,调整目录结构",
+    "role_type_name_write:change"    => "重命名,粘贴到此处,内部拖拽移动或复制",
     "role_type_name_write:upload"    => "文件(夹)上传,远程下载",
     "role_type_name_write:remove"    => "文件(夹)删除,剪切",
     "group_guest"                    => "访客",

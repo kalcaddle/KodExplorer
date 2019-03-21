@@ -436,7 +436,7 @@ function url_request($url,$method='GET',$data=false,$headers=false,$options=fals
 	$http_header = substr($response, 0, $header_size);
 	$http_header = parse_headers($http_header);
 	if(is_array($http_header)){
-		$http_header['kod_add_request_url'] = $url;
+		// $http_header['kod_add_request_url'] = $url;
 	}
 	//error
 	if($response_info['http_code'] == 0){
