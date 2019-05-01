@@ -161,7 +161,7 @@ class kodRarArchive {
 		$reg = '/\s*([-\.\w]+)\s+(\d+)\s+(\d+)\s+\d+%\s+(\d{2,4}-\d{2}-\d{2} \d{2}:\d{2})\s+\w+\s+(.*)\n/i';
 		preg_match_all($reg,$match[1]."\n",$matchItem);
 		if( !is_array($matchItem) || 
-			count($matchItem) != 6 ||
+			count($matchItem) != 7 ||
 			count($matchItem[0]) == 0
 			){
 			return array('code'=>false,'data'=>'Match Nothing Item!');
