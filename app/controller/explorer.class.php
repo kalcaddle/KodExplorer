@@ -184,8 +184,8 @@ class explorer extends Controller{
 			}
 		}
 		Hook::trigger("explorer.mkdirBefore",$path);
-		if(mk_dir($path,DEFAULT_PERRMISSIONS)){
-			chmod_path($path,DEFAULT_PERRMISSIONS);
+		if(mk_dir($path,DEFAULT_DIR_PERRMISSIONS)){
+			chmod_path($path,DEFAULT_DIR_PERRMISSIONS);
 			Hook::trigger("explorer.mkdirAfter",$path);
 			return true;
 		}
