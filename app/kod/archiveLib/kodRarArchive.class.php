@@ -158,7 +158,7 @@ class kodRarArchive {
 
 		//windows  :...D...   93691   82633  88%  2016-12-09 02:20  396CC62C  000/a/32486963.png
 		//linux:   :-rwxr-xr-x   93691   82643  88%  2016-12-09 02:20  396CC62C  000/a/32486963.png
-		$reg = '/\s*([-\.\w]+)\s+(\d+)\s+(\d+)\s+\d+%\s+(\d{2,4}-\d{2}-\d{2} \d{2}:\d{2})\s+\w+\s+(.*)\n/i';
+		$reg = '/\s*([-\.\w]+)\s+(\d+)\s+(\d+)\s+\d+%|-+>\s+(\d{2,4}-\d{2}-\d{2} \d{2}:\d{2})\s+\w+\s+(.*)\n/i';
 		preg_match_all($reg,$match[1]."\n",$matchItem);
 		if( !is_array($matchItem) || 
 			count($matchItem) != 6 ||
