@@ -1041,14 +1041,19 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	//调用webserver下载
 	$server = strtolower($_SERVER['SERVER_SOFTWARE']);
 	if($server && $GLOBALS['config']['settings']['httpSendFile']){
-		if(strstr($server,'nginx')){//nginx
-			header("X-Sendfile: ".$file);
-		}else if(strstr($server,'apache')){ //apache
-			header('X-Accel-Redirect: '.$file);
-		}else if(strstr($server,'http')){//light http
-			header( "X-LIGHTTPD-send-file: " . $file);
+		if(substr($file, 0, strlen(DATA_PATH)) == DATA_PATH){
+			$relativePath = substr($file,strlen(dirname(DATA_PATH)));
+			if(strstr($server,'nginx')){//nginx
+				header('X-Accel-Redirect:'.$relativePath);
+				return;
+			}else if(strstr($server,'apache')){ //apache
+				header('X-Sendfile:'.$relativePath);
+				return;
+			}else if(strstr($server,'http')){//light http
+				header( "X-LIGHTTPD-send-file: " . $relativePath);
+				return;
+			}
 		}
-		return;
 	}
 	
 	//远程路径不支持断点续传；打开zip内部文件
