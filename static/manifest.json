@@ -1,0 +1,33 @@
+{
+  "name": "KodExplorer",
+  "short_name": "KodExplorer",
+  "icons": [{
+      "src": "./images/common/ico-128X128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }, {
+      "src": "./images/common/ico-144X144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }, {
+      "src": "./images/common/ico-152X152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }, {
+      "src": "./images/common/ico-192X192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }, {
+      "src": "./images/common/ico-256X256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }, {
+      "src": "./images/common/ico-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }],
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000"
+}
