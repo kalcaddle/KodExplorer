@@ -1042,9 +1042,9 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	$server = strtolower($_SERVER['SERVER_SOFTWARE']);
 	if($server && $GLOBALS['config']['settings']['httpSendFile']){
 		if(strstr($server,'nginx')){//nginx
-			header("X-Sendfile: ".$file);
-		}else if(strstr($server,'apache')){ //apache
 			header('X-Accel-Redirect: '.$file);
+		}else if(strstr($server,'apache')){ //apache
+			header("X-Sendfile: ".$file);
 		}else if(strstr($server,'http')){//light http
 			header( "X-LIGHTTPD-send-file: " . $file);
 		}
