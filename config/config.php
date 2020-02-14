@@ -38,7 +38,8 @@ define('FUNCTION_DIR',	LIB_DIR .'function/');		//函数库目录
 define('CLASS_DIR',		LIB_DIR .'kod/');			//工具类目录
 define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
 define('SDK_DIR',		LIB_DIR .'sdks/');			//
-define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限，777 部分虚拟主机限制了777
+define('DEFAULT_PERRMISSIONS',0640);	//新建文件、解压文件默认权限
+define('DEFAULT_DIR_PERRMISSIONS',0750);//新建目录
 
 /*
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;
