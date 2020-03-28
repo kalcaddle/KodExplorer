@@ -1028,7 +1028,7 @@ function des_encode($key, $text){
 	return base64_encode($encrypted);
 } 
 function pkcs5_unpad($text){
-	$pad = ord($text{strlen($text)-1});
+	$pad = ord($text[strlen($text)-1]);
 	if ($pad > strlen($text)) return $text;
 	if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) return $text;
 	return substr($text, 0, -1 * $pad);
