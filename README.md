@@ -23,7 +23,7 @@
 - Use experience like operating system, Rich context menu and toolbar, drag and drop, shortcut keys......
 - Available in more than 40 languages.
 - File Manage
-    - All operations with files and folders on a remote server(copy,cute,paste,move,remove,upload,create folder/file,rename,etc.)
+    - All operations with files and folders on a remote server(copy,cut,paste,move,remove,upload,create folder/file,rename,etc.)
     - Multi-User support,custom role group.
     - Flexible configuration of access rights,file types restriction, user - interface and other
     - Clipboard: copy, cut, paste, clear
