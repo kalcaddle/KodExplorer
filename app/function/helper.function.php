@@ -275,7 +275,7 @@ function php_env_check(){
 function check_cache(){
 	//检查是否更新失效
 	$content = file_get_contents(BASIC_PATH.'config/version.php');
-	$result  = match($content,"'KOD_VERSION','(.*)'");
+	$result  = matching($content,"'KOD_VERSION','(.*)'");
 	if($result != KOD_VERSION){
 		show_tips("您服务器开启了php缓存,文件更新尚未生效;
 			请关闭缓存，或稍后1分钟刷新页面再试！

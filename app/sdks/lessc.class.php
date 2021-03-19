@@ -2535,7 +2535,7 @@ class lessc_parser {
 			// whitespace after the operator for it to be an expression
 			$needWhite = $whiteBefore && !$this->inParens;
 
-			if ($this->match(self::$operatorString.($needWhite ? '\s' : ''), $m) && self::$precedence[$m[1]] >= $minP) {
+			if ($this->matching(self::$operatorString.($needWhite ? '\s' : ''), $m) && self::$precedence[$m[1]] >= $minP) {
 				if (!$this->inParens && isset($this->env->currentProperty) && $m[1] == "/" && empty($this->env->supressedDivision)) {
 					foreach (self::$supressDivisionProps as $pattern) {
 						if (preg_match($pattern, $this->env->currentProperty)) {
@@ -2662,7 +2662,7 @@ class lessc_parser {
 		}
 
 		// css hack: \0
-		if ($this->literal('\\') && $this->match('([0-9]+)', $m)) {
+		if ($this->literal('\\') && $this->matching('([0-9]+)', $m)) {
 			$value = array('keyword', '\\'.$m[1]);
 			return true;
 		} else {
@@ -2766,7 +2766,7 @@ class lessc_parser {
 		$nestingLevel = 0;
 
 		$content = array();
-		while ($this->match($patt, $m, false)) {
+		while ($this->matching($patt, $m, false)) {
 			if (!empty($m[1])) {
 				$content[] = $m[1];
 				if ($nestingOpen) {
@@ -2835,7 +2835,7 @@ class lessc_parser {
 		$oldWhite = $this->eatWhiteDefault;
 		$this->eatWhiteDefault = false;
 
-		while ($this->match($patt, $m, false)) {
+		while ($this->matching($patt, $m, false)) {
 			$content[] = $m[1];
 			if ($m[2] == "@{") {
 				$this->count -= strlen($m[2]);
@@ -2894,7 +2894,7 @@ class lessc_parser {
 			if (!ctype_digit($char) && $char != ".") return false;
 		}
 
-		if ($this->match('([0-9]+(?:\.[0-9]*)?|\.[0-9]+)([%a-zA-Z]+)?', $m)) {
+		if ($this->matching('([0-9]+(?:\.[0-9]*)?|\.[0-9]+)([%a-zA-Z]+)?', $m)) {
 			$unit = array("number", $m[1], empty($m[2]) ? "" : $m[2]);
 			return true;
 		}
@@ -2903,7 +2903,7 @@ class lessc_parser {
 
 	// a # color
 	protected function color(&$out) {
-		if ($this->match('(#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3}))', $m)) {
+		if ($this->matching('(#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3}))', $m)) {
 			if (strlen($m[1]) > 7) {
 				$out = array("string", "", array($m[1]));
 			} else {
@@ -3066,7 +3066,7 @@ class lessc_parser {
 					break; // get out early
 				}
 
-				if ($this->match('\s+', $m)) {
+				if ($this->matching('\s+', $m)) {
 					$attrParts[] = " ";
 					continue;
 				}
@@ -3093,7 +3093,7 @@ class lessc_parser {
 				}
 
 				// operator, handles attr namespace too
-				if ($this->match('[|-~\$\*\^=]+', $m)) {
+				if ($this->matching('[|-~\$\*\^=]+', $m)) {
 					$attrParts[] = $m[0];
 					continue;
 				}
@@ -3133,7 +3133,7 @@ class lessc_parser {
 		$this->eatWhiteDefault = false;
 
 		while (true) {
-			if ($this->match('(['.$chars.'0-9]['.$chars.']*)', $m)) {
+			if ($this->matching('(['.$chars.'0-9]['.$chars.']*)', $m)) {
 				$parts[] = $m[1];
 				if ($simple) break;
 
@@ -3184,7 +3184,7 @@ class lessc_parser {
 	protected function func(&$func) {
 		$s = $this->seek();
 
-		if ($this->match('(%|[\w\-_][\w\-_:\.]+|[\w_])', $m) && $this->literal('(')) {
+		if ($this->matching('(%|[\w\-_][\w\-_:\.]+|[\w_])', $m) && $this->literal('(')) {
 			$fname = $m[1];
 
 			$sPreArgs = $this->seek();
@@ -3253,7 +3253,7 @@ class lessc_parser {
 
 	// consume a keyword
 	protected function keyword(&$word) {
-		if ($this->match('([\w_\-\*!"][\w\-_"]*)', $m)) {
+		if ($this->matching('([\w_\-\*!"][\w\-_"]*)', $m)) {
 			$word = $m[1];
 			return true;
 		}
@@ -3350,7 +3350,7 @@ class lessc_parser {
 			self::$literalCache[$what] = lessc::preg_quote($what);
 		}
 
-		return $this->match(self::$literalCache[$what], $m, $eatWhitespace);
+		return $this->matching(self::$literalCache[$what], $m, $eatWhitespace);
 	}
 
 	protected function genericList(&$out, $parseItem, $delim="", $flatten=true) {
@@ -3387,14 +3387,14 @@ class lessc_parser {
 		} else {
 			$validChars = $allowNewline ? "." : "[^\n]";
 		}
-		if (!$this->match('('.$validChars.'*?)'.lessc::preg_quote($what), $m, !$until)) return false;
+		if (!$this->matching('('.$validChars.'*?)'.lessc::preg_quote($what), $m, !$until)) return false;
 		if ($until) $this->count -= strlen($what); // give back $what
 		$out = $m[1];
 		return true;
 	}
 
 	// try to match something on head of buffer
-	protected function match($regex, &$out, $eatWhitespace = null) {
+	protected function matching($regex, &$out, $eatWhitespace = null) {
 		if ($eatWhitespace === null) $eatWhitespace = $this->eatWhiteDefault;
 
 		$r = '/'.$regex.($eatWhitespace && !$this->writeComments ? '\s*' : '').'/Ais';
@@ -3420,7 +3420,7 @@ class lessc_parser {
 			}
 			return $gotWhite;
 		} else {
-			$this->match("", $m);
+			$this->matching("", $m);
 			return strlen($m[0]) > 0;
 		}
 	}

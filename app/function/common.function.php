@@ -759,7 +759,7 @@ function html2txt($document){
 } 
 
 // 获取内容第一条
-function match($content, $preg){
+function matching($content, $preg){
 	$preg = "/" . $preg . "/isU";
 	preg_match($preg, $content, $result);
 	return $result[1];
@@ -837,7 +837,7 @@ function get_utf8_str($string, $length, $dot = '...'){
  * @param string $suffix 截断显示字符
  * @return string 
  */
-function msubstr($str, $start = 0, $length, $charset = "utf-8", $suffix = true){
+function msubstr($str, $start = 0, $length = 0, $charset = "utf-8", $suffix = true){
 	if (function_exists("mb_substr")) {
 		$i_str_len = mb_strlen($str);
 		$s_sub_str = mb_substr($str, $start, $length, $charset);
@@ -1028,7 +1028,7 @@ function des_encode($key, $text){
 	return base64_encode($encrypted);
 } 
 function pkcs5_unpad($text){
-	$pad = ord($text{strlen($text)-1});
+	$pad = ord($text[strlen($text)-1]);
 	if ($pad > strlen($text)) return $text;
 	if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) return $text;
 	return substr($text, 0, -1 * $pad);
