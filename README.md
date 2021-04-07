@@ -6,7 +6,6 @@
 > *该项目处于维护阶段,不再开发新功能.推荐使用全新设计升级产品kodbox*
 
 ----
-----
 
 
 [![Home page](https://img.shields.io/badge/home-page-yellow.svg?style=flat)](http://kodcloud.com) [![GPLV3 License](https://img.shields.io/badge/Licence-GPLV3-green.svg?style=flat)](http://kodcloud.com) [![Download](https://img.shields.io/badge/download-~953.3K-red.svg?style=flat)](https://github.com/kalcaddle/KODExplorer/archive/master.zip)
