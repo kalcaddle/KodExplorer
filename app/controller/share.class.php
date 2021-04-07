@@ -15,7 +15,7 @@ class share extends Controller{
 		parent::__construct();
 		$auth = systemRole::getInfo(1);//经过role检测
 
-		$arrNotCheck = array('commonJs');
+		$arrNotCheck = array('commonJs','manifest','manifestJS');
 		if(substr($this->in['fileUrl'],0,4) == 'http'){
 			$arrNotCheck[] = 'fileGet';
 		}
@@ -278,7 +278,24 @@ class share extends Controller{
 		}
 		echo 'LNG='.$lang.';G.useTime='.$useTime.';';
 	}
-
+	//chrome安装: 必须https;serviceWorker引入处理;manifest配置; [manifest.json配置目录同sw.js引入];
+	public function manifest(){
+		$json   = file_get_contents(BASIC_PATH.'static/others/app/manifest.json');
+		$name   = stristr(I18n::getType(),'zh') ? '可道云':'kodExplorer';
+		$static = STATIC_PATH == './static/' ? APP_HOST.'static/':STATIC_PATH;
+		$assign = array(
+			"{{name}}"		=> $name,
+			"{{appDesc}}"	=> LNG('common.copyright.name'),
+			"{{static}}"	=> $static,
+		);
+		$json = str_replace(array_keys($assign),array_values($assign),$json);
+		header("Content-Type: application/javascript; charset=utf-8");
+		echo $json;
+	}
+	public function manifestJS(){
+		header("Content-Type: application/javascript; charset=utf-8");
+		echo file_get_contents(BASIC_PATH.'static/others/app/sw.js');
+	}
 
 
 	//========ajax function============

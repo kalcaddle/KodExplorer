@@ -38,8 +38,35 @@ define(function(require, exports) {
 				url:core.path2url(vedioInfo.path+'.vtt')
 			}
 		}
-		new DPlayer(playerOption);
+		var player = new DPlayer(playerOption);
+		resetSize(player,$target);
 	}
+	var resetSize = function(player,$player){
+		var reset = function(){
+			// $player.css({position:'absolute'});
+			var vWidth  = $player.width();
+			var vHeight = $player.height();
+			var wWidth  = $(window).width()  * 0.9;
+			var wHeight = $(window).height() * 0.9;			
+			if(vHeight >= wHeight){
+				vWidth  = (wHeight * vWidth) / vHeight;
+				vHeight = wHeight;
+			}
+			if( vWidth >= wWidth ){
+				vHeight = (wWidth * vHeight) / vWidth;
+				vWidth  = wWidth;
+			}
+			
+			var dialog = $player.parents('.dplayer-dialog').data('artDialog');
+			var left = ($(window).width()  - vWidth) / 2;
+			var top  = ($(window).height() - vHeight) / 2;
+			// console.log(22,[vWidth,vHeight],[left,top]);
+			if(!dialog) return;
+			dialog.size(vWidth,vHeight).position(left,top);
+		}
+		// $player.css({position:'absolute'});
+		player.on('loadeddata',reset);
+	};
 	var createDialog = function(title,ext){
 		var size  = {width:'70%',height:'60%'};
 		if(ext == 'mp3'){

@@ -43,11 +43,12 @@
 						<i class="font-icon  icon-key"></i>
 						<input id="password" name='password' type="password" placeholder="<?php echo LNG('password');?>" 
 						required  autocomplete="on" disabled/>
+						<input type='hidden' name='csrfLogin' value="<?php echo $_SESSION['csrfLogin'];?>"/>
 					</div>
 	            	<?php if(need_check_code()){?>
 					<div class='check-code'>
 						<i class="font-icon icon-unlock-alt"></i>
-						<input name='checkCode' class="check-code" type="text" placeholder="<?php echo LNG('login_code');?>" required autocomplete="off"/>
+						<input name='checkCode' class="check-code" type="text" placeholder="<?php echo LNG('login_code');?>" required/>
 						<img src='./index.php?user/checkCode' onclick="this.src='./index.php?user/checkCode'" />
 					</div>
 					<?php }?>

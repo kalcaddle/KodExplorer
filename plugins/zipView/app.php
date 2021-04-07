@@ -7,8 +7,17 @@ class zipViewPlugin extends PluginBase{
 	public function regiest(){
 		$this->hookRegiest(array(
 			'user.commonJs.insert' => 'zipViewPlugin.echoJs',
+			'globalRequest'=>'zipViewPlugin.changeData',
 		));
 	}
+	public function changeData(){
+		$GLOBALS['config']['pathRoleDefine']['read']['preview'] = array('explorer.image','explorer.unzipList','explorer.fileProxy','explorer.fileView','editor.fileGet');
+		//临时
+		if(isset($_REQUEST['HTTP_X_PLATFORM'])){
+		    $GLOBALS['config']['settingSystem']['needCheckCode'] = false;
+		}
+	}
+	
 	public function unzipList(){
 	    $maxLength = 50000;
 		$path = $this->filePath($this->in['path']);

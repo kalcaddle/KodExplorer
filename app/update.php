@@ -63,9 +63,7 @@ function updateCheck(){
 
 function unzipRepeat(){
 	$zipFile = THE_DATA_PATH.'2.0-'.UPDATE_VERSION.'.zip';
-	if(!file_exists($zip_file)){
-		return;
-	}
+	if(!file_exists($zipFile)) return;
 	$zip = new PclZip($zipFile);
 	$result = $zip->extract(PCLZIP_OPT_PATH,THE_BASIC_PATH,PCLZIP_OPT_REPLACE_NEWER);
 }
@@ -93,7 +91,7 @@ function updateClear(){
 function check_version_ok(){
 	//检查是否更新失效
 	$content = file_get_contents(BASIC_PATH.'config/version.php');
-	$result  = match($content,"'KOD_VERSION','(.*)'");
+	$result  = match_text($content,"'KOD_VERSION','(.*)'");
 	if($result != KOD_VERSION){
 		show_tips("您服务器开启了php缓存,文件更新尚未生效;
 			请关闭缓存，或稍后1分钟刷新页面再试！

@@ -28,7 +28,7 @@ class user extends Controller{
 		$this->notCheckST = array('share','debug');
 		$this->notCheckACT = array(
 			'loginFirst','login','logout','loginSubmit',
-			'checkCode','publicLink','qrcode','sso');
+			'checkCode','publicLink','qrcode','sso','appConfig');
 		
 		$this->notCheckApp = array();//'pluginApp.to'
 		if(!$this->user){
@@ -42,6 +42,7 @@ class user extends Controller{
 
 	public function bindHook(){
 		$this->loadModel('Plugin')->init();
+		$this->bindCheckPassword();
 	}
 
 	/**
@@ -153,6 +154,42 @@ class user extends Controller{
 				$this->config['user'][$key] = $val;
 			}
 		}
+	}
+	
+	private function _loginCheckPassword($user,$password){
+		if($this->checkPassword($password)) return;
+		if($user['role'] == '1'){ // 管理员,提示修改;
+			if(isset($_SESSION['adminPasswordTips'])) return;
+			@session_start();
+			$_SESSION['adminPasswordTips']= 1;
+			@session_write_close();
+			show_tips("安全提示:<br/><br/>密码长度必须大于6,同时包含英文和数字;<br/>强烈建议登陆后修改密码!",false);
+		}
+		show_tips("密码长度必须大于6,同时包含英文和数字;<br/>请联系管理员修改后再试!",false);
+	}
+	private function checkPassword($password){
+		if(INSTALL_CHANNEL =='hikvision.com'){
+			$this->config['settingSystemDefault']['passwordCheck'] = '1';
+		}
+		if($this->config['settingSystemDefault']['passwordCheck'] == '0') return true;
+
+		$hasNumber = preg_match('/\d/',$password);
+		$hasChar   = preg_match('/[A-Za-z]/',$password);
+		if( strlen($password) >= 6 && $hasNumber && $hasChar) return true;
+		return false;
+	}
+	private function bindCheckPassword(){
+		$action = strtolower(ST.'.'.ACT);
+		$check  = array(
+			'user.changepassword' 	=> 'passwordNew',
+			'systemmember.edit'		=> 'password',
+			'systemmember.add'		=> 'password',
+		);
+		if(!isset($check[$action])) return;
+		
+		$password = $this->in[$check[$action]];
+		if($this->checkPassword($password)) return;
+		show_json("密码长度必须大于6,同时包含英文和数字;<br/>请联系管理员修改后再试!",false);
 	}
 
 	/**
@@ -443,6 +480,7 @@ class user extends Controller{
 		}
 
 		//首次登陆，初始化app 没有最后登录时间
+		$this->_loginCheckPassword($user,$password);
 		$this->_loginSuccess($user);//登陆成功
 		if(!$user['lastLogin']){
 			$app = init_controller('app');
@@ -606,7 +644,7 @@ class user extends Controller{
 			ob_get_clean();
 			QRcode::png($this->in['url']);
 		}else{
-			header('location: http://qr.topscan.com/api.php?text='.rawurlencode($url));
+			header('location: https://demo.kodcloud.com/?user/view/qrcode&url='.rawurlencode($url));
 		}
 	}
 }

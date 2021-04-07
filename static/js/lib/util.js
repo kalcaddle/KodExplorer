@@ -384,7 +384,9 @@ var LocalData = (function(){
 		if(result === null || result == undefined || result == ''){
 			return false;
 		}else{
-			return jsonDecode(base64Decode(result));
+			try{
+				return jsonDecode(base64Decode(result));
+			}catch(e){return {};}			
 		}
 	}
 	var clear = function(){
@@ -450,13 +452,13 @@ function Queen(maxLength,identify){
 			return [];
 		}
 		if(list == undefined){
-			return LocalData.getConfig(identify);
+			return LocalData.getConfig(identify) || [];
 		}else{
 			return LocalData.setConfig(identify,list);
 		}
 	}
 	var queenList = data();//本地存储初始化
-	if(!queenList){
+	if(!_.isArray(queenList)){
 		queenList = [];
 	}
 	var index = queenList.length - 1;
@@ -659,6 +661,7 @@ var pathTools = (function(){
 	 * 
 	 * 参考
 	 * https://github.com/overset/javascript-natural-sort/blob/master/naturalSort.js
+	 * https://github.com/sxei/pinyinjs
 	 * 
 	 * 耗时：暂不加入如下排序支持
 	 * 时间戳排序;耗时操作 为兼容国外时间  ['10-12-2008','10-11-2008','10-11-2007','10-12-2007']
@@ -706,9 +709,9 @@ var pathTools = (function(){
 			//字符和汉字(字符小于汉字)、字符和字符(小写英文小于大写英文,a<A<b<B )
 			if( aChar.charCodeAt() < 255 || bChar.charCodeAt() < 255){
 				if( aChar.charCodeAt() < 255 && bChar.charCodeAt() < 255){
-					// a<A; ansi比较需要反置; 自行实现，避免localeCompare比较不同平台不一致问题 
+					// B>b>A>a;自行实现，避免localeCompare比较不同平台不一致问题 
 					var aCharI = aChar.toLowerCase(),bCharI = bChar.toLowerCase();
-					if(aCharI == bCharI) return aCharI>bCharI?-1:1;
+					if(aCharI == bCharI) return aChar>bChar?-1:1;//ansii需要反置
 					return aCharI>bCharI?1:-1;
 				}
 				return aChar>bChar?1:-1;
@@ -724,6 +727,7 @@ var pathTools = (function(){
 			if(aIndex !=-1 ) return -1;
 			if(bIndex !=-1 ) return 1;
 			return aChar.localeCompare(bChar);//中文按拼音排序; 不支持词语多音字处理:北京/长沙/长高/重量/重庆
+			// strToPinyin(aChar)>strToPinyin(bChar)?1:-1;
 		}
 		return 0;
 	}

@@ -152,7 +152,7 @@
 			}
 			clearInterval(repeatTimer);
 			taskStatus();
-			repeatTimer = setInterval(taskStatus,600);
+			repeatTimer = setInterval(taskStatus,1000);
 		};
 		var loadSuccess = function(data){
 			window.location.reload();

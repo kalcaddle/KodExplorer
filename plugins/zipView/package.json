@@ -2,7 +2,7 @@
 	"id":"zipView",
 	"name":"{{LNG.Plugin.default.zipView}}",
 	"title":"",
-	"version":"1.35",
+	"version":"1.38",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png",
 		"screenshoot":[

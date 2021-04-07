@@ -111,7 +111,7 @@ return array(
     "system_role_read"               => "Read-only",
     "system_role_write"              => "Kann lesen und schreiben",
     "system_setting_root_path"       => "root-Zugriff",
-    "system_setting_root_path_desc"  => "Nur ein Systemadministrator sollte auf alle Verzeichnisse zugreifen sollen, andere Rechte Benutzergruppen können nur ihre eigenen Benutzerverzeichnisse sehen. Wenn Sie ein- oder ausschalten zu anderen Verzeichnissen Zugriff<br/>Administrator möchten, können Sie die PHP open_basedir anti-Cross-Site-Parameter ändern,<a href=\"https://www.google.com.hk/search?&q=php+open_basedir\" target=\"_ lank\">gesetzt</a>",
+    "system_setting_root_path_desc"  => "Nur ein Systemadministrator sollte auf alle Verzeichnisse zugreifen sollen, andere Rechte Benutzergruppen können nur ihre eigenen Benutzerverzeichnisse sehen. Wenn Sie ein- oder ausschalten zu anderen Verzeichnissen Zugriff<br/>Administrator möchten, können Sie die PHP open_basedir anti-Cross-Site-Parameter ändern,<a href=\"https://www.google.com.hk/search?&q=php+open_basedir\" target=\"_ lank\">gesetzt</a>",
     "system_group_role_title"        => "Rollenverwaltung der Abteilungsbehörde",
     "system_group_role_remove"       => "OK, um die Abteilungsrolle zu löschen",
     "system_group_role_style"        => "Stil",
@@ -801,4 +801,4 @@ return array(
     "Explorer.UI.appTypeAll"         => "Alle Anwendungen",
     "kodApp.oexe.edit"               => "Bearbeiten Sie die Lichtanwendung",
     "kodApp.oexe.open"               => "Öffnen Sie die Anwendung von Licht"
-);
+); 

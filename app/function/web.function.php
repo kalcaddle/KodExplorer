@@ -598,7 +598,7 @@ function url_header($url){
 		if (strstr($name,'=')) $name = substr($name,strrpos($name,'=')+1);
 		if (!$name) $name = 'file.data';
 	}
-	if(isset($header['x-outfilename'])){
+	if(!empty($header['x-outfilename'])){
 		$name = $header['x-outfilename'];
 	}
 	$name = rawurldecode(trim($name,'"'));
@@ -663,7 +663,8 @@ function parse_url_query($url){
 	$params = array();
 	foreach ($queryParts as $param) {
 		$item = explode('=', $param);
-		$params[$item[0]] = $item[1];
+		$key = $item[0]; unset($item[0]);
+        $params[$key] = implode('=', $item);
 	}
 	return $params;
 }
