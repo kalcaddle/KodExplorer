@@ -59,16 +59,19 @@ function zip_pre_name($fileName,$toCharset=false){
 	return $result;
 }
 
-//解压缩文件名检测
 function unzip_filter_ext($name){
 	$add = '.txt';
-	if(checkExt($name)){//允许
+	if( checkExt($name) &&
+		!stristr($name,'user.ini') &&
+		!stristr($name,'.htaccess')
+	){//允许
 		return $name;
 	}
 	return $name.$add;
 }
 //解压到kod，文件名处理;识别编码并转换到当前系统编码
 function unzip_pre_name($fileName){
+	$fileName = str_replace(array('../','..\\',''),'',$fileName);
 	if (!function_exists('iconv')){
 		return unzip_filter_ext($fileName);
 	}
@@ -226,7 +229,7 @@ function file_upload_size(){
 }
 
 function check_list_dir(){
-	$url = APP_HOST.'lib/core/';
+	$url = APP_HOST.'app/core/';
 	$find = "Application.class.php";
 	
 	@ini_set('default_socket_timeout',1);
@@ -275,7 +278,7 @@ function php_env_check(){
 function check_cache(){
 	//检查是否更新失效
 	$content = file_get_contents(BASIC_PATH.'config/version.php');
-	$result  = match($content,"'KOD_VERSION','(.*)'");
+	$result  = match_text($content,"'KOD_VERSION','(.*)'");
 	if($result != KOD_VERSION){
 		show_tips("您服务器开启了php缓存,文件更新尚未生效;
 			请关闭缓存，或稍后1分钟刷新页面再试！

@@ -663,7 +663,8 @@ function parse_url_query($url){
 	$params = array();
 	foreach ($queryParts as $param) {
 		$item = explode('=', $param);
-		$params[$item[0]] = $item[1];
+		$key = $item[0]; unset($item[0]);
+        $params[$key] = implode('=', $item);
 	}
 	return $params;
 }

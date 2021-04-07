@@ -57,7 +57,8 @@ $config['settingSystemDefault'] = array(
 	'pathHidden'		=> "Thumb.db,.DS_Store,.gitignore,.git",//目录列表隐藏的项
 	'autoLogin'			=> "0",			// 是否自动登录；登录用户为guest
 	'needCheckCode'		=> "0",			// 登陆是否开启验证码；默认关闭
-	'firstIn'			=> "explorer",	// 登录后默认进入[explorer desktop,editor]
+	'firstIn'			 => "explorer",	 // 登录后默认进入[explorer desktop,editor]
+	'passwordCheck'		=> '0',			// 是否强制要求密码强度: 长度大于6,包含数字和英文字母;
 
 	'newUserApp'		=> "trello,一起写office,微信,365日历,石墨文档,ProcessOn,计算器,icloud,OfficeConverter",
 	'newUserFolder'		=> "document,desktop,pictures,music",
@@ -78,7 +79,7 @@ $config['settingSystemDefault'] = array(
 $config['settingSystemDefault']['menu'] = array(
 	array('name'=>'desktop','type'=>'system','url'=>'index.php?desktop','target'=>'_self','use'=>'1'),
 	array('name'=>'explorer','type'=>'system','url'=>'index.php?explorer','target'=>'_self','use'=>'1'),
-	array('name'=>'editor','type'=>'system','url'=>'index.php?editor','target'=>'_self','use'=>'1')
+	// array('name'=>'editor','type'=>'system','url'=>'index.php?editor','target'=>'_self','use'=>'1')
 );
 if( strstr(I18n::defaultLang(),'zh') || strstr(I18n::getType(),'zh') ){
 	$config['settingSystemDefault']['newGroupFolder'] = "share,文档,图片资料,视频资料";
@@ -199,7 +200,7 @@ $config['pathRoleDefine'] = array(
 		'list'	=> array('explorer.index','explorer.pathList','explorer.treeList','editor.index','pluginApp.to'),
 		'info'	=> array('explorer.pathInfo','explorer.search'),
 		'copy'	=> array('explorer.pathCopy'),
-		'preview'=>array('explorer.image','explorer.unzipList','explorer.fileProxy','explorer.officeView','editor.fileGet'),
+		'preview'=>array('explorer.image','explorer.unzipList','explorer.fileProxy','explorer.officeView','editor.fileGet','explorer.fileView'),
 		'download'=>array('explorer.fileDownload','explorer.zipDownload','explorer.fileDownloadRemove'),
 	),
 	'write' => array(

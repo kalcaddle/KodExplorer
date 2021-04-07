@@ -18,12 +18,12 @@ if(GLOBAL_DEBUG){
 	define('STATIC_JS','_dev');  //_dev||app
 	define('STATIC_LESS','less');//less||css
 	@ini_set("display_errors","on");
-	@error_reporting(E_ALL^E_NOTICE);//
+	@error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);//
 }else{
 	define('STATIC_JS','app');  //app
 	define('STATIC_LESS','css');//css
 	@ini_set("display_errors","on");//on off
-	@error_reporting(E_ALL^E_NOTICE^E_WARNING);// 0
+	@error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);// 0
 }
 
 //header('HTTP/1.1 200 Ok');//兼容部分lightHttp服务器环境; php5.1以下会输出异常；暂屏蔽
@@ -38,13 +38,13 @@ define('FUNCTION_DIR',	LIB_DIR .'function/');		//函数库目录
 define('CLASS_DIR',		LIB_DIR .'kod/');			//工具类目录
 define('CORER_DIR',		LIB_DIR .'core/');			//核心目录
 define('SDK_DIR',		LIB_DIR .'sdks/');			//
-define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限，777 部分虚拟主机限制了777
+define('DEFAULT_PERRMISSIONS',0755);	//新建文件、解压文件默认权限，777 部分虚拟主机限制了777;
 
 /*
  * 可以数据目录;移到web目录之外，可以使程序更安全, 就不用限制用户的扩展名权限了;
  * 1. 需要先将data文件夹移到别的地方 例如将data文件夹拷贝到D:/
  * 2. 在config文件夹下新建define.php 新增一行 <?php define('DATA_PATH','D:/data/');
- * 注意:路径不能写错;其次php需要有权限访问移动后的目录(设置了防跨站需要关闭)
+ * 注意:路径不能写错;其次php需要有权限访问移动后的目录(设置了防跨站需要关闭)  路径结尾/斜杠绝对不能缺少
  */
 if(file_exists(BASIC_PATH.'config/define.php')){
 	include(BASIC_PATH.'config/define.php');

@@ -384,7 +384,9 @@ var LocalData = (function(){
 		if(result === null || result == undefined || result == ''){
 			return false;
 		}else{
-			return jsonDecode(base64Decode(result));
+			try{
+				return jsonDecode(base64Decode(result));
+			}catch(e){return {};}			
 		}
 	}
 	var clear = function(){
@@ -450,13 +452,13 @@ function Queen(maxLength,identify){
 			return [];
 		}
 		if(list == undefined){
-			return LocalData.getConfig(identify);
+			return LocalData.getConfig(identify) || [];
 		}else{
 			return LocalData.setConfig(identify,list);
 		}
 	}
 	var queenList = data();//本地存储初始化
-	if(!queenList){
+	if(!_.isArray(queenList)){
 		queenList = [];
 	}
 	var index = queenList.length - 1;

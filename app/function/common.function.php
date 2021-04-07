@@ -348,24 +348,6 @@ function array_try($array, $callback){
 		} 
 	} 
 	return false;
-} 
-// 求多个数组的并集
-function array_union(){
-	$argsCount = func_num_args();
-	if ($argsCount < 2) {
-		return false;
-	} else if (2 === $argsCount) {
-		list($arr1, $arr2) = func_get_args();
-
-		while ((list($k, $v) = each($arr2))) {
-			if (!in_array($v, $arr1)) $arr1[] = $v;
-		} 
-		return $arr1;
-	} else { // 三个以上的数组合并
-		$arg_list = func_get_args();
-		$all = call_user_func_array('array_union', $arg_list);
-		return array_union($arg_list[0], $all);
-	} 
 }
 // 取出数组中第n项
 function array_get_index($arr,$index){
@@ -446,7 +428,7 @@ function fatalErrorHandler(){
 }
 
 function show_tips($message,$url= '', $time = 3,$title = '',$exit = true){
-	ob_get_clean();
+	ob_get_clean();$time=500;
 	header('Content-Type: text/html; charset=utf-8');
 	$goto = "content='$time;url=$url'";
 	$info = "{$time}s 后自动跳转, <a href='$url'>立即跳转</a>";
@@ -669,9 +651,9 @@ function show_json($data,$code = true,$info=''){
 
 function show_trace(){
 	echo '<pre>';
-	var_dump(func_get_args());
+	var_dump(json_encode(func_get_args()));
 	echo '<hr/>';
-	echo get_caller_info();
+	print_r(get_caller_info());
 	echo '</pre>';
 	exit;
 }
@@ -759,7 +741,7 @@ function html2txt($document){
 } 
 
 // 获取内容第一条
-function match($content, $preg){
+function match_text($content, $preg){
 	$preg = "/" . $preg . "/isU";
 	preg_match($preg, $content, $result);
 	return $result[1];
@@ -912,25 +894,12 @@ function dump(){call_user_func('pr',func_get_args());}
 function debug_out(){call_user_func('pr',func_get_args());}
 
 /**
- * 取$from~$to范围内的随机数
- * 
- * @param  $from 下限
- * @param  $to 上限
- * @return unknown_type 
+ * 取$from~$to范围内的随机数,包含$from,$to;
  */
 function rand_from_to($from, $to){
-	$size = $to - $from; //数值区间
-	$max = 30000; //最大
-	if ($size < $max) {
-		return $from + mt_rand(0, $size);
-	} else {
-		if ($size % $max) {
-			return $from + random_from_to(0, $size / $max) * $max + mt_rand(0, $size % $max);
-		} else {
-			return $from + random_from_to(0, $size / $max) * $max + mt_rand(0, $max);
-		} 
-	} 
-} 
+	return mt_rand($from,$to);
+	// return $from + mt_rand(0, $to - $from);
+}
 
 /**
  * 产生随机字串，可用来自动生成密码 默认长度6位 字母和数字混合
@@ -1028,7 +997,7 @@ function des_encode($key, $text){
 	return base64_encode($encrypted);
 } 
 function pkcs5_unpad($text){
-	$pad = ord($text{strlen($text)-1});
+	$pad = ord($text[strlen($text)-1]);
 	if ($pad > strlen($text)) return $text;
 	if (strspn($text, chr($pad), strlen($text) - $pad) != $pad) return $text;
 	return substr($text, 0, -1 * $pad);

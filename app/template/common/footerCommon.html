@@ -43,5 +43,6 @@
 			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
 		]
 	});
+	if(navigator.serviceWorker){navigator.serviceWorker.register('./?share/manifestJS');}
 </script>
 <?php Hook::trigger('templateCommonFooter');?>

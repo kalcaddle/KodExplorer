@@ -1,10 +1,3 @@
-/*changed by warlee
-* @link http://kodcloud.com/
-* @author warlee | e-mail:kodcloud@qq.com
-* @copyright warlee 2014.(Shanghai)Co.,Ltd
-* @license http://kodcloud.com/tools/license/license.txt
-*/
-
 *{box-sizing:content-box;}
 body, input, textarea{
     -webkit-font-smoothing: antialiased;font-smoothing: antialiased;
@@ -13,6 +6,10 @@ body, input, textarea{
 }
 /* 图片方向校正 https://gxnotes.com/article/126807.html */
 img {image-orientation: from-image;}
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    -webkit-text-fill-color: initial;
+}
 
 /* kod ie8 hack*/
 @media \0screen\,screen\9 {
@@ -80,6 +77,10 @@ img {image-orientation: from-image;}
 	/*通用*/
 	body{font-family:"Microsoft Yahei","微软雅黑","Lantinghei SC","Helvetica Neue","STXihei",Arial,sans-serif;}
 }
+
+/* adblock 误屏蔽处理 */
+body .share-dialog .share-more{display: block !important;}
+body .share-dialog .share-action{display: block !important;}
 
 
 @media \0screen\,screen\9 {

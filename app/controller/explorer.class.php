@@ -89,7 +89,11 @@ class explorer extends Controller{
 				unset($data['downloadPath']);
 			}
 			if($data['size'] < 100*1024|| isset($this->in['getMd5'])){//100kb
-				$data['fileMd5'] = @md5_file($file);
+				if($data['size'] <= 1024*1024*100){
+			        $data['fileMd5'] = @md5_file($file);
+			    }else{
+			        $data['fileMd5'] = "---";
+			    }
 			}else{
 				$data['fileMd5'] = "...";
 			}
@@ -948,7 +952,7 @@ class explorer extends Controller{
 				}
 			}
 		}
-		$zipFile = $this->zip($userTemp,rand_string(9).'-',fasle);//下载文件夹删除；不检测和记录空间变更
+		$zipFile = $this->zip($userTemp,rand_string(9).'-',false);//下载文件夹删除；不检测和记录空间变更
 		show_json(LNG('zip_success'),true,get_path_this($zipFile));
 	}
 	public function zip($zipPath='',$namePre = "",$checkSpaceChange = true){
@@ -998,7 +1002,7 @@ class explorer extends Controller{
 				$info = LNG('zip_success').LNG('size').":".size_format(filesize($zipname));
 				show_json($info,true,_DIR_OUT(iconv_app($zipname)) );
 			}else{
-				show_json(LNG.error,false);
+				show_json(LNG('error'),false);
 			}
 		}else{
 			return iconv_app($zipname);
@@ -1272,13 +1276,6 @@ class explorer extends Controller{
 		$GLOBALS['kodPathAuthCheck'] = true;//组权限发生变更。导致访问groupPath 无权限退出问题
 		foreach($favList as $key => $val){
 			$thePath = _DIR($val['path']);
-			$hasChildren = path_haschildren($thePath,$checkFile);
-			if( !isset($val['type'])){
-				$val['type'] = 'folder';
-			}
-			if( $val['type'] == 'folder' && $val['ext'] != 'tree-fav'){
-				$hasChildren = true;
-			}
 			$cell = array(
 				'name'      => $val['name'],
 				'ext' 		=> $val['ext'],
