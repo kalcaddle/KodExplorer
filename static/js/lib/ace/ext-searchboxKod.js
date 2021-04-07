@@ -229,33 +229,27 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 		}
 		this.resetEditorHeight = function(show){
 			var $search = $('.search-content');
-			var $searchBody = $('.ace_search');
-			var $editBody = $('.edit_body');
+			var $search_body = $('.ace_search');
+			var $edit_body = $('.edit_body');
 			if(show){
 				$search.removeClass('hidden');
-				$editBody.css('bottom',$searchBody.outerHeight());
+				$edit_body.css('bottom',$search_body.outerHeight());
 			}else{
 				$search.addClass('hidden');
-				$editBody.css('bottom',0);
+				$edit_body.css('bottom',0);
 			}
-			this.resize();
+			Editor && Editor.current() && Editor.current().resize();
 		}
 		this.setEditor = function(appSpace,editor) {
-			this.editorMain = appSpace;
-			this.editorMain.searchBox = this;
 			var $search = $('.search-content');
 			if($search.html() == ''){
 				$search.get(0).appendChild(this.element);
 			}
 			this.resetEditorHeight(true);
+			appSpace.searchBox = this;
 			this.editor = editor;
-			this.resize();
+			Editor && Editor.current() && Editor.current().resize();
 		};
-		this.resize = function(){
-			var editor = this.editorMain && this.editorMain.current();
-			editor && editor.resize();
-		};
-				
 		this.$initElements = function(sb) {
 			this.searchBox = sb.querySelector(".ace_search_form");
 			this.replaceBox = sb.querySelector(".ace_replace_form");
@@ -270,14 +264,14 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 		this.$init = function() {
 			var sb = this.element;
 			this.$initElements(sb);
-			var self = this;
+			var _this = this;
 			event.addListener(sb, "mousedown", function(e) {
 				//下拉菜单
 				if($(e.target).parents('.history-list').length>0){
 					return true;
 				}
 				setTimeout(function() {
-					self.activeInput.focus();
+					_this.activeInput.focus();
 				}, 0);
 				event.stopPropagation(e);
 			});
@@ -287,37 +281,37 @@ ace.define("ace/ext/searchboxKod", ["require", "exports", "module", "ace/lib/dom
 				if(!action){
 					action = $(e.target).parent().attr('action');
 				}
-				if (action && self[action]){
-					self[action]();
-				}else if (self.$searchBarKb.commands[action]){
-					self.$searchBarKb.commands[action].exec(self);
+				if (action && _this[action]){
+					_this[action]();
+				}else if (_this.$searchBarKb.commands[action]){
+					_this.$searchBarKb.commands[action].exec(_this);
 				}
 				event.stopPropagation(e);
 			});
 
 			event.addCommandKeyListener(sb, function(e, hashId, keyCode) {
 				var keyString = keyUtil.keyCodeToString(keyCode);
-				var command = self.$searchBarKb.findKeyCommand(hashId, keyString);
+				var command = _this.$searchBarKb.findKeyCommand(hashId, keyString);
 				if (command && command.exec) {
-					command.exec(self);
+					command.exec(_this);
 					event.stopEvent(e);
 				}
 			});
 
 			this.$onChange = lang.delayedCall(function() {
-				self.find(false, false);
+				_this.find(false, false);
 			});
 
 			event.addListener(this.searchInput, "input", function() {
-				self.$onChange.schedule(20);
+				_this.$onChange.schedule(20);
 			});
 			event.addListener(this.searchInput, "focus", function() {
-				self.activeInput = self.searchInput;
-				self.searchInput.value && self.highlight();
+				_this.activeInput = _this.searchInput;
+				_this.searchInput.value && _this.highlight();
 			});
 			event.addListener(this.replaceInput, "focus", function() {
-				self.activeInput = self.replaceInput;
-				self.searchInput.value && self.highlight();
+				_this.activeInput = _this.replaceInput;
+				_this.searchInput.value && _this.highlight();
 			});
 		};
 		this.$searchBarKb = new HashHandler();

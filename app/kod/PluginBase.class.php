@@ -50,7 +50,7 @@ class PluginBase{
 		if(!is_array($systemConfig['pluginList'])){
 			$systemConfig['pluginList'] = array();
 		}
-		if(is_array($systemConfig['pluginList'][$id])){ 
+		if(is_array($systemConfig['pluginList'][$name])){
 			$systemConfig['pluginList'][$id]['regiest'] = $array;
 		}else{
 			$systemConfig['pluginList'][$id] = array(

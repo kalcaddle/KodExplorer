@@ -89,7 +89,7 @@ class setting extends Controller{
 		}
 		show_json(LNG('success'),true);
 	}
-	private function _clearSession(){
+	private function clearSession(){
 		del_dir(KOD_SESSION);
 	}
 	private function _clearCache(){
