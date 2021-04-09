@@ -28,7 +28,7 @@ class user extends Controller{
 		$this->notCheckST = array('share','debug');
 		$this->notCheckACT = array(
 			'loginFirst','login','logout','loginSubmit',
-			'checkCode','publicLink','qrcode','sso','appConfig');
+			'checkCode','publicLink','qrcode','sso');
 		
 		$this->notCheckApp = array();//'pluginApp.to'
 		if(!$this->user){
@@ -168,7 +168,7 @@ class user extends Controller{
 		show_tips("密码长度必须大于6,同时包含英文和数字;<br/>请联系管理员修改后再试!",false);
 	}
 	private function checkPassword($password){
-		if(INSTALL_CHANNEL =='hikvision.com'){
+		if(defined('INSTALL_CHANNEL') && INSTALL_CHANNEL =='hikvision.com'){
 			$this->config['settingSystemDefault']['passwordCheck'] = '1';
 		}
 		if($this->config['settingSystemDefault']['passwordCheck'] == '0') return true;
@@ -309,6 +309,7 @@ class user extends Controller{
 			),
 			'phpVersion'	=> PHP_VERSION,
 			'version'       => KOD_VERSION,
+			'versionBuild'  => KOD_VERSION_BUILD,
 			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
 			'jsonData'   	=> "",
 			'selfShare'		=> systemMember::userShareList($this->user['userID']),
@@ -361,6 +362,7 @@ class user extends Controller{
 				'uploadCheckChunk'	=> $this->config['settings']['uploadCheckChunk'],
 			),
 			'version'       => KOD_VERSION,
+			'versionBuild'  => KOD_VERSION_BUILD,
 			// 'userConfig' 	=> $this->config['user'],
 		);
 		show_json($theConfig);

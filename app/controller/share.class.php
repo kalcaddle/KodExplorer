@@ -220,6 +220,7 @@ class share extends Controller{
 			'staticPath'    => STATIC_PATH,
 			'appIndex'  	=> $_SERVER['SCRIPT_NAME'],
 			'version'       => KOD_VERSION,
+			'versionBuild'  => KOD_VERSION_BUILD,
 			'versionDesc'   => $versionDesc,
 			'kodID'			=> md5(BASIC_PATH.$this->config['settingSystem']['systemPassword']),
 

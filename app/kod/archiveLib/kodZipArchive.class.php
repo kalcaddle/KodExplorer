@@ -83,7 +83,7 @@ class kodZipArchive{
 		$zip->close();
         
         //子目录解压移除多余层级目录
-		if( is_array(c) ){
+		if( is_array($partName) ){
 			$thePath = trim(str_replace("\\",'/',$partName[0]),'/');
 			$pathGroup = explode('/',$thePath);
 			//一级目录解压不用移动
