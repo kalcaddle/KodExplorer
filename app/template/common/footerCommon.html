@@ -44,5 +44,187 @@
 		]
 	});
 	if(navigator.serviceWorker){navigator.serviceWorker.register('./?share/manifestJS');}
+	
+	
+	
+	
+	function fireMouseEvents( element, eventNames ){
+        if(element && eventNames && eventNames.length){
+            for(var index in eventNames){
+                var eventName = eventNames[index];
+                if(element.fireEvent ){
+                    element.fireEvent( 'on' + eventName );     
+                } else {   
+                    var eventObject = document.createEvent( 'MouseEvents' );
+                    eventObject.initEvent( eventName, true, false );
+                    element.dispatchEvent(eventObject);
+                }
+            }
+        }
+    }
+    
+    function close_current_tab()
+    {
+        close_button = document.querySelectorAll(".edit-tab-menu.this a.close.icon-remove")[0];
+        
+        if( close_button )
+        {
+            close_button.click();
+        }
+    }
+    
+    
+    function go_to_tab(sibling)
+    {
+        
+        if( sibling == 'left' || sibling == 'right' )
+        {
+            current_tab = document.querySelectorAll(".edit-tab-menu.this")[0];
+            if( current_tab )
+            {
+                // alert("current_tab was found!");
+                
+                goal_tab = false;
+                
+                if( sibling == 'left' )
+                {
+                    if( current_tab.previousSibling && current_tab.previousSibling.nodeName=='DIV' && current_tab.previousSibling.getAttribute('class').search("edit-tab-menu") >= 0 )
+                    {
+                        goal_tab = current_tab.previousSibling;
+                    }
+                    else
+                    {
+                        goal_tab = document.querySelectorAll(".edit-tab-menu")[ ( (document.querySelectorAll(".edit-tab-menu").length) - 1) ];
+                    }
+                }
+                
+                else if( sibling == 'right' )
+                {
+                    if( current_tab.nextSibling && current_tab.nextSibling.nodeName=='DIV' && current_tab.nextSibling.getAttribute('class').search("edit-tab-menu") >= 0 )
+                    {
+                        goal_tab = current_tab.nextSibling;
+                    }
+                    else
+                    {
+                        goal_tab = document.querySelectorAll(".edit-tab-menu")[0];
+                    }
+                }
+                
+                
+                
+                
+                
+            }
+            else
+            {
+                // alert("current_tab was not found!");
+            }
+        }
+        
+        if( sibling >= 0 && sibling <= 8 )
+        {
+            goal_tab = document.querySelectorAll(".edit-tab-menu")[ sibling ];
+            if( !goal_tab || goal_tab.nodeName != 'DIV' )
+            {
+                sibling = 'last';
+            }
+        }
+        
+        if( sibling == 'last' )
+        {
+            goal_tab = document.querySelectorAll(".edit-tab-menu")[ ( (document.querySelectorAll(".edit-tab-menu").length) - 1) ];
+        }
+    
+    
+        if ( goal_tab )
+        {
+            // alert( goal_tab );
+            
+            goal_tab_class = goal_tab.getAttribute('class');
+            
+            //alert("goal_tab was found!" + goal_tab_class);
+            
+            if( goal_tab_class.search("edit-tab-menu") >= 0 )
+            {
+                // so it's a valid tab:
+                fireMouseEvents( goal_tab ,['mouseover','mousedown','mouseup','mouseout']);
+            }
+        }
+        
+        
+    }
+	
+    function simulate_Alt_Zero() {
+      // Prepare function for injection into page
+      function injected() {
+        // Adjust as needed; some events are only processed at certain elements
+        var element = document.body;
+    
+        function keyEvent(el, ev) {
+          var eventObj = document.createEvent("Events");
+          eventObj.initEvent(ev, true, true);
+    
+          // Edit this to fit
+          eventObj.keyCode = 48;
+          eventObj.which = 48;
+          eventObj.ctrlKey = false;
+          eventObj.shiftKey = false;
+          eventObj.altKey = true;
+    
+          el.dispatchEvent(eventObj);
+        }
+    
+        // Trigger all 3 just in case
+        keyEvent(element, "keydown");
+        // keyEvent(element, "keypress");
+        keyEvent(element, "keyup");
+      }
+    
+      // Inject the script
+      var script = document.createElement('script');
+      script.textContent = "(" + injected.toString() + ")();";
+      (document.head||document.documentElement).appendChild(script);
+      script.parentNode.removeChild(script);
+    }
+	
+
+	current_page_url = window.location.href;
+	
+	if( current_page_url.search("editor/edit") > 0 )
+	{
+	    document.onkeydown = function(e) {
+          if (e.altKey && e.which == 33)
+          {
+            //alert("ALT + pageup shortcut combination was pressed");
+            go_to_tab("left");
+          } 
+          
+          else if (e.altKey && e.which == 34) {
+            //alert("ALT + pagedown shortcut combination was pressed");
+            go_to_tab("right");
+          }
+          else if (e.altKey && e.which == 87) {
+              //alert("ALT + w");
+              close_current_tab();
+          }
+          
+          else if (e.altKey && ( e.which >= 49 && e.which <= 56 ) ) {
+              // 49 => key 1
+              // 56 => key 8
+              //alert("ALT + 1 ... 8");
+              go_to_tab( (e.which - 49) );
+              
+          }
+          else if (e.altKey && e.which == 57 ) {
+            //   alert("ALT + 9");
+              go_to_tab( "last" );
+          }
+          
+          
+          
+        };
+	}
+	
+	
 </script>
 <?php Hook::trigger('templateCommonFooter');?>
