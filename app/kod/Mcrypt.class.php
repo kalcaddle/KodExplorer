@@ -110,7 +110,8 @@ class Mcrypt{
 			$box[$j] = $tmp; 
 			$result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
 		}
-		if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0)
+		$theTime = intval(substr($result, 0, 10));
+		if (($theTime == 0 || $theTime - time() > 0)
 		&& substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)
 		) {
 			return substr($result, 26);

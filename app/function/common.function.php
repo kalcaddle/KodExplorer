@@ -119,14 +119,11 @@ function mtime(){
 /**
  * 过滤HTML
  */
-function clear_html($HTML, $br = true){
-	$HTML = htmlspecialchars(trim($HTML));
-	$HTML = str_replace("\t", ' ', $HTML);
-	if ($br) {
-		return nl2br($HTML);
-	} else {
-		return str_replace("\n", '', $HTML);
-	} 
+function clear_html($html, $br = true){
+	$html = $html === null ? "" : $html;
+	$replace = array('<','>','"',"'");
+	$replaceTo = array('&lt;','&gt;','&quot;','&#39;');
+	return str_replace($replace,$replaceTo,$html);
 }
 
 /**

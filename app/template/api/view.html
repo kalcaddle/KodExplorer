@@ -68,17 +68,15 @@
 	<script type="text/javascript" src="./index.php?share/commonJs&st=api&act=view#id=<?php echo rand_string(4);?>"></script>
 
 	<?php
-		$name = rawurldecode(get_path_this($_GET['path']));
-		if(isset($_GET['name'])){
-			$name = rawurldecode($_GET['name']);
-		}
+		$path = rawurldecode($_GET['path']);
+		$name = get_path_this($path);
+		if(isset($_GET['name'])){$name = rawurldecode($_GET['name']);}
 	?>
 	<script type="text/javascript">
 		G.shareInfo = {
-			path:"<?php echo $_GET['path'];?>",
-			name:"<?php echo get_path_this($_GET['path']);?>",
-			mtime:0,
-			size:0
+			path:"<?php echo clear_html($path);?>",
+			name:"<?php echo clear_html($name);?>",
+			mtime:0,size:0
 		}
 		<?php if(ST.'.'.ACT == 'explorer.fileView'){echo "G.shareInfo.view = true;G.sharePage=undefined;";}?> 
 		G['accessToken'] = "<?php echo access_token_get();?>";

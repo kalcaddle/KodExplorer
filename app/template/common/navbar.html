@@ -83,7 +83,8 @@
 					<i class="font-icon icon-user"></i>
 					<?php 
 						$user = $_SESSION['kodUser'];
-						echo $user['nickName']?$user['nickName']:$user['name'];
+						$name = $user['nickName']?$user['nickName']:$user['name'];
+						echo clear_html($name);
 					?>&nbsp;
 					<b class="caret"></b>
 				</a>

@@ -239,7 +239,8 @@ class user extends Controller{
 				){
 				$result = true;
 			}else{
-				$error = $this->in['check'].' 没有权限, 配置权限需要为: "'.$this->in['value'].'"';
+				$error = clear_html($this->in['check']).' 没有权限, 配置权限需要为: "'
+						.clear_html($this->in['value']).'"';
 			}
 		}
 		if($result){

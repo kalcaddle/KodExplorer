@@ -38,7 +38,7 @@
 	</div><!-- / frame-main end-->
 	<?php include(TEMPLATE.'common/footerCommon.html');?>
 	<script type="text/javascript">
-		G.project = "<?php echo (isset($_GET['project'])?clear_html($_GET['project']):'') ;?>";
+		G.project = "<?php echo clear_html($_GET['project']) ;?>";
 		seajs.use("app/src/editor/main");
 	</script>
 </body>

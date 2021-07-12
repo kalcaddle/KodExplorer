@@ -3,6 +3,7 @@
 //扩展名权限判断 有权限则返回1 不是true
 function checkExt($file){
 	if($GLOBALS['isRoot']) return 1;
+	if($file == '.htaccess' || $file == '.user.ini') return false;
 	if (strstr($file,'<') || strstr($file,'>') || $file=='') {
 		return 0;
 	}
@@ -17,7 +18,7 @@ function checkExt($file){
 		$extArr = array_merge($extArr,array('phtml','phtm','htaccess','pwml'));
 	}
 	if(in_array('htm',$extArr) || in_array('html',$extArr)){
-		$extArr = array_merge($extArr,array('html','shtml','shtm','html'));
+		$extArr = array_merge($extArr,array('html','shtml','shtm','html','svg'));
 	}
 	foreach ($extArr as $current) {
 		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名

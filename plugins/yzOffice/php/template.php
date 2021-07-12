@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/common.css" type="text/css">
 	<link rel="stylesheet" href="./static/style/font-awesome/css/font-awesome.css">
-	<title><?php echo $fileName;?></title>
+	<title><?php echo clear_html($fileName);?></title>
 	<style>
 		body {margin: 0;font-family: "Helvetica Neue Light", "Segoe UI Semilight", sans-serif;}
 		.infoButtonPrint{
@@ -82,7 +82,7 @@
 			"yzOffice.Main.convert":"<?php echo LNG('yzOffice.Main.convert');?>",
 			"yzOffice.Main.transferAgain":"<?php echo LNG('yzOffice.Main.transferAgain');?>"
 		};
-		var path     = '<?php echo $this->in["path"];?>';
+		var path     = '<?php echo clear_html($this->in["path"]);?>';
 		var apiBase  = "<?php echo $this->pluginApi;?>";//不能含有index.php
 		var selfHost = '<?php echo $this->pluginHost;?>';
 		var cacheFile= '<?php echo $config["cacheFile"];?>';

@@ -19,7 +19,7 @@ class pluginApp extends Controller{
 	public function to() {
 		$route = $this->in['URLremote'];
 		if(count($route) >= 3){
-			$app = $route[2];
+			$app = clear_html($route[2]);
 			$action = $route[3];
 
 			if(count($route) == 3){
@@ -136,6 +136,7 @@ class pluginApp extends Controller{
 
 	// download=>fileSize=>unzip=>remove
 	public function install(){
+		if(!preg_match("/^[0-9a-zA-Z_]*$/",$this->in['app'])) show_json("error!",false);
 		$app = _DIR_CLEAR($this->in['app']);
 		$appPath = PLUGIN_DIR.$app.'.zip';
 		$appPathTemp = $appPath.'.downloading';
@@ -212,6 +213,7 @@ class pluginApp extends Controller{
 		if( !$this->in['app']){
 			show_json(LNG('data_not_full'),false);
 		}
+		if(!preg_match("/^[0-9a-zA-Z_]*$/",$this->in['app'])) show_json("error!",false);
 		$model = $this->loadModel('Plugin');
 		$model->remove($this->in['app']);
 		del_dir(PLUGIN_DIR.$this->in['app']);

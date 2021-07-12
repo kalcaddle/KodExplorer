@@ -2946,7 +2946,20 @@ var htmlEncode=function(str){
 	return s;
 }
 var htmlDecode=function(str){
-	var temp = document.createElement("div");
+	var s = "";
+	if(!str || str.length == 0) return "";
+	s = str.replace(/&amp;/g,"&");
+	s = s.replace(/&lt;/g,"<");
+	s = s.replace(/&gt;/g,">");
+	s = s.replace(/&nbsp;/g," ");
+	s = s.replace(/&#39;/g,"\'");
+	s = s.replace(/&quot;/g,"\"");
+	return s;
+	
+	//IE会丢失换行; 
+	if(!str) return str;
+	if(str.match(/[<& '">]/)) return str;//避免xss风
+	var temp = document.createElement("pre"); 
 	temp.innerHTML = str;
 	var output = temp.innerText || temp.textContent;
 	temp = null;

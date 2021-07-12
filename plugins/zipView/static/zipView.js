@@ -122,13 +122,13 @@ define(function(require, exports) {
 					}
 					var item = tree[i];
 					tree[i] = {
-						name:core.pathThis(item.filename),
+						name:htmlEncode(htmlRemoveTags(core.pathThis(item.filename))),
 						filePath:item.filename,
 						path:currentFileUrl+'&index='+item.index+"&name=/"+urlEncode(item.filename),
 						isParent:!!(item.child),
 						type:item.folder?'folder':'file',
 						menuType:item['folder']?'menu-zip-list-folder':'menu-zip-list-file',
-						ext:core.pathExt(item.filename),
+						ext:htmlEncode(htmlRemoveTags(core.pathExt(item.filename))),
 						mtime:item.mtime,
 						index:item.index,
 						size:item.size,
@@ -562,7 +562,7 @@ define(function(require, exports) {
 				initDataView(treeID,treeData,data,path);
 				Tips.close(LNG.success,true);
 			},[
-				'pathTools.strSort','trim','rtrim','ltrim','urlEncode','urlDecode','$.isNumeric',
+				'pathTools.strSort','trim','rtrim','ltrim','htmlEncode','htmlRemoveTags','urlEncode','urlDecode','$.isNumeric',
 				{'core.pathFather':coreCode.pathFather},
 				{'core.pathClear':coreCode.pathClear},
 				{'core.pathThis':coreCode.pathThis},

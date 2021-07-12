@@ -1,5 +1,5 @@
 <?php include(TEMPLATE.'common/header.html');?>
-	<title><?php echo $shareInfo['name'].' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
+	<title><?php echo clear_html($shareInfo['name']).' - '.LNG('share_title').' - '.strip_tags(LNG('kod_name')).LNG('kod_power_by');?></title>
 	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/base/app_code_edit.css?ver=<?php echo KOD_VERSION;?>"/>
 	<link rel="stylesheet" href="<?php echo STATIC_PATH;?>style/skin/<?php echo $configTheme;?>.css?ver=<?php echo KOD_VERSION;?>" id='link-theme-style'/>
 	
@@ -29,7 +29,7 @@
 	<script type="text/javascript">
 		AUTH  = {'explorer.fileDownload':<?php echo $canDownload;?>};
 		G.user = "<?php echo clear_html($_GET['user']);?>";
-		G.path = "<?php echo (isset($_GET['path'])?clear_html($_GET['path']):'') ;?>";
+		G.path = "<?php echo clear_html($_GET['path']);?>";
 		G.sid = "<?php echo clear_html($_GET['sid']);?>";
 		G.shareInfo = <?php echo json_encode($shareInfo);?>;
 		G.theme = "<?php echo $configTheme;?>";
