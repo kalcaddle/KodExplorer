@@ -82,7 +82,7 @@
 			"yzOffice.Main.convert":"<?php echo LNG('yzOffice.Main.convert');?>",
 			"yzOffice.Main.transferAgain":"<?php echo LNG('yzOffice.Main.transferAgain');?>"
 		};
-		var path     = '<?php echo clear_html($this->in["path"]);?>';
+		var path     = '<?php echo clear_quote($this->in["path"]);?>';
 		var apiBase  = "<?php echo $this->pluginApi;?>";//不能含有index.php
 		var selfHost = '<?php echo $this->pluginHost;?>';
 		var cacheFile= '<?php echo $config["cacheFile"];?>';

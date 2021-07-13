@@ -24,7 +24,7 @@
 	<div id="odf"></div>
 	<script src="<?php echo $this->pluginHost;?>static/webodf.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
-    	var fileURL = "<?php echo clear_html($fileUrl);?>";
+    	var fileURL = "<?php echo clear_quote($fileUrl);?>";
 		var odfelement = document.getElementById("odf"),
 		odfcanvas = new odf.OdfCanvas(odfelement);
 		odfcanvas.load(fileURL);
