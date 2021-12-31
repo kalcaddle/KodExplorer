@@ -27,6 +27,16 @@ function checkExt($file){
 	}
 	return 1;
 }
+function checkExtSafe($file){
+	if($file == '.htaccess' || $file == '.user.ini') return false;
+	if (strstr($file,'<') || strstr($file,'>') || $file=='') return false;
+	$disable  = 'php|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|html|htm|svg|shtml|shtm';
+	$extArr = explode('|',$disable);
+	foreach ($extArr as $ext) {
+		if ($ext && stristr($file,'.'.$ext)) return false;
+	}
+	return true;
+}
 
 //-----解压缩跨平台编码转换；自动识别编码-----
 //压缩前，文件名处理；

@@ -100,11 +100,6 @@ class Downloader {
 			//下载完成，重命名临时文件到目标文件
 			fclose($downloadFp);
 			fclose($fp);
-			
-			$filesize = get_filesize(iconv_system($fileTemp));
-			if($headerSize != 0 && $filesize != $headerSize){
-			    return array('code'=>false,'data'=>'file size error');
-			}
 			self::checkGzip($fileTemp);
 			if(!@rename($fileTemp,$fileName)){
 				usleep(round(rand(0,1000)*50));//0.01~10ms
@@ -145,11 +140,6 @@ class Downloader {
 			if($filesize < $length && $length!=0){
 			    return array('code'=>false,'data'=>'downloading');
 			}
-			if($filesize > $length && $length!=0){
-			    //远程下载大小不匹配；则返回正在下载中，客户端重新触发下载
-			    return array('code'=>false,'data'=>'file size error');
-			}
-			
 			if($res && filesize($fileTemp) != 0){
 				self::checkGzip($fileTemp);
 				if(!@rename($fileTemp,$fileName)){
