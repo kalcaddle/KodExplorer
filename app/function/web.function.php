@@ -750,7 +750,7 @@ function in($name,$default='',$filter=null) {
 		case 'session' :   $input =& $_SESSION;   break;
 		case 'cookie'  :   $input =& $_COOKIE;    break;
 		case 'server'  :   $input =& $_SERVER;    break;
-		case 'globals' :   $input =& $GLOBALS;    break;
+		case 'globals' :   $input = $GLOBALS;    break;
 		default:return NULL;
 	}
 	$filters = isset($filter)?$filter:$default_filter;
