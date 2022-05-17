@@ -425,7 +425,7 @@ function user_logout(){
 
 	$url = './index.php?user/login';
 	//之前界面维持，不是主动退出则登陆后跳转到之前页面
-	if(ACT != 'logout' && count($_GET)!=0 ){
+	if(defined('ACT') && ACT != 'logout' && count($_GET)!=0 ){
 		$url .= '&link='.rawurlencode(this_url());
 	}
 	//移动端；接口请求时退出
