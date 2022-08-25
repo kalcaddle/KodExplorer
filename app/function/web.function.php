@@ -540,16 +540,16 @@ function get_headers_curl($url,$timeout=30,$depth=0,&$headers=array()){
 
 // 防止SSRF 攻击;curl,file_get_contents前检测url;
 function request_url_safe($url){
-	$link = trim(strtolower($url));
-	$link = str_replace('\\','/',$link);
-	while (strstr($link,'../')) {
-		$link = str_replace('../', '/', $link);
+	$url   = str_replace('\\','/',$url);
+	$allow = array('http','https','ftp');
+	$info  = parse_url($url);$hasAllow = false;
+	foreach($allow as $scheme){
+		$schemeNow = substr($url,0,strlen($scheme) + 3);
+		if($schemeNow === $scheme."://"){$hasAllow = true;}
 	}
-	if( substr($link,0,6) != "ftp://" &&
-		substr($link,0,7) != "http://" &&
-		substr($link,0,8) != "https://" ){
-		return false;
-	}
+	if(!$hasAllow) return false;
+	if(!$info['scheme'] || !$info['host'] || !in_array($info['scheme'],$allow)) return false;
+	if(@file_exists($url) ) return false;
 	return true;
 }
 

@@ -1139,6 +1139,7 @@ class explorer extends Controller{
 			show_json(LNG('no_permission_write'),false);
 		}
 		$url = rawurldecode($this->in['url']);
+		if(!request_url_safe($url)){show_json('url error!',false);}
 		if(isset($this->in['name'])){
 			$filename = rawurldecode($this->in['name']);
 		}else{
