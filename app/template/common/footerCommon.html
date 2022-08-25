@@ -36,12 +36,8 @@
 	?>
 	seajs.config({
 		base: "<?php echo STATIC_PATH;?>js/",
-		preload: [
-			"lib/jquery-1.8.0.min",
-		],
-		map:[
-			[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
-		]
+		preload: ["lib/jquery-1.8.0.min"],
+		map:[[/^(.*\.(?:css|js|html|htm|json|text))([\?|#].*)$/i,'$1$2?ver='+G.version]]
 	});
 	if(navigator.serviceWorker){navigator.serviceWorker.register('./?share/manifestJS');}
 </script>

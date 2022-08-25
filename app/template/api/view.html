@@ -83,9 +83,7 @@
 		seajs.config({
 			base: "<?php echo STATIC_PATH;?>js/",
 			preload: ["lib/jquery-1.8.0.min",'lib/ace/src-min-noconflict/ace'],
-			map:[
-				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
-			]
+			map:[[/^(.*\.(?:css|js|html|htm|json|text))([\?|#].*)$/i,'$1$2?ver='+G.version]]
 		});
 		seajs.use("<?php echo STATIC_JS;?>/src/api/view/main");
 	</script>

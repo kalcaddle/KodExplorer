@@ -24,13 +24,6 @@
 	<?php $GLOBALS['loadCommonJs'] = true;?>
 	<?php include(TEMPLATE.'common/footer.html');?>
 	<script type="text/javascript" >
-		seajs.config({
-			base: "<?php echo STATIC_PATH;?>js/",
-			preload: ["lib/jquery-1.8.0.min"],
-			map:[
-				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
-			]
-		});
 		seajs.use("<?php echo STATIC_JS;?>/src/user/main");
 	</script>
 </body>

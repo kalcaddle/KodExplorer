@@ -85,13 +85,6 @@
 				alert('js文件不完整,请查看浏览器控制台和服务器配置是否正常。或检查文件是否被修改(或咨询主机商压缩js导致文件损坏);[js load error!]');
 			}
 		},1000);
-		seajs.config({
-			base: "<?php echo STATIC_PATH;?>js/",
-			preload: ["lib/jquery-1.8.0.min"],
-			map:[
-				[ /^(.*\.(?:css|js))(.*)$/i,'$1$2?ver='+G.version]
-			]
-		});
 		seajs.use("<?php echo STATIC_JS;?>/src/user/main");
 	</script>
 </body>
