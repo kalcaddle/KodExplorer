@@ -2,7 +2,7 @@
 	"id":"officeLive",
 	"name":"{{LNG.officeLive.meta.name}}",
 	"title":"{{LNG.officeLive.meta.title}}",
-	"version":"1.22",
+	"version":"1.23",
 	"category":"file",
 	"source":{
 		"icon":"{{pluginHost}}static/images/icon.png"
@@ -48,7 +48,7 @@
 		},
 		"apiServer":{
 			"type":"input",
-			"value":"https://owa-box.vips100.com/op/view.aspx?src=",
+			"value":"https://view.officeapps.live.com/op/view.aspx?src=",
 			"display":"{{LNG.officeLive.Config.apiServer}}",
 			"desc":"{{LNG.officeLive.Config.apiServerDesc}}",
 			"require":1
@@ -63,7 +63,7 @@
 			"type":"number",
 			"display":"{{LNG.Plugin.Config.fileSort}}",
 			"desc":"{{LNG.Plugin.Config.fileSortDesc}}",
-			"value":5,
+			"value":55,
 		}	
 	}
 }
