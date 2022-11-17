@@ -548,6 +548,7 @@ function request_url_safe($url){
 		if($schemeNow === $scheme."://"){$hasAllow = true;}
 	}
 	if(!$hasAllow) return false;
+	if(strstr($url,'../')) return false;
 	if(!$info['scheme'] || !$info['host'] || !in_array($info['scheme'],$allow)) return false;
 	if(@file_exists($url) ) return false;
 	return true;
