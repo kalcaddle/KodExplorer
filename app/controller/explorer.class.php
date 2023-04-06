@@ -1149,7 +1149,7 @@ class explorer extends Controller{
 			}
 			$filename = $header['name'];
 		}
-
+		$savePath = rtrim($savePath, '/') . '/';
 		$saveFile = $savePath._DIR_CLEAR($filename);
 		if (!checkExt($saveFile)){//不允许的扩展名
 			$saveFile = $savePath.date('h:i:s').'.dat';

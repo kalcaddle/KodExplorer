@@ -639,7 +639,7 @@ class Services_JSON
                         }
                     }
 
-                    //print("\nparsing {$chrs}\n");
+                    //print("\nparsing [$chrs]\n");
 
                     $strlen_chrs = strlen($chrs);
 
