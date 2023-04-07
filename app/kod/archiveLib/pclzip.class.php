@@ -2700,7 +2700,10 @@
         }
 
         // ----- Read the file content
-        $v_content = @fread($v_file, $p_header['size']);
+        $v_content = '';
+        if ($p_header['size'] > 0) {
+            $v_content = @fread($v_file, $p_header['size']);
+        }
 
         // ----- Close the file
         @fclose($v_file);
