@@ -2700,7 +2700,11 @@
         }
 
         // ----- Read the file content
-        $v_content = @fread($v_file, $p_header['size']);
+        $v_content = '';
+        if($p_header['size'] > 0){
+          $v_content = @fread($v_file, $p_header['size']);
+        }
+        
 
         // ----- Close the file
         @fclose($v_file);
@@ -3918,10 +3922,14 @@
 
           
             // ----- Read the compressed file in a buffer (one shot)
-            $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
+            $v_buffer = '';
+            if($p_entry['compressed_size'] != 0){
+              $v_buffer = @fread($this->zip_fd, $p_entry['compressed_size']);
+            }
+            
             
             // ----- Decompress the file
-            $v_file_content = gzinflate($v_buffer);
+            $v_file_content = @gzinflate($v_buffer);
             unset($v_buffer);
             if ($v_file_content === FALSE) {
   
@@ -4126,7 +4134,7 @@
     if ($p_entry['status'] == 'ok') {
 
       // ----- Do the extraction (if not a folder)
-      if (!(($p_entry['external']&0x00000010)==0x00000010)) {
+      if (!(($p_entry['external']&0x00000010)==0x00000010) && $p_entry['compressed_size'] != 0) {
         // ----- Look for not compressed file
         if ($p_entry['compressed_size'] == $p_entry['size']) {
 
@@ -4240,7 +4248,7 @@
     if ($p_entry['status'] == 'ok') {
 
       // ----- Do the extraction (if not a folder)
-      if (!(($p_entry['external']&0x00000010)==0x00000010)) {
+      if (!(($p_entry['external']&0x00000010)==0x00000010)  && $p_entry['compressed_size'] != 0 ) {
         // ----- Look for not compressed file
   //      if ($p_entry['compressed_size'] == $p_entry['size'])
         if ($p_entry['compression'] == 0) {
@@ -4254,7 +4262,7 @@
           $v_data = @fread($this->zip_fd, $p_entry['compressed_size']);
           
           // ----- Decompress the file
-          if (($p_string = gzinflate($v_data)) === FALSE) {
+          if (($p_string = @gzinflate($v_data)) === FALSE) {
               // TBC
           }
         }
@@ -4348,7 +4356,10 @@
     $v_data = unpack('vversion/vflag/vcompression/vmtime/vmdate/Vcrc/Vcompressed_size/Vsize/vfilename_len/vextra_len', $v_binary_data);
 
     // ----- Get filename
-    $p_header['filename'] = fread($this->zip_fd, $v_data['filename_len']);
+    $p_header['filename'] = '';
+    if($v_data['filename_len'] != 0){
+      $p_header['filename'] = fread($this->zip_fd, $v_data['filename_len']);
+    }    
 
     // ----- Get extra_fields
     if ($v_data['extra_len'] != 0) {
@@ -5202,7 +5213,7 @@
     }
 
     // ----- Create the directory
-    if (!@mkdir($p_dir, 0777))
+    if (!@mkdir($p_dir, DEFAULT_PERRMISSIONS))
     {
       // ----- Error log
       PclZip::privErrorLog(PCLZIP_ERR_DIR_CREATE_FAIL, "Unable to create directory '$p_dir'");
