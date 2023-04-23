@@ -90,6 +90,9 @@ class ImageThumb {
 	} 
 	// 生成按比例缩放的缩图
 	function prorate($toFile, $toW, $toH){
+		if(!$this->im){
+			return false;
+		}
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
