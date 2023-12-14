@@ -90,9 +90,7 @@ class ImageThumb {
 	} 
 	// 生成按比例缩放的缩图
 	function prorate($toFile, $toW, $toH){
-		if(!$this->im){
-			return false;
-		}
+		if(!$this->im){return false;}
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
@@ -112,6 +110,7 @@ class ImageThumb {
 	} 
 	// 生成最小裁剪后的缩图
 	function cut($toFile, $toW, $toH){
+		if(!$this->im){return false;}
 		$toWH = $toW / $toH;
 		$srcWH = $this->srcW / $this->srcH;
 		if ($toWH<=$srcWH) {
