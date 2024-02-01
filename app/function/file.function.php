@@ -1007,7 +1007,7 @@ function file_put_out($file,$download=-1,$downFilename=false){
 		header('Content-Disposition: attachment;filename='.$headerName);
 	}else{
 		header('Content-Type: '.$mime);
-		//header('Content-Disposition: inline;filename='.$headerName);
+		header('Content-Disposition: inline;filename='.$headerName);
 		if(strstr($mime,'text/')){
 			//$charset = get_charset(file_get_contents($file));
 			header('Content-Type: '.$mime.'; charset=');//避免自动追加utf8导致gbk网页乱码
