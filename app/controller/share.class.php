@@ -417,7 +417,7 @@ class share extends Controller{
 	public function fileUpload(){
 		$fileName = $_FILES['file']['name']? $_FILES['file']['name']:$GLOBALS['in']['name'];
 		$GLOBALS['isRoot']=0;
-		$GLOBALS['auth']['extNotAllow'] = "htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm";
+		$GLOBALS['auth']['extNotAllow'] = "htm|html|php|phar|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm";
 		if(!checkExt($fileName)){
 			show_json(LNG('no_permission_ext'),false);
 		}

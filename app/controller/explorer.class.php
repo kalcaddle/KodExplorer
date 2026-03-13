@@ -1151,9 +1151,8 @@ class explorer extends Controller{
 		}
 		$savePath = rtrim($savePath, '/') . '/';
 		$saveFile = $savePath._DIR_CLEAR($filename);
-		if (!checkExt($saveFile)){//不允许的扩展名
-			$saveFile = $savePath.date('h:i:s').'.dat';
-		}
+		if(!checkExt($saveFile)){$saveFile = $saveFile.'.txt';}
+		
 		$saveFile = get_filename_auto(iconv_system($saveFile),'',$this->config['user']['fileRepeat']);
 		$saveFileTemp = $saveFile.'.downloading';
 		Hook::trigger("explorer.serverDownloadBefore",$saveFile);

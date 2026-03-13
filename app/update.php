@@ -396,12 +396,12 @@ class updateToV330{
 				"guest" => array(
 					"role" => "guest",
 					"name" => "guest",
-					"ext_not_allow" => "htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm"
+					"ext_not_allow" => "htm|html|php|phar|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm"
 				),
 				"default" => array(
 					"role" => "default",
 					"name" => "default",
-					"ext_not_allow" => "htm|html|php|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm",
+					"ext_not_allow" => "htm|html|php|phar|phtml|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm|phtm",
 					"explorer:mkdir" => 1,
 					"explorer:mkfile" => 1,
 					"explorer:pathDelete" => 1,
