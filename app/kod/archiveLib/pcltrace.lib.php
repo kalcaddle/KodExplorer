@@ -5,11 +5,11 @@
 // License GNU/GPL - Vincent Blavet - Janvier 2001
 // http://www.phpconcept.net & http://phpconcept.free.fr
 // --------------------------------------------------------------------------------
-// Français :
+// Franï¿½ais :
 //   La description de l'usage de la librairie PCL Trace 1.0 n'est pas encore
-//   disponible. Celle-ci n'est pour le moment distribuée qu'avec l'application
+//   disponible. Celle-ci n'est pour le moment distribuï¿½e qu'avec l'application
 //   et la librairie PhpZip.
-//   Une version indépendante sera bientot disponible sur http://www.phpconcept.net
+//   Une version indï¿½pendante sera bientot disponible sur http://www.phpconcept.net
 //
 // English :
 //   The PCL Trace 1.0 library description is not available yet. This library is
@@ -20,17 +20,17 @@
 //
 //   * Avertissement :
 //
-//   Cette librairie a été créée de façon non professionnelle.
-//   Son usage est au risque et péril de celui qui l'utilise, en aucun cas l'auteur
-//   de ce code ne pourra être tenu pour responsable des éventuels dégats qu'il pourrait
+//   Cette librairie a ï¿½tï¿½ crï¿½ï¿½e de faï¿½on non professionnelle.
+//   Son usage est au risque et pï¿½ril de celui qui l'utilise, en aucun cas l'auteur
+//   de ce code ne pourra ï¿½tre tenu pour responsable des ï¿½ventuels dï¿½gats qu'il pourrait
 //   engendrer.
-//   Il est entendu cependant que l'auteur a réalisé ce code par plaisir et n'y a
-//   caché aucun virus, ni malveillance.
-//   Cette libairie est distribuée sous la license GNU/GPL (http://www.gnu.org)
+//   Il est entendu cependant que l'auteur a rï¿½alisï¿½ ce code par plaisir et n'y a
+//   cachï¿½ aucun virus, ni malveillance.
+//   Cette libairie est distribuï¿½e sous la license GNU/GPL (http://www.gnu.org)
 //
 //   * Auteur :
 //
-//   Ce code a été écrit par Vincent Blavet (vincent@blavet.net) sur son temps
+//   Ce code a ï¿½tï¿½ ï¿½crit par Vincent Blavet (vincent@blavet.net) sur son temps
 //   de loisir.
 //
 // --------------------------------------------------------------------------------
@@ -160,25 +160,25 @@ if (!defined("PCLTRACE_LIB"))
 
     // ----- Update the function entry
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = $p_name;
-    $g_pcl_trace_entries[$i][param] = $p_param;
-    $g_pcl_trace_entries[$i][message] = "";
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "1"; // means start of function
+    $g_pcl_trace_entries[$i]['name'] = $p_name;
+    $g_pcl_trace_entries[$i]['param'] = $p_param;
+    $g_pcl_trace_entries[$i]['message'] = "";
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "1"; // means start of function
 
     // ----- Update the message entry
     if ($p_message != "")
     {
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = "";
-    $g_pcl_trace_entries[$i][param] = "";
-    $g_pcl_trace_entries[$i][message] = $p_message;
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "3"; // means message
+    $g_pcl_trace_entries[$i]['name'] = "";
+    $g_pcl_trace_entries[$i]['param'] = "";
+    $g_pcl_trace_entries[$i]['message'] = $p_message;
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "3"; // means message
     }
 
     // ----- Action depending on mode
@@ -230,24 +230,24 @@ if (!defined("PCLTRACE_LIB"))
     if ($p_message != "")
     {
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = "";
-    $g_pcl_trace_entries[$i][param] = "";
-    $g_pcl_trace_entries[$i][message] = $p_message;
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "3"; // means message
+    $g_pcl_trace_entries[$i]['name'] = "";
+    $g_pcl_trace_entries[$i]['param'] = "";
+    $g_pcl_trace_entries[$i]['message'] = $p_message;
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "3"; // means message
     }
 
     // ----- Update the function entry
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = $v_name;
-    $g_pcl_trace_entries[$i][param] = $p_return;
-    $g_pcl_trace_entries[$i][message] = "";
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "2"; // means end of function
+    $g_pcl_trace_entries[$i]['name'] = $v_name;
+    $g_pcl_trace_entries[$i]['param'] = $p_return;
+    $g_pcl_trace_entries[$i]['message'] = "";
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "2"; // means end of function
 
     // ----- Action depending on mode
     PclTraceAction($g_pcl_trace_entries[$i]);
@@ -274,13 +274,13 @@ if (!defined("PCLTRACE_LIB"))
 
     // ----- Update the entry
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = "";
-    $g_pcl_trace_entries[$i][param] = "";
-    $g_pcl_trace_entries[$i][message] = $p_message;
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "3"; // means message of function
+    $g_pcl_trace_entries[$i]['name'] = "";
+    $g_pcl_trace_entries[$i]['param'] = "";
+    $g_pcl_trace_entries[$i]['message'] = $p_message;
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "3"; // means message of function
 
     // ----- Action depending on mode
     PclTraceAction($g_pcl_trace_entries[$i]);
@@ -307,13 +307,13 @@ if (!defined("PCLTRACE_LIB"))
 
     // ----- Update the entry
     $i = sizeof($g_pcl_trace_entries);
-    $g_pcl_trace_entries[$i][name] = "";
-    $g_pcl_trace_entries[$i][param] = "";
-    $g_pcl_trace_entries[$i][message] = $p_message;
-    $g_pcl_trace_entries[$i][file] = $p_file;
-    $g_pcl_trace_entries[$i][line] = $p_line;
-    $g_pcl_trace_entries[$i][index] = $g_pcl_trace_index;
-    $g_pcl_trace_entries[$i][type] = "4"; // means simple message
+    $g_pcl_trace_entries[$i]['name'] = "";
+    $g_pcl_trace_entries[$i]['param'] = "";
+    $g_pcl_trace_entries[$i]['message'] = $p_message;
+    $g_pcl_trace_entries[$i]['file'] = $p_file;
+    $g_pcl_trace_entries[$i]['line'] = $p_line;
+    $g_pcl_trace_entries[$i]['index'] = $g_pcl_trace_index;
+    $g_pcl_trace_entries[$i]['type'] = "4"; // means simple message
 
     // ----- Action depending on mode
     PclTraceAction($g_pcl_trace_entries[$i]);
@@ -363,14 +363,14 @@ if (!defined("PCLTRACE_LIB"))
       // ---- Row header
       echo "<tr>";
       echo "<td><table width=100% border=0 cellspacing=0 cellpadding=0><tr>";
-      $n = ($g_pcl_trace_entries[$i][index]+1)*10;
+      $n = ($g_pcl_trace_entries[$i]['index']+1)*10;
       echo "<td width=".$n."><table width=100% border=0 cellspacing=0 cellpadding=0><tr>";
 
-      for ($j=0; $j<=$g_pcl_trace_entries[$i][index]; $j++)
+      for ($j=0; $j<=$g_pcl_trace_entries[$i]['index']; $j++)
       {
-        if ($j==$g_pcl_trace_entries[$i][index])
+        if ($j==$g_pcl_trace_entries[$i]['index'])
         {
-          if (($g_pcl_trace_entries[$i][type] == 1) || ($g_pcl_trace_entries[$i][type] == 2))
+          if (($g_pcl_trace_entries[$i]['type'] == 1) || ($g_pcl_trace_entries[$i]['type'] == 2))
           echo "<td width=10><div align=center><font size=2 face=$v_font>+</font></div></td>";
         }
         else
@@ -380,27 +380,27 @@ if (!defined("PCLTRACE_LIB"))
       echo "</tr></table></td>";
 
       echo "<td width=2></td>";
-      switch ($g_pcl_trace_entries[$i][type]) {
+      switch ($g_pcl_trace_entries[$i]['type']) {
         case 1:
-          echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i][name]."(".$g_pcl_trace_entries[$i][param].")</font></td>";
+          echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i]['name']."(".$g_pcl_trace_entries[$i]['param'].")</font></td>";
         break;
         case 2:
-          echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i][name]."()=".$g_pcl_trace_entries[$i][param]."</font></td>";
+          echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i]['name']."()=".$g_pcl_trace_entries[$i]['param']."</font></td>";
         break;
         case 3:
         case 4:
           echo "<td><table width=100% border=0 cellspacing=0 cellpadding=0><td width=20></td><td>";
-          echo "<font size=2 face=$v_font>".$g_pcl_trace_entries[$i][message]."</font>";
+          echo "<font size=2 face=$v_font>".$g_pcl_trace_entries[$i]['message']."</font>";
           echo "</td></table></td>";
         break;
         default:
-        echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i][name]."(".$g_pcl_trace_entries[$i][param].")</font></td>";
+        echo "<td><font size=2 face=$v_font>".$g_pcl_trace_entries[$i]['name']."(".$g_pcl_trace_entries[$i]['param'].")</font></td>";
       }
       echo "</tr></table></td>";
       echo "<td width=5></td>";
-      echo "<td><font size=1 face=$v_font>".basename($g_pcl_trace_entries[$i][file])."</font></td>";
+      echo "<td><font size=1 face=$v_font>".basename($g_pcl_trace_entries[$i]['file'])."</font></td>";
       echo "<td width=5></td>";
-      echo "<td><font size=1 face=$v_font>".$g_pcl_trace_entries[$i][line]."</font></td>";
+      echo "<td><font size=1 face=$v_font>".$g_pcl_trace_entries[$i]['line']."</font></td>";
       echo "</tr>";
     }
 
@@ -437,14 +437,14 @@ if (!defined("PCLTRACE_LIB"))
 
     if ($g_pcl_trace_mode == "normal")
     {
-      for ($i=0; $i<$p_entry[index]; $i++)
+      for ($i=0; $i<$p_entry['index']; $i++)
         echo "---";
-      if ($p_entry[type] == 1)
-        echo "<b>".$p_entry[name]."</b>(".$p_entry[param].") : ".$p_entry[message]." [".$p_entry[file].", ".$p_entry[line]."]<br>";
-      else if ($p_entry[type] == 2)
-        echo "<b>".$p_entry[name]."</b>()=".$p_entry[param]." : ".$p_entry[message]." [".$p_entry[file].", ".$p_entry[line]."]<br>";
+      if ($p_entry['type'] == 1)
+        echo "<b>".$p_entry['name']."</b>(".$p_entry['param'].") : ".$p_entry['message']." [".$p_entry['file'].", ".$p_entry['line']."]<br>";
+      else if ($p_entry['type'] == 2)
+        echo "<b>".$p_entry['name']."</b>()=".$p_entry['param']." : ".$p_entry['message']." [".$p_entry['file'].", ".$p_entry['line']."]<br>";
       else
-        echo $p_entry[message]." [".$p_entry[file].", ".$p_entry[line]."]<br>";
+        echo $p_entry['message']." [".$p_entry['file'].", ".$p_entry['line']."]<br>";
     }
   }
   // --------------------------------------------------------------------------------
